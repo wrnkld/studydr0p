@@ -5,7 +5,7 @@ import AppHeader from "@/components/AppHeader";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { toast } from "sonner";
 
-const ENABLED: StudyType[] = ["survey"]; // others come in next iterations
+const ENABLED: StudyType[] = ["survey", "card_sort"]; // others come in next iterations
 
 export default function NewStudy() {
   const navigate = useNavigate();
@@ -23,7 +23,12 @@ export default function NewStudy() {
         researcher_id: user.id,
         title: `Untitled ${STUDY_TYPE_META[type].label}`,
         type,
-        config: type === "survey" ? { questions: [], layout: "single_page" } : {},
+        config:
+          type === "survey"
+            ? { questions: [], layout: "single_page" }
+            : type === "card_sort"
+              ? { sort_type: "open" }
+              : {},
       })
       .select("id")
       .single();

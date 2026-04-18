@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { SurveyConfig, SurveyQuestion } from "@/lib/types";
+import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
 import { toast } from "sonner";
+import SurveyParticipant from "./participant/SurveyParticipant";
+import CardSortParticipant from "./participant/CardSortParticipant";
 
 interface StudyData {
   id: string;
   title: string;
   description: string | null;
-  type: string;
+  type: StudyType;
   status: string;
-  config: SurveyConfig;
+  config: unknown;
 }
 
 export default function ParticipantStudy() {
@@ -26,8 +24,6 @@ export default function ParticipantStudy() {
   const [started, setStarted] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<number>(0);
-  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
-  const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
 
   useEffect(() => {
@@ -48,10 +44,7 @@ export default function ParticipantStudy() {
         setLoading(false);
         return;
       }
-      setStudy({
-        ...data,
-        config: (data.config as unknown as SurveyConfig) ?? { questions: [] },
-      });
+      setStudy(data as StudyData);
       setLoading(false);
     })();
   }, [slug]);
@@ -77,49 +70,21 @@ export default function ParticipantStudy() {
     setStarted(true);
   };
 
-  const submit = async () => {
-    if (!study || !sessionId) return;
-    const required = study.config.questions;
-    for (const q of required) {
-      const a = answers[q.id];
-      if (a === undefined || a === "" || (Array.isArray(a) && a.length === 0)) {
-        toast.error("Please answer all questions");
-        return;
-      }
-    }
-    setSubmitting(true);
-    const { error: respErr } = await supabase.from("responses").insert({
-      study_id: study.id,
-      session_id: sessionId,
-      data: { answers },
-    });
-    if (respErr) {
-      setSubmitting(false);
-      toast.error(respErr.message);
-      return;
-    }
-    await supabase
-      .from("sessions")
-      .update({
-        completed_at: new Date().toISOString(),
-        metadata: {
-          duration_ms: Date.now() - startedAt,
-        },
-      })
-      .eq("id", sessionId);
-    setSubmitting(false);
-    setDone(true);
-  };
-
   if (loading) {
-    return <Centered><div className="text-sm text-muted-foreground">Loading…</div></Centered>;
+    return (
+      <Centered>
+        <div className="text-sm text-muted-foreground">Loading…</div>
+      </Centered>
+    );
   }
 
   if (error === "not_found") {
     return (
       <Centered>
         <h1 className="text-2xl font-semibold">Study not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">This link doesn't lead anywhere.</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This link doesn't lead anywhere.
+        </p>
       </Centered>
     );
   }
@@ -147,113 +112,70 @@ export default function ParticipantStudy() {
   }
 
   if (!started) {
+    const intro = introCopy(study);
     return (
       <div className="min-h-screen bg-background">
         <main className="container max-w-xl py-16">
           <h1 className="text-3xl font-semibold tracking-tight">{study.title}</h1>
           {study.description && (
-            <p className="mt-4 whitespace-pre-wrap text-muted-foreground">{study.description}</p>
+            <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
+              {study.description}
+            </p>
           )}
-          <p className="mt-8 text-sm text-muted-foreground">
-            {study.config.questions.length} question{study.config.questions.length === 1 ? "" : "s"} · Anonymous
-          </p>
-          <Button size="lg" className="mt-6" onClick={begin}>Start</Button>
+          <p className="mt-8 text-sm text-muted-foreground">{intro}</p>
+          <Button size="lg" className="mt-6" onClick={begin}>
+            Start
+          </Button>
         </main>
       </div>
     );
   }
 
+  if (!sessionId) return null;
+
+  if (study.type === "survey") {
+    const cfg = (study.config as SurveyConfig) ?? { questions: [] };
+    return (
+      <SurveyParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
+  if (study.type === "card_sort") {
+    const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
+    return (
+      <CardSortParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container max-w-xl py-12">
-        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
-        <ol className="mt-10 space-y-10">
-          {study.config.questions.map((q, i) => (
-            <li key={q.id} className="space-y-3">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                Question {i + 1}
-              </div>
-              <QuestionInput
-                q={q}
-                value={answers[q.id]}
-                onChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}
-              />
-            </li>
-          ))}
-        </ol>
-        <Button className="mt-12 w-full sm:w-auto" size="lg" onClick={submit} disabled={submitting}>
-          {submitting ? "Submitting…" : "Submit"}
-        </Button>
-      </main>
-    </div>
+    <Centered>
+      <h1 className="text-2xl font-semibold">Unsupported study</h1>
+    </Centered>
   );
 }
 
-function QuestionInput({
-  q,
-  value,
-  onChange,
-}: {
-  q: SurveyQuestion;
-  value: string | string[] | undefined;
-  onChange: (v: string | string[]) => void;
-}) {
-  if (q.type === "open_text") {
-    return (
-      <div className="space-y-2">
-        <Label className="text-base font-normal">{q.label}</Label>
-        <Textarea
-          rows={4}
-          value={(value as string) ?? ""}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      </div>
-    );
+function introCopy(study: StudyData): string {
+  if (study.type === "survey") {
+    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
+    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
   }
-  if (q.type === "likert") {
-    return (
-      <div className="space-y-3">
-        <Label className="text-base font-normal">{q.label}</Label>
-        <div className="flex gap-2">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              onClick={() => onChange(String(n))}
-              className={`h-12 w-12 rounded-md border text-sm font-medium transition-colors ${
-                value === String(n)
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border hover:bg-accent"
-              }`}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Strongly disagree</span>
-          <span>Strongly agree</span>
-        </div>
-      </div>
-    );
+  if (study.type === "card_sort") {
+    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
+    return sort === "open"
+      ? "You'll group cards into categories you create · Anonymous"
+      : "You'll sort cards into predefined categories · Anonymous";
   }
-  // multiple_choice
-  return (
-    <div className="space-y-3">
-      <Label className="text-base font-normal">{q.label}</Label>
-      <RadioGroup value={(value as string) ?? ""} onValueChange={onChange}>
-        {(q.options ?? []).map((opt, i) => (
-          <label
-            key={i}
-            className="flex cursor-pointer items-center gap-3 rounded-md border border-border p-3 hover:bg-accent/50"
-          >
-            <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
-            <span>{opt}</span>
-          </label>
-        ))}
-      </RadioGroup>
-    </div>
-  );
+  return "Anonymous";
 }
 
 function Centered({ children }: { children: React.ReactNode }) {
