@@ -28,6 +28,27 @@ export interface CardSortConfig {
   sort_type: "open" | "closed";
 }
 
+export interface CardRow {
+  id: string;
+  label: string;
+  description: string | null;
+  position: number;
+}
+
+export interface CategoryRow {
+  id: string;
+  label: string;
+  position: number;
+}
+
+// Participant response shape for card sort
+// open: categories created by participant; closed: uses researcher categories
+export interface CardSortResponseData {
+  sort_type: "open" | "closed";
+  groups: { category_id: string | null; category_label: string; card_ids: string[] }[];
+  unsorted_card_ids: string[];
+}
+
 export interface FirstClickConfig {
   task: string;
   image_url: string;
