@@ -4,14 +4,22 @@ import { supabase } from "@/integrations/supabase/client";
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
-import { SurveyConfig, SurveyQuestion } from "@/lib/types";
+import {
+  CardRow,
+  CardSortConfig,
+  CardSortResponseData,
+  CategoryRow,
+  StudyType,
+  SurveyConfig,
+  SurveyQuestion,
+} from "@/lib/types";
 import { toast } from "sonner";
 
 interface StudyData {
   id: string;
   title: string;
-  type: string;
-  config: SurveyConfig;
+  type: StudyType;
+  config: unknown;
 }
 
 interface SessionRow {
@@ -24,7 +32,7 @@ interface SessionRow {
 interface ResponseRow {
   id: string;
   session_id: string;
-  data: { answers: Record<string, string | string[]> };
+  data: Record<string, unknown>;
   created_at: string;
 }
 
@@ -33,26 +41,43 @@ export default function StudyResults() {
   const [study, setStudy] = useState<StudyData | null>(null);
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [responses, setResponses] = useState<ResponseRow[]>([]);
+  const [cards, setCards] = useState<CardRow[]>([]);
+  const [categories, setCategories] = useState<CategoryRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!id) return;
     (async () => {
-      const [studyRes, sessRes, respRes] = await Promise.all([
+      const [studyRes, sessRes, respRes, cardsRes, catsRes] = await Promise.all([
         supabase.from("studies").select("id, title, type, config").eq("id", id).single(),
-        supabase.from("sessions").select("id, started_at, completed_at, metadata").eq("study_id", id),
-        supabase.from("responses").select("id, session_id, data, created_at").eq("study_id", id),
+        supabase
+          .from("sessions")
+          .select("id, started_at, completed_at, metadata")
+          .eq("study_id", id),
+        supabase
+          .from("responses")
+          .select("id, session_id, data, created_at")
+          .eq("study_id", id),
+        supabase
+          .from("cards")
+          .select("id, label, description, position")
+          .eq("study_id", id)
+          .order("position"),
+        supabase
+          .from("categories")
+          .select("id, label, position")
+          .eq("study_id", id)
+          .order("position"),
       ]);
       if (studyRes.error || !studyRes.data) {
         toast.error("Study not found");
         return;
       }
-      setStudy({
-        ...studyRes.data,
-        config: (studyRes.data.config as unknown as SurveyConfig) ?? { questions: [] },
-      });
+      setStudy(studyRes.data as StudyData);
       setSessions((sessRes.data ?? []) as SessionRow[]);
       setResponses((respRes.data ?? []) as ResponseRow[]);
+      setCards((cardsRes.data ?? []) as CardRow[]);
+      setCategories((catsRes.data ?? []) as CategoryRow[]);
       setLoading(false);
     })();
   }, [id]);
@@ -74,17 +99,38 @@ export default function StudyResults() {
 
   const exportCsv = () => {
     if (!study) return;
-    const questions = study.config.questions;
-    const headers = ["session_id", "submitted_at", ...questions.map((q) => q.label || q.id)];
-    const rows = responses.map((r) => {
-      const cells = [r.session_id, r.created_at];
-      questions.forEach((q) => {
-        const v = r.data?.answers?.[q.id];
-        cells.push(Array.isArray(v) ? v.join("; ") : (v ?? "").toString());
+    let csv = "";
+    if (study.type === "survey") {
+      const questions = ((study.config as SurveyConfig)?.questions ?? []) as SurveyQuestion[];
+      const headers = ["session_id", "submitted_at", ...questions.map((q) => q.label || q.id)];
+      const rows = responses.map((r) => {
+        const cells: string[] = [r.session_id, r.created_at];
+        const answers = (r.data as { answers?: Record<string, string | string[]> })?.answers ?? {};
+        questions.forEach((q) => {
+          const v = answers[q.id];
+          cells.push(Array.isArray(v) ? v.join("; ") : (v ?? "").toString());
+        });
+        return cells.map(csvEscape).join(",");
       });
-      return cells.map(csvEscape).join(",");
-    });
-    const csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
+      csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
+    } else if (study.type === "card_sort") {
+      const headers = ["session_id", "submitted_at", "card_label", "category_label"];
+      const rows: string[] = [];
+      responses.forEach((r) => {
+        const data = r.data as unknown as CardSortResponseData;
+        (data.groups ?? []).forEach((g) => {
+          g.card_ids.forEach((cid) => {
+            const card = cards.find((c) => c.id === cid);
+            rows.push(
+              [r.session_id, r.created_at, card?.label ?? cid, g.category_label]
+                .map(csvEscape)
+                .join(","),
+            );
+          });
+        });
+      });
+      csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
+    }
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -109,7 +155,10 @@ export default function StudyResults() {
     <div className="min-h-screen bg-background">
       <AppHeader />
       <main className="container max-w-4xl py-10">
-        <Link to="/dashboard" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground">
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
+        >
           <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to dashboard
         </Link>
 
@@ -130,12 +179,20 @@ export default function StudyResults() {
         </section>
 
         <section className="mt-12 space-y-10">
-          {study.config.questions.length === 0 && (
-            <div className="text-sm text-muted-foreground">No questions in this study.</div>
+          {study.type === "survey" && (
+            <SurveyResults
+              config={(study.config as SurveyConfig) ?? { questions: [] }}
+              responses={responses}
+            />
           )}
-          {study.config.questions.map((q, i) => (
-            <QuestionResult key={q.id} q={q} index={i} responses={responses} />
-          ))}
+          {study.type === "card_sort" && (
+            <CardSortResults
+              cards={cards}
+              categories={categories}
+              config={(study.config as CardSortConfig) ?? { sort_type: "open" }}
+              responses={responses}
+            />
+          )}
         </section>
       </main>
     </div>
@@ -151,6 +208,26 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
+function SurveyResults({
+  config,
+  responses,
+}: {
+  config: SurveyConfig;
+  responses: ResponseRow[];
+}) {
+  const questions = config.questions ?? [];
+  if (questions.length === 0) {
+    return <div className="text-sm text-muted-foreground">No questions in this study.</div>;
+  }
+  return (
+    <>
+      {questions.map((q, i) => (
+        <QuestionResult key={q.id} q={q} index={i} responses={responses} />
+      ))}
+    </>
+  );
+}
+
 function QuestionResult({
   q,
   index,
@@ -161,7 +238,7 @@ function QuestionResult({
   responses: ResponseRow[];
 }) {
   const values = responses
-    .map((r) => r.data?.answers?.[q.id])
+    .map((r) => (r.data as { answers?: Record<string, unknown> })?.answers?.[q.id])
     .filter((v): v is string => typeof v === "string" && v.length > 0);
 
   if (q.type === "open_text") {
@@ -172,16 +249,19 @@ function QuestionResult({
         </div>
         <h3 className="mt-1 font-medium">{q.label}</h3>
         <ul className="mt-4 space-y-2">
-          {values.length === 0 && <li className="text-sm text-muted-foreground">No responses yet.</li>}
+          {values.length === 0 && (
+            <li className="text-sm text-muted-foreground">No responses yet.</li>
+          )}
           {values.map((v, i) => (
-            <li key={i} className="rounded-md border border-border p-3 text-sm whitespace-pre-wrap">{v}</li>
+            <li key={i} className="rounded-md border border-border p-3 text-sm whitespace-pre-wrap">
+              {v}
+            </li>
           ))}
         </ul>
       </div>
     );
   }
 
-  // bar chart for choice & likert
   const buckets: string[] =
     q.type === "likert" ? ["1", "2", "3", "4", "5"] : (q.options ?? []);
   const counts = buckets.map((b) => values.filter((v) => v === b).length);
@@ -212,6 +292,114 @@ function QuestionResult({
             </li>
           );
         })}
+      </ul>
+    </div>
+  );
+}
+
+function CardSortResults({
+  cards,
+  categories,
+  config,
+  responses,
+}: {
+  cards: CardRow[];
+  categories: CategoryRow[];
+  config: CardSortConfig;
+  responses: ResponseRow[];
+}) {
+  // For each card, count how often it ended up in each category label.
+  // For closed sort use category_id; for open sort group by normalized label.
+  const norm = (s: string) => s.trim().toLowerCase();
+
+  const stats = cards.map((card) => {
+    const tally = new Map<string, { display: string; count: number }>();
+    let placed = 0;
+    responses.forEach((r) => {
+      const data = r.data as unknown as CardSortResponseData;
+      (data.groups ?? []).forEach((g) => {
+        if (!g.card_ids.includes(card.id)) return;
+        placed += 1;
+        const key =
+          config.sort_type === "closed" && g.category_id
+            ? `id:${g.category_id}`
+            : `lbl:${norm(g.category_label)}`;
+        const existing = tally.get(key);
+        if (existing) {
+          existing.count += 1;
+        } else {
+          tally.set(key, { display: g.category_label || "(unnamed)", count: 1 });
+        }
+      });
+    });
+    const sorted = [...tally.values()].sort((a, b) => b.count - a.count);
+    const top = sorted[0];
+    return {
+      card,
+      placed,
+      top,
+      pct: top && placed ? Math.round((top.count / placed) * 100) : 0,
+      breakdown: sorted,
+    };
+  });
+
+  if (responses.length === 0) {
+    return <div className="text-sm text-muted-foreground">No responses yet.</div>;
+  }
+
+  return (
+    <div>
+      <div className="text-xs uppercase tracking-widest text-muted-foreground">
+        Card placements
+      </div>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Top category for each card and how often participants placed it there.
+      </p>
+      <ul className="mt-6 divide-y divide-border rounded-lg border border-border">
+        {stats.map(({ card, top, pct, placed, breakdown }) => (
+          <li key={card.id} className="p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <div className="font-medium">{card.label}</div>
+                {card.description && (
+                  <div className="mt-0.5 text-xs text-muted-foreground">
+                    {card.description}
+                  </div>
+                )}
+              </div>
+              <div className="text-right text-sm">
+                {top ? (
+                  <>
+                    <div className="font-medium">{top.display}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {pct}% ({top.count}/{placed})
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-xs text-muted-foreground">No placements</div>
+                )}
+              </div>
+            </div>
+            {breakdown.length > 1 && (
+              <details className="mt-3">
+                <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
+                  Show all categories
+                </summary>
+                <ul className="mt-2 space-y-1">
+                  {breakdown.map((b, i) => (
+                    <li
+                      key={i}
+                      className="flex justify-between text-xs text-muted-foreground"
+                    >
+                      <span className="truncate">{b.display}</span>
+                      <span>{b.count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+          </li>
+        ))}
       </ul>
     </div>
   );
