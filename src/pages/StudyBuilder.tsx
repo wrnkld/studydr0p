@@ -81,7 +81,7 @@ export default function StudyBuilder() {
     const payload = {
       title: title.trim() || "Untitled study",
       description: description.trim() || null,
-      config: config as unknown as Record<string, unknown>,
+      config: config as unknown as never,
       status: overrides.status ?? status,
       slug: overrides.slug !== undefined ? overrides.slug : slug,
     };
