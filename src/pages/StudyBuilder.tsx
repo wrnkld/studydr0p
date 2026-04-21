@@ -137,3 +137,12 @@ export default function StudyBuilder() {
     );
   }
 
+  return (
+    <div className="min-h-screen bg-background">
+      <AppHeader />
+      <div className="container py-10 text-sm text-muted-foreground">
+        This study type is not supported yet.
+      </div>
+    </div>
+  );
+}

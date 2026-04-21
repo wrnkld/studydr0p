@@ -200,6 +200,12 @@ export default function ParticipantStudy() {
     );
   }
 
+  return (
+    <Centered>
+      <h1 className="text-2xl font-semibold">Unsupported study</h1>
+    </Centered>
+  );
+}
 
 function introCopy(study: StudyData): string {
   if (study.type === "survey") {
@@ -219,6 +225,9 @@ function introCopy(study: StudyData): string {
   if (study.type === "tree_test") {
     const task = (study.config as TreeTestConfig)?.task ?? "";
     return task ? "Find your answer in the menu · Anonymous" : "Anonymous";
+  }
+  if (study.type === "first_click") {
+    return "Click where you'd go first · Anonymous";
   }
   return "Anonymous";
 }
