@@ -121,12 +121,19 @@ export default function StudyBuilder() {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-background">
-      <AppHeader />
-      <div className="container py-10 text-sm text-muted-foreground">
-        This study type is not supported yet.
-      </div>
-    </div>
-  );
-}
+  if (study.type === "first_click") {
+    const cfg = (study.config as FirstClickConfig) ?? { task: "", image_url: "" };
+    return (
+      <FirstClickBuilder
+        studyId={study.id}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config: cfg,
+        }}
+      />
+    );
+  }
+
