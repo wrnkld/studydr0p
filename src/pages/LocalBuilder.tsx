@@ -71,6 +71,13 @@ export default function LocalBuilder() {
       return;
     }
 
+    // Types without a local-draft builder route straight into the
+    // full authenticated builder (auto-creates the study on arrival).
+    if (!SUPPORTED.includes(requested)) {
+      navigate(`/dashboard/studies/new?type=${requested}`, { replace: true });
+      return;
+    }
+
     if (existing && existing.type === requested) {
       setDraft(existing);
     } else {
