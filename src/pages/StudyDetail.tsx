@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +14,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Download } from "lucide-react";
+import { Check, Copy, Download } from "lucide-react";
 import { toast } from "sonner";
 import {
   CardRow,
@@ -21,12 +22,18 @@ import {
   CardSortResponseData,
   CategoryRow,
   FirstClickConfig,
+  FiveSecondConfig,
   StudyStatus,
   StudyType,
   SurveyConfig,
   SurveyQuestion,
+  TreeTestConfig,
 } from "@/lib/types";
 import FirstClickResults from "./results/FirstClickResults";
+import SurveyResults from "./results/SurveyResults";
+import CardSortResults from "./results/CardSortResults";
+import TreeTestResults from "./results/TreeTestResults";
+import FiveSecondResults from "./results/FiveSecondResults";
 
 interface StudyData {
   id: string;
@@ -52,7 +59,7 @@ interface ResponseRow {
 }
 
 // Single study detail / results page. Title + Share/Edit/Delete on top,
-// metrics and per-type result visualizations below.
+// share link, metrics, and per-type result visualizations below.
 export default function StudyDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -60,10 +67,11 @@ export default function StudyDetail() {
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [responses, setResponses] = useState<ResponseRow[]>([]);
   const [cards, setCards] = useState<CardRow[]>([]);
-  const [categories, setCategories] = useState<CategoryRow[]>([]);
+  const [, setCategories] = useState<CategoryRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -122,11 +130,13 @@ export default function StudyDetail() {
     return Math.round(avg / 1000);
   }, [sessions]);
 
-  const share = async () => {
-    if (!study?.slug) return;
-    const url = `${window.location.origin}/s/${study.slug}`;
-    await navigator.clipboard.writeText(url);
-    toast.success("Share link copied");
+  const shareUrl = study?.slug ? `https://studydrop.app/s/${study.slug}` : null;
+
+  const copyShareLink = async () => {
+    if (!shareUrl) return;
+    await navigator.clipboard.writeText(shareUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   };
 
   const remove = async () => {
@@ -197,7 +207,6 @@ export default function StudyDetail() {
     );
   }
 
-  const canShare = study.status === "live" && !!study.slug;
   const canExport = (study.type === "survey" || study.type === "card_sort") && responses.length > 0;
 
   return (
@@ -210,11 +219,6 @@ export default function StudyDetail() {
           </h1>
 
           <div className="flex flex-wrap gap-3">
-            {canShare && (
-              <Button size="lg" className="rounded-full" onClick={share}>
-                Share
-              </Button>
-            )}
             {canExport && (
               <Button
                 size="lg"
@@ -238,7 +242,44 @@ export default function StudyDetail() {
           </div>
         </div>
 
-        <section className="mt-12 grid grid-cols-3 gap-4">
+        {shareUrl && (
+          <section className="mt-10 rounded-2xl border border-border p-5">
+            <label
+              htmlFor="participant-link"
+              className="text-xs uppercase tracking-widest text-muted-foreground"
+            >
+              Participant link
+            </label>
+            <div className="mt-2 flex gap-2">
+              <Input
+                id="participant-link"
+                readOnly
+                value={shareUrl}
+                onFocus={(e) => e.currentTarget.select()}
+                className="font-mono text-sm"
+              />
+              <Button onClick={copyShareLink} variant="outline" className="shrink-0">
+                {copied ? (
+                  <>
+                    <Check className="mr-1.5 h-4 w-4" /> Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="mr-1.5 h-4 w-4" /> Copy link
+                  </>
+                )}
+              </Button>
+            </div>
+            {study.status !== "live" && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Study is currently <strong>{study.status}</strong> — participants
+                can't submit until you publish it.
+              </p>
+            )}
+          </section>
+        )}
+
+        <section className="mt-10 grid grid-cols-3 gap-4">
           <Stat label="Responses" value={responses.length.toString()} />
           <Stat label="Completion rate" value={`${completionRate}%`} />
           <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
@@ -253,15 +294,15 @@ export default function StudyDetail() {
             <>
               {study.type === "survey" && (
                 <SurveyResults
+                  studyId={study.id}
                   config={(study.config as SurveyConfig) ?? { questions: [] }}
                   responses={responses}
                 />
               )}
               {study.type === "card_sort" && (
                 <CardSortResults
+                  studyId={study.id}
                   cards={cards}
-                  categories={categories}
-                  config={(study.config as CardSortConfig) ?? { sort_type: "open" }}
                   responses={responses}
                 />
               )}
@@ -271,11 +312,27 @@ export default function StudyDetail() {
                   responses={responses}
                 />
               )}
-              {(study.type === "tree_test" || study.type === "five_second") && (
-                <div className="text-sm text-muted-foreground">
-                  {responses.length} response{responses.length === 1 ? "" : "s"} recorded.
-                  Detailed visualizations for this study type are coming soon.
-                </div>
+              {study.type === "tree_test" && (
+                <TreeTestResults
+                  studyId={study.id}
+                  config={
+                    (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" }
+                  }
+                  responses={responses}
+                />
+              )}
+              {study.type === "five_second" && (
+                <FiveSecondResults
+                  studyId={study.id}
+                  config={
+                    (study.config as FiveSecondConfig) ?? {
+                      image_url: "",
+                      duration_ms: 5000,
+                      follow_up: [],
+                    }
+                  }
+                  responses={responses}
+                />
               )}
             </>
           )}
@@ -308,197 +365,6 @@ function Stat({ label, value }: { label: string; value: string }) {
     <div className="rounded-2xl border border-border p-5">
       <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
       <div className="mt-2 text-2xl font-semibold">{value}</div>
-    </div>
-  );
-}
-
-function SurveyResults({
-  config,
-  responses,
-}: {
-  config: SurveyConfig;
-  responses: ResponseRow[];
-}) {
-  const questions = config.questions ?? [];
-  if (questions.length === 0) {
-    return <div className="text-sm text-muted-foreground">No questions in this study.</div>;
-  }
-  return (
-    <>
-      {questions.map((q, i) => (
-        <QuestionResult key={q.id} q={q} index={i} responses={responses} />
-      ))}
-    </>
-  );
-}
-
-function QuestionResult({
-  q,
-  index,
-  responses,
-}: {
-  q: SurveyQuestion;
-  index: number;
-  responses: ResponseRow[];
-}) {
-  const values = responses
-    .map((r) => (r.data as { answers?: Record<string, unknown> })?.answers?.[q.id])
-    .filter((v): v is string => typeof v === "string" && v.length > 0);
-
-  if (q.type === "open_text") {
-    return (
-      <div>
-        <div className="text-xs uppercase tracking-widest text-muted-foreground">
-          Question {index + 1} · open text
-        </div>
-        <h3 className="mt-1 font-medium">{q.label}</h3>
-        <ul className="mt-4 space-y-2">
-          {values.length === 0 && (
-            <li className="text-sm text-muted-foreground">No responses yet.</li>
-          )}
-          {values.map((v, i) => (
-            <li key={i} className="rounded-md border border-border p-3 text-sm whitespace-pre-wrap">
-              {v}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-
-  const buckets: string[] =
-    q.type === "likert" ? ["1", "2", "3", "4", "5"] : (q.options ?? []);
-  const counts = buckets.map((b) => values.filter((v) => v === b).length);
-  const max = Math.max(1, ...counts);
-
-  return (
-    <div>
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">
-        Question {index + 1} · {q.type === "likert" ? "likert" : "multiple choice"}
-      </div>
-      <h3 className="mt-1 font-medium">{q.label}</h3>
-      <ul className="mt-4 space-y-2">
-        {buckets.map((b, i) => {
-          const count = counts[i];
-          const pct = values.length ? Math.round((count / values.length) * 100) : 0;
-          return (
-            <li key={b} className="flex items-center gap-3 text-sm">
-              <span className="w-32 shrink-0 truncate">{b}</span>
-              <div className="relative h-6 flex-1 rounded bg-secondary">
-                <div
-                  className="absolute inset-y-0 left-0 rounded bg-foreground"
-                  style={{ width: `${(count / max) * 100}%` }}
-                />
-              </div>
-              <span className="w-20 shrink-0 text-right text-muted-foreground">
-                {count} ({pct}%)
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </div>
-  );
-}
-
-function CardSortResults({
-  cards,
-  categories: _categories,
-  config,
-  responses,
-}: {
-  cards: CardRow[];
-  categories: CategoryRow[];
-  config: CardSortConfig;
-  responses: ResponseRow[];
-}) {
-  const norm = (s: string) => s.trim().toLowerCase();
-
-  const stats = cards.map((card) => {
-    const tally = new Map<string, { display: string; count: number }>();
-    let placed = 0;
-    responses.forEach((r) => {
-      const data = r.data as unknown as CardSortResponseData;
-      (data.groups ?? []).forEach((g) => {
-        if (!g.card_ids.includes(card.id)) return;
-        placed += 1;
-        const key =
-          config.sort_type === "closed" && g.category_id
-            ? `id:${g.category_id}`
-            : `lbl:${norm(g.category_label)}`;
-        const existing = tally.get(key);
-        if (existing) {
-          existing.count += 1;
-        } else {
-          tally.set(key, { display: g.category_label || "(unnamed)", count: 1 });
-        }
-      });
-    });
-    const sorted = [...tally.values()].sort((a, b) => b.count - a.count);
-    const top = sorted[0];
-    return {
-      card,
-      placed,
-      top,
-      pct: top && placed ? Math.round((top.count / placed) * 100) : 0,
-      breakdown: sorted,
-    };
-  });
-
-  return (
-    <div>
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">
-        Card placements
-      </div>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Top category for each card and how often participants placed it there.
-      </p>
-      <ul className="mt-6 divide-y divide-border rounded-lg border border-border">
-        {stats.map(({ card, top, pct, placed, breakdown }) => (
-          <li key={card.id} className="p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <div className="font-medium">{card.label}</div>
-                {card.description && (
-                  <div className="mt-0.5 text-xs text-muted-foreground">
-                    {card.description}
-                  </div>
-                )}
-              </div>
-              <div className="text-right text-sm">
-                {top ? (
-                  <>
-                    <div className="font-medium">{top.display}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {pct}% ({top.count}/{placed})
-                    </div>
-                  </>
-                ) : (
-                  <div className="text-xs text-muted-foreground">No placements</div>
-                )}
-              </div>
-            </div>
-            {breakdown.length > 1 && (
-              <details className="mt-3">
-                <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
-                  Show all categories
-                </summary>
-                <ul className="mt-2 space-y-1">
-                  {breakdown.map((b, i) => (
-                    <li
-                      key={i}
-                      className="flex justify-between text-xs text-muted-foreground"
-                    >
-                      <span className="truncate">{b.display}</span>
-                      <span>{b.count}</span>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            )}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
