@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AppHeader from "@/components/AppHeader";
 import { toast } from "sonner";
-import { CardSortConfig, FiveSecondConfig, StudyStatus, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
+import { CardSortConfig, FirstClickConfig, FiveSecondConfig, StudyStatus, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import FiveSecondBuilder from "./builders/FiveSecondBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
+import FirstClickBuilder from "./builders/FirstClickBuilder";
 
 interface StudyRow {
   id: string;
