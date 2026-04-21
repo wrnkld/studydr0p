@@ -229,37 +229,6 @@ export default function LocalBuilder() {
           </div>
         </section>
 
-        {!supported && (
-          <div className="mt-10 rounded-lg border border-dashed border-border p-8 text-center">
-            <div className="font-medium">
-              {meta.label} builder is coming soon
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">
-              We're still building this study type. Try{" "}
-              <button
-                className="underline"
-                onClick={() => {
-                  clearDraft();
-                  navigate("/build/card_sort", { replace: true });
-                }}
-              >
-                Card sort
-              </button>{" "}
-              or{" "}
-              <button
-                className="underline"
-                onClick={() => {
-                  clearDraft();
-                  navigate("/build/survey", { replace: true });
-                }}
-              >
-                Survey
-              </button>{" "}
-              instead.
-            </p>
-          </div>
-        )}
-
         {draft.type === "card_sort" && (
           <CardSortFields
             draft={draft}
@@ -274,6 +243,29 @@ export default function LocalBuilder() {
           />
         )}
 
+        {draft.type === "first_click" && (
+          <FirstClickFields
+            draft={draft}
+            user={user}
+            onChange={(next) => setDraft(next)}
+          />
+        )}
+
+        {draft.type === "tree_test" && (
+          <TreeTestFields
+            draft={draft}
+            onChange={(next) => setDraft(next)}
+          />
+        )}
+
+        {draft.type === "five_second" && (
+          <FiveSecondFields
+            draft={draft}
+            user={user}
+            onChange={(next) => setDraft(next)}
+          />
+        )}
+
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Button
             variant="outline"
@@ -284,7 +276,7 @@ export default function LocalBuilder() {
           >
             Discard
           </Button>
-          <Button onClick={handlePublish} disabled={publishing || !supported}>
+          <Button onClick={handlePublish} disabled={publishing}>
             {publishing
               ? "Publishing…"
               : user
