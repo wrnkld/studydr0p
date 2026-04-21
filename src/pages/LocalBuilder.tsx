@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -22,13 +22,14 @@ import {
 } from "@/lib/types";
 import {
   DraftStudy,
+  DraftTreeNode,
   loadDraft,
   newDraft,
   saveDraft,
   clearDraft,
 } from "@/lib/draftStudy";
 import { useAuth } from "@/hooks/useAuth";
-import { Trash2, Plus, ArrowLeft } from "lucide-react";
+import { Trash2, Plus, ArrowLeft, ImageIcon, Upload, Lock } from "lucide-react";
 import SignInToPublishModal from "@/components/SignInToPublishModal";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,7 +42,6 @@ const VALID_TYPES: StudyType[] = [
   "tree_test",
   "five_second",
 ];
-const SUPPORTED: StudyType[] = ["card_sort", "survey"];
 
 export default function LocalBuilder() {
   const { type: typeParam } = useParams();
