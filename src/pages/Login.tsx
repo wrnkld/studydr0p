@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import AppHeader from "@/components/AppHeader";
@@ -37,37 +36,42 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="container flex max-w-md flex-col py-24">
-        <h1 className="text-3xl font-semibold tracking-tight">Sign in</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We'll email you a magic link. No passwords.
-        </p>
-
+      <main className="container max-w-3xl py-20">
         {sent ? (
-          <div className="mt-10 rounded-lg border border-border p-6">
-            <div className="font-medium">Check your inbox</div>
-            <p className="mt-2 text-sm text-muted-foreground">
-              We sent a magic link to <strong>{email}</strong>. Click it to
-              continue.
+          <>
+            <h1 className="text-5xl font-semibold tracking-tight">Link sent</h1>
+            <p className="mt-6 text-lg text-muted-foreground">
+              We sent a magic link to {email}. Click it to continue.
             </p>
-          </div>
+          </>
         ) : (
-          <form onSubmit={onSubmit} className="mt-10 space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+          <>
+            <h1 className="text-5xl font-semibold tracking-tight">Sign in</h1>
+            <p className="mt-6 text-lg text-muted-foreground">
+              We'll email you a magic link. No passwords.
+            </p>
+
+            <form onSubmit={onSubmit} className="mt-12 max-w-md space-y-4">
               <Input
                 id="email"
                 type="email"
                 required
+                aria-label="Email"
                 placeholder="you@team.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                className="h-12 rounded-full px-5"
               />
-            </div>
-            <Button type="submit" className="w-full" disabled={submitting}>
-              {submitting ? "Sending…" : "Send magic link"}
-            </Button>
-          </form>
+              <Button
+                type="submit"
+                size="lg"
+                disabled={submitting}
+                className="rounded-full"
+              >
+                {submitting ? "Sending…" : "Send"}
+              </Button>
+            </form>
+          </>
         )}
       </main>
     </div>
