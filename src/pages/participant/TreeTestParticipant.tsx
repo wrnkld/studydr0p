@@ -102,7 +102,7 @@ export default function TreeTestParticipant({
     const { error: respErr } = await supabase.from("responses").insert({
       study_id: study.id,
       session_id: sessionId,
-      data,
+      data: data as unknown as never,
     });
     if (respErr) {
       setSubmitting(false);

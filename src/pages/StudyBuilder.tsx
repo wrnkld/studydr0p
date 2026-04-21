@@ -104,6 +104,22 @@ export default function StudyBuilder() {
     );
   }
 
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" };
+    return (
+      <TreeTestBuilder
+        studyId={study.id}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config: cfg,
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />

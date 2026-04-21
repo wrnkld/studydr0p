@@ -175,12 +175,18 @@ export default function ParticipantStudy() {
     );
   }
 
-  return (
-    <Centered>
-      <h1 className="text-2xl font-semibold">Unsupported study</h1>
-    </Centered>
-  );
-}
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" };
+    return (
+      <TreeTestParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
 
 function introCopy(study: StudyData): string {
   if (study.type === "survey") {
