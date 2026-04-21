@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
@@ -22,13 +22,14 @@ import {
 } from "@/lib/types";
 import {
   DraftStudy,
+  DraftTreeNode,
   loadDraft,
   newDraft,
   saveDraft,
   clearDraft,
 } from "@/lib/draftStudy";
 import { useAuth } from "@/hooks/useAuth";
-import { Trash2, Plus, ArrowLeft } from "lucide-react";
+import { Trash2, Plus, ArrowLeft, ImageIcon, Upload, Lock } from "lucide-react";
 import SignInToPublishModal from "@/components/SignInToPublishModal";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -41,7 +42,6 @@ const VALID_TYPES: StudyType[] = [
   "tree_test",
   "five_second",
 ];
-const SUPPORTED: StudyType[] = ["card_sort", "survey"];
 
 export default function LocalBuilder() {
   const { type: typeParam } = useParams();
@@ -71,12 +71,7 @@ export default function LocalBuilder() {
       return;
     }
 
-    // Types without a local-draft builder route straight into the
-    // full authenticated builder (auto-creates the study on arrival).
-    if (!SUPPORTED.includes(requested)) {
-      navigate(`/dashboard/studies/new?type=${requested}`, { replace: true });
-      return;
-    }
+    // All 5 study types are supported in the local builder.
 
     if (existing && existing.type === requested) {
       setDraft(existing);
@@ -128,9 +123,36 @@ export default function LocalBuilder() {
         toast.error("All questions need a label");
         return;
       }
-    } else {
-      toast.info(`${STUDY_TYPE_META[draft.type].label} isn't ready to publish yet.`);
-      return;
+    } else if (draft.type === "first_click") {
+      const fc = draft.firstClick!;
+      if (!fc.config.task.trim()) {
+        toast.error("Add a task prompt");
+        return;
+      }
+      if (!fc.config.image_url) {
+        toast.error("Add an image (sign in to upload)");
+        return;
+      }
+    } else if (draft.type === "tree_test") {
+      const tt = draft.treeTest!;
+      if (!tt.config.task.trim()) {
+        toast.error("Add a task prompt");
+        return;
+      }
+      if (tt.nodes.length < 2) {
+        toast.error("Add at least 2 tree nodes");
+        return;
+      }
+      if (!tt.config.correct_node_id) {
+        toast.error("Pick the correct destination node");
+        return;
+      }
+    } else if (draft.type === "five_second") {
+      const fs = draft.fiveSecond!;
+      if (!fs.config.image_url) {
+        toast.error("Add an image (sign in to upload)");
+        return;
+      }
     }
 
     if (!user) {
@@ -164,7 +186,6 @@ export default function LocalBuilder() {
   }
 
   const meta = STUDY_TYPE_META[draft.type];
-  const supported = SUPPORTED.includes(draft.type);
 
   return (
     <div className="min-h-screen bg-background">
@@ -208,37 +229,6 @@ export default function LocalBuilder() {
           </div>
         </section>
 
-        {!supported && (
-          <div className="mt-10 rounded-lg border border-dashed border-border p-8 text-center">
-            <div className="font-medium">
-              {meta.label} builder is coming soon
-            </div>
-            <p className="mt-1 text-sm text-muted-foreground">
-              We're still building this study type. Try{" "}
-              <button
-                className="underline"
-                onClick={() => {
-                  clearDraft();
-                  navigate("/build/card_sort", { replace: true });
-                }}
-              >
-                Card sort
-              </button>{" "}
-              or{" "}
-              <button
-                className="underline"
-                onClick={() => {
-                  clearDraft();
-                  navigate("/build/survey", { replace: true });
-                }}
-              >
-                Survey
-              </button>{" "}
-              instead.
-            </p>
-          </div>
-        )}
-
         {draft.type === "card_sort" && (
           <CardSortFields
             draft={draft}
@@ -253,6 +243,29 @@ export default function LocalBuilder() {
           />
         )}
 
+        {draft.type === "first_click" && (
+          <FirstClickFields
+            draft={draft}
+            user={user}
+            onChange={(next) => setDraft(next)}
+          />
+        )}
+
+        {draft.type === "tree_test" && (
+          <TreeTestFields
+            draft={draft}
+            onChange={(next) => setDraft(next)}
+          />
+        )}
+
+        {draft.type === "five_second" && (
+          <FiveSecondFields
+            draft={draft}
+            user={user}
+            onChange={(next) => setDraft(next)}
+          />
+        )}
+
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Button
             variant="outline"
@@ -263,7 +276,7 @@ export default function LocalBuilder() {
           >
             Discard
           </Button>
-          <Button onClick={handlePublish} disabled={publishing || !supported}>
+          <Button onClick={handlePublish} disabled={publishing}>
             {publishing
               ? "Publishing…"
               : user
@@ -679,7 +692,17 @@ export async function persistDraftToDb(
       ? draft.cardSort?.config ?? { sort_type: "open" }
       : draft.type === "survey"
         ? draft.survey?.config ?? { questions: [], layout: "single_page" }
-        : {};
+        : draft.type === "first_click"
+          ? draft.firstClick?.config ?? { task: "", image_url: "" }
+          : draft.type === "tree_test"
+            ? draft.treeTest?.config ?? { task: "", correct_node_id: "" }
+            : draft.type === "five_second"
+              ? draft.fiveSecond?.config ?? {
+                  image_url: "",
+                  duration_ms: 5000,
+                  follow_up: [],
+                }
+              : {};
 
   const { data: study, error: studyErr } = await supabase
     .from("studies")
@@ -724,5 +747,376 @@ export async function persistDraftToDb(
     }
   }
 
+  if (draft.type === "tree_test" && draft.treeTest) {
+    const nodeRows = draft.treeTest.nodes.map((n, i) => ({
+      id: n.id,
+      study_id: study.id,
+      label: n.label.trim() || "Untitled node",
+      parent_id: n.parent_id,
+      position: i,
+    }));
+    if (nodeRows.length) {
+      const { error } = await supabase.from("tree_nodes").insert(nodeRows);
+      if (error) throw new Error(error.message);
+    }
+  }
+
   return study.id;
+}
+
+// ---------- First-click fields ----------
+function FirstClickFields({
+  draft,
+  user,
+  onChange,
+}: {
+  draft: DraftStudy;
+  user: { id: string } | null;
+  onChange: (d: DraftStudy) => void;
+}) {
+  const fc = draft.firstClick!;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const set = (cfg: typeof fc.config) =>
+    onChange({ ...draft, firstClick: { config: cfg } });
+
+  const handleFile = async (file: File) => {
+    if (!user) {
+      toast.error("Sign in to upload images");
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file");
+      return;
+    }
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "png";
+    const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage
+      .from("study-assets")
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (error) {
+      setUploading(false);
+      toast.error(error.message);
+      return;
+    }
+    const { data } = supabase.storage.from("study-assets").getPublicUrl(path);
+    set({ ...fc.config, image_url: data.publicUrl });
+    setUploading(false);
+  };
+
+  return (
+    <section className="mt-12 space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="task">Task prompt</Label>
+        <Textarea
+          id="task"
+          rows={3}
+          value={fc.config.task}
+          onChange={(e) => set({ ...fc.config, task: e.target.value })}
+          placeholder="e.g. Where would you click to add a new project?"
+        />
+      </div>
+      <div>
+        <Label>Image</Label>
+        {fc.config.image_url ? (
+          <div className="mt-2 space-y-3">
+            <img
+              src={fc.config.image_url}
+              alt="Stimulus"
+              className="max-h-[400px] w-auto rounded-lg border border-border"
+            />
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                <Upload className="mr-1.5 h-3.5 w-3.5" /> Replace
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => set({ ...fc.config, image_url: "" })}
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+        ) : !user ? (
+          <div className="mt-2 flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-10 text-sm text-muted-foreground">
+            <Lock className="h-6 w-6" />
+            <span>Sign in to upload an image</span>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-10 text-sm text-muted-foreground hover:bg-muted/60"
+          >
+            <ImageIcon className="h-6 w-6" />
+            <span>{uploading ? "Uploading…" : "Click to upload an image"}</span>
+          </button>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handleFile(f);
+            e.target.value = "";
+          }}
+        />
+      </div>
+    </section>
+  );
+}
+
+// ---------- Tree test fields ----------
+function TreeTestFields({
+  draft,
+  onChange,
+}: {
+  draft: DraftStudy;
+  onChange: (d: DraftStudy) => void;
+}) {
+  const tt = draft.treeTest!;
+  const setNodes = (nodes: DraftTreeNode[]) =>
+    onChange({ ...draft, treeTest: { ...tt, nodes } });
+  const setConfig = (cfg: typeof tt.config) =>
+    onChange({ ...draft, treeTest: { ...tt, config: cfg } });
+
+  return (
+    <>
+      <section className="mt-12 space-y-2">
+        <Label htmlFor="tt-task">Task prompt</Label>
+        <Textarea
+          id="tt-task"
+          rows={3}
+          value={tt.config.task}
+          onChange={(e) => setConfig({ ...tt.config, task: e.target.value })}
+          placeholder="e.g. Where would you go to update your billing info?"
+        />
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+          Tree nodes
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Use parent links to nest items. Mark one as the correct destination.
+        </p>
+        <ul className="mt-4 space-y-2">
+          {tt.nodes.map((n, i) => (
+            <li key={n.id} className="flex items-center gap-2">
+              <div className="w-6 text-xs text-muted-foreground">{i + 1}.</div>
+              <Input
+                placeholder="Node label"
+                value={n.label}
+                onChange={(e) =>
+                  setNodes(
+                    tt.nodes.map((x) =>
+                      x.id === n.id ? { ...x, label: e.target.value } : x,
+                    ),
+                  )
+                }
+              />
+              <Select
+                value={n.parent_id ?? "__root__"}
+                onValueChange={(v) =>
+                  setNodes(
+                    tt.nodes.map((x) =>
+                      x.id === n.id
+                        ? { ...x, parent_id: v === "__root__" ? null : v }
+                        : x,
+                    ),
+                  )
+                }
+              >
+                <SelectTrigger className="w-[160px]">
+                  <SelectValue placeholder="Parent" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__root__">— root —</SelectItem>
+                  {tt.nodes
+                    .filter((x) => x.id !== n.id)
+                    .map((x) => (
+                      <SelectItem key={x.id} value={x.id}>
+                        {x.label || "(untitled)"}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              <Button
+                variant={tt.config.correct_node_id === n.id ? "default" : "outline"}
+                size="sm"
+                onClick={() =>
+                  setConfig({
+                    ...tt.config,
+                    correct_node_id:
+                      tt.config.correct_node_id === n.id ? "" : n.id,
+                  })
+                }
+              >
+                {tt.config.correct_node_id === n.id ? "Correct ✓" : "Mark correct"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setNodes(tt.nodes.filter((x) => x.id !== n.id));
+                  if (tt.config.correct_node_id === n.id) {
+                    setConfig({ ...tt.config, correct_node_id: "" });
+                  }
+                }}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setNodes([
+                ...tt.nodes,
+                {
+                  id: crypto.randomUUID(),
+                  label: "",
+                  parent_id: null,
+                  position: tt.nodes.length,
+                },
+              ])
+            }
+          >
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add node
+          </Button>
+        </div>
+      </section>
+    </>
+  );
+}
+
+// ---------- Five-second fields ----------
+function FiveSecondFields({
+  draft,
+  user,
+  onChange,
+}: {
+  draft: DraftStudy;
+  user: { id: string } | null;
+  onChange: (d: DraftStudy) => void;
+}) {
+  const fs = draft.fiveSecond!;
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+  const set = (cfg: typeof fs.config) =>
+    onChange({ ...draft, fiveSecond: { config: cfg } });
+
+  const handleFile = async (file: File) => {
+    if (!user) {
+      toast.error("Sign in to upload images");
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file");
+      return;
+    }
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "png";
+    const path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+    const { error } = await supabase.storage
+      .from("study-assets")
+      .upload(path, file, { upsert: true, contentType: file.type });
+    if (error) {
+      setUploading(false);
+      toast.error(error.message);
+      return;
+    }
+    const { data } = supabase.storage.from("study-assets").getPublicUrl(path);
+    set({ ...fs.config, image_url: data.publicUrl });
+    setUploading(false);
+  };
+
+  return (
+    <section className="mt-12 space-y-4">
+      <div className="space-y-2">
+        <Label>Display duration</Label>
+        <Select
+          value={String(fs.config.duration_ms)}
+          onValueChange={(v) => set({ ...fs.config, duration_ms: Number(v) })}
+        >
+          <SelectTrigger className="w-[200px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="3000">3 seconds</SelectItem>
+            <SelectItem value="5000">5 seconds</SelectItem>
+            <SelectItem value="10000">10 seconds</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div>
+        <Label>Image</Label>
+        {fs.config.image_url ? (
+          <div className="mt-2 space-y-3">
+            <img
+              src={fs.config.image_url}
+              alt="Stimulus"
+              className="max-h-[400px] w-auto rounded-lg border border-border"
+            />
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+              >
+                <Upload className="mr-1.5 h-3.5 w-3.5" /> Replace
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => set({ ...fs.config, image_url: "" })}
+              >
+                Remove
+              </Button>
+            </div>
+          </div>
+        ) : !user ? (
+          <div className="mt-2 flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-10 text-sm text-muted-foreground">
+            <Lock className="h-6 w-6" />
+            <span>Sign in to upload an image</span>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="mt-2 flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-10 text-sm text-muted-foreground hover:bg-muted/60"
+          >
+            <ImageIcon className="h-6 w-6" />
+            <span>{uploading ? "Uploading…" : "Click to upload an image"}</span>
+          </button>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const f = e.target.files?.[0];
+            if (f) handleFile(f);
+            e.target.value = "";
+          }}
+        />
+      </div>
+    </section>
+  );
 }
