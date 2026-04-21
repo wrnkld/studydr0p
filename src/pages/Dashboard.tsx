@@ -4,19 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import AppHeader from "@/components/AppHeader";
-import { STUDY_TYPE_META, StudyType, StudyStatus } from "@/lib/types";
+import StudyTypePicker from "@/components/StudyTypePicker";
+import { StudyType, StudyStatus } from "@/lib/types";
 import { FREE_STUDY_LIMIT, UPGRADE_COPY } from "@/lib/limits";
 import { toast } from "sonner";
 import { loadDraft, clearDraft } from "@/lib/draftStudy";
 import { persistDraftToDb } from "@/pages/LocalBuilder";
-
-const TYPES: StudyType[] = [
-  "card_sort",
-  "survey",
-  "first_click",
-  "tree_test",
-  "five_second",
-];
 
 interface StudyRow {
   id: string;
@@ -106,26 +99,7 @@ export default function Dashboard() {
           {loading ? (
             <div className="text-sm text-muted-foreground">Loading…</div>
           ) : studies.length === 0 ? (
-            <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-              {TYPES.map((t, index) => {
-                const meta = STUDY_TYPE_META[t];
-                return (
-                  <li key={t}>
-                    <Link
-                      to={`/dashboard/studies/new?type=${t}`}
-                      className="group flex aspect-square flex-col justify-between rounded-2xl border border-border bg-card p-5 shadow-sm transition-colors hover:bg-accent/40"
-                    >
-                      <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-base font-medium leading-tight">
-                        {meta.label}
-                      </span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+            <StudyTypePicker hrefFor={(t) => `/dashboard/studies/new?type=${t}`} />
           ) : (
             <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
               {studies.map((s) => (
