@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import AppHeader from "@/components/AppHeader";
+import { useAuth } from "@/hooks/useAuth";
 
 const TYPES: StudyType[] = [
   "card_sort",
