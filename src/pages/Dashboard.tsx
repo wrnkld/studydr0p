@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { STUDY_TYPE_META, StudyType, StudyStatus } from "@/lib/types";
 import { FREE_STUDY_LIMIT, FREE_RESPONSE_LIMIT, UPGRADE_COPY } from "@/lib/limits";
 import { toast } from "sonner";
 import { Copy } from "lucide-react";
+import { loadDraft, clearDraft } from "@/lib/draftStudy";
+import { persistDraftToDb } from "@/pages/LocalBuilder";
 
 interface StudyRow {
   id: string;
