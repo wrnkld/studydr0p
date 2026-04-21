@@ -71,12 +71,7 @@ export default function LocalBuilder() {
       return;
     }
 
-    // Types without a local-draft builder route straight into the
-    // full authenticated builder (auto-creates the study on arrival).
-    if (!SUPPORTED.includes(requested)) {
-      navigate(`/dashboard/studies/new?type=${requested}`, { replace: true });
-      return;
-    }
+    // All 5 study types are supported in the local builder.
 
     if (existing && existing.type === requested) {
       setDraft(existing);
@@ -128,9 +123,36 @@ export default function LocalBuilder() {
         toast.error("All questions need a label");
         return;
       }
-    } else {
-      toast.info(`${STUDY_TYPE_META[draft.type].label} isn't ready to publish yet.`);
-      return;
+    } else if (draft.type === "first_click") {
+      const fc = draft.firstClick!;
+      if (!fc.config.task.trim()) {
+        toast.error("Add a task prompt");
+        return;
+      }
+      if (!fc.config.image_url) {
+        toast.error("Add an image (sign in to upload)");
+        return;
+      }
+    } else if (draft.type === "tree_test") {
+      const tt = draft.treeTest!;
+      if (!tt.config.task.trim()) {
+        toast.error("Add a task prompt");
+        return;
+      }
+      if (tt.nodes.length < 2) {
+        toast.error("Add at least 2 tree nodes");
+        return;
+      }
+      if (!tt.config.correct_node_id) {
+        toast.error("Pick the correct destination node");
+        return;
+      }
+    } else if (draft.type === "five_second") {
+      const fs = draft.fiveSecond!;
+      if (!fs.config.image_url) {
+        toast.error("Add an image (sign in to upload)");
+        return;
+      }
     }
 
     if (!user) {
@@ -164,7 +186,6 @@ export default function LocalBuilder() {
   }
 
   const meta = STUDY_TYPE_META[draft.type];
-  const supported = SUPPORTED.includes(draft.type);
 
   return (
     <div className="min-h-screen bg-background">
