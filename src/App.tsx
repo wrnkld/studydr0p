@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,7 +11,6 @@ import Dashboard from "./pages/Dashboard";
 import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
 import StudyDetail from "./pages/StudyDetail";
-import StudyResults from "./pages/StudyResults";
 import ParticipantStudy from "./pages/ParticipantStudy";
 import LocalBuilder from "./pages/LocalBuilder";
 import NotFound from "./pages/NotFound";
@@ -50,7 +49,7 @@ const App = () => (
             />
             <Route
               path="/dashboard/studies/:id/results"
-              element={<ProtectedRoute><StudyResults /></ProtectedRoute>}
+              element={<Navigate to=".." replace relative="path" />}
             />
 
             <Route path="*" element={<NotFound />} />
