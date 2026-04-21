@@ -3,7 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import AppHeader from "@/components/AppHeader";
-import { STUDY_TYPE_META, StudyType } from "@/lib/types";
+import StudyTypePicker from "@/components/StudyTypePicker";
+import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 
 const TYPES: StudyType[] = [
@@ -69,28 +70,11 @@ export default function NewStudy() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="container max-w-3xl py-10">
-        <h1 className="text-3xl font-semibold tracking-tight">Choose a study type</h1>
-        <ul className="mt-10 grid gap-3 sm:grid-cols-2">
-          {TYPES.map((t) => {
-            const meta = STUDY_TYPE_META[t];
-            return (
-              <li key={t}>
-                <button
-                  type="button"
-                  onClick={() => void create(t)}
-                  disabled={creating}
-                  className="group block w-full rounded-lg border border-border p-5 text-left transition-colors hover:bg-accent/40 disabled:opacity-60"
-                >
-                  <div className="font-medium">{meta.label}</div>
-                  <div className="mt-1 text-sm text-muted-foreground">
-                    {meta.description}
-                  </div>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+      <main className="container max-w-6xl py-16">
+        <h1 className="text-5xl font-semibold tracking-tight">New study</h1>
+        <div className="mt-14">
+          <StudyTypePicker onSelect={(t) => void create(t)} disabled={creating} />
+        </div>
       </main>
     </div>
   );
