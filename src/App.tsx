@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
+import StudyDetail from "./pages/StudyDetail";
 import StudyResults from "./pages/StudyResults";
 import ParticipantStudy from "./pages/ParticipantStudy";
 import LocalBuilder from "./pages/LocalBuilder";
@@ -38,6 +39,10 @@ const App = () => (
             <Route
               path="/dashboard/studies/new"
               element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
+            />
+            <Route
+              path="/dashboard/studies/:id"
+              element={<ProtectedRoute><StudyDetail /></ProtectedRoute>}
             />
             <Route
               path="/dashboard/studies/:id/edit"

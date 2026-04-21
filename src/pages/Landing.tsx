@@ -1,74 +1,38 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import AppHeader from "@/components/AppHeader";
 import { useAuth } from "@/hooks/useAuth";
 
-const TYPES: StudyType[] = [
-  "card_sort",
-  "survey",
-  "first_click",
-  "tree_test",
-  "five_second",
-];
-
+// Landing page per wireframe: hero copy, row of placeholder tiles, single Sign in CTA.
 export default function Landing() {
   const { session } = useAuth();
-  const primaryCta = session ? "/dashboard" : "/build/card_sort";
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="container max-w-3xl py-24">
-        <h1 className="text-5xl font-semibold tracking-tight md:text-6xl">
+      <main className="container max-w-6xl py-20">
+        <h1 className="max-w-4xl text-5xl font-semibold tracking-tight md:text-6xl">
           UX research, without the friction.
         </h1>
-        <p className="mt-6 text-lg text-muted-foreground">
+        <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
           Studydrop lets you run unmoderated UX studies and share them with
           participants via a single link. No participant accounts. No
           onboarding. Just answers.
         </p>
 
-        <div className="mt-10 flex flex-wrap gap-3">
+        <div className="mt-14 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div
+              key={i}
+              aria-hidden
+              className="aspect-square rounded-2xl border border-border bg-card shadow-sm"
+            />
+          ))}
+        </div>
+
+        <div className="mt-16">
           <Button asChild size="lg">
-            <Link to={primaryCta}>Start for free</Link>
+            <Link to={session ? "/dashboard" : "/login"}>Sign in</Link>
           </Button>
-          <Button asChild size="lg" variant="outline">
-            <Link to={session ? "/dashboard" : "/login"}>Buy for $20</Link>
-          </Button>
-        </div>
-
-        <div className="mt-20 border-t border-border pt-10">
-          <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-            Five study types
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Click any type to start building — no signup required.
-          </p>
-          <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-            {TYPES.map((t) => {
-              const meta = STUDY_TYPE_META[t];
-              return (
-                <li key={t}>
-                  <Link
-                    to={`/build/${t}`}
-                    className="block rounded-lg border border-border p-5 transition-colors hover:bg-accent/40"
-                  >
-                    <div className="font-medium">{meta.label}</div>
-                    <div className="mt-1 text-sm text-muted-foreground">
-                      {meta.description}
-                    </div>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-
-        <div className="mt-20 border-t border-border pt-10 text-sm text-muted-foreground">
-          <p>
-            Free: 1 study, up to 10 responses. $20 one-time unlocks unlimited
-            studies and responses, forever.
-          </p>
         </div>
       </main>
     </div>
