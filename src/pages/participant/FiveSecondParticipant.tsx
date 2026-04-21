@@ -18,7 +18,7 @@ interface Props {
   onDone: () => void;
 }
 
-type Phase = "ready" | "showing" | "questions";
+type Phase = "showing" | "questions";
 
 export default function FiveSecondParticipant({
   study,
@@ -28,7 +28,7 @@ export default function FiveSecondParticipant({
 }: Props) {
   const durationMs = study.config.duration_ms || 5000;
   const totalSeconds = Math.round(durationMs / 1000);
-  const [phase, setPhase] = useState<Phase>("ready");
+  const [phase, setPhase] = useState<Phase>("showing");
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
