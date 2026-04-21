@@ -14,7 +14,7 @@ const TYPES: StudyType[] = [
 
 export default function Landing() {
   const { session } = useAuth();
-  const ctaTo = session ? "/dashboard" : "/login";
+  const primaryCta = session ? "/dashboard" : "/build/card_sort";
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
@@ -30,10 +30,10 @@ export default function Landing() {
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild size="lg">
-            <Link to={ctaTo}>Start for free</Link>
+            <Link to={primaryCta}>Start for free</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link to={ctaTo}>Buy for $20</Link>
+            <Link to={session ? "/dashboard" : "/login"}>Buy for $20</Link>
           </Button>
         </div>
 
@@ -41,18 +41,23 @@ export default function Landing() {
           <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
             Five study types
           </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Click any type to start building — no signup required.
+          </p>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2">
             {TYPES.map((t) => {
               const meta = STUDY_TYPE_META[t];
               return (
-                <li
-                  key={t}
-                  className="rounded-lg border border-border p-5 transition-colors hover:bg-accent/40"
-                >
-                  <div className="font-medium">{meta.label}</div>
-                  <div className="mt-1 text-sm text-muted-foreground">
-                    {meta.description}
-                  </div>
+                <li key={t}>
+                  <Link
+                    to={`/build/${t}`}
+                    className="block rounded-lg border border-border p-5 transition-colors hover:bg-accent/40"
+                  >
+                    <div className="font-medium">{meta.label}</div>
+                    <div className="mt-1 text-sm text-muted-foreground">
+                      {meta.description}
+                    </div>
+                  </Link>
                 </li>
               );
             })}

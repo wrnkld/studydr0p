@@ -12,6 +12,7 @@ import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
 import StudyResults from "./pages/StudyResults";
 import ParticipantStudy from "./pages/ParticipantStudy";
+import LocalBuilder from "./pages/LocalBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,8 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/build" element={<LocalBuilder />} />
+            <Route path="/build/:type" element={<LocalBuilder />} />
             <Route path="/s/:slug" element={<ParticipantStudy />} />
 
             <Route
