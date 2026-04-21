@@ -22,9 +22,33 @@ interface StudyRow {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [studies, setStudies] = useState<StudyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPaid, setIsPaid] = useState(false);
+
+  // After sign-in via the publish modal, persist the localStorage draft
+  // and forward to the new study's edit page.
+  useEffect(() => {
+    if (!user) return;
+    if (searchParams.get("claim") !== "1") return;
+    const draft = loadDraft();
+    searchParams.delete("claim");
+    setSearchParams(searchParams, { replace: true });
+    if (!draft) return;
+    (async () => {
+      try {
+        const studyId = await persistDraftToDb(draft, user.id);
+        clearDraft();
+        toast.success("Study published");
+        navigate(`/dashboard/studies/${studyId}/edit`, { replace: true });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Failed to save draft";
+        toast.error(msg);
+      }
+    })();
+  }, [user, searchParams, setSearchParams, navigate]);
 
   useEffect(() => {
     if (!user) return;
