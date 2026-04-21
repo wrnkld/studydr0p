@@ -1,7 +1,14 @@
 // localStorage-backed draft for an unauthenticated user building a study.
 // One draft at a time — keeps things simple and matches "Start for free".
 
-import { CardSortConfig, StudyType, SurveyConfig } from "./types";
+import {
+  CardSortConfig,
+  FirstClickConfig,
+  FiveSecondConfig,
+  StudyType,
+  SurveyConfig,
+  TreeTestConfig,
+} from "./types";
 
 const KEY = "studydrop:draft";
 
@@ -17,6 +24,13 @@ export interface DraftCategoryRow {
   position: number;
 }
 
+export interface DraftTreeNode {
+  id: string;
+  label: string;
+  parent_id: string | null;
+  position: number;
+}
+
 export interface DraftStudy {
   type: StudyType;
   title: string;
@@ -29,6 +43,16 @@ export interface DraftStudy {
   };
   survey?: {
     config: SurveyConfig;
+  };
+  firstClick?: {
+    config: FirstClickConfig;
+  };
+  treeTest?: {
+    config: TreeTestConfig;
+    nodes: DraftTreeNode[];
+  };
+  fiveSecond?: {
+    config: FiveSecondConfig;
   };
   updated_at: number;
 }
@@ -77,6 +101,17 @@ export function newDraft(type: StudyType): DraftStudy {
   } else if (type === "survey") {
     base.survey = {
       config: { questions: [], layout: "single_page" },
+    };
+  } else if (type === "first_click") {
+    base.firstClick = { config: { task: "", image_url: "" } };
+  } else if (type === "tree_test") {
+    base.treeTest = {
+      config: { task: "", correct_node_id: "" },
+      nodes: [],
+    };
+  } else if (type === "five_second") {
+    base.fiveSecond = {
+      config: { image_url: "", duration_ms: 5000, follow_up: [] },
     };
   }
   return base;
