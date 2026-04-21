@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
+import { CardSortConfig, FiveSecondConfig, StudyType, SurveyConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import FiveSecondParticipant from "./participant/FiveSecondParticipant";
 
 interface StudyData {
   id: string;
@@ -157,6 +158,22 @@ export default function ParticipantStudy() {
     );
   }
 
+  if (study.type === "five_second") {
+    const cfg = (study.config as FiveSecondConfig) ?? {
+      image_url: "",
+      duration_ms: 5000,
+      follow_up: [],
+    };
+    return (
+      <FiveSecondParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
   return (
     <Centered>
       <h1 className="text-2xl font-semibold">Unsupported study</h1>
@@ -174,6 +191,10 @@ function introCopy(study: StudyData): string {
     return sort === "open"
       ? "You'll group cards into categories you create · Anonymous"
       : "You'll sort cards into predefined categories · Anonymous";
+  }
+  if (study.type === "five_second") {
+    const n = (study.config as FiveSecondConfig)?.follow_up?.length ?? 0;
+    return `5-second image · ${n} follow-up question${n === 1 ? "" : "s"} · Anonymous`;
   }
   return "Anonymous";
 }

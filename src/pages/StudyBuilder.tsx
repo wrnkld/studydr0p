@@ -3,9 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AppHeader from "@/components/AppHeader";
 import { toast } from "sonner";
-import { CardSortConfig, StudyStatus, StudyType, SurveyConfig } from "@/lib/types";
+import { CardSortConfig, FiveSecondConfig, StudyStatus, StudyType, SurveyConfig } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
+import FiveSecondBuilder from "./builders/FiveSecondBuilder";
 
 interface StudyRow {
   id: string;
@@ -70,6 +71,26 @@ export default function StudyBuilder() {
     const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
     return (
       <CardSortBuilder
+        studyId={study.id}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config: cfg,
+        }}
+      />
+    );
+  }
+
+  if (study.type === "five_second") {
+    const cfg = (study.config as FiveSecondConfig) ?? {
+      image_url: "",
+      duration_ms: 5000,
+      follow_up: [],
+    };
+    return (
+      <FiveSecondBuilder
         studyId={study.id}
         initial={{
           title: study.title,
