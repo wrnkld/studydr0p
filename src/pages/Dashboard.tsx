@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { STUDY_TYPE_META, StudyType, StudyStatus } from "@/lib/types";
 import { FREE_STUDY_LIMIT, FREE_RESPONSE_LIMIT, UPGRADE_COPY } from "@/lib/limits";
 import { toast } from "sonner";
 import { Copy } from "lucide-react";
+import { loadDraft, clearDraft } from "@/lib/draftStudy";
+import { persistDraftToDb } from "@/pages/LocalBuilder";
 
 interface StudyRow {
   id: string;
@@ -20,9 +22,33 @@ interface StudyRow {
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [studies, setStudies] = useState<StudyRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [isPaid, setIsPaid] = useState(false);
+
+  // After sign-in via the publish modal, persist the localStorage draft
+  // and forward to the new study's edit page.
+  useEffect(() => {
+    if (!user) return;
+    if (searchParams.get("claim") !== "1") return;
+    const draft = loadDraft();
+    searchParams.delete("claim");
+    setSearchParams(searchParams, { replace: true });
+    if (!draft) return;
+    (async () => {
+      try {
+        const studyId = await persistDraftToDb(draft, user.id);
+        clearDraft();
+        toast.success("Study published");
+        navigate(`/dashboard/studies/${studyId}/edit`, { replace: true });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Failed to save draft";
+        toast.error(msg);
+      }
+    })();
+  }, [user, searchParams, setSearchParams, navigate]);
 
   useEffect(() => {
     if (!user) return;
