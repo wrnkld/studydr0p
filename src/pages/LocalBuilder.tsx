@@ -73,7 +73,19 @@ export default function LocalBuilder() {
 
     // All 5 study types are supported in the local builder.
 
-    if (existing && existing.type === requested) {
+    // Reuse the saved draft only if it matches the requested type AND
+    // already has the per-type slot populated (older drafts from before
+    // we supported all 5 types may be missing it).
+    const slotOk =
+      existing &&
+      existing.type === requested &&
+      ((requested === "card_sort" && existing.cardSort) ||
+        (requested === "survey" && existing.survey) ||
+        (requested === "first_click" && existing.firstClick) ||
+        (requested === "tree_test" && existing.treeTest) ||
+        (requested === "five_second" && existing.fiveSecond));
+
+    if (slotOk) {
       setDraft(existing);
     } else {
       const fresh = newDraft(requested);
