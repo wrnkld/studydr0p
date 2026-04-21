@@ -3,11 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AppHeader from "@/components/AppHeader";
 import { toast } from "sonner";
-import { CardSortConfig, FiveSecondConfig, StudyStatus, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
+import { CardSortConfig, FirstClickConfig, FiveSecondConfig, StudyStatus, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import FiveSecondBuilder from "./builders/FiveSecondBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
+import FirstClickBuilder from "./builders/FirstClickBuilder";
 
 interface StudyRow {
   id: string;
@@ -108,6 +109,22 @@ export default function StudyBuilder() {
     const cfg = (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" };
     return (
       <TreeTestBuilder
+        studyId={study.id}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config: cfg,
+        }}
+      />
+    );
+  }
+
+  if (study.type === "first_click") {
+    const cfg = (study.config as FirstClickConfig) ?? { task: "", image_url: "" };
+    return (
+      <FirstClickBuilder
         studyId={study.id}
         initial={{
           title: study.title,

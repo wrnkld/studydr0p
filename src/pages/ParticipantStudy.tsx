@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CardSortConfig, FiveSecondConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
+import { CardSortConfig, FirstClickConfig, FiveSecondConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 import FiveSecondParticipant from "./participant/FiveSecondParticipant";
 import TreeTestParticipant from "./participant/TreeTestParticipant";
+import FirstClickParticipant from "./participant/FirstClickParticipant";
 
 interface StudyData {
   id: string;
@@ -187,6 +188,18 @@ export default function ParticipantStudy() {
     );
   }
 
+  if (study.type === "first_click") {
+    const cfg = (study.config as FirstClickConfig) ?? { task: "", image_url: "" };
+    return (
+      <FirstClickParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
   return (
     <Centered>
       <h1 className="text-2xl font-semibold">Unsupported study</h1>
@@ -212,6 +225,9 @@ function introCopy(study: StudyData): string {
   if (study.type === "tree_test") {
     const task = (study.config as TreeTestConfig)?.task ?? "";
     return task ? "Find your answer in the menu · Anonymous" : "Anonymous";
+  }
+  if (study.type === "first_click") {
+    return "Click where you'd go first · Anonymous";
   }
   return "Anonymous";
 }
