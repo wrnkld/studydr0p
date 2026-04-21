@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CardSortConfig, FiveSecondConfig, StudyType, SurveyConfig } from "@/lib/types";
+import { CardSortConfig, FiveSecondConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 import FiveSecondParticipant from "./participant/FiveSecondParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
 
 interface StudyData {
   id: string;
