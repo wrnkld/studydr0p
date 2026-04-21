@@ -13,6 +13,8 @@ const TYPES: StudyType[] = [
 ];
 
 export default function Landing() {
+  const { session } = useAuth();
+  const ctaTo = session ? "/dashboard" : "/login";
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
@@ -28,10 +30,10 @@ export default function Landing() {
 
         <div className="mt-10 flex flex-wrap gap-3">
           <Button asChild size="lg">
-            <Link to="/login">Start for free</Link>
+            <Link to={ctaTo}>Start for free</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
-            <Link to="/login">Buy for $20</Link>
+            <Link to={ctaTo}>Buy for $20</Link>
           </Button>
         </div>
 
