@@ -80,35 +80,6 @@ export default function FiveSecondParticipant({
     onDone();
   };
 
-  if (phase === "ready") {
-    return (
-      <div className="min-h-screen bg-background">
-        <main className="container max-w-xl py-16">
-          <div className="text-xs uppercase tracking-widest text-muted-foreground">
-            Five-second test
-          </div>
-          <h1 className="mt-3 text-3xl font-semibold tracking-tight">{study.title}</h1>
-          {study.description && (
-            <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
-              {study.description}
-            </p>
-          )}
-          <div className="mt-8 rounded-lg border border-border bg-muted/30 p-5 text-sm">
-            <p className="font-medium">How it works</p>
-            <ol className="mt-2 list-inside list-decimal space-y-1 text-muted-foreground">
-              <li>You'll see an image for exactly {totalSeconds} seconds.</li>
-              <li>The image will then disappear.</li>
-              <li>Answer a few quick questions about what you remember.</li>
-            </ol>
-          </div>
-          <Button size="lg" className="mt-8" onClick={() => setPhase("showing")}>
-            I'm ready — start
-          </Button>
-        </main>
-      </div>
-    );
-  }
-
   if (phase === "showing") {
     return (
       <div className="flex min-h-screen flex-col bg-background">
