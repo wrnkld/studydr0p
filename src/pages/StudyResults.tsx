@@ -9,11 +9,13 @@ import {
   CardSortConfig,
   CardSortResponseData,
   CategoryRow,
+  FirstClickConfig,
   StudyType,
   SurveyConfig,
   SurveyQuestion,
 } from "@/lib/types";
 import { toast } from "sonner";
+import FirstClickResults from "./results/FirstClickResults";
 
 interface StudyData {
   id: string;
@@ -190,6 +192,12 @@ export default function StudyResults() {
               cards={cards}
               categories={categories}
               config={(study.config as CardSortConfig) ?? { sort_type: "open" }}
+              responses={responses}
+            />
+          )}
+          {study.type === "first_click" && (
+            <FirstClickResults
+              config={(study.config as FirstClickConfig) ?? { task: "", image_url: "" }}
               responses={responses}
             />
           )}
