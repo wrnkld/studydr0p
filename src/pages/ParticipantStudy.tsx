@@ -187,6 +187,12 @@ export default function ParticipantStudy() {
     );
   }
 
+  return (
+    <Centered>
+      <h1 className="text-2xl font-semibold">Unsupported study</h1>
+    </Centered>
+  );
+}
 
 function introCopy(study: StudyData): string {
   if (study.type === "survey") {
@@ -202,6 +208,10 @@ function introCopy(study: StudyData): string {
   if (study.type === "five_second") {
     const n = (study.config as FiveSecondConfig)?.follow_up?.length ?? 0;
     return `5-second image · ${n} follow-up question${n === 1 ? "" : "s"} · Anonymous`;
+  }
+  if (study.type === "tree_test") {
+    const task = (study.config as TreeTestConfig)?.task ?? "";
+    return task ? "Find your answer in the menu · Anonymous" : "Anonymous";
   }
   return "Anonymous";
 }
