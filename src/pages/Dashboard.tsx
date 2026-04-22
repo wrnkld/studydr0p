@@ -101,21 +101,22 @@ export default function Dashboard() {
           ) : studies.length === 0 ? (
             <StudyTypePicker hrefFor={(t) => `/dashboard/studies/new?type=${t}`} />
           ) : (
-            <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+            <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
               {studies.map((s) => (
                 <li key={s.id}>
                   <Link
                     to={`/dashboard/studies/${s.id}`}
-                    className="group block aspect-square rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:bg-accent/40"
+                    className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-accent/40"
                   >
-                    <div className="flex h-full flex-col justify-between">
-                      <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                        {s.status}
-                      </div>
-                      <div className="line-clamp-3 text-sm font-medium">
-                        {s.title || "Untitled"}
-                      </div>
+                    <div className="flex items-center gap-4">
+                      <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        {s.type.replace("_", "-")}
+                      </span>
+                      <span className="font-medium">{s.title || "Untitled"}</span>
                     </div>
+                    <span className="text-xs uppercase tracking-widest text-muted-foreground">
+                      {s.status}
+                    </span>
                   </Link>
                 </li>
               ))}
