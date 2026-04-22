@@ -36,7 +36,7 @@ export default function StudyBuilder() {
         .single();
       if (error || !data) {
         toast.error("Study not found");
-        navigate("/dashboard");
+        navigate("/studies");
         return;
       }
       setStudy(data as StudyRow);

@@ -103,7 +103,7 @@ export default function StudyDetail() {
       ]);
       if (studyRes.error || !studyRes.data) {
         toast.error("Study not found");
-        navigate("/dashboard");
+        navigate("/studies");
         return;
       }
       setStudy(studyRes.data as StudyData);
@@ -150,7 +150,7 @@ export default function StudyDetail() {
       return;
     }
     toast.success("Study deleted");
-    navigate("/dashboard", { replace: true });
+    navigate("/studies", { replace: true });
   };
 
   const exportCsv = () => {
@@ -230,7 +230,7 @@ export default function StudyDetail() {
               </Button>
             )}
             <Button asChild size="lg" className="rounded-full">
-              <Link to={`/dashboard/studies/${study.id}/edit`}>Edit</Link>
+              <Link to={`/studies/${study.id}/edit`}>Edit</Link>
             </Button>
             <Button
               size="lg"
