@@ -36,22 +36,22 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="container max-w-3xl py-20">
+      <main className="container flex min-h-[calc(100vh-3.5rem)] max-w-3xl flex-col items-center justify-center py-20 text-center">
         {sent ? (
           <>
             <h1 className="text-5xl font-semibold tracking-tight">Link sent</h1>
-            <p className="mt-6 text-lg text-muted-foreground">
+            <p className="mt-6 max-w-md text-lg text-muted-foreground">
               We sent a magic link to {email}. Click it to continue.
             </p>
           </>
         ) : (
           <>
             <h1 className="text-5xl font-semibold tracking-tight">Sign in</h1>
-            <p className="mt-6 text-lg text-muted-foreground">
+            <p className="mt-6 max-w-md text-lg text-muted-foreground">
               We'll email you a magic link. No passwords.
             </p>
 
-            <form onSubmit={onSubmit} className="mt-12 max-w-md space-y-4">
+            <form onSubmit={onSubmit} className="mt-12 w-full max-w-md space-y-4">
               <Input
                 id="email"
                 type="email"
