@@ -12,7 +12,7 @@ export default function Landing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) navigate("/dashboard", { replace: true });
+    if (session) navigate("/studies", { replace: true });
   }, [session, navigate]);
 
   return (
