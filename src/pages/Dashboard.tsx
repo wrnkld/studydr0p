@@ -42,7 +42,7 @@ export default function Dashboard() {
         const studyId = await persistDraftToDb(draft, user.id);
         clearDraft();
         toast.success("Study published");
-        navigate(`/dashboard/studies/${studyId}`, { replace: true });
+        navigate(`/studies/${studyId}`, { replace: true });
       } catch (e) {
         const msg = e instanceof Error ? e.message : "Failed to save draft";
         toast.error(msg);
@@ -82,7 +82,7 @@ export default function Dashboard() {
           <h1 className="text-5xl font-semibold tracking-tight">Studies</h1>
           <Button asChild size="lg" className="rounded-full" disabled={atStudyLimit}>
             <Link
-              to="/dashboard/studies/new"
+              to="/studies/new"
               onClick={(e) => {
                 if (atStudyLimit) {
                   e.preventDefault();
@@ -99,13 +99,13 @@ export default function Dashboard() {
           {loading ? (
             <div className="text-sm text-muted-foreground">Loading…</div>
           ) : studies.length === 0 ? (
-            <StudyTypePicker hrefFor={(t) => `/dashboard/studies/new?type=${t}`} />
+            <StudyTypePicker hrefFor={(t) => `/studies/new?type=${t}`} />
           ) : (
             <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
               {studies.map((s) => (
                 <li key={s.id}>
                   <Link
-                    to={`/dashboard/studies/${s.id}`}
+                    to={`/studies/${s.id}`}
                     className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-accent/40"
                   >
                     <div className="flex items-center gap-4">

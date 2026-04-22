@@ -177,7 +177,7 @@ export default function LocalBuilder() {
     try {
       const studyId = await persistDraftToDb(draft, user.id);
       clearDraft();
-      navigate(`/dashboard/studies/${studyId}/edit`);
+      navigate(`/studies/${studyId}/edit`);
     } catch (e) {
       const msg = e instanceof Error ? e.message : "Failed to publish";
       toast.error(msg);

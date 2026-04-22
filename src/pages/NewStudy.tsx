@@ -58,7 +58,7 @@ export default function NewStudy() {
       return;
     }
 
-    navigate(`/dashboard/studies/${data.id}/edit`);
+    navigate(`/studies/${data.id}/edit`);
   };
 
   useEffect(() => {

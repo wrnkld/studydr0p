@@ -15,7 +15,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) navigate("/dashboard", { replace: true });
+    if (session) navigate("/studies", { replace: true });
   }, [session, navigate]);
 
   const onSubmit = async (e: FormEvent) => {
@@ -23,7 +23,7 @@ export default function Login() {
     setSubmitting(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/dashboard` },
+      options: { emailRedirectTo: `${window.location.origin}/studies` },
     });
     setSubmitting(false);
     if (error) {

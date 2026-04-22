@@ -12,13 +12,13 @@ export default function Landing() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (session) navigate("/dashboard", { replace: true });
+    if (session) navigate("/studies", { replace: true });
   }, [session, navigate]);
 
   return (
     <div className="min-h-screen bg-background">
       <AppHeader />
-      <main className="container max-w-6xl py-20">
+      <main className="container flex min-h-[calc(100vh-3.5rem)] max-w-6xl flex-col items-center justify-center py-20 text-center">
         <h1 className="max-w-4xl text-5xl font-semibold tracking-tight md:text-6xl">
           UX research, without the friction.
         </h1>
@@ -28,13 +28,13 @@ export default function Landing() {
           onboarding. Just answers.
         </p>
 
-        <div className="mt-14">
+        <div className="mt-14 w-full">
           <StudyTypePicker hrefFor={(t) => `/build/${t}`} />
         </div>
 
         <div className="mt-16">
           <Button asChild size="lg">
-            <Link to={session ? "/dashboard" : "/login"}>Sign in</Link>
+            <Link to={session ? "/studies" : "/login"}>Sign in</Link>
           </Button>
         </div>
       </main>

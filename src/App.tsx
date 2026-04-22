@@ -32,23 +32,23 @@ const App = () => (
             <Route path="/s/:slug" element={<ParticipantStudy />} />
 
             <Route
-              path="/dashboard"
+              path="/studies"
               element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
             />
             <Route
-              path="/dashboard/studies/new"
+              path="/studies/new"
               element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
             />
             <Route
-              path="/dashboard/studies/:id"
+              path="/studies/:id"
               element={<ProtectedRoute><StudyDetail /></ProtectedRoute>}
             />
             <Route
-              path="/dashboard/studies/:id/edit"
+              path="/studies/:id/edit"
               element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
             />
             <Route
-              path="/dashboard/studies/:id/results"
+              path="/studies/:id/results"
               element={<Navigate to=".." replace relative="path" />}
             />
 

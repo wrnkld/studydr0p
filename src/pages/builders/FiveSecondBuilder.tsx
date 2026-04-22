@@ -149,10 +149,10 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
       <AppHeader />
       <main className="container max-w-3xl py-10">
         <Link
-          to="/dashboard"
+          to="/studies"
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to dashboard
+          <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
         </Link>
 
         <div className="mt-6 flex items-end justify-between gap-4">
