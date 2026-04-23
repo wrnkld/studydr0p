@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import AppHeader from "@/components/AppHeader";
 import StudyTypePicker from "@/components/StudyTypePicker";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -38,8 +37,7 @@ export default function Landing() {
 
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
-      <main className="container flex min-h-[calc(100vh-3.5rem)] max-w-6xl flex-col items-center justify-center py-20 text-center">
+      <main className="container flex min-h-screen max-w-6xl flex-col items-center justify-center py-20 text-center">
         <h1 className="max-w-4xl text-5xl font-semibold tracking-tight md:text-6xl">
           UX research, without the friction.
         </h1>
