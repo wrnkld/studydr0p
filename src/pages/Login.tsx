@@ -60,13 +60,11 @@ export default function Login() {
                 placeholder="you@team.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-12 rounded-full px-5"
               />
               <Button
                 type="submit"
                 size="lg"
                 disabled={submitting}
-                className="rounded-full"
               >
                 {submitting ? "Sending…" : "Send"}
               </Button>

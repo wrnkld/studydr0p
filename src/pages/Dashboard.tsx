@@ -80,7 +80,7 @@ export default function Dashboard() {
       <main className="container max-w-6xl py-16">
         <div className="flex items-end justify-between gap-4">
           <h1 className="text-5xl font-semibold tracking-tight">Studies</h1>
-          <Button asChild size="lg" className="rounded-full" disabled={atStudyLimit}>
+          <Button asChild size="lg" disabled={atStudyLimit}>
             <Link
               to="/studies/new"
               onClick={(e) => {
