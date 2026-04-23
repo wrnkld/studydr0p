@@ -20,7 +20,7 @@ export default function AppHeader() {
           StudyDrop
         </Link>
 
-        {user ? (
+        {user && (
           <button
             type="button"
             onClick={async () => {
@@ -31,13 +31,6 @@ export default function AppHeader() {
           >
             Sign out
           </button>
-        ) : (
-          <Link
-            to="/login"
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Sign in
-          </Link>
         )}
       </div>
     </header>
