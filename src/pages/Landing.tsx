@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import AppHeader from "@/components/AppHeader";
 import StudyTypePicker from "@/components/StudyTypePicker";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
