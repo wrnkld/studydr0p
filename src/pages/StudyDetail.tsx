@@ -223,18 +223,17 @@ export default function StudyDetail() {
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full"
                 onClick={exportCsv}
               >
                 <Download className="mr-1.5 h-4 w-4" /> Export CSV
               </Button>
             )}
-            <Button asChild size="lg" className="rounded-full">
+            <Button asChild size="lg">
               <Link to={`/studies/${study.id}/edit`}>Edit</Link>
             </Button>
             <Button
               size="lg"
-              className="rounded-full"
+              variant="outline"
               onClick={() => setConfirmOpen(true)}
             >
               Delete
