@@ -2,13 +2,10 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CardSortConfig, FirstClickConfig, FiveSecondConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
+import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
-import FiveSecondParticipant from "./participant/FiveSecondParticipant";
-import TreeTestParticipant from "./participant/TreeTestParticipant";
-import FirstClickParticipant from "./participant/FirstClickParticipant";
 
 interface StudyData {
   id: string;
@@ -160,45 +157,7 @@ export default function ParticipantStudy() {
     );
   }
 
-  if (study.type === "five_second") {
-    const cfg = (study.config as FiveSecondConfig) ?? {
-      image_url: "",
-      duration_ms: 5000,
-      follow_up: [],
-    };
-    return (
-      <FiveSecondParticipant
-        study={{ ...study, config: cfg }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        onDone={() => setDone(true)}
-      />
-    );
-  }
-
-  if (study.type === "tree_test") {
-    const cfg = (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" };
-    return (
-      <TreeTestParticipant
-        study={{ ...study, config: cfg }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        onDone={() => setDone(true)}
-      />
-    );
-  }
-
-  if (study.type === "first_click") {
-    const cfg = (study.config as FirstClickConfig) ?? { task: "", image_url: "" };
-    return (
-      <FirstClickParticipant
-        study={{ ...study, config: cfg }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        onDone={() => setDone(true)}
-      />
-    );
-  }
+  
 
   return (
     <Centered>
@@ -217,17 +176,6 @@ function introCopy(study: StudyData): string {
     return sort === "open"
       ? "You'll group cards into categories you create · Anonymous"
       : "You'll sort cards into predefined categories · Anonymous";
-  }
-  if (study.type === "five_second") {
-    const n = (study.config as FiveSecondConfig)?.follow_up?.length ?? 0;
-    return `5-second image · ${n} follow-up question${n === 1 ? "" : "s"} · Anonymous`;
-  }
-  if (study.type === "tree_test") {
-    const task = (study.config as TreeTestConfig)?.task ?? "";
-    return task ? "Find your answer in the menu · Anonymous" : "Anonymous";
-  }
-  if (study.type === "first_click") {
-    return "Click where you'd go first · Anonymous";
   }
   return "Anonymous";
 }

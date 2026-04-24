@@ -35,13 +35,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { generateSlug } from "@/lib/slug";
 
-const VALID_TYPES: StudyType[] = [
-  "card_sort",
-  "survey",
-  "first_click",
-  "tree_test",
-  "five_second",
-];
+const VALID_TYPES: StudyType[] = ["card_sort", "survey"];
 
 export default function LocalBuilder() {
   const { type: typeParam } = useParams();

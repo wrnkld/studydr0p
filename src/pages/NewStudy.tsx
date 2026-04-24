@@ -7,13 +7,7 @@ import StudyTypePicker from "@/components/StudyTypePicker";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 
-const TYPES: StudyType[] = [
-  "survey",
-  "card_sort",
-  "first_click",
-  "tree_test",
-  "five_second",
-];
+const TYPES: StudyType[] = ["survey", "card_sort"];
 
 function isStudyType(value: string): value is StudyType {
   return TYPES.includes(value as StudyType);
@@ -40,13 +34,7 @@ export default function NewStudy() {
             ? { questions: [], layout: "single_page" }
             : type === "card_sort"
               ? { sort_type: "open" }
-              : type === "first_click"
-                ? { task: "", image_url: "" }
-                : type === "tree_test"
-                  ? { task: "", correct_node_id: "" }
-                  : type === "five_second"
-                    ? { image_url: "", duration_ms: 5000, follow_up: [] }
-                    : {},
+              : {},
       })
       .select("id")
       .single();

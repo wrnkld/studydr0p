@@ -1,13 +1,7 @@
 import { Link } from "react-router-dom";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 
-const TYPES: StudyType[] = [
-  "card_sort",
-  "survey",
-  "first_click",
-  "tree_test",
-  "five_second",
-];
+const TYPES: StudyType[] = ["card_sort", "survey"];
 
 interface Props {
   /**
@@ -24,7 +18,7 @@ interface Props {
 // Used on Landing, Dashboard empty state, and the New Study picker.
 export default function StudyTypePicker({ hrefFor, onSelect, disabled }: Props) {
   return (
-    <ul className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
+    <ul className="mx-auto grid max-w-2xl grid-cols-2 gap-6">
       {TYPES.map((t, index) => {
         const meta = STUDY_TYPE_META[t];
         const num = String(index + 1).padStart(2, "0");
