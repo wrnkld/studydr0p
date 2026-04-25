@@ -11,7 +11,6 @@ import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
 import StudyDetail from "./pages/StudyDetail";
 import ParticipantStudy from "./pages/ParticipantStudy";
-import LocalBuilder from "./pages/LocalBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,8 +24,6 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Landing />} />
-            <Route path="/build" element={<LocalBuilder />} />
-            <Route path="/build/:type" element={<LocalBuilder />} />
             <Route path="/s/:slug" element={<ParticipantStudy />} />
 
             <Route
