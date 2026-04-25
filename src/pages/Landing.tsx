@@ -1,16 +1,11 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-
-const TYPES = [
-  { id: "card_sort", label: "Card sort" },
-  { id: "survey", label: "Survey" },
-] as const;
 
 export default function Landing() {
   const { session } = useAuth();
