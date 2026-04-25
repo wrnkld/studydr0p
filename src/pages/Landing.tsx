@@ -45,15 +45,6 @@ export default function Landing() {
           </p>
         </div>
 
-        <ul className="space-y-1">
-          {TYPES.map((t) => (
-            <li key={t.id}>
-              <Link to={`/build/${t.id}`} className="underline">
-                {t.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
 
         <div>
           {sentTo ? (
