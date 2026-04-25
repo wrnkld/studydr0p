@@ -286,7 +286,7 @@ export default function LocalBuilder() {
       </main>
 
       <SignInToPublishModal open={signInOpen} onOpenChange={setSignInOpen} />
-    </div>
+    </>
   );
 }
 
