@@ -197,14 +197,7 @@ export default function LocalBuilder() {
     <>
       <AppHeader />
       <main className="p-6 max-w-3xl space-y-6">
-        <button onClick={() => navigate("/")} className="underline">
-          Back
-        </button>
-
-        <div className="flex items-center justify-between gap-4">
-          <h1>New {meta.label.toLowerCase()}</h1>
-          <span>Draft · saved in this browser</span>
-        </div>
+        <h1>New {meta.label.toLowerCase()}</h1>
 
         <section className="mt-8 space-y-4">
           <div className="space-y-2">
