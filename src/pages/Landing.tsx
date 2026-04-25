@@ -1,7 +1,10 @@
 import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import AppHeader from "@/components/AppHeader";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 const TYPES = [
@@ -36,40 +39,44 @@ export default function Landing() {
   };
 
   return (
-    <main className="p-6 space-y-6">
-      <h1>Studydrop</h1>
-      <p>Run unmoderated UX studies. Share via a single link.</p>
+    <>
+      <AppHeader />
+      <main className="p-6 space-y-6 max-w-2xl">
+        <div className="space-y-2">
+          <h1>Studydrop</h1>
+          <p>Run unmoderated UX studies. Share via a single link.</p>
+        </div>
 
-      <ul className="space-y-1">
-        {TYPES.map((t) => (
-          <li key={t.id}>
-            <a href={`/build/${t.id}`} className="underline">
-              {t.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+        <ul className="space-y-1">
+          {TYPES.map((t) => (
+            <li key={t.id}>
+              <Link to={`/build/${t.id}`} className="underline">
+                {t.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
 
-      <div>
-        {sentTo ? (
-          <p>Link sent to {sentTo}</p>
-        ) : (
-          <form onSubmit={onSubmit} className="space-x-2">
-            <input
-              type="email"
-              required
-              aria-label="Email"
-              placeholder="you@team.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border px-2 py-1"
-            />
-            <button type="submit" disabled={submitting} className="border px-2 py-1">
-              {submitting ? "Sending…" : "Send"}
-            </button>
-          </form>
-        )}
-      </div>
-    </main>
+        <div>
+          {sentTo ? (
+            <p>Link sent to {sentTo}</p>
+          ) : (
+            <form onSubmit={onSubmit} className="flex gap-2 max-w-sm">
+              <Input
+                type="email"
+                required
+                aria-label="Email"
+                placeholder="you@team.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Sending…" : "Send"}
+              </Button>
+            </form>
+          )}
+        </div>
+      </main>
+    </>
   );
 }
