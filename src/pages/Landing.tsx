@@ -43,8 +43,12 @@ export default function Landing() {
       <AppHeader />
       <main className="p-6 space-y-6 max-w-2xl">
         <div className="space-y-2">
-          <h1>Studydrop</h1>
-          <p>Run unmoderated UX studies. Share via a single link.</p>
+          <h1>UX research, without the friction.</h1>
+          <p>
+            Studydrop lets you run unmoderated UX studies and share them with
+            participants via a single link. No participant accounts. No
+            onboarding. Just answers.
+          </p>
         </div>
 
         <ul className="space-y-1">
