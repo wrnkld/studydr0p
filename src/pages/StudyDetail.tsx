@@ -198,79 +198,53 @@ export default function StudyDetail() {
 
   if (loading || !study) {
     return (
-      <div className="min-h-screen bg-background">
+      <>
         <AppHeader />
-        <div className="container py-10 text-sm text-muted-foreground">
-          Loading…
-        </div>
-      </div>
+        <div className="p-6">Loading…</div>
+      </>
     );
   }
 
   const canExport = (study.type === "survey" || study.type === "card_sort") && responses.length > 0;
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <AppHeader />
-      <main className="container max-w-6xl py-16">
-        <div className="flex flex-wrap items-start justify-between gap-6">
-          <h1 className="text-5xl font-semibold tracking-tight">
-            {study.title || "Untitled"}
-          </h1>
-
-          <div className="flex flex-wrap gap-3">
+      <main className="p-6 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h1>{study.title || "Untitled"}</h1>
+          <div className="space-x-3">
             {canExport && (
-              <Button
-                size="lg"
-                variant="outline"
-                onClick={exportCsv}
-              >
-                <Download className="mr-1.5 h-4 w-4" /> Export CSV
-              </Button>
+              <button onClick={exportCsv} className="underline">
+                Export CSV
+              </button>
             )}
-            <Button asChild size="lg">
-              <Link to={`/studies/${study.id}/edit`}>Edit</Link>
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => setConfirmOpen(true)}
-            >
+            <Link to={`/studies/${study.id}/edit`} className="underline">
+              Edit
+            </Link>
+            <button onClick={() => setConfirmOpen(true)} className="underline">
               Delete
-            </Button>
+            </button>
           </div>
         </div>
 
         {shareUrl && (
-          <section className="mt-10 rounded-2xl border border-border p-5">
-            <label
-              htmlFor="participant-link"
-              className="text-xs uppercase tracking-widest text-muted-foreground"
-            >
-              Participant link
-            </label>
-            <div className="mt-2 flex gap-2">
-              <Input
+          <section className="space-y-1">
+            <div>Participant link</div>
+            <div className="space-x-2">
+              <input
                 id="participant-link"
                 readOnly
                 value={shareUrl}
                 onFocus={(e) => e.currentTarget.select()}
-                className="font-mono text-sm"
+                className="border px-2 py-1 font-mono text-sm w-full max-w-md"
               />
-              <Button onClick={copyShareLink} variant="outline" className="shrink-0">
-                {copied ? (
-                  <>
-                    <Check className="mr-1.5 h-4 w-4" /> Copied!
-                  </>
-                ) : (
-                  <>
-                    <Copy className="mr-1.5 h-4 w-4" /> Copy link
-                  </>
-                )}
-              </Button>
+              <button onClick={copyShareLink} className="underline">
+                {copied ? "Copied!" : "Copy link"}
+              </button>
             </div>
             {study.status !== "live" && (
-              <p className="mt-2 text-xs text-muted-foreground">
+              <p>
                 Study is currently <strong>{study.status}</strong> — participants
                 can't submit until you publish it.
               </p>
@@ -278,17 +252,15 @@ export default function StudyDetail() {
           </section>
         )}
 
-        <section className="mt-10 grid grid-cols-3 gap-4">
-          <Stat label="Responses" value={responses.length.toString()} />
-          <Stat label="Completion rate" value={`${completionRate}%`} />
-          <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
+        <section className="space-y-1">
+          <div>Responses: {responses.length}</div>
+          <div>Completion rate: {completionRate}%</div>
+          <div>Avg time: {avgTime !== null ? `${avgTime}s` : "—"}</div>
         </section>
 
-        <section className="mt-12 space-y-10">
+        <section className="space-y-6">
           {responses.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-border p-12 text-center text-sm text-muted-foreground">
-              No responses yet. Share your study link to start collecting data.
-            </div>
+            <p>No responses yet. Share your study link to start collecting data.</p>
           ) : (
             <>
               {study.type === "survey" && (
@@ -355,16 +327,7 @@ export default function StudyDetail() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-border p-5">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">{label}</div>
-      <div className="mt-2 text-2xl font-semibold">{value}</div>
-    </div>
+    </>
   );
 }
 

@@ -7,32 +7,22 @@ export default function AppHeader() {
   const navigate = useNavigate();
 
   return (
-    <header className="border-b border-border">
-      <div className="container flex h-14 items-center justify-between">
-        <Link
-          to={user ? "/studies" : "/"}
-          className="flex items-center gap-2 font-semibold tracking-tight"
+    <header className="p-6 flex items-center justify-between">
+      <Link to={user ? "/studies" : "/"} className="underline">
+        StudyDrop
+      </Link>
+      {user && (
+        <button
+          type="button"
+          onClick={async () => {
+            await signOut();
+            navigate("/");
+          }}
+          className="underline"
         >
-          <span
-            aria-hidden
-            className="inline-block h-6 w-6 rounded-md bg-foreground"
-          />
-          StudyDrop
-        </Link>
-
-        {user && (
-          <button
-            type="button"
-            onClick={async () => {
-              await signOut();
-              navigate("/");
-            }}
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            Sign out
-          </button>
-        )}
-      </div>
+          Sign out
+        </button>
+      )}
     </header>
   );
 }
