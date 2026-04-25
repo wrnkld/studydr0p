@@ -46,6 +46,14 @@ export default function Landing() {
         </div>
 
 
+        <div className="space-y-2">
+          <p>Study types</p>
+          <ul className="space-y-1">
+            <li>Card sort</li>
+            <li>Survey</li>
+          </ul>
+        </div>
+
         <div>
           {sentTo ? (
             <p>Link sent to {sentTo}</p>
