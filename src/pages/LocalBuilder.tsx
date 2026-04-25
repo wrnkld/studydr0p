@@ -204,7 +204,7 @@ export default function LocalBuilder() {
         <div className="flex items-center justify-between gap-4">
           <h1>New {meta.label.toLowerCase()}</h1>
           <span>Draft · saved in this browser</span>
-        </div>
+    </>
 
         <section className="mt-8 space-y-4">
           <div className="space-y-2">
