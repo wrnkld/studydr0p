@@ -194,23 +194,16 @@ export default function LocalBuilder() {
   const meta = STUDY_TYPE_META[draft.type];
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <AppHeader />
-      <main className="container max-w-3xl py-10">
-        <button
-          onClick={() => navigate("/")}
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1.5 h-4 w-4" /> Back
+      <main className="p-6 max-w-3xl space-y-6">
+        <button onClick={() => navigate("/")} className="underline">
+          Back
         </button>
 
-        <div className="mt-6 flex items-end justify-between gap-4">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            New {meta.label.toLowerCase()}
-          </h1>
-          <span className="text-xs text-muted-foreground">
-            Draft · saved in this browser
-          </span>
+        <div className="flex items-center justify-between gap-4">
+          <h1>New {meta.label.toLowerCase()}</h1>
+          <span>Draft · saved in this browser</span>
         </div>
 
         <section className="mt-8 space-y-4">
