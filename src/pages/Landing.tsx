@@ -46,8 +46,7 @@ export default function Landing() {
           <h1>UX research, without the friction.</h1>
           <p>
             Studydrop lets you run unmoderated UX studies and share them with
-            participants via a single link. No participant accounts. No
-            onboarding. Just answers.
+            participants via a single link.
           </p>
         </div>
 
