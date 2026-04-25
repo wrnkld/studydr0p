@@ -3,14 +3,16 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import AppHeader from "@/components/AppHeader";
-import StudyTypePicker from "@/components/StudyTypePicker";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 
-const TYPES: StudyType[] = ["survey", "card_sort"];
+const TYPES: { id: StudyType; label: string }[] = [
+  { id: "card_sort", label: "Card sort" },
+  { id: "survey", label: "Survey" },
+];
 
 function isStudyType(value: string): value is StudyType {
-  return TYPES.includes(value as StudyType);
+  return TYPES.some((t) => t.id === value);
 }
 
 export default function NewStudy() {
@@ -56,14 +58,25 @@ export default function NewStudy() {
   }, [searchParams, user, creating]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <AppHeader />
-      <main className="container max-w-6xl py-16">
-        <h1 className="text-5xl font-semibold tracking-tight">New study</h1>
-        <div className="mt-14">
-          <StudyTypePicker onSelect={(t) => void create(t)} disabled={creating} />
-        </div>
+      <main className="p-6 space-y-4">
+        <h1>New study</h1>
+        <ul className="space-y-1">
+          {TYPES.map((t) => (
+            <li key={t.id}>
+              <button
+                type="button"
+                onClick={() => void create(t.id)}
+                disabled={creating}
+                className="underline disabled:opacity-50"
+              >
+                {t.label}
+              </button>
+            </li>
+          ))}
+        </ul>
       </main>
-    </div>
+    </>
   );
 }

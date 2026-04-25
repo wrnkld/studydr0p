@@ -1,14 +1,14 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import StudyTypePicker from "@/components/StudyTypePicker";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
-// Landing page per wireframe: hero copy, row of the 5 study type tiles
-// (each linked to its builder), inline magic-link sign in.
+const TYPES = [
+  { id: "card_sort", label: "Card sort" },
+  { id: "survey", label: "Survey" },
+] as const;
+
 export default function Landing() {
   const { session } = useAuth();
   const navigate = useNavigate();
@@ -36,47 +36,40 @@ export default function Landing() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container flex min-h-screen max-w-6xl flex-col items-center justify-center py-20 text-center">
-        <h1 className="max-w-4xl text-5xl font-semibold tracking-tight md:text-6xl">
-          UX research, without the friction.
-        </h1>
-        <p className="mt-6 max-w-2xl text-lg text-muted-foreground">
-          Studydrop lets you run unmoderated UX studies and share them with
-          participants via a single link. No participant accounts. No
-          onboarding. Just answers.
-        </p>
+    <main className="p-6 space-y-6">
+      <h1>Studydrop</h1>
+      <p>Run unmoderated UX studies. Share via a single link.</p>
 
-        <div className="mt-14 w-full">
-          <StudyTypePicker hrefFor={(t) => `/build/${t}`} />
-        </div>
+      <ul className="space-y-1">
+        {TYPES.map((t) => (
+          <li key={t.id}>
+            <a href={`/build/${t.id}`} className="underline">
+              {t.label}
+            </a>
+          </li>
+        ))}
+      </ul>
 
-        <div className="mt-16 w-full max-w-md">
-          {sentTo ? (
-            <p className="text-base text-muted-foreground">
-              Link sent to <span className="text-foreground">{sentTo}</span>
-            </p>
-          ) : (
-            <form
-              onSubmit={onSubmit}
-              className="flex flex-col gap-3 sm:flex-row"
-            >
-              <Input
-                id="email"
-                type="email"
-                required
-                aria-label="Email"
-                placeholder="you@team.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Button type="submit" size="lg" disabled={submitting}>
-                {submitting ? "Sending…" : "Send"}
-              </Button>
-            </form>
-          )}
-        </div>
-      </main>
-    </div>
+      <div>
+        {sentTo ? (
+          <p>Link sent to {sentTo}</p>
+        ) : (
+          <form onSubmit={onSubmit} className="space-x-2">
+            <input
+              type="email"
+              required
+              aria-label="Email"
+              placeholder="you@team.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="border px-2 py-1"
+            />
+            <button type="submit" disabled={submitting} className="border px-2 py-1">
+              {submitting ? "Sending…" : "Send"}
+            </button>
+          </form>
+        )}
+      </div>
+    </main>
   );
 }

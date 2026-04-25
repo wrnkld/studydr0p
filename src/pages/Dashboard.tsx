@@ -2,9 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
 import AppHeader from "@/components/AppHeader";
-import StudyTypePicker from "@/components/StudyTypePicker";
 import { StudyType, StudyStatus } from "@/lib/types";
 import { FREE_STUDY_LIMIT, UPGRADE_COPY } from "@/lib/limits";
 import { toast } from "sonner";
@@ -19,8 +17,11 @@ interface StudyRow {
   slug: string | null;
 }
 
-// Studies grid per wireframe. Empty state shows the 5 study type cards again;
-// otherwise one square tile per created study.
+const TYPES = [
+  { id: "card_sort", label: "Card sort" },
+  { id: "survey", label: "Survey" },
+] as const;
+
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +30,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [isPaid, setIsPaid] = useState(false);
 
-  // Persist localStorage draft after magic-link sign-in.
   useEffect(() => {
     if (!user) return;
     if (searchParams.get("claim") !== "1") return;
@@ -75,55 +75,50 @@ export default function Dashboard() {
   const atStudyLimit = !isPaid && studies.length >= FREE_STUDY_LIMIT;
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
       <AppHeader />
-      <main className="container max-w-6xl py-16">
-        <div className="flex items-end justify-between gap-4">
-          <h1 className="text-5xl font-semibold tracking-tight">Studies</h1>
-          <Button asChild size="lg" disabled={atStudyLimit}>
-            <Link
-              to="/studies/new"
-              onClick={(e) => {
-                if (atStudyLimit) {
-                  e.preventDefault();
-                  toast.error(`${UPGRADE_COPY.headline}. ${UPGRADE_COPY.body}`);
-                }
-              }}
-            >
-              New study
-            </Link>
-          </Button>
+      <main className="p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h1>Studies</h1>
+          <Link
+            to="/studies/new"
+            className="underline"
+            onClick={(e) => {
+              if (atStudyLimit) {
+                e.preventDefault();
+                toast.error(`${UPGRADE_COPY.headline}. ${UPGRADE_COPY.body}`);
+              }
+            }}
+          >
+            New study
+          </Link>
         </div>
 
-        <div className="mt-14">
-          {loading ? (
-            <div className="text-sm text-muted-foreground">Loading…</div>
-          ) : studies.length === 0 ? (
-            <StudyTypePicker hrefFor={(t) => `/studies/new?type=${t}`} />
-          ) : (
-            <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
-              {studies.map((s) => (
-                <li key={s.id}>
-                  <Link
-                    to={`/studies/${s.id}`}
-                    className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-accent/40"
-                  >
-                    <div className="flex items-center gap-4">
-                      <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                        {s.type.replace("_", "-")}
-                      </span>
-                      <span className="font-medium">{s.title || "Untitled"}</span>
-                    </div>
-                    <span className="text-xs uppercase tracking-widest text-muted-foreground">
-                      {s.status}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        {loading ? (
+          <p>Loading…</p>
+        ) : studies.length === 0 ? (
+          <ul className="space-y-1">
+            {TYPES.map((t) => (
+              <li key={t.id}>
+                <Link to={`/studies/new?type=${t.id}`} className="underline">
+                  {t.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ul className="space-y-1">
+            {studies.map((s) => (
+              <li key={s.id}>
+                <Link to={`/studies/${s.id}`} className="underline">
+                  {s.title || "Untitled"}
+                </Link>{" "}
+                — {s.type.replace("_", "-")} — {s.status}
+              </li>
+            ))}
+          </ul>
+        )}
       </main>
-    </div>
+    </>
   );
 }
