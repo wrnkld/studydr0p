@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,7 @@ import {
   SurveyQuestionType,
   StudyStatus,
 } from "@/lib/types";
-import { Trash2, Plus, ArrowLeft } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 
 interface Props {
   studyId: string;
@@ -40,9 +40,10 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
   const [description, setDescription] = useState(initial.description ?? "");
   const [status, setStatus] = useState<StudyStatus>(initial.status);
   const [slug, setSlug] = useState<string | null>(initial.slug);
+  // Surveys always render one question at a time — layout option removed from UI.
   const [config, setConfig] = useState<SurveyConfig>({
     questions: initial.config.questions ?? [],
-    layout: initial.config.layout ?? "single_page",
+    layout: "one_per_page",
   });
 
   const addQuestion = (type: SurveyQuestionType) => {
@@ -78,7 +79,7 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     const payload = {
       title: title.trim() || "Untitled study",
       description: description.trim() || null,
-      config: config as unknown as never,
+      config: { ...config, layout: "one_per_page" } as unknown as never,
       status: overrides.status ?? status,
       slug: overrides.slug !== undefined ? overrides.slug : slug,
     };
@@ -92,11 +93,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
   };
 
   const handleSave = async () => {
-    const ok = await save();
-    if (ok) toast.success("Saved");
-  };
-
-  const handlePublish = async () => {
     if (config.questions.length === 0) {
       toast.error("Add at least one question first");
       return;
@@ -110,7 +106,8 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Published");
+      toast.success("Saved");
+      navigate(`/studies/${studyId}`);
     }
   };
 
@@ -128,16 +125,8 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     <div className="min-h-screen bg-background">
 
       <main className="container max-w-3xl py-10">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
-        </Link>
-
-        <div className="mt-6 flex items-end justify-between gap-4">
+        <div className="flex items-end justify-between gap-4">
           <h1 className="text-2xl font-semibold tracking-tight">Edit survey</h1>
-          <span className="text-xs text-muted-foreground">Status: {status}</span>
         </div>
 
         <section className="mt-8 space-y-4">
@@ -154,23 +143,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Brief context shown to participants."
             />
-          </div>
-          <div className="space-y-2">
-            <Label>Layout</Label>
-            <Select
-              value={config.layout ?? "single_page"}
-              onValueChange={(v) =>
-                setConfig((c) => ({ ...c, layout: v as SurveyConfig["layout"] }))
-              }
-            >
-              <SelectTrigger className="w-[220px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="single_page">All on one page</SelectItem>
-                <SelectItem value="one_per_page">One per page</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </section>
 
@@ -199,12 +171,12 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
                           });
                         }}
                       >
-                        <SelectTrigger className="w-[180px]">
+                        <SelectTrigger className="w-[200px]">
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="multiple_choice">Multiple choice</SelectItem>
-                          <SelectItem value="likert">Likert (1-5)</SelectItem>
+                          <SelectItem value="likert">Rating scale (1-5)</SelectItem>
                           <SelectItem value="open_text">Open text</SelectItem>
                         </SelectContent>
                       </Select>
@@ -275,7 +247,7 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
               <Plus className="mr-1.5 h-3.5 w-3.5" /> Multiple choice
             </Button>
             <Button variant="outline" size="sm" onClick={() => addQuestion("likert")}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" /> Likert
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> Rating scale
             </Button>
             <Button variant="outline" size="sm" onClick={() => addQuestion("open_text")}>
               <Plus className="mr-1.5 h-3.5 w-3.5" /> Open text
@@ -302,14 +274,9 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
         )}
 
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button variant="outline" onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save draft"}
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
           </Button>
-          {status !== "live" && (
-            <Button onClick={handlePublish} disabled={saving}>
-              {status === "closed" ? "Re-publish" : "Publish"}
-            </Button>
-          )}
           {status === "live" && (
             <Button variant="outline" onClick={handleClose} disabled={saving}>
               Close study
