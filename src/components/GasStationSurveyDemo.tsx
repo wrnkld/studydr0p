@@ -3,6 +3,8 @@
 // No data is saved.
 
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 type Question =
   | { id: string; type: "single"; label: string; options: string[] }
@@ -83,31 +85,27 @@ export default function GasStationSurveyDemo({
   };
 
   return (
-    <div className="bg-white text-black space-y-6">
-      <div className="text-[11px] uppercase tracking-[0.15em] text-gray-500">
+    <div className="space-y-6">
+      <div className="text-xs text-muted-foreground">
         Question {step + 1} of {QUESTIONS.length}
       </div>
 
-      <h2 className="text-2xl font-bold leading-tight">{q.label}</h2>
+      <h2 className="text-base font-medium">{q.label}</h2>
 
       <div>
         {q.type === "single" && (
           <div className="flex flex-col gap-2">
-            {q.options.map((opt) => {
-              const selected = current === opt;
-              return (
-                <button
-                  key={opt}
-                  type="button"
-                  onClick={() => setAnswer(opt)}
-                  className={`text-left border border-black px-3 py-2 text-sm ${
-                    selected ? "bg-black text-white" : "bg-white text-black"
-                  }`}
-                >
-                  {opt}
-                </button>
-              );
-            })}
+            {q.options.map((opt) => (
+              <Button
+                key={opt}
+                type="button"
+                variant={current === opt ? "default" : "outline"}
+                className="justify-start"
+                onClick={() => setAnswer(opt)}
+              >
+                {opt}
+              </Button>
+            ))}
           </div>
         )}
 
@@ -117,16 +115,15 @@ export default function GasStationSurveyDemo({
               const list = Array.isArray(current) ? current : [];
               const selected = list.includes(opt);
               return (
-                <button
+                <Button
                   key={opt}
                   type="button"
+                  variant={selected ? "default" : "outline"}
+                  className="justify-start"
                   onClick={() => toggleMulti(opt)}
-                  className={`text-left border border-black px-3 py-2 text-sm ${
-                    selected ? "bg-black text-white" : "bg-white text-black"
-                  }`}
                 >
                   {opt}
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -135,64 +132,52 @@ export default function GasStationSurveyDemo({
         {q.type === "rating" && (
           <div className="flex flex-wrap gap-2">
             {Array.from({ length: q.max - q.min + 1 }, (_, i) => q.min + i).map(
-              (n) => {
-                const selected = current === n;
-                return (
-                  <button
-                    key={n}
-                    type="button"
-                    onClick={() => setAnswer(n)}
-                    className={`border border-black w-12 h-12 text-sm ${
-                      selected ? "bg-black text-white" : "bg-white text-black"
-                    }`}
-                  >
-                    {n}
-                  </button>
-                );
-              },
+              (n) => (
+                <Button
+                  key={n}
+                  type="button"
+                  size="icon"
+                  variant={current === n ? "default" : "outline"}
+                  onClick={() => setAnswer(n)}
+                >
+                  {n}
+                </Button>
+              ),
             )}
           </div>
         )}
 
         {q.type === "text" && (
-          <textarea
+          <Textarea
             value={typeof current === "string" ? current : ""}
             onChange={(e) => setAnswer(e.target.value)}
             rows={4}
-            className="w-full border border-black p-3 text-sm bg-white text-black focus:outline-none rounded-none"
-            placeholder=""
           />
         )}
       </div>
 
       <div className="flex gap-2">
         {step > 0 && (
-          <button
+          <Button
             type="button"
+            variant="outline"
             onClick={() => setStep((s) => s - 1)}
-            className="border border-black bg-white text-black px-6 py-2 text-sm"
           >
             Back
-          </button>
+          </Button>
         )}
         {isLast ? (
-          <button
-            type="button"
-            onClick={onSubmit}
-            disabled={!canAdvance}
-            className="border border-black bg-black text-white px-6 py-2 text-sm disabled:bg-white disabled:text-gray-400 disabled:cursor-not-allowed"
-          >
+          <Button type="button" onClick={onSubmit} disabled={!canAdvance}>
             Submit
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button
             type="button"
             onClick={() => setStep((s) => s + 1)}
             disabled={!canAdvance}
-            className="border border-black bg-black text-white px-6 py-2 text-sm disabled:bg-white disabled:text-gray-400 disabled:cursor-not-allowed"
           >
             Next
-          </button>
+          </Button>
         )}
       </div>
     </div>
