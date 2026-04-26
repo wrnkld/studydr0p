@@ -1,7 +1,11 @@
-import { useEffect } from "react";
+import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import AppHeader from "@/components/AppHeader";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import {
   EXAMPLE_STUDIES,
   FRIDGE_STUDY,
@@ -11,10 +15,9 @@ import {
 export default function Landing() {
   const { session } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (session) navigate("/studies", { replace: true });
-  }, [session, navigate]);
+  const [email, setEmail] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [sentTo, setSentTo] = useState<string | null>(null);
 
   // Pre-compute small summaries for each panel.
   const fridgeSummary = summarizeCardSort(FRIDGE_STUDY);
@@ -30,6 +33,21 @@ export default function Landing() {
     { label: "Average food rating", top: "5.8 / 10", pct: null as number | null },
     { label: "Most-eaten item", top: "Beef jerky", pct: 85 },
   ];
+
+  const onSignIn = async (e: FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: `${window.location.origin}/studies` },
+    });
+    setSubmitting(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setSentTo(email);
+  };
 
   return (
     <>
@@ -89,6 +107,28 @@ export default function Landing() {
             </ul>
             <div className="mt-3 text-sm underline">See full results →</div>
           </Link>
+        </section>
+
+        <section>
+          {session ? (
+            <Button onClick={() => navigate("/studies/new")}>New study</Button>
+          ) : sentTo ? (
+            <p>Link sent to {sentTo}. Check your email to sign in.</p>
+          ) : (
+            <form onSubmit={onSignIn} className="flex gap-2 max-w-sm">
+              <Input
+                type="email"
+                required
+                aria-label="Email"
+                placeholder="you@team.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Sending…" : "Sign in"}
+              </Button>
+            </form>
+          )}
         </section>
       </main>
     </>
