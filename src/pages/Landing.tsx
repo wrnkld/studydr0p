@@ -5,9 +5,7 @@ import AppHeader from "@/components/AppHeader";
 import {
   EXAMPLE_STUDIES,
   FRIDGE_STUDY,
-  REMOTE_STUDY,
   summarizeCardSort,
-  summarizeSurvey,
 } from "@/lib/exampleStudies";
 
 export default function Landing() {
