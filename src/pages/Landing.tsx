@@ -1,10 +1,4 @@
-import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import {
   EXAMPLE_STUDIES,
   FRIDGE_STUDY,
@@ -12,12 +6,6 @@ import {
 } from "@/lib/exampleStudies";
 
 export default function Landing() {
-  const { session } = useAuth();
-  const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [sentTo, setSentTo] = useState<string | null>(null);
-
   // Pre-compute small summaries for each panel.
   const fridgeSummary = summarizeCardSort(FRIDGE_STUDY);
 
@@ -32,21 +20,6 @@ export default function Landing() {
     { label: "Average food rating", top: "5.8 / 10", pct: null as number | null },
     { label: "Most-eaten item", top: "Beef jerky", pct: 85 },
   ];
-
-  const onSignIn = async (e: FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/studies` },
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setSentTo(email);
-  };
 
   return (
     <>
