@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
 import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
 import { CardSortConfig, CardRow, CategoryRow, StudyStatus } from "@/lib/types";
-import { Trash2, Plus, ArrowLeft } from "lucide-react";
+import { Trash2, Plus } from "lucide-react";
 
 interface Props {
   studyId: string;
@@ -44,6 +44,7 @@ interface DraftCategory {
 }
 
 export default function CardSortBuilder({ studyId, initial }: Props) {
+  const navigate = useNavigate();
   const [loadingChildren, setLoadingChildren] = useState(true);
   const [saving, setSaving] = useState(false);
   const [title, setTitle] = useState(initial.title);
@@ -201,11 +202,6 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
   };
 
   const handleSave = async () => {
-    const ok = await save();
-    if (ok) toast.success("Saved");
-  };
-
-  const handlePublish = async () => {
     if (cards.length < 2) {
       toast.error("Add at least 2 cards");
       return;
@@ -229,7 +225,8 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Published");
+      toast.success("Saved");
+      navigate(`/studies/${studyId}`);
     }
   };
 
@@ -256,16 +253,8 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     <div className="min-h-screen bg-background">
 
       <main className="container max-w-3xl py-10">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
-        </Link>
-
-        <div className="mt-6 flex items-end justify-between gap-4">
+        <div className="flex items-end justify-between gap-4">
           <h1 className="text-2xl font-semibold tracking-tight">Edit card sort</h1>
-          <span className="text-xs text-muted-foreground">Status: {status}</span>
         </div>
 
         <section className="mt-8 space-y-4">
@@ -391,14 +380,9 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
         )}
 
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button variant="outline" onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save draft"}
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
           </Button>
-          {status !== "live" && (
-            <Button onClick={handlePublish} disabled={saving}>
-              {status === "closed" ? "Re-publish" : "Publish"}
-            </Button>
-          )}
           {status === "live" && (
             <Button variant="outline" onClick={handleClose} disabled={saving}>
               Close study
