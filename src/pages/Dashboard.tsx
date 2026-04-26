@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import AppHeader from "@/components/AppHeader";
-import { StudyType, StudyStatus } from "@/lib/types";
+import { StudyType } from "@/lib/types";
 import { FREE_STUDY_LIMIT, UPGRADE_COPY } from "@/lib/limits";
 import { toast } from "sonner";
 
@@ -11,14 +11,9 @@ interface StudyRow {
   id: string;
   title: string;
   type: StudyType;
-  status: StudyStatus;
   slug: string | null;
+  responseCount: number;
 }
-
-const TYPES = [
-  { id: "card_sort", label: "Card sort" },
-  { id: "survey", label: "Survey" },
-] as const;
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -32,7 +27,7 @@ export default function Dashboard() {
       const [studiesRes, researcherRes] = await Promise.all([
         supabase
           .from("studies")
-          .select("id, title, type, status, slug")
+          .select("id, title, type, slug, responses(count)")
           .eq("researcher_id", user.id)
           .order("created_at", { ascending: false }),
         supabase
@@ -43,7 +38,16 @@ export default function Dashboard() {
       ]);
 
       if (researcherRes.data) setIsPaid(researcherRes.data.is_paid);
-      if (studiesRes.data) setStudies(studiesRes.data as StudyRow[]);
+      if (studiesRes.data) {
+        const rows: StudyRow[] = (studiesRes.data as any[]).map((s) => ({
+          id: s.id,
+          title: s.title,
+          type: s.type,
+          slug: s.slug,
+          responseCount: s.responses?.[0]?.count ?? 0,
+        }));
+        setStudies(rows);
+      }
       setLoading(false);
     })();
   }, [user]);
@@ -54,8 +58,7 @@ export default function Dashboard() {
     <>
       <AppHeader />
       <main className="p-6 space-y-4">
-        <div className="flex items-center justify-between">
-          <h1>Studies</h1>
+        <div className="flex justify-end">
           <Link
             to="/studies/new"
             className="underline"
@@ -72,24 +75,15 @@ export default function Dashboard() {
 
         {loading ? (
           <p>Loading…</p>
-        ) : studies.length === 0 ? (
-          <ul className="space-y-1">
-            {TYPES.map((t) => (
-              <li key={t.id}>
-                <Link to={`/studies/new?type=${t.id}`} className="underline">
-                  {t.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
+        ) : studies.length === 0 ? null : (
           <ul className="space-y-1">
             {studies.map((s) => (
               <li key={s.id}>
+                {s.title || "Untitled"} — {s.type.replace("_", "-")} —{" "}
+                {s.responseCount} response{s.responseCount === 1 ? "" : "s"} —{" "}
                 <Link to={`/studies/${s.id}`} className="underline">
-                  {s.title || "Untitled"}
-                </Link>{" "}
-                — {s.type.replace("_", "-")} — {s.status}
+                  view
+                </Link>
               </li>
             ))}
           </ul>
