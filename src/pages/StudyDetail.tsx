@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -13,7 +12,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Check, Copy } from "lucide-react";
 import { toast } from "sonner";
 import {
   CardRow,
@@ -28,7 +26,6 @@ import {
   SurveyQuestion,
   TreeTestConfig,
 } from "@/lib/types";
-import StudyBuilder from "./StudyBuilder";
 import FirstClickResults from "./results/FirstClickResults";
 import SurveyResults from "./results/SurveyResults";
 import CardSortResults from "./results/CardSortResults";
@@ -58,12 +55,11 @@ interface ResponseRow {
   created_at: string;
 }
 
-type TabKey = "build" | "share" | "results";
-
+// Researcher results page at /studies/:id/results.
+// Pure data view — no edit form. Editing lives back at /studies/:id.
 export default function StudyDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
   const [study, setStudy] = useState<StudyData | null>(null);
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [responses, setResponses] = useState<ResponseRow[]>([]);
@@ -72,7 +68,6 @@ export default function StudyDetail() {
   const [loading, setLoading] = useState(true);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -116,25 +111,6 @@ export default function StudyDetail() {
     })();
   }, [id, navigate]);
 
-  // Tab logic:
-  // - explicit ?tab=... wins (used by builder save → ?tab=share)
-  // - otherwise default to results when there are responses
-  // - else default to build (you're still setting it up)
-  const tabParam = searchParams.get("tab") as TabKey | null;
-  const defaultTab: TabKey = useMemo(() => {
-    if (tabParam === "build" || tabParam === "share" || tabParam === "results") {
-      return tabParam;
-    }
-    if (responses.length > 0) return "results";
-    return "build";
-  }, [tabParam, responses.length]);
-
-  const onTabChange = (next: string) => {
-    const params = new URLSearchParams(searchParams);
-    params.set("tab", next);
-    setSearchParams(params, { replace: true });
-  };
-
   const completionRate = useMemo(() => {
     if (sessions.length === 0) return 0;
     const completed = sessions.filter((s) => s.completed_at).length;
@@ -149,18 +125,6 @@ export default function StudyDetail() {
     const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
     return Math.round(avg / 1000);
   }, [sessions]);
-
-  const shareUrl = study?.slug
-    ? `${window.location.origin}/s/${study.slug}`
-    : null;
-
-  const copyShareLink = async () => {
-    if (!shareUrl) return;
-    await navigator.clipboard.writeText(shareUrl);
-    setCopied(true);
-    toast.success("Link copied");
-    setTimeout(() => setCopied(false), 1500);
-  };
 
   const remove = async () => {
     if (!study) return;
@@ -227,148 +191,92 @@ export default function StudyDetail() {
     (study.type === "survey" || study.type === "card_sort") && responses.length > 0;
 
   return (
-    <main className="container max-w-3xl py-10">
+    <main className="container max-w-3xl py-10 space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {study.title || "Untitled"}
-        </h1>
-        <button
-          onClick={() => setConfirmOpen(true)}
-          className="text-sm text-muted-foreground underline-offset-2 hover:underline"
-        >
-          Delete
-        </button>
+        <div>
+          <Link
+            to={`/studies/${study.id}`}
+            className="text-sm text-muted-foreground underline-offset-2 hover:underline"
+          >
+            ← Back to builder
+          </Link>
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight">
+            {study.title || "Untitled"} · Results
+          </h1>
+        </div>
+        <div className="flex items-center gap-3">
+          {canExport && (
+            <button onClick={exportCsv} className="text-sm underline">
+              Export CSV
+            </button>
+          )}
+          <button
+            onClick={() => setConfirmOpen(true)}
+            className="text-sm text-muted-foreground underline-offset-2 hover:underline"
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
-      <Tabs value={defaultTab} onValueChange={onTabChange} className="mt-6">
-        <TabsList>
-          <TabsTrigger value="build">Build</TabsTrigger>
-          <TabsTrigger value="share">Share</TabsTrigger>
-          <TabsTrigger value="results">Results</TabsTrigger>
-        </TabsList>
+      <section className="grid grid-cols-3 gap-4">
+        <Stat label="Responses" value={String(responses.length)} />
+        <Stat label="Completion" value={`${completionRate}%`} />
+        <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
+      </section>
 
-        <TabsContent value="build" className="mt-8">
-          <StudyBuilder />
-        </TabsContent>
-
-        <TabsContent value="share" className="mt-12">
-          {shareUrl ? (
-            <div className="flex flex-col items-center text-center">
-              <p className="text-sm uppercase tracking-widest text-muted-foreground">
-                Participant link
-              </p>
-              <a
-                href={shareUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-4 break-all text-2xl font-medium tracking-tight underline-offset-4 hover:underline sm:text-3xl"
-              >
-                {shareUrl}
-              </a>
-              <Button size="lg" className="mt-6" onClick={copyShareLink}>
-                {copied ? (
-                  <>
-                    <Check className="h-4 w-4" /> Copied
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-4 w-4" /> Copy link
-                  </>
-                )}
-              </Button>
-
-              <p className="mt-12 text-sm text-muted-foreground">
-                {responses.length} {responses.length === 1 ? "response" : "responses"}
-              </p>
-
-              {study.status !== "live" && (
-                <p className="mt-6 text-sm text-muted-foreground">
-                  Study is <strong>{study.status}</strong> — participants can't submit
-                  until you publish it from the Build tab.
-                </p>
-              )}
-            </div>
-          ) : (
-            <p className="text-sm text-muted-foreground">
-              Save the study from the Build tab to get a participant link.
-            </p>
-          )}
-        </TabsContent>
-
-        <TabsContent value="results" className="mt-8 space-y-8">
-          <section className="grid grid-cols-3 gap-4 text-sm">
-            <Stat label="Responses" value={String(responses.length)} />
-            <Stat label="Completion" value={`${completionRate}%`} />
-            <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
-          </section>
-
-          {canExport && (
-            <div>
-              <button onClick={exportCsv} className="text-sm underline">
-                Export CSV
-              </button>
-            </div>
-          )}
-
-          <section>
-            {responses.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                No responses yet. Share your study link to start collecting data.
-              </p>
-            ) : (
-              <>
-                {study.type === "survey" && (
-                  <SurveyResults
-                    studyId={study.id}
-                    config={(study.config as SurveyConfig) ?? { questions: [] }}
-                    responses={responses}
-                  />
-                )}
-                {study.type === "card_sort" && (
-                  <CardSortResults
-                    studyId={study.id}
-                    cards={cards}
-                    responses={responses}
-                  />
-                )}
-                {study.type === "first_click" && (
-                  <FirstClickResults
-                    config={
-                      (study.config as FirstClickConfig) ?? { task: "", image_url: "" }
-                    }
-                    responses={responses}
-                  />
-                )}
-                {study.type === "tree_test" && (
-                  <TreeTestResults
-                    studyId={study.id}
-                    config={
-                      (study.config as TreeTestConfig) ?? {
-                        task: "",
-                        correct_node_id: "",
-                      }
-                    }
-                    responses={responses}
-                  />
-                )}
-                {study.type === "five_second" && (
-                  <FiveSecondResults
-                    studyId={study.id}
-                    config={
-                      (study.config as FiveSecondConfig) ?? {
-                        image_url: "",
-                        duration_ms: 5000,
-                        follow_up: [],
-                      }
-                    }
-                    responses={responses}
-                  />
-                )}
-              </>
+      <section>
+        {responses.length === 0 ? (
+          <p className="text-sm text-muted-foreground">
+            No responses yet. Share your study link to start collecting data.
+          </p>
+        ) : (
+          <>
+            {study.type === "survey" && (
+              <SurveyResults
+                studyId={study.id}
+                config={(study.config as SurveyConfig) ?? { questions: [] }}
+                responses={responses}
+              />
             )}
-          </section>
-        </TabsContent>
-      </Tabs>
+            {study.type === "card_sort" && (
+              <CardSortResults
+                studyId={study.id}
+                cards={cards}
+                responses={responses}
+              />
+            )}
+            {study.type === "first_click" && (
+              <FirstClickResults
+                config={(study.config as FirstClickConfig) ?? { task: "", image_url: "" }}
+                responses={responses}
+              />
+            )}
+            {study.type === "tree_test" && (
+              <TreeTestResults
+                studyId={study.id}
+                config={
+                  (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" }
+                }
+                responses={responses}
+              />
+            )}
+            {study.type === "five_second" && (
+              <FiveSecondResults
+                studyId={study.id}
+                config={
+                  (study.config as FiveSecondConfig) ?? {
+                    image_url: "",
+                    duration_ms: 5000,
+                    follow_up: [],
+                  }
+                }
+                responses={responses}
+              />
+            )}
+          </>
+        )}
+      </section>
 
       <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
         <AlertDialogContent>

@@ -131,7 +131,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
       setStatus("live");
       setSlug(newSlug);
       toast.success("Saved");
-      navigate(`/studies/${studyId}?tab=share`);
     }
   };
 
@@ -143,12 +142,14 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     }
   };
 
-  
+  const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
 
   return (
-    <div>
-      <main>
-        <section className="space-y-4">
+    <div className="min-h-screen bg-background">
+      <main className="container max-w-3xl py-10">
+        <h1 className="text-2xl font-semibold tracking-tight">Edit survey</h1>
+
+        <section className="mt-8 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -284,6 +285,37 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
             </Button>
           )}
         </div>
+
+        {status === "live" && shareUrl && (
+          <section className="mt-10 rounded-lg border border-border p-5">
+            <div className="text-sm font-medium">Participant link</div>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Input
+                readOnly
+                value={shareUrl}
+                onFocus={(e) => e.currentTarget.select()}
+                className="font-mono"
+              />
+              <Button
+                variant="outline"
+                onClick={() => {
+                  navigator.clipboard.writeText(shareUrl);
+                  toast.success("Copied");
+                }}
+              >
+                Copy
+              </Button>
+              <Button asChild variant="outline">
+                <a href={shareUrl} target="_blank" rel="noreferrer">
+                  Preview
+                </a>
+              </Button>
+              <Button asChild variant="outline">
+                <a href={`/studies/${studyId}/results`}>Results</a>
+              </Button>
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );
