@@ -31,7 +31,7 @@ type TabKey = "build" | "preview" | "results";
 export default function StudyBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
 
