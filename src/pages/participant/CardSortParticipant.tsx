@@ -20,6 +20,8 @@ interface Props {
   };
   sessionId: string;
   startedAt: number;
+  /** When true, skip writing responses/sessions to the database. */
+  preview?: boolean;
   onDone: () => void;
 }
 
@@ -37,6 +39,7 @@ export default function CardSortParticipant({
   study,
   sessionId,
   startedAt,
+  preview = false,
   onDone,
 }: Props) {
   const [loading, setLoading] = useState(true);
