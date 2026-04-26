@@ -18,7 +18,7 @@ export function InlineSignIn({ className = "" }: { className?: string }) {
     setSubmitting(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/studies` },
+      options: { emailRedirectTo: `${window.location.origin}/` },
     });
     setSubmitting(false);
     if (error) {
@@ -64,7 +64,7 @@ export default function AppHeader() {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border">
       <div className="flex items-center justify-between px-4 h-12">
-        <Link to={session ? "/studies" : "/"} className="font-medium">
+        <Link to="/" className="font-medium">
           StudyDrop
         </Link>
 
