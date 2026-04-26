@@ -48,7 +48,7 @@ export default function ParticipantStudy() {
         setLoading(false);
         return;
       }
-      if (data.status !== "live") {
+      if (data.status !== "live" && !isPreview) {
         setError("closed");
         setLoading(false);
         return;
