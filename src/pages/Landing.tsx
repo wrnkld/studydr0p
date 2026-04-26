@@ -5,9 +5,7 @@ import AppHeader from "@/components/AppHeader";
 import {
   EXAMPLE_STUDIES,
   FRIDGE_STUDY,
-  REMOTE_STUDY,
   summarizeCardSort,
-  summarizeSurvey,
 } from "@/lib/exampleStudies";
 
 export default function Landing() {
@@ -20,12 +18,18 @@ export default function Landing() {
 
   // Pre-compute small summaries for each panel.
   const fridgeSummary = summarizeCardSort(FRIDGE_STUDY);
-  const surveySummary = summarizeSurvey(REMOTE_STUDY);
 
   // Pick a few interesting cards for the fridge teaser.
   const fridgeHighlights = ["Ketchup", "Birthday cake", "Mystery tupperware"]
     .map((c) => fridgeSummary.find((s) => s.card === c))
     .filter((s): s is NonNullable<typeof s> => Boolean(s));
+
+  // Hand-picked highlights for the gas station survey teaser.
+  const gasHighlights = [
+    { label: "Ever eaten a gas station hot dog?", top: "Yes", pct: 50 },
+    { label: "Average food rating", top: "5.8 / 10", pct: null as number | null },
+    { label: "Most-eaten item", top: "Beef jerky", pct: 85 },
+  ];
 
   return (
     <>
@@ -63,29 +67,25 @@ export default function Landing() {
           </Link>
 
           <Link
-            to={`/examples/${REMOTE_STUDY.id}`}
+            to="/examples/gasstation"
             className="block rounded-lg border border-border p-4 hover:bg-accent transition-colors"
           >
             <div className="text-xs uppercase text-muted-foreground">
-              Survey · {REMOTE_STUDY.responses.length} responses
+              Survey · 20 responses
             </div>
-            <h2 className="mt-1 text-lg font-semibold">{REMOTE_STUDY.title}</h2>
+            <h2 className="mt-1 text-lg font-semibold">
+              Gas station food. No judgment.
+            </h2>
             <ul className="mt-3 space-y-1 text-sm">
-              {surveySummary.map((s) => {
-                const top = Object.entries(s.counts).sort(
-                  (a, b) => b[1] - a[1],
-                )[0];
-                if (!top) return null;
-                const pct = Math.round((top[1] / s.total) * 100);
-                return (
-                  <li key={s.question.id}>
-                    <span className="font-medium">{s.question.label}</span>{" "}
-                    <span className="text-muted-foreground">
-                      — top: {top[0]} ({pct}%)
-                    </span>
-                  </li>
-                );
-              })}
+              {gasHighlights.map((h) => (
+                <li key={h.label}>
+                  <span className="font-medium">{h.label}</span>{" "}
+                  <span className="text-muted-foreground">
+                    — {h.top}
+                    {h.pct !== null ? ` (${h.pct}%)` : ""}
+                  </span>
+                </li>
+              ))}
             </ul>
             <div className="mt-3 text-sm underline">See full results →</div>
           </Link>
