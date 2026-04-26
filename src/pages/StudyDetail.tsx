@@ -102,7 +102,7 @@ export default function StudyDetail() {
       ]);
       if (studyRes.error || !studyRes.data) {
         toast.error("Study not found");
-        navigate("/studies");
+        navigate("/");
         return;
       }
       setStudy(studyRes.data as StudyData);
@@ -149,7 +149,7 @@ export default function StudyDetail() {
       return;
     }
     toast.success("Study deleted");
-    navigate("/studies", { replace: true });
+    navigate("/", { replace: true });
   };
 
   const exportCsv = () => {

@@ -8,7 +8,6 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import AppHeader from "@/components/AppHeader";
 import Landing from "./pages/Landing";
 import ExampleStudy from "./pages/ExampleStudy";
-import Dashboard from "./pages/Dashboard";
 import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
 import StudyDetail from "./pages/StudyDetail";

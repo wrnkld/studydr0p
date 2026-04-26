@@ -148,7 +148,7 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
 
       <main className="container max-w-3xl py-10">
         <Link
-          to="/studies"
+          to="/"
           className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
