@@ -44,7 +44,7 @@ const App = () => (
               />
               <Route
                 path="/studies/:id/results"
-                element={<Navigate to=".." replace relative="path" />}
+                element={<ResultsRedirect />}
               />
 
               <Route path="*" element={<NotFound />} />
