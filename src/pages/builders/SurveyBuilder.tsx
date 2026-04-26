@@ -146,7 +146,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
 
   return (
     <div className="space-y-8 py-6">
-      <h1>Edit survey</h1>
 
       <section className="space-y-4">
         <div className="space-y-2">
