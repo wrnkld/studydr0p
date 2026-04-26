@@ -207,13 +207,13 @@ function ByCardSection() {
 }
 
 function MatrixSection() {
-  const CAT_VAR: Record<Category, string> = {
-    Door: "--chart-1",
-    "Top shelf": "--chart-2",
-    "Middle shelf": "--chart-3",
-    "Bottom shelf": "--chart-4",
-    Freezer: "--chart-5",
-    Trash: "--chart-6",
+  const CAT_COLOR: Record<Category, string> = {
+    Door: COLORS.door,
+    "Top shelf": COLORS.top,
+    "Middle shelf": COLORS.middle,
+    "Bottom shelf": COLORS.bottom,
+    Freezer: COLORS.freezer,
+    Trash: COLORS.trash,
   };
   return (
     <section>
