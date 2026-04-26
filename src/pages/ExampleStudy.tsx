@@ -33,7 +33,7 @@ export default function ExampleStudy() {
   const { session } = useAuth();
   const navigate = useNavigate();
   const [submittedSort, setSubmittedSort] = useState(false);
-  const [tab, setTab] = useState<"results" | "take">("results");
+  const [tab, setTab] = useState<"preview" | "results">("preview");
 
   if (!study && !isGasStation) {
     return (
