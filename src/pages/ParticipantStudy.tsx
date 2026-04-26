@@ -122,7 +122,11 @@ export default function ParticipantStudy() {
     return (
       <Centered>
         <h1 className="text-3xl font-semibold tracking-tight">Thank you</h1>
-        <p className="mt-3 text-muted-foreground">Your response has been recorded.</p>
+        <p className="mt-3 text-muted-foreground">
+          {isPreview
+            ? "Preview complete — nothing was saved."
+            : "Your response has been recorded."}
+        </p>
       </Centered>
     );
   }
