@@ -81,11 +81,11 @@ const Q4_DATA = [
 
 // ---------- Q5: Open text ----------
 const Q5_RESPONSES = [
-  "A taquito that has been rotating since 2019.",
-  "Nacho cheese pump, two pickled eggs, and zero questions asked.",
-  "Whatever's closest to the register and still warm-ish.",
-  "A blue Gatorade and a slice of pizza older than my car.",
-  "Roller dog, extra mystery, served at 11pm in the rain.",
+  "A Slim Jim and a large coffee, that's it.",
+  "Hot chips and a Gatorade, every time.",
+  "I only buy water",
+  "Water and some sorta granola bar",
+  "Sheetz or Wawa sandwich",
 ];
 
 export default function GasStationSurveyResults() {
