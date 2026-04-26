@@ -139,7 +139,7 @@ export default function ExampleStudy() {
           </>
         )}
 
-        {(study.id !== "fridge" || submittedSort) && (
+        {(study.id !== "fridge" || view === "results") && (
           <section className="rounded-lg border border-border p-4 space-y-3">
             {session ? (
               <>
