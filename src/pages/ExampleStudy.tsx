@@ -18,6 +18,7 @@ import {
   summarizeCardSort,
   summarizeSurvey,
 } from "@/lib/exampleStudies";
+import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import { toast } from "sonner";
 
 // Renders a full results view for a hardcoded example study.
@@ -68,22 +69,21 @@ export default function ExampleStudy() {
   return (
     <>
       <AppHeader />
-      <main className="p-6 space-y-6 max-w-3xl">
+      <main className="p-6 space-y-6 max-w-5xl">
         <div className="space-y-1">
           <Link to="/" className="text-sm underline text-muted-foreground">
             ← Examples
           </Link>
           <h1>{study.title}</h1>
           <p className="text-muted-foreground">{study.question}</p>
-          <div className="text-sm text-muted-foreground">
-            {study.responses.length} responses · example data
-          </div>
         </div>
 
-        {study.type === "card_sort" ? (
-          <CardSortResultsView study={study} />
-        ) : (
+        {study.id === "fridge" ? (
+          <FridgeCardSortResults />
+        ) : study.type === "survey" ? (
           <SurveyResultsView study={study} />
+        ) : (
+          <CardSortResultsView study={study} />
         )}
 
         <section className="rounded-lg border border-border p-4 space-y-3">
