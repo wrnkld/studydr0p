@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
 import { CardSortConfig, CardRow, CategoryRow, StudyStatus } from "@/lib/types";
 import { Trash2, Plus } from "lucide-react";
+import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
   studyId: string;
@@ -262,13 +263,21 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     }
   };
 
-  const handleClose = async () => {
-    const ok = await save({ status: "closed" });
-    if (ok) {
-      setStatus("closed");
-      toast.success("Study closed");
+  const handleDelete = useCallback(async () => {
+    const { error } = await supabase.from("studies").delete().eq("id", studyId);
+    if (error) {
+      toast.error(error.message);
+      throw error;
     }
-  };
+    toast.success("Study deleted");
+  }, [studyId]);
+
+  useRegisterStudyActions({
+    studyId,
+    onSave: handleSave,
+    onDelete: handleDelete,
+    saving,
+  });
 
   
 
@@ -372,17 +381,6 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
           </Button>
         </section>
       )}
-
-      <div className="flex flex-wrap gap-2 border-t pt-6">
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? "Saving…" : "Save"}
-        </Button>
-        {status === "live" && (
-          <Button variant="outline" onClick={handleClose} disabled={saving}>
-            Close study
-          </Button>
-        )}
-      </div>
 
       {status === "live" && shareUrl && (
         <section className="space-y-2 rounded-md border p-4">

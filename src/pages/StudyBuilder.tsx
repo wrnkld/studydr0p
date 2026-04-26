@@ -10,7 +10,7 @@ import {
 } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 import StudyResultsView from "@/components/StudyResultsView";
 import { Button } from "@/components/ui/button";
 import SurveyParticipant from "./participant/SurveyParticipant";
@@ -31,7 +31,7 @@ type TabKey = "build" | "preview" | "results";
 export default function StudyBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
 
@@ -75,13 +75,6 @@ export default function StudyBuilder() {
     [study?.slug],
   );
 
-  const setTab = (next: TabKey) => {
-    const params = new URLSearchParams(searchParams);
-    if (next === "build") params.delete("tab");
-    else params.set("tab", next);
-    setSearchParams(params, { replace: true });
-  };
-
   if (loading || !study) {
     return (
       <main className="container py-8">
@@ -124,23 +117,11 @@ export default function StudyBuilder() {
 
   return (
     <main className="container py-8">
-      <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
-        <TabsList>
-          <TabsTrigger value="build">Build</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="results">Results</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="build">{builder}</TabsContent>
-
-        <TabsContent value="preview">
-          <InlinePreview study={study} shareUrl={shareUrl} />
-        </TabsContent>
-
-        <TabsContent value="results">
-          <StudyResultsView studyId={study.id} />
-        </TabsContent>
-      </Tabs>
+      {activeTab === "build" && builder}
+      {activeTab === "preview" && (
+        <InlinePreview study={study} shareUrl={shareUrl} />
+      )}
+      {activeTab === "results" && <StudyResultsView studyId={study.id} />}
     </main>
   );
 }
