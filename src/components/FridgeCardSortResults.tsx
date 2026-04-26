@@ -110,23 +110,11 @@ const DISAGREEMENT = RAW.map((r) => ({ card: r.card, chaos: chaosOf(r) }))
 
 export default function FridgeCardSortResults() {
   return (
-    <div className="bg-white text-black space-y-12">
-      {/* Top metadata row */}
-      <section className="flex flex-wrap gap-x-24 gap-y-8 pt-4">
-        {[
-          { n: TOTAL, label: "participants" },
-          { n: RAW.length, label: "cards" },
-          { n: CATEGORIES.length, label: "categories" },
-        ].map((m) => (
-          <div key={m.label}>
-            <div className="text-[64px] font-bold leading-none tracking-tight">
-              {m.n}
-            </div>
-            <div className="mt-3 text-[12px] text-gray-500 uppercase tracking-wide">
-              {m.label}
-            </div>
-          </div>
-        ))}
+    <div className="space-y-8">
+      <section className="grid grid-cols-3 gap-4">
+        <Stat label="Responses" value={String(TOTAL)} />
+        <Stat label="Cards" value={String(RAW.length)} />
+        <Stat label="Categories" value={String(CATEGORIES.length)} />
       </section>
 
       <ByCardSection />
@@ -136,11 +124,18 @@ export default function FridgeCardSortResults() {
   );
 }
 
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border p-4">
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="mt-1 text-xl font-medium">{value}</div>
+    </div>
+  );
+}
+
 function SectionHeader({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-12 text-[11px] font-bold uppercase tracking-[0.15em] pb-2 border-b-4 border-black mb-6 rounded-none">
-      {children}
-    </h2>
+    <h3 className="text-base font-medium border-b pb-2">{children}</h3>
   );
 }
 
