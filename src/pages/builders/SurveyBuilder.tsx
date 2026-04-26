@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -127,7 +126,7 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
 
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
+
       <main className="container max-w-3xl py-10">
         <Link
           to="/studies"

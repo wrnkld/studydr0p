@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import AppHeader from "@/components/AppHeader";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 
@@ -59,7 +58,7 @@ export default function NewStudy() {
 
   return (
     <>
-      <AppHeader />
+
       <main className="p-6 space-y-4">
         <h1>New study</h1>
         <ul className="space-y-1">

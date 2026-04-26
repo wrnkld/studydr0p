@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -199,7 +198,7 @@ export default function StudyDetail() {
   if (loading || !study) {
     return (
       <>
-        <AppHeader />
+
         <div className="p-6">Loading…</div>
       </>
     );
@@ -209,7 +208,7 @@ export default function StudyDetail() {
 
   return (
     <>
-      <AppHeader />
+
       <main className="p-6 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h1>{study.title || "Untitled"}</h1>

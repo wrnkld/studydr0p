@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import AppHeader from "@/components/AppHeader";
 import { toast } from "sonner";
 import { CardSortConfig, StudyStatus, StudyType, SurveyConfig } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
@@ -44,7 +43,7 @@ export default function StudyBuilder() {
   if (loading || !study) {
     return (
       <div className="min-h-screen bg-background">
-        <AppHeader />
+
         <div className="container py-10 text-sm text-muted-foreground">Loading…</div>
       </div>
     );
@@ -84,7 +83,7 @@ export default function StudyBuilder() {
 
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
+
       <div className="container py-10 text-sm text-muted-foreground">
         This study type is not supported yet.
       </div>

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import AppHeader from "@/components/AppHeader";
 import { StudyType } from "@/lib/types";
 import { FREE_STUDY_LIMIT, UPGRADE_COPY } from "@/lib/limits";
 import { toast } from "sonner";
@@ -56,7 +55,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <AppHeader />
+
       <main className="p-6 space-y-4">
         <div className="flex justify-end">
           <Link

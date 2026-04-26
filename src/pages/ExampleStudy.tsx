@@ -1,10 +1,7 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -22,7 +19,7 @@ import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
 import GasStationSurveyResults from "@/components/GasStationSurveyResults";
 import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
-import { toast } from "sonner";
+
 
 // Renders a full results view for a hardcoded example study.
 // CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
@@ -33,16 +30,13 @@ export default function ExampleStudy() {
   const study = id ? getExampleStudy(id) : null;
   const { session } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [sentTo, setSentTo] = useState<string | null>(null);
   const [submittedSort, setSubmittedSort] = useState(false);
   const [view, setView] = useState<"results" | "sort">("results");
 
   if (!study && !isGasStation) {
     return (
       <>
-        <AppHeader />
+
         <main className="p-6 space-y-2">
           <h1>Example not found</h1>
           <Link to="/" className="underline">
@@ -53,21 +47,6 @@ export default function ExampleStudy() {
     );
   }
 
-  const onSignIn = async (e: FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/studies` },
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setSentTo(email);
-  };
-
   const onDuplicate = () => {
     // Example studies are illustrative — duplicate sends them to new study flow.
     navigate(`/studies/new?type=${study.type}`);
@@ -75,7 +54,7 @@ export default function ExampleStudy() {
 
   return (
     <>
-      <AppHeader />
+
       <main className="p-6 space-y-6 max-w-5xl">
         {isFridge || isGasStation ? (
           <>
@@ -160,33 +139,10 @@ export default function ExampleStudy() {
           </>
         ) : null}
 
-        {((!isFridge && !isGasStation) || view === "results") && (
+        {!isFridge && !isGasStation && session && (
           <section className="rounded-lg border border-border p-4 space-y-3">
-            {session ? (
-              <>
-                <p>Like this? Make your own version in your dashboard.</p>
-                <Button onClick={onDuplicate}>Duplicate this study</Button>
-              </>
-            ) : sentTo ? (
-              <p>Link sent to {sentTo}. Check your email to sign in.</p>
-            ) : (
-              <>
-                <p>Sign in to create your own study like this.</p>
-                <form onSubmit={onSignIn} className="flex gap-2 max-w-sm">
-                  <Input
-                    type="email"
-                    required
-                    aria-label="Email"
-                    placeholder="you@team.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Button type="submit" disabled={submitting}>
-                    {submitting ? "Sending…" : "Sign in to create your own study"}
-                  </Button>
-                </form>
-              </>
-            )}
+            <p>Like this? Make your own version in your dashboard.</p>
+            <Button onClick={onDuplicate}>Duplicate this study</Button>
           </section>
         )}
       </main>
