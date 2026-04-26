@@ -19,6 +19,10 @@ interface StudyData {
 
 export default function ParticipantStudy() {
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  // Preview mode: rendered in an iframe inside the researcher's builder.
+  // Skips writing sessions/responses so previews don't pollute real data.
+  const isPreview = searchParams.get("preview") === "1";
   const [study, setStudy] = useState<StudyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<"not_found" | "closed" | null>(null);
