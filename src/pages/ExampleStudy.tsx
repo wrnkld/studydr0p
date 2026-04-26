@@ -32,6 +32,7 @@ export default function ExampleStudy() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const [submittedSort, setSubmittedSort] = useState(false);
 
   if (!study) {
     return (
