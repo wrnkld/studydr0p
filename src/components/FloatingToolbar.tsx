@@ -96,7 +96,6 @@ function LoggedOutBar() {
   return (
     <Shell>
       <Logo />
-      <Divider />
       <SignInForm />
     </Shell>
   );
@@ -108,20 +107,21 @@ function LoggedInHomeBar() {
   return (
     <Shell>
       <Logo />
-      <Divider />
-      <Button size="sm" onClick={() => navigate("/studies/new")}>
-        New study
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={async () => {
-          await signOut();
-          navigate("/");
-        }}
-      >
-        Sign out
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button size="sm" onClick={() => navigate("/studies/new")}>
+          New study
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={async () => {
+            await signOut();
+            navigate("/");
+          }}
+        >
+          Sign out
+        </Button>
+      </div>
     </Shell>
   );
 }
