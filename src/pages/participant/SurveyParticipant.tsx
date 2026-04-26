@@ -17,10 +17,18 @@ interface Props {
   };
   sessionId: string;
   startedAt: number;
+  /** When true, skip writing responses/sessions to the database. */
+  preview?: boolean;
   onDone: () => void;
 }
 
-export default function SurveyParticipant({ study, sessionId, startedAt, onDone }: Props) {
+export default function SurveyParticipant({
+  study,
+  sessionId,
+  startedAt,
+  preview = false,
+  onDone,
+}: Props) {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -33,6 +41,12 @@ export default function SurveyParticipant({ study, sessionId, startedAt, onDone 
       }
     }
     setSubmitting(true);
+    if (preview) {
+      // Don't pollute real data with preview submissions.
+      setSubmitting(false);
+      onDone();
+      return;
+    }
     const { error: respErr } = await supabase.from("responses").insert({
       study_id: study.id,
       session_id: sessionId,
