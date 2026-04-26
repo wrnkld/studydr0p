@@ -382,17 +382,6 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
         </section>
       )}
 
-      <div className="flex flex-wrap gap-2 border-t pt-6">
-        <Button onClick={handleSave} disabled={saving}>
-          {saving ? "Saving…" : "Save"}
-        </Button>
-        {status === "live" && (
-          <Button variant="outline" onClick={handleClose} disabled={saving}>
-            Close study
-          </Button>
-        )}
-      </div>
-
       {status === "live" && shareUrl && (
         <section className="space-y-2 rounded-md border p-4">
           <div className="text-sm font-medium">Participant link</div>
