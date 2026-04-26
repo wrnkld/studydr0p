@@ -86,13 +86,6 @@ export default function ExampleStudy() {
             </TabsContent>
 
             <TabsContent value="results" className="space-y-4 pt-4">
-              {submittedSort && (
-                <p className="text-xs text-muted-foreground">
-                  {isFridge
-                    ? "You and 20 others sorted this."
-                    : "You and 20 others answered this."}
-                </p>
-              )}
               {isFridge ? <FridgeCardSortResults /> : <GasStationSurveyResults />}
             </TabsContent>
           </Tabs>
