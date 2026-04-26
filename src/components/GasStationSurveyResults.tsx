@@ -35,7 +35,6 @@ const barConfig = {
 const Q1_DATA = [
   { label: "Yes", value: 10 },
   { label: "No", value: 6 },
-  { label: "I don't want to talk about it", value: 4 },
 ];
 
 // ---------- Q2: Rating 1-10 ----------
@@ -63,7 +62,6 @@ const Q3_DATA = [
   { label: "Beef jerky", value: 17 },
   { label: "Taquito", value: 16 },
   { label: "Donut", value: 13 },
-  { label: "Roller grill mystery item", value: 11 },
   { label: "Hot dog", value: 10 },
   { label: "Just snacks", value: 8 },
   { label: "Pizza slice", value: 7 },
