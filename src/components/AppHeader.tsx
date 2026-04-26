@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -60,6 +60,10 @@ export function InlineSignIn({ className = "" }: { className?: string }) {
 export default function AppHeader() {
   const { session, signOut } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Participant view is intentionally chrome-free: no header, no branding, no nav.
+  if (location.pathname.startsWith("/s/")) return null;
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-border">

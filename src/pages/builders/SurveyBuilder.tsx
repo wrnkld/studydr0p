@@ -131,7 +131,7 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
       setStatus("live");
       setSlug(newSlug);
       toast.success("Saved");
-      navigate(`/studies/${studyId}`);
+      navigate(`/studies/${studyId}?tab=share`);
     }
   };
 
@@ -143,17 +143,12 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     }
   };
 
-  const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
+  
 
   return (
-    <div className="min-h-screen bg-background">
-
-      <main className="container max-w-3xl py-10">
-        <div className="flex items-end justify-between gap-4">
-          <h1 className="text-2xl font-semibold tracking-tight">Edit survey</h1>
-        </div>
-
-        <section className="mt-8 space-y-4">
+    <div>
+      <main>
+        <section className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -279,24 +274,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
           </div>
         </section>
 
-        {shareUrl && status === "live" && (
-          <section className="mt-10 rounded-lg border border-border p-5">
-            <div className="text-sm font-medium">Share link</div>
-            <div className="mt-2 flex gap-2">
-              <Input readOnly value={shareUrl} onFocus={(e) => e.currentTarget.select()} />
-              <Button
-                variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(shareUrl);
-                  toast.success("Copied");
-                }}
-              >
-                Copy
-              </Button>
-            </div>
-          </section>
-        )}
-
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
           <Button onClick={handleSave} disabled={saving}>
             {saving ? "Saving…" : "Save"}
@@ -304,13 +281,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
           {status === "live" && (
             <Button variant="outline" onClick={handleClose} disabled={saving}>
               Close study
-            </Button>
-          )}
-          {status === "live" && slug && (
-            <Button asChild variant="ghost">
-              <a href={`/s/${slug}`} target="_blank" rel="noreferrer">
-                Preview
-              </a>
             </Button>
           )}
         </div>

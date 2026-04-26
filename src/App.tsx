@@ -9,7 +9,7 @@ import AppHeader from "@/components/AppHeader";
 import Landing from "./pages/Landing";
 import ExampleStudy from "./pages/ExampleStudy";
 import NewStudy from "./pages/NewStudy";
-import StudyBuilder from "./pages/StudyBuilder";
+
 import StudyDetail from "./pages/StudyDetail";
 import ParticipantStudy from "./pages/ParticipantStudy";
 import NotFound from "./pages/NotFound";
@@ -40,7 +40,7 @@ const App = () => (
             />
             <Route
               path="/studies/:id/edit"
-              element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
+              element={<Navigate to=".." replace relative="path" />}
             />
             <Route
               path="/studies/:id/results"
