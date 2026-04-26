@@ -78,7 +78,7 @@ export default function ExampleStudy() {
           <p className="text-muted-foreground">{study.question}</p>
         </div>
 
-        {study.type === "card_sort" && study.id === "fridge" ? (
+        {study.id === "fridge" ? (
           <FridgeCardSortResults />
         ) : study.type === "card_sort" ? (
           <CardSortResultsView study={study} />
