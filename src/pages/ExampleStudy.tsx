@@ -80,10 +80,10 @@ export default function ExampleStudy() {
 
         {study.id === "fridge" ? (
           <FridgeCardSortResults />
-        ) : study.type === "card_sort" ? (
-          <CardSortResultsView study={study} />
-        ) : (
+        ) : study.type === "survey" ? (
           <SurveyResultsView study={study} />
+        ) : (
+          <CardSortResultsView study={study} />
         )}
 
         <section className="rounded-lg border border-border p-4 space-y-3">
