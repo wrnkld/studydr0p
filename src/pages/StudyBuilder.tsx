@@ -13,7 +13,6 @@ import CardSortBuilder from "./builders/CardSortBuilder";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import StudyResultsView from "@/components/StudyResultsView";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 
