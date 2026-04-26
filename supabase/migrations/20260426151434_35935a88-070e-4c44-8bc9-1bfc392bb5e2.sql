@@ -1,0 +1,1 @@
+DELETE FROM public.studies WHERE id IN ('39f89401-d351-4046-bb5a-62ec140c8cd9', 'd96f1a5e-d532-4817-9167-68441a910ecd');
