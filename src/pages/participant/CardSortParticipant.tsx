@@ -184,142 +184,135 @@ export default function CardSortParticipant({
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">
-        Loading…
-      </div>
+      <main className="container py-8">
+        <p className="text-sm text-muted-foreground">Loading…</p>
+      </main>
     );
   }
 
   const cardById = (id: string) => cards.find((c) => c.id === id);
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container max-w-5xl py-8">
-        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {study.config.sort_type === "open"
-            ? "Group the cards into categories that make sense to you, then name each group."
-            : "Drag each card into the category where you think it belongs."}
-        </p>
+    <main className="container py-8 space-y-6">
+      <h1>{study.title}</h1>
+      <p className="text-sm text-muted-foreground">
+        {study.config.sort_type === "open"
+          ? "Group the cards into categories that make sense to you, then name each group."
+          : "Drag each card into the category where you think it belongs."}
+      </p>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-[260px_1fr]">
-          {/* Unsorted column */}
-          <DropZone
-            id={UNSORTED}
-            label={`Cards (${unsorted.length})`}
-            isDragOver={dragOver === UNSORTED}
-            onDragEnter={() => setDragOver(UNSORTED)}
-            onDragLeave={() => setDragOver(null)}
-            onDrop={() => {
-              if (draggedCardId) moveCardTo(draggedCardId, UNSORTED);
-              setDragOver(null);
-              setDraggedCardId(null);
-            }}
-          >
-            {unsorted.length === 0 && (
-              <div className="text-xs text-muted-foreground">All sorted ✓</div>
-            )}
-            {unsorted.map((id) => {
-              const c = cardById(id);
-              if (!c) return null;
-              return (
-                <DraggableCard
-                  key={id}
-                  card={c}
-                  onDragStart={() => setDraggedCardId(id)}
-                  onDragEnd={() => setDraggedCardId(null)}
-                  onMobileMove={(targetId) => moveCardTo(id, targetId)}
-                  groups={groups}
-                  showUnsortedOption={false}
-                />
-              );
-            })}
-          </DropZone>
+      <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+        {/* Unsorted column */}
+        <DropZone
+          id={UNSORTED}
+          label={`Cards (${unsorted.length})`}
+          isDragOver={dragOver === UNSORTED}
+          onDragEnter={() => setDragOver(UNSORTED)}
+          onDragLeave={() => setDragOver(null)}
+          onDrop={() => {
+            if (draggedCardId) moveCardTo(draggedCardId, UNSORTED);
+            setDragOver(null);
+            setDraggedCardId(null);
+          }}
+        >
+          {unsorted.length === 0 && (
+            <div className="text-xs text-muted-foreground">All sorted ✓</div>
+          )}
+          {unsorted.map((id) => {
+            const c = cardById(id);
+            if (!c) return null;
+            return (
+              <DraggableCard
+                key={id}
+                card={c}
+                onDragStart={() => setDraggedCardId(id)}
+                onDragEnd={() => setDraggedCardId(null)}
+                onMobileMove={(targetId) => moveCardTo(id, targetId)}
+                groups={groups}
+                showUnsortedOption={false}
+              />
+            );
+          })}
+        </DropZone>
 
-          {/* Categories area */}
-          <div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {groups.map((g) => (
-                <DropZone
-                  key={g.id}
-                  id={g.id}
-                  label={
-                    study.config.sort_type === "closed" ? (
-                      <span className="text-sm font-medium">{g.label}</span>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <Input
-                          value={g.label}
-                          onChange={(e) => renameGroup(g.id, e.target.value)}
-                          placeholder="Category name"
-                          className="h-8"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeOpenGroup(g.id)}
-                          className="text-muted-foreground hover:text-foreground"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    )
-                  }
-                  isDragOver={dragOver === g.id}
-                  onDragEnter={() => setDragOver(g.id)}
-                  onDragLeave={() => setDragOver(null)}
-                  onDrop={() => {
-                    if (draggedCardId) moveCardTo(draggedCardId, g.id);
-                    setDragOver(null);
-                    setDraggedCardId(null);
-                  }}
-                >
-                  {g.card_ids.length === 0 && (
-                    <div className="text-xs text-muted-foreground">Drop cards here</div>
-                  )}
-                  {g.card_ids.map((id) => {
-                    const c = cardById(id);
-                    if (!c) return null;
-                    return (
-                      <DraggableCard
-                        key={id}
-                        card={c}
-                        onDragStart={() => setDraggedCardId(id)}
-                        onDragEnd={() => setDraggedCardId(null)}
-                        onMobileMove={(targetId) => moveCardTo(id, targetId)}
-                        groups={groups}
-                        showUnsortedOption
+        {/* Categories area */}
+        <div className="space-y-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {groups.map((g) => (
+              <DropZone
+                key={g.id}
+                id={g.id}
+                label={
+                  study.config.sort_type === "closed" ? (
+                    <span className="text-sm font-medium">{g.label}</span>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        value={g.label}
+                        onChange={(e) => renameGroup(g.id, e.target.value)}
+                        placeholder="Category name"
                       />
-                    );
-                  })}
-                </DropZone>
-              ))}
-            </div>
-
-            {study.config.sort_type === "open" && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={addOpenCategory}
-                className="mt-4"
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeOpenGroup(g.id)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )
+                }
+                isDragOver={dragOver === g.id}
+                onDragEnter={() => setDragOver(g.id)}
+                onDragLeave={() => setDragOver(null)}
+                onDrop={() => {
+                  if (draggedCardId) moveCardTo(draggedCardId, g.id);
+                  setDragOver(null);
+                  setDraggedCardId(null);
+                }}
               >
-                <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
-              </Button>
-            )}
+                {g.card_ids.length === 0 && (
+                  <div className="text-xs text-muted-foreground">Drop cards here</div>
+                )}
+                {g.card_ids.map((id) => {
+                  const c = cardById(id);
+                  if (!c) return null;
+                  return (
+                    <DraggableCard
+                      key={id}
+                      card={c}
+                      onDragStart={() => setDraggedCardId(id)}
+                      onDragEnd={() => setDraggedCardId(null)}
+                      onMobileMove={(targetId) => moveCardTo(id, targetId)}
+                      groups={groups}
+                      showUnsortedOption
+                    />
+                  );
+                })}
+              </DropZone>
+            ))}
           </div>
-        </div>
 
-        <div className="mt-10 border-t border-border pt-6">
-          <Button size="lg" onClick={submit} disabled={submitting}>
-            {submitting ? "Submitting…" : "Submit"}
-          </Button>
-          <p className="mt-2 text-xs text-muted-foreground">
-            {unsorted.length > 0
-              ? `${unsorted.length} card${unsorted.length === 1 ? "" : "s"} left to sort.`
-              : "All cards sorted."}
-          </p>
+          {study.config.sort_type === "open" && (
+            <Button variant="outline" size="sm" onClick={addOpenCategory}>
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
+            </Button>
+          )}
         </div>
-      </main>
-    </div>
+      </div>
+
+      <div className="space-y-2 border-t pt-6">
+        <Button onClick={submit} disabled={submitting}>
+          {submitting ? "Submitting…" : "Submit"}
+        </Button>
+        <p className="text-xs text-muted-foreground">
+          {unsorted.length > 0
+            ? `${unsorted.length} card${unsorted.length === 1 ? "" : "s"} left to sort.`
+            : "All cards sorted."}
+        </p>
+      </div>
+    </main>
   );
 }
 
@@ -351,11 +344,7 @@ function DropZone({
         e.preventDefault();
         onDrop();
       }}
-      className={`rounded-lg border p-3 transition-colors ${
-        isDragOver
-          ? "border-foreground bg-accent/40"
-          : "border-border bg-background"
-      }`}
+      className={`rounded-md border p-3 ${isDragOver ? "bg-accent" : ""}`}
       data-zone-id={id}
     >
       <div className="mb-2 px-1">{label}</div>
@@ -386,13 +375,12 @@ function DraggableCard({
       draggable
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
-      className="group relative cursor-grab rounded-md border border-border bg-card p-3 text-sm shadow-sm active:cursor-grabbing"
+      className="relative cursor-grab rounded-md border bg-card p-3 text-sm active:cursor-grabbing"
     >
       <div className="font-medium">{card.label}</div>
       {card.description && (
         <div className="mt-1 text-xs text-muted-foreground">{card.description}</div>
       )}
-      {/* Mobile fallback: tap to move */}
       <button
         type="button"
         onClick={() => setShowMenu((s) => !s)}
@@ -402,7 +390,7 @@ function DraggableCard({
         ⋯
       </button>
       {showMenu && (
-        <div className="absolute right-2 top-9 z-10 w-44 rounded-md border border-border bg-popover p-1 shadow-md sm:hidden">
+        <div className="absolute right-2 top-9 z-10 w-44 rounded-md border bg-popover p-1 shadow-md sm:hidden">
           {showUnsortedOption && (
             <button
               type="button"

@@ -145,173 +145,169 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
   const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container max-w-3xl py-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Edit survey</h1>
+    <div className="space-y-8 py-6">
+      <h1>Edit survey</h1>
 
-        <section className="mt-8 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
-            <Textarea
-              id="description"
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief context shown to participants."
-            />
-          </div>
-        </section>
+      <section className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="description">Description (optional)</Label>
+          <Textarea
+            id="description"
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Brief context shown to participants."
+          />
+        </div>
+      </section>
 
-        <section className="mt-12">
-          <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-            Questions
-          </h2>
+      <section className="space-y-4">
+        <h2>Questions</h2>
 
-          <ul className="mt-4 space-y-3">
-            {config.questions.map((q, i) => (
-              <li key={q.id} className="rounded-lg border border-border p-4">
-                <div className="flex items-start gap-3">
-                  <div className="mt-2 text-xs text-muted-foreground">{i + 1}.</div>
-                  <div className="flex-1 space-y-3">
-                    <div className="flex items-center gap-2">
-                      <Select
-                        value={q.type}
-                        onValueChange={(v) => {
-                          const next = v as SurveyQuestionType;
-                          updateQuestion(q.id, {
-                            type: next,
-                            options:
-                              next === "multiple_choice"
-                                ? q.options ?? ["Option 1", "Option 2"]
-                                : undefined,
-                          });
-                        }}
-                      >
-                        <SelectTrigger className="w-[200px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="multiple_choice">Multiple choice</SelectItem>
-                          <SelectItem value="likert">Rating scale (1-5)</SelectItem>
-                          <SelectItem value="open_text">Open text</SelectItem>
-                        </SelectContent>
-                      </Select>
+        <ul className="space-y-3">
+          {config.questions.map((q, i) => (
+            <li key={q.id} className="rounded-md border p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={q.type}
+                      onValueChange={(v) => {
+                        const next = v as SurveyQuestionType;
+                        updateQuestion(q.id, {
+                          type: next,
+                          options:
+                            next === "multiple_choice"
+                              ? q.options ?? ["Option 1", "Option 2"]
+                              : undefined,
+                        });
+                      }}
+                    >
+                      <SelectTrigger className="w-[200px]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="multiple_choice">Multiple choice</SelectItem>
+                        <SelectItem value="likert">Rating scale (1-5)</SelectItem>
+                        <SelectItem value="open_text">Open text</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="ml-auto"
+                      onClick={() => removeQuestion(q.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <Input
+                    placeholder="Question…"
+                    value={q.label}
+                    onChange={(e) => updateQuestion(q.id, { label: e.target.value })}
+                  />
+                  {q.type === "multiple_choice" && (
+                    <div className="space-y-2">
+                      {(q.options ?? []).map((opt, oi) => (
+                        <div key={oi} className="flex items-center gap-2">
+                          <Input
+                            value={opt}
+                            onChange={(e) => {
+                              const opts = [...(q.options ?? [])];
+                              opts[oi] = e.target.value;
+                              updateQuestion(q.id, { options: opts });
+                            }}
+                          />
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              const opts = (q.options ?? []).filter(
+                                (_, i) => i !== oi,
+                              );
+                              updateQuestion(q.id, { options: opts });
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
                       <Button
-                        variant="ghost"
-                        size="icon"
-                        className="ml-auto"
-                        onClick={() => removeQuestion(q.id)}
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          updateQuestion(q.id, {
+                            options: [
+                              ...(q.options ?? []),
+                              `Option ${(q.options?.length ?? 0) + 1}`,
+                            ],
+                          })
+                        }
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Plus className="mr-1.5 h-3.5 w-3.5" /> Add option
                       </Button>
                     </div>
-                    <Input
-                      placeholder="Question…"
-                      value={q.label}
-                      onChange={(e) => updateQuestion(q.id, { label: e.target.value })}
-                    />
-                    {q.type === "multiple_choice" && (
-                      <div className="space-y-2">
-                        {(q.options ?? []).map((opt, oi) => (
-                          <div key={oi} className="flex items-center gap-2">
-                            <Input
-                              value={opt}
-                              onChange={(e) => {
-                                const opts = [...(q.options ?? [])];
-                                opts[oi] = e.target.value;
-                                updateQuestion(q.id, { options: opts });
-                              }}
-                            />
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={() => {
-                                const opts = (q.options ?? []).filter(
-                                  (_, i) => i !== oi,
-                                );
-                                updateQuestion(q.id, { options: opts });
-                              }}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        ))}
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            updateQuestion(q.id, {
-                              options: [
-                                ...(q.options ?? []),
-                                `Option ${(q.options?.length ?? 0) + 1}`,
-                              ],
-                            })
-                          }
-                        >
-                          <Plus className="mr-1.5 h-3.5 w-3.5" /> Add option
-                        </Button>
-                      </div>
-                    )}
-                  </div>
+                  )}
                 </div>
-              </li>
-            ))}
-          </ul>
+              </div>
+            </li>
+          ))}
+        </ul>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Button variant="outline" size="sm" onClick={() => addQuestion("multiple_choice")}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" /> Multiple choice
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => addQuestion("likert")}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" /> Rating scale
-            </Button>
-            <Button variant="outline" size="sm" onClick={() => addQuestion("open_text")}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" /> Open text
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => addQuestion("multiple_choice")}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Multiple choice
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => addQuestion("likert")}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Rating scale
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => addQuestion("open_text")}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Open text
+          </Button>
+        </div>
+      </section>
+
+      <div className="flex flex-wrap gap-2 border-t pt-6">
+        <Button onClick={handleSave} disabled={saving}>
+          {saving ? "Saving…" : "Save"}
+        </Button>
+        {status === "live" && (
+          <Button variant="outline" onClick={handleClose} disabled={saving}>
+            Close study
+          </Button>
+        )}
+      </div>
+
+      {status === "live" && shareUrl && (
+        <section className="space-y-2 rounded-md border p-4">
+          <div className="text-sm font-medium">Participant link</div>
+          <div className="flex flex-wrap gap-2">
+            <Input
+              readOnly
+              value={shareUrl}
+              onFocus={(e) => e.currentTarget.select()}
+            />
+            <Button
+              variant="outline"
+              onClick={() => {
+                navigator.clipboard.writeText(shareUrl);
+                toast.success("Copied");
+              }}
+            >
+              Copy
             </Button>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Use the Preview tab above to try it as a participant.
+          </p>
         </section>
-
-        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save"}
-          </Button>
-          {status === "live" && (
-            <Button variant="outline" onClick={handleClose} disabled={saving}>
-              Close study
-            </Button>
-          )}
-        </div>
-
-        {status === "live" && shareUrl && (
-          <section className="mt-10 rounded-lg border border-border p-5">
-            <div className="text-sm font-medium">Participant link</div>
-            <div className="mt-2 flex flex-wrap gap-2">
-              <Input
-                readOnly
-                value={shareUrl}
-                onFocus={(e) => e.currentTarget.select()}
-                className="font-mono"
-              />
-              <Button
-                variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(shareUrl);
-                  toast.success("Copied");
-                }}
-              >
-                Copy
-              </Button>
-            </div>
-            <p className="mt-2 text-xs text-muted-foreground">
-              Use the Preview tab above to try it as a participant.
-            </p>
-          </section>
-        )}
-      </main>
+      )}
     </div>
   );
 }
+

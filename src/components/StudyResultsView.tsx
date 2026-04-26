@@ -169,14 +169,12 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
     (study.type === "survey" || study.type === "card_sort") && responses.length > 0;
 
   return (
-    <div className="space-y-8">
-      {showHeader && (
-        <div className="flex items-center justify-end">
-          {canExport && (
-            <button onClick={exportCsv} className="text-sm underline">
-              Export CSV
-            </button>
-          )}
+    <div className="space-y-6 py-6">
+      {showHeader && canExport && (
+        <div className="flex justify-end">
+          <button onClick={exportCsv} className="text-sm underline">
+            Export CSV
+          </button>
         </div>
       )}
 
@@ -244,10 +242,8 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-border p-4">
-      <div className="text-xs uppercase tracking-widest text-muted-foreground">
-        {label}
-      </div>
+    <div className="rounded-md border p-4">
+      <div className="text-xs text-muted-foreground">{label}</div>
       <div className="mt-1 text-xl font-medium">{value}</div>
     </div>
   );

@@ -273,173 +273,143 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
   
 
   if (loadingChildren) {
-    return (
-      <div className="min-h-screen bg-background">
-
-        <div className="container py-10 text-sm text-muted-foreground">Loading…</div>
-      </div>
-    );
+    return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
   }
 
   const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container max-w-3xl py-10">
-        <h1 className="text-2xl font-semibold tracking-tight">Edit card sort</h1>
+    <div className="space-y-8 py-6">
+      <h1>Edit card sort</h1>
 
-        <section className="mt-8 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
-            <Textarea
-              id="description"
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief context shown to participants."
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Sort type</Label>
-            <Select
-              value={sortType}
-              onValueChange={(v) => setSortType(v as "open" | "closed")}
-            >
-              <SelectTrigger className="w-[260px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="open">Open — participants name categories</SelectItem>
-                <SelectItem value="closed">Closed — you define categories</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </section>
+      <section className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="description">Description (optional)</Label>
+          <Textarea
+            id="description"
+            rows={3}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Brief context shown to participants."
+          />
+        </div>
+        <div className="space-y-2">
+          <Label>Sort type</Label>
+          <Select
+            value={sortType}
+            onValueChange={(v) => setSortType(v as "open" | "closed")}
+          >
+            <SelectTrigger className="w-[260px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="open">Open — participants name categories</SelectItem>
+              <SelectItem value="closed">Closed — you define categories</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </section>
 
-        <section className="mt-12">
-          <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-            Cards
-          </h2>
-          <ul className="mt-4 space-y-3">
-            {cards.map((c, i) => (
-              <li key={c.id} className="rounded-lg border border-border p-4">
-                <div className="flex items-start gap-3">
-                  <div className="mt-2 text-xs text-muted-foreground">{i + 1}.</div>
-                  <div className="flex-1 space-y-2">
-                    <Input
-                      placeholder="Card label"
-                      value={c.label}
-                      onChange={(e) => updateCard(c.id, { label: e.target.value })}
-                    />
-                    <Textarea
-                      rows={2}
-                      placeholder="Optional description"
-                      value={c.description}
-                      onChange={(e) => updateCard(c.id, { description: e.target.value })}
-                    />
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeCard(c.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+      <section className="space-y-4">
+        <h2>Cards</h2>
+        <ul className="space-y-3">
+          {cards.map((c, i) => (
+            <li key={c.id} className="rounded-md border p-4">
+              <div className="flex items-start gap-3">
+                <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+                <div className="flex-1 space-y-2">
+                  <Input
+                    placeholder="Card label"
+                    value={c.label}
+                    onChange={(e) => updateCard(c.id, { label: e.target.value })}
+                  />
+                  <Textarea
+                    rows={2}
+                    placeholder="Optional description"
+                    value={c.description}
+                    onChange={(e) => updateCard(c.id, { description: e.target.value })}
+                  />
                 </div>
+                <Button variant="ghost" size="icon" onClick={() => removeCard(c.id)}>
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Button variant="outline" size="sm" onClick={addCard}>
+          <Plus className="mr-1.5 h-3.5 w-3.5" /> Add card
+        </Button>
+      </section>
+
+      {sortType === "closed" && (
+        <section className="space-y-4">
+          <h2>Categories</h2>
+          <ul className="space-y-2">
+            {categories.map((c, i) => (
+              <li key={c.id} className="flex items-center gap-2">
+                <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
+                <Input
+                  placeholder="Category label"
+                  value={c.label}
+                  onChange={(e) => updateCategory(c.id, { label: e.target.value })}
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeCategory(c.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </li>
             ))}
           </ul>
-          <div className="mt-4">
-            <Button variant="outline" size="sm" onClick={addCard}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" /> Add card
+          <Button variant="outline" size="sm" onClick={addCategory}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
+          </Button>
+        </section>
+      )}
+
+      <div className="flex flex-wrap gap-2 border-t pt-6">
+        <Button onClick={handleSave} disabled={saving}>
+          {saving ? "Saving…" : "Save"}
+        </Button>
+        {status === "live" && (
+          <Button variant="outline" onClick={handleClose} disabled={saving}>
+            Close study
+          </Button>
+        )}
+      </div>
+
+      {status === "live" && shareUrl && (
+        <section className="space-y-2 rounded-md border p-4">
+          <div className="text-sm font-medium">Participant link</div>
+          <div className="flex flex-wrap gap-2">
+            <Input
+              readOnly
+              value={shareUrl}
+              onFocus={(e) => e.currentTarget.select()}
+            />
+            <Button
+              variant="outline"
+              onClick={() => {
+                navigator.clipboard.writeText(shareUrl);
+                toast.success("Copied");
+              }}
+            >
+              Copy
             </Button>
           </div>
+          <p className="text-xs text-muted-foreground">
+            Use the Preview tab above to try it as a participant.
+          </p>
         </section>
-
-        {sortType === "closed" && (
-          <section className="mt-12">
-            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-              Categories
-            </h2>
-            <ul className="mt-4 space-y-2">
-              {categories.map((c, i) => (
-                <li key={c.id} className="flex items-center gap-2">
-                  <div className="w-6 text-xs text-muted-foreground">{i + 1}.</div>
-                  <Input
-                    placeholder="Category label"
-                    value={c.label}
-                    onChange={(e) => updateCategory(c.id, { label: e.target.value })}
-                  />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeCategory(c.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </li>
-              ))}
-            </ul>
-            <div className="mt-4">
-              <Button variant="outline" size="sm" onClick={addCategory}>
-                <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
-              </Button>
-            </div>
-          </section>
-        )}
-
-        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save"}
-          </Button>
-          {status === "live" && (
-            <Button variant="outline" onClick={handleClose} disabled={saving}>
-              Close study
-            </Button>
-          )}
-        </div>
-
-        {status === "live" && shareUrl && (
-          <SharePanel studyId={studyId} shareUrl={shareUrl} />
-        )}
-      </main>
+      )}
     </div>
   );
 }
 
-interface SharePanelProps {
-  studyId: string;
-  shareUrl: string;
-}
-
-function SharePanel({ shareUrl }: SharePanelProps) {
-  return (
-    <section className="mt-10 rounded-lg border border-border p-5">
-      <div className="text-sm font-medium">Participant link</div>
-      <div className="mt-2 flex flex-wrap gap-2">
-        <Input
-          readOnly
-          value={shareUrl}
-          onFocus={(e) => e.currentTarget.select()}
-          className="font-mono"
-        />
-        <Button
-          variant="outline"
-          onClick={() => {
-            navigator.clipboard.writeText(shareUrl);
-            toast.success("Copied");
-          }}
-        >
-          Copy
-        </Button>
-      </div>
-      <p className="mt-2 text-xs text-muted-foreground">
-        Use the Preview tab above to try it as a participant.
-      </p>
-    </section>
-  );
-}

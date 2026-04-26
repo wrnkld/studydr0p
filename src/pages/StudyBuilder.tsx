@@ -65,9 +65,9 @@ export default function StudyBuilder() {
 
   if (loading || !study) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container py-10 text-sm text-muted-foreground">Loading…</div>
-      </div>
+      <main className="container py-8">
+        <p className="text-sm text-muted-foreground">Loading…</p>
+      </main>
     );
   }
 
@@ -98,56 +98,48 @@ export default function StudyBuilder() {
         }}
       />
     ) : (
-      <div className="container py-10 text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         This study type is not supported yet.
-      </div>
+      </p>
     );
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container max-w-3xl pt-8">
-        <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
-          <TabsList>
-            <TabsTrigger value="build">Build</TabsTrigger>
-            <TabsTrigger value="preview" disabled={!shareUrl}>
-              Preview
-            </TabsTrigger>
-            <TabsTrigger value="results">Results</TabsTrigger>
-          </TabsList>
+    <main className="container py-8">
+      <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
+        <TabsList>
+          <TabsTrigger value="build">Build</TabsTrigger>
+          <TabsTrigger value="preview" disabled={!shareUrl}>
+            Preview
+          </TabsTrigger>
+          <TabsTrigger value="results">Results</TabsTrigger>
+        </TabsList>
 
-          <TabsContent value="build" className="mt-0">
-            {builder}
-          </TabsContent>
+        <TabsContent value="build">{builder}</TabsContent>
 
-          <TabsContent value="preview" className="mt-0">
-            <PreviewTab shareUrl={shareUrl} />
-          </TabsContent>
+        <TabsContent value="preview">
+          <PreviewTab shareUrl={shareUrl} />
+        </TabsContent>
 
-          <TabsContent value="results" className="mt-0">
-            <div className="py-10">
-              <StudyResultsView studyId={study.id} />
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
+        <TabsContent value="results">
+          <StudyResultsView studyId={study.id} />
+        </TabsContent>
+      </Tabs>
+    </main>
   );
 }
 
 function PreviewTab({ shareUrl }: { shareUrl: string | null }) {
   if (!shareUrl) {
     return (
-      <div className="py-10 text-sm text-muted-foreground">
+      <p className="text-sm text-muted-foreground">
         Save the study first to preview it as a participant.
-      </div>
+      </p>
     );
   }
-  // ?preview=1 tells ParticipantStudy to skip writing sessions/responses,
-  // so previewing never pollutes real data.
   const previewUrl = `${shareUrl}?preview=1`;
   return (
-    <div className="py-6">
-      <div className="mb-3 flex items-center justify-between">
+    <div className="space-y-3">
+      <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
           Exactly what participants see — submissions here aren't saved.
         </p>
@@ -157,7 +149,7 @@ function PreviewTab({ shareUrl }: { shareUrl: string | null }) {
           </a>
         </Button>
       </div>
-      <div className="overflow-hidden rounded-lg border border-border bg-background">
+      <div className="overflow-hidden rounded-md border">
         <iframe
           src={previewUrl}
           title="Participant preview"

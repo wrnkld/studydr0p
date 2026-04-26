@@ -20,8 +20,6 @@ interface StudyData {
 export default function ParticipantStudy() {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
-  // Preview mode: rendered in an iframe inside the researcher's builder.
-  // Skips writing sessions/responses so previews don't pollute real data.
   const isPreview = searchParams.get("preview") === "1";
   const [study, setStudy] = useState<StudyData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,8 +27,6 @@ export default function ParticipantStudy() {
   const [started, setStarted] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<number>(0);
-  // Override the document title so participants never see "StudyDrop" in
-  // their browser tab or shared link previews. Falls back to a neutral string.
   useDocumentTitle(study?.title ?? "Study");
 
   const [done, setDone] = useState(false);
@@ -60,7 +56,6 @@ export default function ParticipantStudy() {
 
   const begin = async () => {
     if (!study) return;
-    // In preview mode, fake the session — we don't want to write to the DB.
     if (isPreview) {
       setSessionId("preview");
       setStartedAt(Date.now());
@@ -88,31 +83,29 @@ export default function ParticipantStudy() {
 
   if (loading) {
     return (
-      <Centered>
-        <div className="text-sm text-muted-foreground">Loading…</div>
-      </Centered>
+      <main className="container py-8">
+        <p className="text-sm text-muted-foreground">Loading…</p>
+      </main>
     );
   }
 
   if (error === "not_found") {
     return (
-      <Centered>
-        <h1 className="text-2xl font-semibold">Study not found</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          This link doesn't lead anywhere.
-        </p>
-      </Centered>
+      <main className="container py-16 space-y-2">
+        <h1>Study not found</h1>
+        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
+      </main>
     );
   }
 
   if (error === "closed") {
     return (
-      <Centered>
-        <h1 className="text-2xl font-semibold">This study is closed</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+      <main className="container py-16 space-y-2">
+        <h1>This study is closed</h1>
+        <p className="text-muted-foreground">
           Thanks for your interest — the researcher is no longer collecting responses.
         </p>
-      </Centered>
+      </main>
     );
   }
 
@@ -120,34 +113,30 @@ export default function ParticipantStudy() {
 
   if (done) {
     return (
-      <Centered>
-        <h1 className="text-3xl font-semibold tracking-tight">Thank you</h1>
-        <p className="mt-3 text-muted-foreground">
+      <main className="container py-16 space-y-2">
+        <h1>Thank you</h1>
+        <p className="text-muted-foreground">
           {isPreview
             ? "Preview complete — nothing was saved."
             : "Your response has been recorded."}
         </p>
-      </Centered>
+      </main>
     );
   }
 
   if (!started) {
     const intro = introCopy(study);
     return (
-      <div className="min-h-screen bg-background">
-        <main className="container max-w-xl py-16">
-          <h1 className="text-3xl font-semibold tracking-tight">{study.title}</h1>
-          {study.description && (
-            <p className="mt-4 whitespace-pre-wrap text-muted-foreground">
-              {study.description}
-            </p>
-          )}
-          <p className="mt-8 text-sm text-muted-foreground">{intro}</p>
-          <Button size="lg" className="mt-6" onClick={begin}>
-            Start
-          </Button>
-        </main>
-      </div>
+      <main className="container py-12 space-y-4">
+        <h1>{study.title}</h1>
+        {study.description && (
+          <p className="whitespace-pre-wrap text-muted-foreground">
+            {study.description}
+          </p>
+        )}
+        <p className="text-sm text-muted-foreground">{intro}</p>
+        <Button onClick={begin}>Start</Button>
+      </main>
     );
   }
 
@@ -179,12 +168,10 @@ export default function ParticipantStudy() {
     );
   }
 
-  
-
   return (
-    <Centered>
-      <h1 className="text-2xl font-semibold">Unsupported study</h1>
-    </Centered>
+    <main className="container py-16">
+      <h1>Unsupported study</h1>
+    </main>
   );
 }
 
@@ -200,12 +187,4 @@ function introCopy(study: StudyData): string {
       : "You'll sort cards into predefined categories · Anonymous";
   }
   return "Anonymous";
-}
-
-function Centered({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-6">
-      <div className="max-w-md text-center">{children}</div>
-    </div>
-  );
 }
