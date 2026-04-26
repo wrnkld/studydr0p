@@ -141,7 +141,7 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
 
 function ByCardSection() {
   return (
-    <section>
+    <section className="space-y-3">
       <SectionHeader>By card</SectionHeader>
       <ChartContainer
         config={chartConfig}
