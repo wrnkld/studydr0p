@@ -1,5 +1,6 @@
-// Interactive (demo-only) card sort for the fridge example.
-// Drag cards into categories. State is local; nothing is saved.
+// Participant-style card sort for the fridge example.
+// All 12 cards must be placed before Submit enables.
+// Calls onSubmit when the participant finishes — no data is saved.
 
 import { useState } from "react";
 import {
@@ -38,7 +39,7 @@ const CATEGORIES = [
 
 const POOL = "__pool__";
 
-type Placement = Record<string, string>; // cardId -> categoryId (or POOL)
+type Placement = Record<string, string>;
 
 function initial(): Placement {
   const p: Placement = {};
@@ -46,7 +47,11 @@ function initial(): Placement {
   return p;
 }
 
-export default function FridgeCardSortDemo() {
+export default function FridgeCardSortDemo({
+  onSubmit,
+}: {
+  onSubmit: () => void;
+}) {
   const [placement, setPlacement] = useState<Placement>(initial);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -59,22 +64,24 @@ export default function FridgeCardSortDemo() {
     setPlacement((p) => ({ ...p, [cardId]: overId }));
   };
 
-  const reset = () => setPlacement(initial());
-
   const cardsIn = (zone: string) =>
     CARDS.filter((c) => placement[c] === zone);
+
+  const remaining = cardsIn(POOL).length;
+  const allPlaced = remaining === 0;
 
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
       <div className="bg-white text-black space-y-6">
-        <DropZone id={POOL} label="Cards">
-          <div className="flex flex-wrap gap-2">
+        <p className="text-base">
+          Sort each item into the part of the fridge it belongs in.
+        </p>
+
+        <DropZone id={POOL} label={`Cards (${remaining} left)`}>
+          <div className="flex flex-wrap gap-2 min-h-[40px]">
             {cardsIn(POOL).map((c) => (
               <DraggableCard key={c} id={c} label={c} />
             ))}
-            {cardsIn(POOL).length === 0 && (
-              <span className="text-xs text-gray-500">All cards placed.</span>
-            )}
           </div>
         </DropZone>
 
@@ -93,10 +100,11 @@ export default function FridgeCardSortDemo() {
         <div>
           <button
             type="button"
-            onClick={reset}
-            className="text-xs text-gray-500 underline hover:text-black"
+            onClick={onSubmit}
+            disabled={!allPlaced}
+            className="border border-black bg-black text-white px-6 py-2 text-sm disabled:bg-white disabled:text-gray-400 disabled:cursor-not-allowed"
           >
-            Reset
+            Submit
           </button>
         </div>
       </div>
