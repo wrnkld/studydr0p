@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,10 @@ interface StudyData {
 
 export default function ParticipantStudy() {
   const { slug } = useParams();
+  const [searchParams] = useSearchParams();
+  // Preview mode: rendered in an iframe inside the researcher's builder.
+  // Skips writing sessions/responses so previews don't pollute real data.
+  const isPreview = searchParams.get("preview") === "1";
   const [study, setStudy] = useState<StudyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<"not_found" | "closed" | null>(null);
@@ -44,7 +48,7 @@ export default function ParticipantStudy() {
         setLoading(false);
         return;
       }
-      if (data.status !== "live") {
+      if (data.status !== "live" && !isPreview) {
         setError("closed");
         setLoading(false);
         return;
@@ -56,6 +60,13 @@ export default function ParticipantStudy() {
 
   const begin = async () => {
     if (!study) return;
+    // In preview mode, fake the session — we don't want to write to the DB.
+    if (isPreview) {
+      setSessionId("preview");
+      setStartedAt(Date.now());
+      setStarted(true);
+      return;
+    }
     const ua = navigator.userAgent;
     const isMobile = /Mobi|Android|iPhone/.test(ua);
     const { data, error: e } = await supabase
@@ -111,7 +122,11 @@ export default function ParticipantStudy() {
     return (
       <Centered>
         <h1 className="text-3xl font-semibold tracking-tight">Thank you</h1>
-        <p className="mt-3 text-muted-foreground">Your response has been recorded.</p>
+        <p className="mt-3 text-muted-foreground">
+          {isPreview
+            ? "Preview complete — nothing was saved."
+            : "Your response has been recorded."}
+        </p>
       </Centered>
     );
   }
@@ -145,6 +160,7 @@ export default function ParticipantStudy() {
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
         startedAt={startedAt}
+        preview={isPreview}
         onDone={() => setDone(true)}
       />
     );
@@ -157,6 +173,7 @@ export default function ParticipantStudy() {
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
         startedAt={startedAt}
+        preview={isPreview}
         onDone={() => setDone(true)}
       />
     );

@@ -20,6 +20,8 @@ interface Props {
   };
   sessionId: string;
   startedAt: number;
+  /** When true, skip writing responses/sessions to the database. */
+  preview?: boolean;
   onDone: () => void;
 }
 
@@ -37,6 +39,7 @@ export default function CardSortParticipant({
   study,
   sessionId,
   startedAt,
+  preview = false,
   onDone,
 }: Props) {
   const [loading, setLoading] = useState(true);
@@ -143,6 +146,12 @@ export default function CardSortParticipant({
       }
     }
     setSubmitting(true);
+    if (preview) {
+      // Don't pollute real data with preview submissions.
+      setSubmitting(false);
+      onDone();
+      return;
+    }
     const data: CardSortResponseData = {
       sort_type: study.config.sort_type,
       groups: groups.map((g) => ({
