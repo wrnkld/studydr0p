@@ -1,11 +1,10 @@
-import AppHeader from "@/components/AppHeader";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
+
       <main className="container flex max-w-md flex-col py-24 text-center">
         <h1 className="text-4xl font-semibold tracking-tight">Page not found</h1>
         <p className="mt-3 text-muted-foreground">

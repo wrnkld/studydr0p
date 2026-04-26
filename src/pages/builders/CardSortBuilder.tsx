@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -247,7 +246,7 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
   if (loadingChildren) {
     return (
       <div className="min-h-screen bg-background">
-        <AppHeader />
+
         <div className="container py-10 text-sm text-muted-foreground">Loading…</div>
       </div>
     );
@@ -255,7 +254,7 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
 
   return (
     <div className="min-h-screen bg-background">
-      <AppHeader />
+
       <main className="container max-w-3xl py-10">
         <Link
           to="/studies"

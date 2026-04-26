@@ -2,7 +2,6 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import AppHeader from "@/components/AppHeader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -51,7 +50,7 @@ export default function Landing() {
 
   return (
     <>
-      <AppHeader />
+
       <main className="p-6 space-y-8 max-w-3xl">
         <div className="space-y-2">
           <h1>UX research, without the friction.</h1>

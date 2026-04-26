@@ -2,7 +2,6 @@ import { FormEvent, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import AppHeader from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,7 +41,7 @@ export default function ExampleStudy() {
   if (!study && !isGasStation) {
     return (
       <>
-        <AppHeader />
+
         <main className="p-6 space-y-2">
           <h1>Example not found</h1>
           <Link to="/" className="underline">
@@ -75,7 +74,7 @@ export default function ExampleStudy() {
 
   return (
     <>
-      <AppHeader />
+
       <main className="p-6 space-y-6 max-w-5xl">
         {isFridge || isGasStation ? (
           <>
