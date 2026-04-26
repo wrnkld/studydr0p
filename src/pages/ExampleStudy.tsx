@@ -33,7 +33,7 @@ export default function ExampleStudy() {
   const { session } = useAuth();
   const navigate = useNavigate();
   const [submittedSort, setSubmittedSort] = useState(false);
-  const [view, setView] = useState<"results" | "sort">("results");
+  const [tab, setTab] = useState<"results" | "take">("results");
 
   if (!study && !isGasStation) {
     return (
@@ -61,25 +61,13 @@ export default function ExampleStudy() {
               : "Gas station food. No judgment."}
           </h1>
 
-          <div className="flex gap-2">
-            <Button
-              variant={view === "results" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setView("results")}
-            >
-              Results
-            </Button>
-            <Button
-              variant={view === "sort" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setView("sort")}
-            >
-              {isFridge ? "Sort it" : "Take it"}
-            </Button>
-          </div>
+          <Tabs value={tab} onValueChange={(v) => setTab(v as "results" | "take")}>
+            <TabsList>
+              <TabsTrigger value="results">Results</TabsTrigger>
+              <TabsTrigger value="take">{isFridge ? "Sort it" : "Take it"}</TabsTrigger>
+            </TabsList>
 
-          {view === "results" ? (
-            <>
+            <TabsContent value="results" className="space-y-4 pt-4">
               {submittedSort && (
                 <p className="text-xs text-muted-foreground">
                   {isFridge
@@ -88,22 +76,26 @@ export default function ExampleStudy() {
                 </p>
               )}
               {isFridge ? <FridgeCardSortResults /> : <GasStationSurveyResults />}
-            </>
-          ) : isFridge ? (
-            <FridgeCardSortDemo
-              onSubmit={() => {
-                setSubmittedSort(true);
-                setView("results");
-              }}
-            />
-          ) : (
-            <GasStationSurveyDemo
-              onSubmit={() => {
-                setSubmittedSort(true);
-                setView("results");
-              }}
-            />
-          )}
+            </TabsContent>
+
+            <TabsContent value="take" className="pt-4">
+              {isFridge ? (
+                <FridgeCardSortDemo
+                  onSubmit={() => {
+                    setSubmittedSort(true);
+                    setTab("results");
+                  }}
+                />
+              ) : (
+                <GasStationSurveyDemo
+                  onSubmit={() => {
+                    setSubmittedSort(true);
+                    setTab("results");
+                  }}
+                />
+              )}
+            </TabsContent>
+          </Tabs>
         </>
       ) : study ? (
         <>
