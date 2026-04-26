@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -17,7 +16,6 @@ interface Props {
   };
   sessionId: string;
   startedAt: number;
-  /** When true, skip writing responses/sessions to the database. */
   preview?: boolean;
   onDone: () => void;
 }
@@ -42,7 +40,6 @@ export default function SurveyParticipant({
     }
     setSubmitting(true);
     if (preview) {
-      // Don't pollute real data with preview submissions.
       setSubmitting(false);
       onDone();
       return;
@@ -69,28 +66,24 @@ export default function SurveyParticipant({
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <main className="container max-w-xl py-12">
-        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
-        <ol className="mt-10 space-y-10">
-          {study.config.questions.map((q, i) => (
-            <li key={q.id} className="space-y-3">
-              <div className="text-xs uppercase tracking-widest text-muted-foreground">
-                Question {i + 1}
-              </div>
-              <QuestionInput
-                q={q}
-                value={answers[q.id]}
-                onChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}
-              />
-            </li>
-          ))}
-        </ol>
-        <Button className="mt-12 w-full sm:w-auto" size="lg" onClick={submit} disabled={submitting}>
-          {submitting ? "Submitting…" : "Submit"}
-        </Button>
-      </main>
-    </div>
+    <main className="container py-8 space-y-6">
+      <h1>{study.title}</h1>
+      <ol className="space-y-8">
+        {study.config.questions.map((q, i) => (
+          <li key={q.id} className="space-y-3">
+            <div className="text-sm text-muted-foreground">Question {i + 1}</div>
+            <QuestionInput
+              q={q}
+              value={answers[q.id]}
+              onChange={(v) => setAnswers((a) => ({ ...a, [q.id]: v }))}
+            />
+          </li>
+        ))}
+      </ol>
+      <Button onClick={submit} disabled={submitting}>
+        {submitting ? "Submitting…" : "Submit"}
+      </Button>
+    </main>
   );
 }
 
@@ -106,7 +99,7 @@ function QuestionInput({
   if (q.type === "open_text") {
     return (
       <div className="space-y-2">
-        <Label className="text-base font-normal">{q.label}</Label>
+        <Label>{q.label}</Label>
         <Textarea
           rows={4}
           value={(value as string) ?? ""}
@@ -118,21 +111,18 @@ function QuestionInput({
   if (q.type === "likert") {
     return (
       <div className="space-y-3">
-        <Label className="text-base font-normal">{q.label}</Label>
+        <Label>{q.label}</Label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((n) => (
-            <button
+            <Button
               key={n}
               type="button"
+              variant={value === String(n) ? "default" : "outline"}
               onClick={() => onChange(String(n))}
-              className={`h-12 w-12 rounded-md border text-sm font-medium transition-colors ${
-                value === String(n)
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border hover:bg-accent"
-              }`}
+              className="h-12 w-12"
             >
               {n}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="flex justify-between text-xs text-muted-foreground">
@@ -144,12 +134,12 @@ function QuestionInput({
   }
   return (
     <div className="space-y-3">
-      <Label className="text-base font-normal">{q.label}</Label>
+      <Label>{q.label}</Label>
       <RadioGroup value={(value as string) ?? ""} onValueChange={onChange}>
         {(q.options ?? []).map((opt, i) => (
           <label
             key={i}
-            className="flex cursor-pointer items-center gap-3 rounded-md border border-border p-3 hover:bg-accent/50"
+            className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
           >
             <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
             <span>{opt}</span>
