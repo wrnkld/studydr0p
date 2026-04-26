@@ -33,6 +33,7 @@ export default function ExampleStudy() {
   const [submitting, setSubmitting] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [submittedSort, setSubmittedSort] = useState(false);
+  const [view, setView] = useState<"results" | "sort">("results");
 
   if (!study) {
     return (
