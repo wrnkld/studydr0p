@@ -54,101 +54,83 @@ export default function ExampleStudy() {
   };
 
   return (
-    <>
+    <main className="container py-8 space-y-6">
+      {isFridge || isGasStation ? (
+        <>
+          <h1>
+            {isFridge
+              ? "Where does it go in the fridge?"
+              : "Gas station food. No judgment."}
+          </h1>
 
-      <main className="p-6 space-y-6 max-w-5xl">
-        {isFridge || isGasStation ? (
-          <>
-            <h1 className="text-3xl font-bold tracking-tight">
-              {isFridge
-                ? "Where does it go in the fridge?"
-                : "Gas station food. No judgment."}
-            </h1>
+          <div className="flex gap-2">
+            <Button
+              variant={view === "results" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setView("results")}
+            >
+              Results
+            </Button>
+            <Button
+              variant={view === "sort" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setView("sort")}
+            >
+              {isFridge ? "Sort it" : "Take it"}
+            </Button>
+          </div>
 
-            <div className="flex gap-0 border border-black w-fit">
-              <button
-                type="button"
-                onClick={() => setView("results")}
-                className={`px-4 py-2 text-sm ${
-                  view === "results"
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                Results
-              </button>
-              <button
-                type="button"
-                onClick={() => setView("sort")}
-                className={`px-4 py-2 text-sm border-l border-black ${
-                  view === "sort"
-                    ? "bg-black text-white"
-                    : "bg-white text-black"
-                }`}
-              >
-                {isFridge ? "Sort it" : "Take it"}
-              </button>
-            </div>
+          {view === "results" ? (
+            <>
+              {submittedSort && (
+                <p className="text-xs text-muted-foreground">
+                  {isFridge
+                    ? "You and 20 others sorted this."
+                    : "You and 20 others answered this."}
+                </p>
+              )}
+              {isFridge ? <FridgeCardSortResults /> : <GasStationSurveyResults />}
+            </>
+          ) : isFridge ? (
+            <FridgeCardSortDemo
+              onSubmit={() => {
+                setSubmittedSort(true);
+                setView("results");
+              }}
+            />
+          ) : (
+            <GasStationSurveyDemo
+              onSubmit={() => {
+                setSubmittedSort(true);
+                setView("results");
+              }}
+            />
+          )}
+        </>
+      ) : study ? (
+        <>
+          <div className="space-y-1">
+            <Link to="/" className="text-sm underline text-muted-foreground">
+              ← Examples
+            </Link>
+            <h1>{study.title}</h1>
+            <p className="text-muted-foreground">{study.question}</p>
+          </div>
+          {study.type === "survey" ? (
+            <SurveyResultsView study={study} />
+          ) : (
+            <CardSortResultsView study={study} />
+          )}
+        </>
+      ) : null}
 
-            {view === "results" ? (
-              <>
-                {submittedSort && (
-                  <div className="border-t border-gray-300 pt-3">
-                    <p className="text-xs text-gray-500">
-                      {isFridge
-                        ? "You and 20 others sorted this."
-                        : "You and 20 others answered this."}
-                    </p>
-                  </div>
-                )}
-                {isFridge ? (
-                  <FridgeCardSortResults />
-                ) : (
-                  <GasStationSurveyResults />
-                )}
-              </>
-            ) : isFridge ? (
-              <FridgeCardSortDemo
-                onSubmit={() => {
-                  setSubmittedSort(true);
-                  setView("results");
-                }}
-              />
-            ) : (
-              <GasStationSurveyDemo
-                onSubmit={() => {
-                  setSubmittedSort(true);
-                  setView("results");
-                }}
-              />
-            )}
-          </>
-        ) : study ? (
-          <>
-            <div className="space-y-1">
-              <Link to="/" className="text-sm underline text-muted-foreground">
-                ← Examples
-              </Link>
-              <h1>{study.title}</h1>
-              <p className="text-muted-foreground">{study.question}</p>
-            </div>
-            {study.type === "survey" ? (
-              <SurveyResultsView study={study} />
-            ) : (
-              <CardSortResultsView study={study} />
-            )}
-          </>
-        ) : null}
-
-
-        {!isFridge && !isGasStation && session && (
-          <section className="rounded-lg border border-border p-4 space-y-3">
-            <p>Like this? Make your own version in your dashboard.</p>
-            <Button onClick={onDuplicate}>Duplicate this study</Button>
-          </section>
-        )}
-      </main>
-    </>
+      {!isFridge && !isGasStation && session && (
+        <section className="rounded-md border p-4 space-y-3">
+          <p>Like this? Make your own version in your dashboard.</p>
+          <Button onClick={onDuplicate}>Duplicate this study</Button>
+        </section>
+      )}
+    </main>
   );
 }
 
