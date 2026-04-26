@@ -416,7 +416,7 @@ interface SharePanelProps {
   shareUrl: string;
 }
 
-function SharePanel({ studyId, shareUrl }: SharePanelProps) {
+function SharePanel({ shareUrl }: SharePanelProps) {
   return (
     <section className="mt-10 rounded-lg border border-border p-5">
       <div className="text-sm font-medium">Participant link</div>
@@ -436,15 +436,10 @@ function SharePanel({ studyId, shareUrl }: SharePanelProps) {
         >
           Copy
         </Button>
-        <Button asChild variant="outline">
-          <a href={shareUrl} target="_blank" rel="noreferrer">
-            Preview
-          </a>
-        </Button>
-        <Button asChild variant="outline">
-          <a href={`/studies/${studyId}/results`}>Results</a>
-        </Button>
       </div>
+      <p className="mt-2 text-xs text-muted-foreground">
+        Use the Preview tab above to try it as a participant.
+      </p>
     </section>
   );
 }
