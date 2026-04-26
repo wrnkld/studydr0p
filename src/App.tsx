@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Landing from "./pages/Landing";
+import ExampleStudy from "./pages/ExampleStudy";
 import Dashboard from "./pages/Dashboard";
 import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
@@ -24,6 +25,7 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/examples/:id" element={<ExampleStudy />} />
             <Route path="/s/:slug" element={<ParticipantStudy />} />
 
             <Route
