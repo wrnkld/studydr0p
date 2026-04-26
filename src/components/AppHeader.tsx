@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-// Inline email + Sign in form. Reused in the sticky header and on
-// example-study pages so behavior + styling stay in sync.
 export function InlineSignIn({ className = "" }: { className?: string }) {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -45,7 +43,7 @@ export function InlineSignIn({ className = "" }: { className?: string }) {
         placeholder="you@team.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="h-8 w-56"
+        className="w-56"
       />
       <Button type="submit" size="sm" disabled={submitting}>
         {submitting ? "Sending…" : "Sign in"}
@@ -54,20 +52,17 @@ export function InlineSignIn({ className = "" }: { className?: string }) {
   );
 }
 
-// Global sticky top bar. Mounted once in App.tsx.
-// Logged out: logo + inline email/sign-in form.
-// Logged in:  logo + New study + Sign out (grouped together on the right).
 export default function AppHeader() {
   const { session, signOut } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Participant view is intentionally chrome-free: no header, no branding, no nav.
+  // Participant view stays chrome-free.
   if (location.pathname.startsWith("/s/")) return null;
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-border">
-      <div className="flex items-center justify-between px-4 h-12">
+    <header className="border-b">
+      <div className="container flex h-14 items-center justify-between">
         <Link to="/" className="font-medium">
           StudyDrop
         </Link>
@@ -77,16 +72,16 @@ export default function AppHeader() {
             <Button size="sm" onClick={() => navigate("/studies/new")}>
               New study
             </Button>
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={async () => {
                 await signOut();
                 navigate("/");
               }}
-              className="underline text-sm"
             >
               Sign out
-            </button>
+            </Button>
           </div>
         ) : (
           <InlineSignIn />

@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const TYPES: { id: StudyType; label: string }[] = [
   { id: "card_sort", label: "Card sort" },
@@ -57,25 +58,20 @@ export default function NewStudy() {
   }, [searchParams, user, creating]);
 
   return (
-    <>
-
-      <main className="p-6 space-y-4">
-        <h1>New study</h1>
-        <ul className="space-y-1">
-          {TYPES.map((t) => (
-            <li key={t.id}>
-              <button
-                type="button"
-                onClick={() => void create(t.id)}
-                disabled={creating}
-                className="underline disabled:opacity-50"
-              >
-                {t.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </main>
-    </>
+    <main className="container py-8 space-y-4">
+      <h1>New study</h1>
+      <div className="flex flex-wrap gap-2">
+        {TYPES.map((t) => (
+          <Button
+            key={t.id}
+            variant="outline"
+            onClick={() => void create(t.id)}
+            disabled={creating}
+          >
+            {t.label}
+          </Button>
+        ))}
+      </div>
+    </main>
   );
 }
