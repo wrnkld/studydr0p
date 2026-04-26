@@ -32,6 +32,7 @@ export default function ExampleStudy() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const [submittedSort, setSubmittedSort] = useState(false);
 
   if (!study) {
     return (
@@ -71,55 +72,65 @@ export default function ExampleStudy() {
     <>
       <AppHeader />
       <main className="p-6 space-y-6 max-w-5xl">
-        <div className="space-y-1">
-          <Link to="/" className="text-sm underline text-muted-foreground">
-            ← Examples
-          </Link>
-          <h1>{study.title}</h1>
-          <p className="text-muted-foreground">{study.question}</p>
-        </div>
-
         {study.id === "fridge" ? (
-          <>
-            <FridgeCardSortDemo />
-            <div className="border-t border-gray-300 pt-3">
-              <p className="text-xs text-gray-500">20 people sorted this</p>
-            </div>
-            <FridgeCardSortResults />
-          </>
-        ) : study.type === "survey" ? (
-          <SurveyResultsView study={study} />
+          submittedSort ? (
+            <>
+              <div className="border-t border-gray-300 pt-3">
+                <p className="text-xs text-gray-500">
+                  You and 20 others sorted this.
+                </p>
+              </div>
+              <FridgeCardSortResults />
+            </>
+          ) : (
+            <FridgeCardSortDemo onSubmit={() => setSubmittedSort(true)} />
+          )
         ) : (
-          <CardSortResultsView study={study} />
+          <>
+            <div className="space-y-1">
+              <Link to="/" className="text-sm underline text-muted-foreground">
+                ← Examples
+              </Link>
+              <h1>{study.title}</h1>
+              <p className="text-muted-foreground">{study.question}</p>
+            </div>
+            {study.type === "survey" ? (
+              <SurveyResultsView study={study} />
+            ) : (
+              <CardSortResultsView study={study} />
+            )}
+          </>
         )}
 
-        <section className="rounded-lg border border-border p-4 space-y-3">
-          {session ? (
-            <>
-              <p>Like this? Make your own version in your dashboard.</p>
-              <Button onClick={onDuplicate}>Duplicate this study</Button>
-            </>
-          ) : sentTo ? (
-            <p>Link sent to {sentTo}. Check your email to sign in.</p>
-          ) : (
-            <>
-              <p>Sign in to create your own study like this.</p>
-              <form onSubmit={onSignIn} className="flex gap-2 max-w-sm">
-                <Input
-                  type="email"
-                  required
-                  aria-label="Email"
-                  placeholder="you@team.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <Button type="submit" disabled={submitting}>
-                  {submitting ? "Sending…" : "Sign in to create your own study"}
-                </Button>
-              </form>
-            </>
-          )}
-        </section>
+        {(study.id !== "fridge" || submittedSort) && (
+          <section className="rounded-lg border border-border p-4 space-y-3">
+            {session ? (
+              <>
+                <p>Like this? Make your own version in your dashboard.</p>
+                <Button onClick={onDuplicate}>Duplicate this study</Button>
+              </>
+            ) : sentTo ? (
+              <p>Link sent to {sentTo}. Check your email to sign in.</p>
+            ) : (
+              <>
+                <p>Sign in to create your own study like this.</p>
+                <form onSubmit={onSignIn} className="flex gap-2 max-w-sm">
+                  <Input
+                    type="email"
+                    required
+                    aria-label="Email"
+                    placeholder="you@team.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  <Button type="submit" disabled={submitting}>
+                    {submitting ? "Sending…" : "Sign in to create your own study"}
+                  </Button>
+                </form>
+              </>
+            )}
+          </section>
+        )}
       </main>
     </>
   );
