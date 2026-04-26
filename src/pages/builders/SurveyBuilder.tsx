@@ -143,7 +143,7 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     }
   };
 
-  const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
+  
 
   return (
     <div>

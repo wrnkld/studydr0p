@@ -271,7 +271,7 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     }
   };
 
-  const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
+  
 
   if (loadingChildren) {
     return (
