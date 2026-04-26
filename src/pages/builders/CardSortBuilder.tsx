@@ -263,13 +263,21 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     }
   };
 
-  const handleClose = async () => {
-    const ok = await save({ status: "closed" });
-    if (ok) {
-      setStatus("closed");
-      toast.success("Study closed");
+  const handleDelete = useCallback(async () => {
+    const { error } = await supabase.from("studies").delete().eq("id", studyId);
+    if (error) {
+      toast.error(error.message);
+      throw error;
     }
-  };
+    toast.success("Study deleted");
+  }, [studyId]);
+
+  useRegisterStudyActions({
+    studyId,
+    onSave: handleSave,
+    onDelete: handleDelete,
+    saving,
+  });
 
   
 
