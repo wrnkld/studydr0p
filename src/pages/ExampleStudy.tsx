@@ -80,7 +80,13 @@ export default function ExampleStudy() {
         </div>
 
         {study.id === "fridge" ? (
-          <FridgeCardSortResults />
+          <>
+            <FridgeCardSortDemo />
+            <div className="border-t border-gray-300 pt-3">
+              <p className="text-xs text-gray-500">20 people sorted this</p>
+            </div>
+            <FridgeCardSortResults />
+          </>
         ) : study.type === "survey" ? (
           <SurveyResultsView study={study} />
         ) : (
