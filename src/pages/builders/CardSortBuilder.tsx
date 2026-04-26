@@ -402,7 +402,49 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
             </Button>
           )}
         </div>
+
+        {status === "live" && shareUrl && (
+          <SharePanel studyId={studyId} shareUrl={shareUrl} />
+        )}
       </main>
     </div>
+  );
+}
+
+interface SharePanelProps {
+  studyId: string;
+  shareUrl: string;
+}
+
+function SharePanel({ studyId, shareUrl }: SharePanelProps) {
+  return (
+    <section className="mt-10 rounded-lg border border-border p-5">
+      <div className="text-sm font-medium">Participant link</div>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Input
+          readOnly
+          value={shareUrl}
+          onFocus={(e) => e.currentTarget.select()}
+          className="font-mono"
+        />
+        <Button
+          variant="outline"
+          onClick={() => {
+            navigator.clipboard.writeText(shareUrl);
+            toast.success("Copied");
+          }}
+        >
+          Copy
+        </Button>
+        <Button asChild variant="outline">
+          <a href={shareUrl} target="_blank" rel="noreferrer">
+            Preview
+          </a>
+        </Button>
+        <Button asChild variant="outline">
+          <a href={`/studies/${studyId}/results`}>Results</a>
+        </Button>
+      </div>
+    </section>
   );
 }
