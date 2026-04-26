@@ -19,6 +19,7 @@ import {
   summarizeSurvey,
 } from "@/lib/exampleStudies";
 import FridgeCardSortResults from "@/components/FridgeCardSortResults";
+import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
 import { toast } from "sonner";
 
 // Renders a full results view for a hardcoded example study.
@@ -79,7 +80,13 @@ export default function ExampleStudy() {
         </div>
 
         {study.id === "fridge" ? (
-          <FridgeCardSortResults />
+          <>
+            <FridgeCardSortDemo />
+            <div className="border-t border-gray-300 pt-3">
+              <p className="text-xs text-gray-500">20 people sorted this</p>
+            </div>
+            <FridgeCardSortResults />
+          </>
         ) : study.type === "survey" ? (
           <SurveyResultsView study={study} />
         ) : (
