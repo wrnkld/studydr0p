@@ -5,12 +5,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import AppHeader from "@/components/AppHeader";
+import FloatingToolbar from "@/components/FloatingToolbar";
+import { StudyToolbarProvider } from "@/components/StudyToolbarContext";
 import Landing from "./pages/Landing";
 import ExampleStudy from "./pages/ExampleStudy";
 import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
-import StudyDetail from "./pages/StudyDetail";
 import ParticipantStudy from "./pages/ParticipantStudy";
 import NotFound from "./pages/NotFound";
 
@@ -23,32 +23,34 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <AppHeader />
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/examples/:id" element={<ExampleStudy />} />
-            <Route path="/s/:slug" element={<ParticipantStudy />} />
+          <StudyToolbarProvider>
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/examples/:id" element={<ExampleStudy />} />
+              <Route path="/s/:slug" element={<ParticipantStudy />} />
 
-            <Route path="/studies" element={<Navigate to="/" replace />} />
-            <Route
-              path="/studies/new"
-              element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
-            />
-            <Route
-              path="/studies/:id"
-              element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
-            />
-            <Route
-              path="/studies/:id/edit"
-              element={<Navigate to=".." replace relative="path" />}
-            />
-            <Route
-              path="/studies/:id/results"
-              element={<ProtectedRoute><StudyDetail /></ProtectedRoute>}
-            />
+              <Route path="/studies" element={<Navigate to="/" replace />} />
+              <Route
+                path="/studies/new"
+                element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
+              />
+              <Route
+                path="/studies/:id"
+                element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
+              />
+              <Route
+                path="/studies/:id/edit"
+                element={<Navigate to=".." replace relative="path" />}
+              />
+              <Route
+                path="/studies/:id/results"
+                element={<Navigate to=".." replace relative="path" />}
+              />
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <FloatingToolbar />
+          </StudyToolbarProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
