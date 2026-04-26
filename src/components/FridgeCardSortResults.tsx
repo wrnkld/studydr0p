@@ -196,6 +196,14 @@ function ByCardSection() {
 }
 
 function MatrixSection() {
+  const CAT_VAR: Record<Category, string> = {
+    Door: "--chart-1",
+    "Top shelf": "--chart-2",
+    "Middle shelf": "--chart-3",
+    "Bottom shelf": "--chart-4",
+    Freezer: "--chart-5",
+    Trash: "--chart-6",
+  };
   return (
     <section>
       <SectionHeader>Matrix</SectionHeader>
@@ -223,7 +231,6 @@ function MatrixSection() {
                 {CATEGORIES.map((c) => {
                   const p = pct(r[c]);
                   // Background = category color at low opacity, scaled.
-                  // Map 0..100% → 0..0.85 alpha.
                   const alpha = p === 0 ? 0 : 0.1 + (p / 100) * 0.75;
                   return (
                     <td
@@ -233,12 +240,11 @@ function MatrixSection() {
                         backgroundColor:
                           p === 0
                             ? "transparent"
-                            : `hsl(var(--color-${SLUG[c]}) / ${alpha.toFixed(3)})`,
-                        color: p >= 60 && (c === "Door" || c === "Top shelf")
-                          ? "white"
-                          : "black",
-                        // The CSS var --color-* is provided by ChartContainer scope,
-                        // so we inline the literal HSL value instead.
+                            : `hsl(var(${CAT_VAR[c]}) / ${alpha.toFixed(3)})`,
+                        color:
+                          p >= 60 && (c === "Door" || c === "Top shelf")
+                            ? "white"
+                            : "black",
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
@@ -250,10 +256,6 @@ function MatrixSection() {
           </tbody>
         </table>
       </div>
-      {/* CSS shim: expose chart colors as CSS vars for the matrix cells */}
-      <style>{`
-        section :where(td) { --color-door: var(--chart-1); }
-      `}</style>
     </section>
   );
 }
