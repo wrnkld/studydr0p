@@ -266,7 +266,7 @@ function MatrixSection() {
 
 function DisagreementSection() {
   return (
-    <section>
+    <section className="space-y-3">
       <SectionHeader>Disagreement</SectionHeader>
       <ChartContainer
         config={chaosConfig}
