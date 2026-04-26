@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
@@ -24,6 +25,10 @@ export default function ParticipantStudy() {
   const [started, setStarted] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<number>(0);
+  // Override the document title so participants never see "StudyDrop" in
+  // their browser tab or shared link previews. Falls back to a neutral string.
+  useDocumentTitle(study?.title ?? "Study");
+
   const [done, setDone] = useState(false);
 
   useEffect(() => {
