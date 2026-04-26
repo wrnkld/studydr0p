@@ -9,7 +9,7 @@ import AppHeader from "@/components/AppHeader";
 import Landing from "./pages/Landing";
 import ExampleStudy from "./pages/ExampleStudy";
 import NewStudy from "./pages/NewStudy";
-
+import StudyBuilder from "./pages/StudyBuilder";
 import StudyDetail from "./pages/StudyDetail";
 import ParticipantStudy from "./pages/ParticipantStudy";
 import NotFound from "./pages/NotFound";
@@ -36,7 +36,7 @@ const App = () => (
             />
             <Route
               path="/studies/:id"
-              element={<ProtectedRoute><StudyDetail /></ProtectedRoute>}
+              element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
             />
             <Route
               path="/studies/:id/edit"
@@ -44,7 +44,7 @@ const App = () => (
             />
             <Route
               path="/studies/:id/results"
-              element={<Navigate to=".." replace relative="path" />}
+              element={<ProtectedRoute><StudyDetail /></ProtectedRoute>}
             />
 
             <Route path="*" element={<NotFound />} />
