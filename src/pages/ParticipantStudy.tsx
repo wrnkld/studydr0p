@@ -60,6 +60,13 @@ export default function ParticipantStudy() {
 
   const begin = async () => {
     if (!study) return;
+    // In preview mode, fake the session — we don't want to write to the DB.
+    if (isPreview) {
+      setSessionId("preview");
+      setStartedAt(Date.now());
+      setStarted(true);
+      return;
+    }
     const ua = navigator.userAgent;
     const isMobile = /Mobi|Android|iPhone/.test(ua);
     const { data, error: e } = await supabase
