@@ -72,26 +72,34 @@ export default function ExampleStudy() {
     <>
       <AppHeader />
       <main className="p-6 space-y-6 max-w-5xl">
-        <div className="space-y-1">
-          <Link to="/" className="text-sm underline text-muted-foreground">
-            ← Examples
-          </Link>
-          <h1>{study.title}</h1>
-          <p className="text-muted-foreground">{study.question}</p>
-        </div>
-
         {study.id === "fridge" ? (
-          <>
-            <FridgeCardSortDemo />
-            <div className="border-t border-gray-300 pt-3">
-              <p className="text-xs text-gray-500">20 people sorted this</p>
-            </div>
-            <FridgeCardSortResults />
-          </>
-        ) : study.type === "survey" ? (
-          <SurveyResultsView study={study} />
+          submittedSort ? (
+            <>
+              <div className="border-t border-gray-300 pt-3">
+                <p className="text-xs text-gray-500">
+                  You and 20 others sorted this.
+                </p>
+              </div>
+              <FridgeCardSortResults />
+            </>
+          ) : (
+            <FridgeCardSortDemo onSubmit={() => setSubmittedSort(true)} />
+          )
         ) : (
-          <CardSortResultsView study={study} />
+          <>
+            <div className="space-y-1">
+              <Link to="/" className="text-sm underline text-muted-foreground">
+                ← Examples
+              </Link>
+              <h1>{study.title}</h1>
+              <p className="text-muted-foreground">{study.question}</p>
+            </div>
+            {study.type === "survey" ? (
+              <SurveyResultsView study={study} />
+            ) : (
+              <CardSortResultsView study={study} />
+            )}
+          </>
         )}
 
         <section className="rounded-lg border border-border p-4 space-y-3">
