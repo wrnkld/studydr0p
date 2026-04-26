@@ -259,7 +259,6 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
       setStatus("live");
       setSlug(newSlug);
       toast.success("Saved");
-      navigate(`/studies/${studyId}?tab=share`);
     }
   };
 
