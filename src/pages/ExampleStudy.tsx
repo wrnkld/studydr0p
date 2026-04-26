@@ -33,6 +33,7 @@ export default function ExampleStudy() {
   const [submitting, setSubmitting] = useState(false);
   const [sentTo, setSentTo] = useState<string | null>(null);
   const [submittedSort, setSubmittedSort] = useState(false);
+  const [view, setView] = useState<"results" | "sort">("results");
 
   if (!study) {
     return (
@@ -73,18 +74,54 @@ export default function ExampleStudy() {
       <AppHeader />
       <main className="p-6 space-y-6 max-w-5xl">
         {study.id === "fridge" ? (
-          submittedSort ? (
-            <>
-              <div className="border-t border-gray-300 pt-3">
-                <p className="text-xs text-gray-500">
-                  You and 20 others sorted this.
-                </p>
-              </div>
-              <FridgeCardSortResults />
-            </>
-          ) : (
-            <FridgeCardSortDemo onSubmit={() => setSubmittedSort(true)} />
-          )
+          <>
+            <div className="flex gap-0 border border-black w-fit">
+              <button
+                type="button"
+                onClick={() => setView("results")}
+                className={`px-4 py-2 text-sm ${
+                  view === "results"
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                Results
+              </button>
+              <button
+                type="button"
+                onClick={() => setView("sort")}
+                className={`px-4 py-2 text-sm border-l border-black ${
+                  view === "sort"
+                    ? "bg-black text-white"
+                    : "bg-white text-black"
+                }`}
+              >
+                Sort it
+              </button>
+            </div>
+
+            {view === "results" ? (
+              submittedSort ? (
+                <>
+                  <div className="border-t border-gray-300 pt-3">
+                    <p className="text-xs text-gray-500">
+                      You and 20 others sorted this.
+                    </p>
+                  </div>
+                  <FridgeCardSortResults />
+                </>
+              ) : (
+                <FridgeCardSortResults />
+              )
+            ) : (
+              <FridgeCardSortDemo
+                onSubmit={() => {
+                  setSubmittedSort(true);
+                  setView("results");
+                }}
+              />
+            )}
+          </>
         ) : (
           <>
             <div className="space-y-1">
@@ -102,7 +139,7 @@ export default function ExampleStudy() {
           </>
         )}
 
-        {(study.id !== "fridge" || submittedSort) && (
+        {(study.id !== "fridge" || view === "results") && (
           <section className="rounded-lg border border-border p-4 space-y-3">
             {session ? (
               <>
