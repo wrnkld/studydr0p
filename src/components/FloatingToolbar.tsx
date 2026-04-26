@@ -169,8 +169,8 @@ function StudyBar() {
       className={cn(
         "text-sm transition-colors",
         activeTab === value
-          ? "font-semibold text-foreground"
-          : "text-muted-foreground hover:text-foreground",
+          ? "font-medium text-foreground"
+          : "font-normal text-muted-foreground hover:text-foreground",
       )}
     >
       {children}
