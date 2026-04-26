@@ -20,12 +20,16 @@ import {
 } from "@/lib/exampleStudies";
 import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
+import GasStationSurveyResults from "@/components/GasStationSurveyResults";
+import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
 import { toast } from "sonner";
 
 // Renders a full results view for a hardcoded example study.
 // CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
 export default function ExampleStudy() {
   const { id } = useParams();
+  const isFridge = id === "fridge";
+  const isGasStation = id === "gasstation";
   const study = id ? getExampleStudy(id) : null;
   const { session } = useAuth();
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ export default function ExampleStudy() {
   const [submittedSort, setSubmittedSort] = useState(false);
   const [view, setView] = useState<"results" | "sort">("results");
 
-  if (!study) {
+  if (!study && !isGasStation) {
     return (
       <>
         <AppHeader />
@@ -73,8 +77,14 @@ export default function ExampleStudy() {
     <>
       <AppHeader />
       <main className="p-6 space-y-6 max-w-5xl">
-        {study.id === "fridge" ? (
+        {isFridge || isGasStation ? (
           <>
+            <h1 className="text-3xl font-bold tracking-tight">
+              {isFridge
+                ? "Where does it go in the fridge?"
+                : "Gas station food. No judgment."}
+            </h1>
+
             <div className="flex gap-0 border border-black w-fit">
               <button
                 type="button"
@@ -96,25 +106,36 @@ export default function ExampleStudy() {
                     : "bg-white text-black"
                 }`}
               >
-                Sort it
+                {isFridge ? "Sort it" : "Take it"}
               </button>
             </div>
 
             {view === "results" ? (
-              submittedSort ? (
-                <>
+              <>
+                {submittedSort && (
                   <div className="border-t border-gray-300 pt-3">
                     <p className="text-xs text-gray-500">
-                      You and 20 others sorted this.
+                      {isFridge
+                        ? "You and 20 others sorted this."
+                        : "You and 20 others answered this."}
                     </p>
                   </div>
+                )}
+                {isFridge ? (
                   <FridgeCardSortResults />
-                </>
-              ) : (
-                <FridgeCardSortResults />
-              )
-            ) : (
+                ) : (
+                  <GasStationSurveyResults />
+                )}
+              </>
+            ) : isFridge ? (
               <FridgeCardSortDemo
+                onSubmit={() => {
+                  setSubmittedSort(true);
+                  setView("results");
+                }}
+              />
+            ) : (
+              <GasStationSurveyDemo
                 onSubmit={() => {
                   setSubmittedSort(true);
                   setView("results");
@@ -122,7 +143,7 @@ export default function ExampleStudy() {
               />
             )}
           </>
-        ) : (
+        ) : study ? (
           <>
             <div className="space-y-1">
               <Link to="/" className="text-sm underline text-muted-foreground">
@@ -137,9 +158,9 @@ export default function ExampleStudy() {
               <CardSortResultsView study={study} />
             )}
           </>
-        )}
+        ) : null}
 
-        {(study.id !== "fridge" || view === "results") && (
+        {((!isFridge && !isGasStation) || view === "results") && (
           <section className="rounded-lg border border-border p-4 space-y-3">
             {session ? (
               <>
