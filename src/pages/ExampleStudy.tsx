@@ -139,33 +139,10 @@ export default function ExampleStudy() {
           </>
         ) : null}
 
-        {((!isFridge && !isGasStation) || view === "results") && (
+        {!isFridge && !isGasStation && session && (
           <section className="rounded-lg border border-border p-4 space-y-3">
-            {session ? (
-              <>
-                <p>Like this? Make your own version in your dashboard.</p>
-                <Button onClick={onDuplicate}>Duplicate this study</Button>
-              </>
-            ) : sentTo ? (
-              <p>Link sent to {sentTo}. Check your email to sign in.</p>
-            ) : (
-              <>
-                <p>Sign in to create your own study like this.</p>
-                <form onSubmit={onSignIn} className="flex gap-2 max-w-sm">
-                  <Input
-                    type="email"
-                    required
-                    aria-label="Email"
-                    placeholder="you@team.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Button type="submit" disabled={submitting}>
-                    {submitting ? "Sending…" : "Sign in to create your own study"}
-                  </Button>
-                </form>
-              </>
-            )}
+            <p>Like this? Make your own version in your dashboard.</p>
+            <Button onClick={onDuplicate}>Duplicate this study</Button>
           </section>
         )}
       </main>
