@@ -29,10 +29,7 @@ const App = () => (
             <Route path="/examples/:id" element={<ExampleStudy />} />
             <Route path="/s/:slug" element={<ParticipantStudy />} />
 
-            <Route
-              path="/studies"
-              element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
-            />
+            <Route path="/studies" element={<Navigate to="/" replace />} />
             <Route
               path="/studies/new"
               element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
