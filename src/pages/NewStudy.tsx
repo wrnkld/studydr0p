@@ -47,7 +47,7 @@ export default function NewStudy() {
       return;
     }
 
-    navigate(`/studies/${data.id}/edit`);
+    navigate(`/studies/${data.id}?tab=build`);
   };
 
   useEffect(() => {

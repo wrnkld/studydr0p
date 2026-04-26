@@ -40,7 +40,7 @@ const App = () => (
             />
             <Route
               path="/studies/:id/edit"
-              element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
+              element={<Navigate to=".." replace relative="path" />}
             />
             <Route
               path="/studies/:id/results"
