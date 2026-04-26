@@ -75,13 +75,6 @@ export default function StudyBuilder() {
     [study?.slug],
   );
 
-  const setTab = (next: TabKey) => {
-    const params = new URLSearchParams(searchParams);
-    if (next === "build") params.delete("tab");
-    else params.set("tab", next);
-    setSearchParams(params, { replace: true });
-  };
-
   if (loading || !study) {
     return (
       <main className="container py-8">
