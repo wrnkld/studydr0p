@@ -20,12 +20,16 @@ import {
 } from "@/lib/exampleStudies";
 import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
+import GasStationSurveyResults from "@/components/GasStationSurveyResults";
+import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
 import { toast } from "sonner";
 
 // Renders a full results view for a hardcoded example study.
 // CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
 export default function ExampleStudy() {
   const { id } = useParams();
+  const isFridge = id === "fridge";
+  const isGasStation = id === "gasstation";
   const study = id ? getExampleStudy(id) : null;
   const { session } = useAuth();
   const navigate = useNavigate();
@@ -35,7 +39,7 @@ export default function ExampleStudy() {
   const [submittedSort, setSubmittedSort] = useState(false);
   const [view, setView] = useState<"results" | "sort">("results");
 
-  if (!study) {
+  if (!study && !isGasStation) {
     return (
       <>
         <AppHeader />
