@@ -1,42 +1,36 @@
-import { FormEvent, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import AppHeader from "@/components/AppHeader";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
+import {
+  EXAMPLE_STUDIES,
+  FRIDGE_STUDY,
+  REMOTE_STUDY,
+  summarizeCardSort,
+  summarizeSurvey,
+} from "@/lib/exampleStudies";
 
 export default function Landing() {
   const { session } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [sentTo, setSentTo] = useState<string | null>(null);
 
   useEffect(() => {
     if (session) navigate("/studies", { replace: true });
   }, [session, navigate]);
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/studies` },
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setSentTo(email);
-  };
+  // Pre-compute small summaries for each panel.
+  const fridgeSummary = summarizeCardSort(FRIDGE_STUDY);
+  const surveySummary = summarizeSurvey(REMOTE_STUDY);
+
+  // Pick a few interesting cards for the fridge teaser.
+  const fridgeHighlights = ["Ketchup", "Birthday cake", "Mystery tupperware"]
+    .map((c) => fridgeSummary.find((s) => s.card === c))
+    .filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   return (
     <>
       <AppHeader />
-      <main className="p-6 space-y-6 max-w-2xl">
+      <main className="p-6 space-y-8 max-w-3xl">
         <div className="space-y-2">
           <h1>UX research, without the friction.</h1>
           <p>
@@ -45,35 +39,61 @@ export default function Landing() {
           </p>
         </div>
 
+        <section className="grid gap-4 sm:grid-cols-2">
+          <Link
+            to={`/examples/${FRIDGE_STUDY.id}`}
+            className="block rounded-lg border border-border p-4 hover:bg-accent transition-colors"
+          >
+            <div className="text-xs uppercase text-muted-foreground">
+              Card sort · {FRIDGE_STUDY.responses.length} responses
+            </div>
+            <h2 className="mt-1 text-lg font-semibold">{FRIDGE_STUDY.title}</h2>
+            <ul className="mt-3 space-y-1 text-sm">
+              {fridgeHighlights.map((h) => (
+                <li key={h.card}>
+                  <span className="font-medium">{h.card}</span> →{" "}
+                  {h.topCategory}{" "}
+                  <span className="text-muted-foreground">
+                    ({h.agreement}% agreed)
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-3 text-sm underline">See full results →</div>
+          </Link>
 
-        <div className="space-y-2">
-          <p>Study types</p>
-          <ul className="space-y-1">
-            <li>Card sort</li>
-            <li>Survey</li>
-          </ul>
-        </div>
-
-        <div>
-          {sentTo ? (
-            <p>Link sent to {sentTo}</p>
-          ) : (
-            <form onSubmit={onSubmit} className="flex gap-2 max-w-sm">
-              <Input
-                type="email"
-                required
-                aria-label="Email"
-                placeholder="you@team.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Button type="submit" disabled={submitting}>
-                {submitting ? "Sending…" : "Send"}
-              </Button>
-            </form>
-          )}
-        </div>
+          <Link
+            to={`/examples/${REMOTE_STUDY.id}`}
+            className="block rounded-lg border border-border p-4 hover:bg-accent transition-colors"
+          >
+            <div className="text-xs uppercase text-muted-foreground">
+              Survey · {REMOTE_STUDY.responses.length} responses
+            </div>
+            <h2 className="mt-1 text-lg font-semibold">{REMOTE_STUDY.title}</h2>
+            <ul className="mt-3 space-y-1 text-sm">
+              {surveySummary.map((s) => {
+                const top = Object.entries(s.counts).sort(
+                  (a, b) => b[1] - a[1],
+                )[0];
+                if (!top) return null;
+                const pct = Math.round((top[1] / s.total) * 100);
+                return (
+                  <li key={s.question.id}>
+                    <span className="font-medium">{s.question.label}</span>{" "}
+                    <span className="text-muted-foreground">
+                      — top: {top[0]} ({pct}%)
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+            <div className="mt-3 text-sm underline">See full results →</div>
+          </Link>
+        </section>
       </main>
     </>
   );
 }
+
+// Re-export to keep tree-shaking simple if other modules want this list.
+export { EXAMPLE_STUDIES };
