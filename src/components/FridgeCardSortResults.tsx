@@ -110,23 +110,11 @@ const DISAGREEMENT = RAW.map((r) => ({ card: r.card, chaos: chaosOf(r) }))
 
 export default function FridgeCardSortResults() {
   return (
-    <div className="bg-white text-black space-y-12">
-      {/* Top metadata row */}
-      <section className="flex flex-wrap gap-x-24 gap-y-8 pt-4">
-        {[
-          { n: TOTAL, label: "participants" },
-          { n: RAW.length, label: "cards" },
-          { n: CATEGORIES.length, label: "categories" },
-        ].map((m) => (
-          <div key={m.label}>
-            <div className="text-[64px] font-bold leading-none tracking-tight">
-              {m.n}
-            </div>
-            <div className="mt-3 text-[12px] text-gray-500 uppercase tracking-wide">
-              {m.label}
-            </div>
-          </div>
-        ))}
+    <div className="space-y-8">
+      <section className="grid grid-cols-3 gap-4">
+        <Stat label="Responses" value={String(TOTAL)} />
+        <Stat label="Cards" value={String(RAW.length)} />
+        <Stat label="Categories" value={String(CATEGORIES.length)} />
       </section>
 
       <ByCardSection />
@@ -136,17 +124,24 @@ export default function FridgeCardSortResults() {
   );
 }
 
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border p-4">
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="mt-1 text-xl font-medium">{value}</div>
+    </div>
+  );
+}
+
 function SectionHeader({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-12 text-[11px] font-bold uppercase tracking-[0.15em] pb-2 border-b-4 border-black mb-6 rounded-none">
-      {children}
-    </h2>
+    <h3 className="text-base font-medium border-b pb-2">{children}</h3>
   );
 }
 
 function ByCardSection() {
   return (
-    <section>
+    <section className="space-y-3">
       <SectionHeader>By card</SectionHeader>
       <ChartContainer
         config={chartConfig}
@@ -216,17 +211,17 @@ function MatrixSection() {
     Trash: COLORS.trash,
   };
   return (
-    <section>
+    <section className="space-y-3">
       <SectionHeader>Matrix</SectionHeader>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-md border">
         <table className="w-full border-collapse text-xs">
           <thead>
-            <tr>
-              <th className="text-left p-2 border-b border-black font-medium" />
+            <tr className="border-b">
+              <th className="px-3 py-2 text-left font-medium" />
               {CATEGORIES.map((c) => (
                 <th
                   key={c}
-                  className="p-2 border-b border-black font-medium text-left whitespace-nowrap"
+                  className="px-3 py-2 text-left font-medium whitespace-nowrap"
                 >
                   {c}
                 </th>
@@ -235,18 +230,17 @@ function MatrixSection() {
           </thead>
           <tbody>
             {RAW.map((r) => (
-              <tr key={r.card}>
-                <td className="p-2 font-medium border-b border-gray-200 whitespace-nowrap">
+              <tr key={r.card} className="border-b last:border-b-0">
+                <td className="px-3 py-2 font-medium whitespace-nowrap">
                   {r.card}
                 </td>
                 {CATEGORIES.map((c) => {
                   const p = pct(r[c]);
-                  // Background = category color at low opacity, scaled.
-                  const alpha = p === 0 ? 0 : 0.1 + (p / 100) * 0.75;
+                  const alpha = p === 0 ? 0 : 0.1 + (p / 100) * 0.6;
                   return (
                     <td
                       key={c}
-                      className="p-2 border-b border-gray-200 text-center"
+                      className="px-3 py-2 text-center"
                       style={{
                         backgroundColor:
                           p === 0
@@ -255,7 +249,6 @@ function MatrixSection() {
                                 /hsl\(([^)]+)\)/,
                                 `hsl($1 / ${alpha.toFixed(3)})`,
                               ),
-                        color: p >= 55 ? "white" : "black",
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
@@ -273,7 +266,7 @@ function MatrixSection() {
 
 function DisagreementSection() {
   return (
-    <section>
+    <section className="space-y-3">
       <SectionHeader>Disagreement</SectionHeader>
       <ChartContainer
         config={chaosConfig}

@@ -33,7 +33,7 @@ export default function ExampleStudy() {
   const { session } = useAuth();
   const navigate = useNavigate();
   const [submittedSort, setSubmittedSort] = useState(false);
-  const [tab, setTab] = useState<"results" | "take">("results");
+  const [tab, setTab] = useState<"preview" | "results">("preview");
 
   if (!study && !isGasStation) {
     return (
@@ -61,24 +61,13 @@ export default function ExampleStudy() {
               : "Gas station food. No judgment."}
           </h1>
 
-          <Tabs value={tab} onValueChange={(v) => setTab(v as "results" | "take")}>
+          <Tabs value={tab} onValueChange={(v) => setTab(v as "preview" | "results")}>
             <TabsList>
+              <TabsTrigger value="preview">Preview</TabsTrigger>
               <TabsTrigger value="results">Results</TabsTrigger>
-              <TabsTrigger value="take">{isFridge ? "Sort it" : "Take it"}</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="results" className="space-y-4 pt-4">
-              {submittedSort && (
-                <p className="text-xs text-muted-foreground">
-                  {isFridge
-                    ? "You and 20 others sorted this."
-                    : "You and 20 others answered this."}
-                </p>
-              )}
-              {isFridge ? <FridgeCardSortResults /> : <GasStationSurveyResults />}
-            </TabsContent>
-
-            <TabsContent value="take" className="pt-4">
+            <TabsContent value="preview" className="pt-4">
               {isFridge ? (
                 <FridgeCardSortDemo
                   onSubmit={() => {
@@ -94,6 +83,17 @@ export default function ExampleStudy() {
                   }}
                 />
               )}
+            </TabsContent>
+
+            <TabsContent value="results" className="space-y-4 pt-4">
+              {submittedSort && (
+                <p className="text-xs text-muted-foreground">
+                  {isFridge
+                    ? "You and 20 others sorted this."
+                    : "You and 20 others answered this."}
+                </p>
+              )}
+              {isFridge ? <FridgeCardSortResults /> : <GasStationSurveyResults />}
             </TabsContent>
           </Tabs>
         </>

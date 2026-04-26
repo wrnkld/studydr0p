@@ -12,6 +12,7 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { Button } from "@/components/ui/button";
 
 const CARDS = [
   "Ketchup",
@@ -72,8 +73,8 @@ export default function FridgeCardSortDemo({
 
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
-      <div className="bg-white text-black space-y-6">
-        <p className="text-base">
+      <div className="space-y-6">
+        <p className="text-sm text-muted-foreground">
           Sort each item into the part of the fridge it belongs in.
         </p>
 
@@ -97,16 +98,9 @@ export default function FridgeCardSortDemo({
           ))}
         </div>
 
-        <div>
-          <button
-            type="button"
-            onClick={onSubmit}
-            disabled={!allPlaced}
-            className="border border-black bg-black text-white px-6 py-2 text-sm disabled:bg-white disabled:text-gray-400 disabled:cursor-not-allowed"
-          >
-            Submit
-          </button>
-        </div>
+        <Button onClick={onSubmit} disabled={!allPlaced}>
+          Submit
+        </Button>
       </div>
     </DndContext>
   );
@@ -127,7 +121,7 @@ function DraggableCard({ id, label }: { id: string; label: string }) {
       style={style}
       {...listeners}
       {...attributes}
-      className="border border-black bg-white px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing select-none"
+      className="rounded-md border bg-background px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing select-none hover:bg-accent"
     >
       {label}
     </button>
@@ -147,12 +141,9 @@ function DropZone({
   return (
     <div
       ref={setNodeRef}
-      className="border border-black p-3"
-      style={{ backgroundColor: isOver ? "hsl(0 0% 95%)" : "transparent" }}
+      className={`rounded-md border p-3 ${isOver ? "bg-muted" : ""}`}
     >
-      <div className="text-[11px] uppercase tracking-[0.15em] text-gray-500 mb-2">
-        {label}
-      </div>
+      <div className="text-xs text-muted-foreground mb-2">{label}</div>
       {children}
     </div>
   );
