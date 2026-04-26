@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
 import { CardSortConfig, CardRow, CategoryRow, StudyStatus } from "@/lib/types";
 import { Trash2, Plus } from "lucide-react";
+import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
   studyId: string;
