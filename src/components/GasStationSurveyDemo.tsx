@@ -15,7 +15,7 @@ const QUESTIONS: Question[] = [
     id: "q1",
     type: "single",
     label: "Have you ever eaten a gas station hot dog?",
-    options: ["Yes", "No", "I don't want to talk about it"],
+    options: ["Yes", "No"],
   },
   {
     id: "q2",
@@ -33,7 +33,6 @@ const QUESTIONS: Question[] = [
       "Taquito",
       "Donut",
       "Beef jerky",
-      "Roller grill mystery item",
       "Pizza slice",
       "Just snacks",
     ],
