@@ -1,9 +1,7 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -21,7 +19,7 @@ import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
 import GasStationSurveyResults from "@/components/GasStationSurveyResults";
 import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
-import { toast } from "sonner";
+
 
 // Renders a full results view for a hardcoded example study.
 // CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
@@ -32,9 +30,6 @@ export default function ExampleStudy() {
   const study = id ? getExampleStudy(id) : null;
   const { session } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [sentTo, setSentTo] = useState<string | null>(null);
   const [submittedSort, setSubmittedSort] = useState(false);
   const [view, setView] = useState<"results" | "sort">("results");
 
@@ -51,21 +46,6 @@ export default function ExampleStudy() {
       </>
     );
   }
-
-  const onSignIn = async (e: FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: `${window.location.origin}/studies` },
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setSentTo(email);
-  };
 
   const onDuplicate = () => {
     // Example studies are illustrative — duplicate sends them to new study flow.
