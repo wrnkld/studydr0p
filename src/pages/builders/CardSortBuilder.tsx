@@ -280,7 +280,6 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
 
   return (
     <div className="space-y-8 py-6">
-      <h1>Edit card sort</h1>
 
       <section className="space-y-4">
         <div className="space-y-2">

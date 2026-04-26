@@ -13,7 +13,6 @@ import CardSortBuilder from "./builders/CardSortBuilder";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import StudyResultsView from "@/components/StudyResultsView";
 import { Button } from "@/components/ui/button";
-import { ExternalLink } from "lucide-react";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 
@@ -148,7 +147,6 @@ export default function StudyBuilder() {
 
 function InlinePreview({
   study,
-  shareUrl,
 }: {
   study: StudyRow;
   shareUrl: string | null;
@@ -162,23 +160,8 @@ function InlinePreview({
     setDone(false);
   }, [study.id, study.config, study.title]);
 
-  const previewUrl = shareUrl ? `${shareUrl}?preview=1` : null;
-
   return (
-    <div className="space-y-3 pt-4">
-      <div className="flex items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">
-          Exactly what participants see — submissions here aren't saved.
-        </p>
-        {previewUrl && (
-          <Button asChild variant="outline" size="sm">
-            <a href={previewUrl} target="_blank" rel="noreferrer">
-              Open in new tab <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
-            </a>
-          </Button>
-        )}
-      </div>
-
+    <div className="pt-4">
       <div className="rounded-md border p-6">
         <PreviewBody
           study={study}
