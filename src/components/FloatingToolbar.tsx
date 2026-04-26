@@ -28,7 +28,7 @@ import { useStudyToolbar } from "./StudyToolbarContext";
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto inline-flex items-center gap-3 rounded-full border bg-background px-4 py-2 shadow-lg">
+      <div className="pointer-events-auto flex h-12 w-[520px] items-center justify-center gap-3 rounded-full border bg-background px-4 shadow-lg">
         {children}
       </div>
     </div>
@@ -37,7 +37,7 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function Logo() {
   return (
-    <Link to="/" className="text-sm font-semibold">
+    <Link to="/" className="text-sm font-medium">
       StudyDrop
     </Link>
   );
