@@ -2,13 +2,20 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { CardSortConfig, StudyStatus, StudyType, SurveyConfig } from "@/lib/types";
+import {
+  CardSortConfig,
+  StudyStatus,
+  StudyType,
+  SurveyConfig,
+} from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import StudyResultsView from "@/components/StudyResultsView";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import SurveyParticipant from "./participant/SurveyParticipant";
+import CardSortParticipant from "./participant/CardSortParticipant";
 
 interface StudyRow {
   id: string;
@@ -50,6 +57,19 @@ export default function StudyBuilder() {
       setLoading(false);
     })();
   }, [id, navigate]);
+
+  // Re-load study when switching INTO the preview tab so it reflects edits.
+  useEffect(() => {
+    if (!id || activeTab !== "preview") return;
+    (async () => {
+      const { data } = await supabase
+        .from("studies")
+        .select("id, title, description, type, status, slug, config")
+        .eq("id", id)
+        .single();
+      if (data) setStudy(data as StudyRow);
+    })();
+  }, [id, activeTab]);
 
   const shareUrl = useMemo(
     () => (study?.slug ? `${window.location.origin}/s/${study.slug}` : null),
@@ -108,16 +128,14 @@ export default function StudyBuilder() {
       <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
         <TabsList>
           <TabsTrigger value="build">Build</TabsTrigger>
-          <TabsTrigger value="preview" disabled={!shareUrl}>
-            Preview
-          </TabsTrigger>
+          <TabsTrigger value="preview">Preview</TabsTrigger>
           <TabsTrigger value="results">Results</TabsTrigger>
         </TabsList>
 
         <TabsContent value="build">{builder}</TabsContent>
 
         <TabsContent value="preview">
-          <PreviewTab shareUrl={shareUrl} />
+          <InlinePreview study={study} shareUrl={shareUrl} />
         </TabsContent>
 
         <TabsContent value="results">
@@ -128,34 +146,161 @@ export default function StudyBuilder() {
   );
 }
 
-function PreviewTab({ shareUrl }: { shareUrl: string | null }) {
-  if (!shareUrl) {
-    return (
-      <p className="text-sm text-muted-foreground">
-        Save the study first to preview it as a participant.
-      </p>
-    );
-  }
-  const previewUrl = `${shareUrl}?preview=1`;
+function InlinePreview({
+  study,
+  shareUrl,
+}: {
+  study: StudyRow;
+  shareUrl: string | null;
+}) {
+  const [started, setStarted] = useState(false);
+  const [done, setDone] = useState(false);
+
+  // Reset preview state if the study changes (e.g. edit + return).
+  useEffect(() => {
+    setStarted(false);
+    setDone(false);
+  }, [study.id, study.config, study.title]);
+
+  const previewUrl = shareUrl ? `${shareUrl}?preview=1` : null;
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 pt-4">
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
           Exactly what participants see — submissions here aren't saved.
         </p>
-        <Button asChild variant="outline" size="sm">
-          <a href={previewUrl} target="_blank" rel="noreferrer">
-            Open in new tab <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
-          </a>
-        </Button>
+        {previewUrl && (
+          <Button asChild variant="outline" size="sm">
+            <a href={previewUrl} target="_blank" rel="noreferrer">
+              Open in new tab <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+            </a>
+          </Button>
+        )}
       </div>
-      <div className="overflow-hidden rounded-md border">
-        <iframe
-          src={previewUrl}
-          title="Participant preview"
-          className="h-[75vh] w-full"
+
+      <div className="rounded-md border p-6">
+        <PreviewBody
+          study={study}
+          started={started}
+          done={done}
+          onStart={() => setStarted(true)}
+          onDone={() => setDone(true)}
+          onRestart={() => {
+            setDone(false);
+            setStarted(false);
+          }}
         />
       </div>
     </div>
   );
+}
+
+function PreviewBody({
+  study,
+  started,
+  done,
+  onStart,
+  onDone,
+  onRestart,
+}: {
+  study: StudyRow;
+  started: boolean;
+  done: boolean;
+  onStart: () => void;
+  onDone: () => void;
+  onRestart: () => void;
+}) {
+  if (done) {
+    return (
+      <div className="space-y-3 py-6 text-center">
+        <h2 className="text-lg font-medium">Thank you</h2>
+        <p className="text-sm text-muted-foreground">
+          Preview complete — nothing was saved.
+        </p>
+        <Button variant="outline" size="sm" onClick={onRestart}>
+          Restart preview
+        </Button>
+      </div>
+    );
+  }
+
+  if (!started) {
+    const intro = introCopy(study);
+    return (
+      <div className="space-y-4 py-2">
+        <h2 className="text-lg font-medium">{study.title || "Untitled"}</h2>
+        {study.description && (
+          <p className="whitespace-pre-wrap text-muted-foreground">
+            {study.description}
+          </p>
+        )}
+        <p className="text-sm text-muted-foreground">{intro}</p>
+        <Button onClick={onStart}>Start</Button>
+      </div>
+    );
+  }
+
+  if (study.type === "survey") {
+    const cfg = (study.config as SurveyConfig) ?? { questions: [] };
+    if (!cfg.questions || cfg.questions.length === 0) {
+      return (
+        <p className="text-sm text-muted-foreground">
+          No questions yet — add some in the Build tab.
+        </p>
+      );
+    }
+    return (
+      <SurveyParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId="preview"
+        startedAt={Date.now()}
+        preview
+        onDone={onDone}
+      />
+    );
+  }
+
+  if (study.type === "card_sort") {
+    const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
+    return (
+      <CardSortParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId="preview"
+        startedAt={Date.now()}
+        preview
+        onDone={onDone}
+      />
+    );
+  }
+
+  return (
+    <p className="text-sm text-muted-foreground">
+      This study type can't be previewed yet.
+    </p>
+  );
+}
+
+function introCopy(study: StudyRow): string {
+  if (study.type === "survey") {
+    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
+    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
+  }
+  if (study.type === "card_sort") {
+    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
+    return sort === "open"
+      ? "You'll group cards into categories you create · Anonymous"
+      : "You'll sort cards into predefined categories · Anonymous";
+  }
+  return "Anonymous";
 }
