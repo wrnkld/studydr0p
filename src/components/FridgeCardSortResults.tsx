@@ -58,17 +58,28 @@ const SLUG: Record<Category, string> = {
   Trash: "trash",
 };
 
+// Local chart palette — overrides the monochrome app theme so categories
+// are visually distinguishable. Recharts-style defaults.
+const COLORS = {
+  door:    "hsl(221 83% 53%)",  // blue
+  top:     "hsl(142 71% 45%)",  // green
+  middle:  "hsl(38 92% 50%)",   // amber
+  bottom:  "hsl(271 76% 53%)",  // purple
+  freezer: "hsl(199 89% 48%)",  // cyan
+  trash:   "hsl(0 72% 51%)",    // red
+} as const;
+
 const chartConfig = {
-  door:    { label: "Door",         color: "hsl(var(--chart-1))" },
-  top:     { label: "Top shelf",    color: "hsl(var(--chart-2))" },
-  middle:  { label: "Middle shelf", color: "hsl(var(--chart-3))" },
-  bottom:  { label: "Bottom shelf", color: "hsl(var(--chart-4))" },
-  freezer: { label: "Freezer",      color: "hsl(var(--chart-5))" },
-  trash:   { label: "Trash",        color: "hsl(var(--chart-6))" },
+  door:    { label: "Door",         color: COLORS.door },
+  top:     { label: "Top shelf",    color: COLORS.top },
+  middle:  { label: "Middle shelf", color: COLORS.middle },
+  bottom:  { label: "Bottom shelf", color: COLORS.bottom },
+  freezer: { label: "Freezer",      color: COLORS.freezer },
+  trash:   { label: "Trash",        color: COLORS.trash },
 } satisfies ChartConfig;
 
 const chaosConfig = {
-  chaos: { label: "Chaos", color: "hsl(var(--chart-1))" },
+  chaos: { label: "Chaos", color: COLORS.door },
 } satisfies ChartConfig;
 
 function pct(n: number) {
@@ -196,13 +207,13 @@ function ByCardSection() {
 }
 
 function MatrixSection() {
-  const CAT_VAR: Record<Category, string> = {
-    Door: "--chart-1",
-    "Top shelf": "--chart-2",
-    "Middle shelf": "--chart-3",
-    "Bottom shelf": "--chart-4",
-    Freezer: "--chart-5",
-    Trash: "--chart-6",
+  const CAT_COLOR: Record<Category, string> = {
+    Door: COLORS.door,
+    "Top shelf": COLORS.top,
+    "Middle shelf": COLORS.middle,
+    "Bottom shelf": COLORS.bottom,
+    Freezer: COLORS.freezer,
+    Trash: COLORS.trash,
   };
   return (
     <section>
@@ -240,11 +251,11 @@ function MatrixSection() {
                         backgroundColor:
                           p === 0
                             ? "transparent"
-                            : `hsl(var(${CAT_VAR[c]}) / ${alpha.toFixed(3)})`,
-                        color:
-                          p >= 60 && (c === "Door" || c === "Top shelf")
-                            ? "white"
-                            : "black",
+                            : CAT_COLOR[c].replace(
+                                /hsl\(([^)]+)\)/,
+                                `hsl($1 / ${alpha.toFixed(3)})`,
+                              ),
+                        color: p >= 55 ? "white" : "black",
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
