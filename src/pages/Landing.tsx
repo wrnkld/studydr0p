@@ -11,6 +11,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 interface CombinedRow {
   id: string;
@@ -44,6 +56,8 @@ export default function Landing() {
   const { user, session } = useAuth();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadingStudies, setLoadingStudies] = useState(false);
+  const [toDelete, setToDelete] = useState<CombinedRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -74,6 +88,20 @@ export default function Landing() {
     })();
   }, [user]);
 
+  const handleDelete = async () => {
+    if (!toDelete) return;
+    setDeleting(true);
+    const { error } = await supabase.from("studies").delete().eq("id", toDelete.id);
+    setDeleting(false);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    setUserRows((prev) => prev.filter((r) => r.id !== toDelete.id));
+    setToDelete(null);
+    toast.success("Study deleted");
+  };
+
   const rows = [...userRows, ...EXAMPLE_ROWS];
 
   return (
@@ -96,7 +124,7 @@ export default function Landing() {
                 <TableHead>Study</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead className="text-right">Responses</TableHead>
-                <TableHead className="w-24" />
+                <TableHead className="w-28" />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -111,8 +139,18 @@ export default function Landing() {
                     {STUDY_TYPE_META[r.type]?.label ?? r.type}
                   </TableCell>
                   <TableCell className="text-right">{r.responseCount}</TableCell>
-                  <TableCell className="text-right text-xs text-muted-foreground">
-                    {r.isExample ? "Example" : ""}
+                  <TableCell className="text-right">
+                    {r.isExample ? (
+                      <span className="text-xs text-muted-foreground">Example</span>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setToDelete(r)}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -120,6 +158,24 @@ export default function Landing() {
           </Table>
         </div>
       )}
+
+      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this study?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes “{toDelete?.title}” and all of its
+              responses. This action can't be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </main>
   );
 }
