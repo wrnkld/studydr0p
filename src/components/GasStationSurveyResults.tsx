@@ -88,22 +88,11 @@ const Q5_RESPONSES = [
 
 export default function GasStationSurveyResults() {
   return (
-    <div className="bg-white text-black space-y-12">
-      {/* Top metadata row */}
-      <section className="flex flex-wrap gap-x-24 gap-y-8 pt-4">
-        {[
-          { n: TOTAL, label: "participants" },
-          { n: 5, label: "questions" },
-        ].map((m) => (
-          <div key={m.label}>
-            <div className="text-[64px] font-bold leading-none tracking-tight">
-              {m.n}
-            </div>
-            <div className="mt-3 text-[12px] text-gray-500 uppercase tracking-wide">
-              {m.label}
-            </div>
-          </div>
-        ))}
+    <div className="space-y-8">
+      <section className="grid grid-cols-3 gap-4">
+        <Stat label="Responses" value={String(TOTAL)} />
+        <Stat label="Questions" value="5" />
+        <Stat label="Avg score" value={`${Q2_AVG.toFixed(1)} / 10`} />
       </section>
 
       <QuestionSection
@@ -117,59 +106,48 @@ export default function GasStationSurveyResults() {
         number={2}
         title="Rate your go-to gas station on food quality."
       >
-        <div className="space-y-6">
-          <div>
-            <div className="text-[64px] font-bold leading-none tracking-tight">
-              {Q2_AVG.toFixed(1)}
-              <span className="text-[24px] font-normal text-gray-500"> / 10</span>
-            </div>
-            <div className="mt-3 text-[12px] text-gray-500 uppercase tracking-wide">
-              average score
-            </div>
-          </div>
-          <ChartContainer
-            config={barConfig}
-            className="aspect-auto h-[220px] w-full"
+        <ChartContainer
+          config={barConfig}
+          className="aspect-auto h-[220px] w-full"
+        >
+          <BarChart
+            data={Q2_DIST}
+            margin={{ top: 8, right: 16, bottom: 8, left: 8 }}
           >
-            <BarChart
-              data={Q2_DIST}
-              margin={{ top: 8, right: 16, bottom: 8, left: 8 }}
-            >
-              <CartesianGrid vertical={false} stroke="hsl(0 0% 90%)" />
-              <XAxis
-                dataKey="score"
-                stroke="hsl(0 0% 10%)"
-                fontSize={12}
-                tickLine={false}
-                axisLine={false}
-              />
-              <YAxis
-                stroke="hsl(0 0% 40%)"
-                fontSize={11}
-                tickLine={false}
-                axisLine={false}
-                allowDecimals={false}
-              />
-              <ChartTooltip
-                content={
-                  <ChartTooltipContent
-                    formatter={(value) => (
-                      <div className="flex w-full justify-between gap-4">
-                        <span>Responses</span>
-                        <span className="font-mono font-medium">{value}</span>
-                      </div>
-                    )}
-                  />
-                }
-              />
-              <Bar
-                dataKey="value"
-                fill="var(--color-value)"
-                isAnimationActive={false}
-              />
-            </BarChart>
-          </ChartContainer>
-        </div>
+            <CartesianGrid vertical={false} stroke="hsl(0 0% 90%)" />
+            <XAxis
+              dataKey="score"
+              stroke="hsl(0 0% 10%)"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              stroke="hsl(0 0% 40%)"
+              fontSize={11}
+              tickLine={false}
+              axisLine={false}
+              allowDecimals={false}
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  formatter={(value) => (
+                    <div className="flex w-full justify-between gap-4">
+                      <span>Responses</span>
+                      <span className="font-mono font-medium">{value}</span>
+                    </div>
+                  )}
+                />
+              }
+            />
+            <Bar
+              dataKey="value"
+              fill="var(--color-value)"
+              isAnimationActive={false}
+            />
+          </BarChart>
+        </ChartContainer>
       </QuestionSection>
 
       <QuestionSection
@@ -194,13 +172,22 @@ export default function GasStationSurveyResults() {
           {Q5_RESPONSES.map((r, i) => (
             <li
               key={i}
-              className="border-l-2 border-black pl-4 text-sm leading-relaxed"
+              className="border-l-2 pl-4 text-sm leading-relaxed"
             >
               {r}
             </li>
           ))}
         </ul>
       </QuestionSection>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md border p-4">
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="mt-1 text-xl font-medium">{value}</div>
     </div>
   );
 }
@@ -215,10 +202,13 @@ function QuestionSection({
   children: React.ReactNode;
 }) {
   return (
-    <section>
-      <h2 className="mt-12 text-[11px] font-bold uppercase tracking-[0.15em] pb-2 border-b-4 border-black mb-6 rounded-none">
-        Q{number} — {title}
-      </h2>
+    <section className="space-y-4">
+      <div className="border-b pb-2">
+        <div className="text-xs uppercase tracking-wide text-muted-foreground">
+          Question {number}
+        </div>
+        <h3 className="mt-1 text-base font-medium">{title}</h3>
+      </div>
       {children}
     </section>
   );
