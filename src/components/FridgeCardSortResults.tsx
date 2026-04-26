@@ -211,17 +211,17 @@ function MatrixSection() {
     Trash: COLORS.trash,
   };
   return (
-    <section>
+    <section className="space-y-3">
       <SectionHeader>Matrix</SectionHeader>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto rounded-md border">
         <table className="w-full border-collapse text-xs">
           <thead>
-            <tr>
-              <th className="text-left p-2 border-b border-black font-medium" />
+            <tr className="border-b">
+              <th className="px-3 py-2 text-left font-medium" />
               {CATEGORIES.map((c) => (
                 <th
                   key={c}
-                  className="p-2 border-b border-black font-medium text-left whitespace-nowrap"
+                  className="px-3 py-2 text-left font-medium whitespace-nowrap"
                 >
                   {c}
                 </th>
@@ -230,18 +230,17 @@ function MatrixSection() {
           </thead>
           <tbody>
             {RAW.map((r) => (
-              <tr key={r.card}>
-                <td className="p-2 font-medium border-b border-gray-200 whitespace-nowrap">
+              <tr key={r.card} className="border-b last:border-b-0">
+                <td className="px-3 py-2 font-medium whitespace-nowrap">
                   {r.card}
                 </td>
                 {CATEGORIES.map((c) => {
                   const p = pct(r[c]);
-                  // Background = category color at low opacity, scaled.
-                  const alpha = p === 0 ? 0 : 0.1 + (p / 100) * 0.75;
+                  const alpha = p === 0 ? 0 : 0.1 + (p / 100) * 0.6;
                   return (
                     <td
                       key={c}
-                      className="p-2 border-b border-gray-200 text-center"
+                      className="px-3 py-2 text-center"
                       style={{
                         backgroundColor:
                           p === 0
@@ -250,7 +249,6 @@ function MatrixSection() {
                                 /hsl\(([^)]+)\)/,
                                 `hsl($1 / ${alpha.toFixed(3)})`,
                               ),
-                        color: p >= 55 ? "white" : "black",
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
