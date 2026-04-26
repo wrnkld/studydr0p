@@ -80,28 +80,6 @@ export default function Landing() {
             <div className="mt-3 text-sm underline">See full results →</div>
           </Link>
         </section>
-
-        <section>
-          {session ? (
-            <Button onClick={() => navigate("/studies/new")}>New study</Button>
-          ) : sentTo ? (
-            <p>Link sent to {sentTo}. Check your email to sign in.</p>
-          ) : (
-            <form onSubmit={onSignIn} className="flex gap-2 max-w-sm">
-              <Input
-                type="email"
-                required
-                aria-label="Email"
-                placeholder="you@team.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <Button type="submit" disabled={submitting}>
-                {submitting ? "Sending…" : "Sign in"}
-              </Button>
-            </form>
-          )}
-        </section>
       </main>
     </>
   );
