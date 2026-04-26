@@ -10,7 +10,7 @@ import {
 } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+
 import StudyResultsView from "@/components/StudyResultsView";
 import { Button } from "@/components/ui/button";
 import SurveyParticipant from "./participant/SurveyParticipant";
