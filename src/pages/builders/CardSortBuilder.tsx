@@ -281,10 +281,14 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     );
   }
 
+  const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
+
   return (
-    <div>
-      <main>
-        <section className="space-y-4">
+    <div className="min-h-screen bg-background">
+      <main className="container max-w-3xl py-10">
+        <h1 className="text-2xl font-semibold tracking-tight">Edit card sort</h1>
+
+        <section className="mt-8 space-y-4">
           <div className="space-y-2">
             <Label htmlFor="title">Title</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
