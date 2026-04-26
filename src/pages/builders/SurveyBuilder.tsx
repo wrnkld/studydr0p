@@ -309,8 +309,6 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
             <p className="mt-2 text-xs text-muted-foreground">
               Use the Preview tab above to try it as a participant.
             </p>
-            <div className="hidden">
-            </div>
           </section>
         )}
       </main>
