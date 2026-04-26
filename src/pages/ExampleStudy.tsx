@@ -19,7 +19,7 @@ import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
 import GasStationSurveyResults from "@/components/GasStationSurveyResults";
 import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
-import { InlineSignIn } from "@/components/AppHeader";
+
 
 
 // Renders a full results view for a hardcoded example study.
@@ -140,16 +140,6 @@ export default function ExampleStudy() {
           </>
         ) : null}
 
-        {(isFridge || isGasStation) && (
-          session ? (
-            <Button onClick={() => navigate("/studies/new")}>New study</Button>
-          ) : (
-            <div className="flex items-center gap-3 flex-wrap">
-              <span>Make your own.</span>
-              <InlineSignIn />
-            </div>
-          )
-        )}
 
         {!isFridge && !isGasStation && session && (
           <section className="rounded-lg border border-border p-4 space-y-3">
