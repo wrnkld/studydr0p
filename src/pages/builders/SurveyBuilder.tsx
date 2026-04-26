@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import {
   StudyStatus,
 } from "@/lib/types";
 import { Trash2, Plus } from "lucide-react";
+import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
   studyId: string;
