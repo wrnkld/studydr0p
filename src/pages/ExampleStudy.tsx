@@ -18,6 +18,7 @@ import {
   summarizeCardSort,
   summarizeSurvey,
 } from "@/lib/exampleStudies";
+import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import { toast } from "sonner";
 
 // Renders a full results view for a hardcoded example study.
