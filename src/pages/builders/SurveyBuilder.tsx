@@ -76,20 +76,44 @@ export default function SurveyBuilder({ studyId, initial }: Props) {
     overrides: Partial<{ status: StudyStatus; slug: string | null }> = {},
   ) => {
     setSaving(true);
-    const payload = {
-      title: title.trim() || "Untitled study",
-      description: description.trim() || null,
-      config: { ...config, layout: "one_per_page" } as unknown as never,
-      status: overrides.status ?? status,
-      slug: overrides.slug !== undefined ? overrides.slug : slug,
-    };
-    const { error } = await supabase.from("studies").update(payload).eq("id", studyId);
-    setSaving(false);
-    if (error) {
-      toast.error(error.message);
+    try {
+      // Confirm the study still exists (and is owned by us under RLS) before
+      // attempting an update — silent 0-row updates are confusing.
+      const { data: existing, error: checkErr } = await supabase
+        .from("studies")
+        .select("id")
+        .eq("id", studyId)
+        .maybeSingle();
+      if (checkErr) {
+        console.error("[SurveyBuilder] study lookup failed", checkErr);
+        throw new Error(checkErr.message);
+      }
+      if (!existing) {
+        toast.error("This study no longer exists. Redirecting…");
+        navigate("/");
+        return null;
+      }
+
+      const payload = {
+        title: title.trim() || "Untitled study",
+        description: description.trim() || null,
+        config: { ...config, layout: "one_per_page" } as unknown as never,
+        status: overrides.status ?? status,
+        slug: overrides.slug !== undefined ? overrides.slug : slug,
+      };
+      const { error } = await supabase.from("studies").update(payload).eq("id", studyId);
+      if (error) {
+        console.error("[SurveyBuilder] study update failed", error);
+        throw new Error(`Couldn't save survey: ${error.message}`);
+      }
+      return payload;
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "Something went wrong while saving";
+      toast.error(msg);
       return null;
+    } finally {
+      setSaving(false);
     }
-    return payload;
   };
 
   const handleSave = async () => {
