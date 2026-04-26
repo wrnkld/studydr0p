@@ -142,21 +142,24 @@ function PreviewTab({ shareUrl }: { shareUrl: string | null }) {
       </div>
     );
   }
+  // ?preview=1 tells ParticipantStudy to skip writing sessions/responses,
+  // so previewing never pollutes real data.
+  const previewUrl = `${shareUrl}?preview=1`;
   return (
     <div className="py-6">
       <div className="mb-3 flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          This is exactly what participants see.
+          Exactly what participants see — submissions here aren't saved.
         </p>
         <Button asChild variant="outline" size="sm">
-          <a href={shareUrl} target="_blank" rel="noreferrer">
+          <a href={previewUrl} target="_blank" rel="noreferrer">
             Open in new tab <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
           </a>
         </Button>
       </div>
       <div className="overflow-hidden rounded-lg border border-border bg-background">
         <iframe
-          src={shareUrl}
+          src={previewUrl}
           title="Participant preview"
           className="h-[75vh] w-full"
         />
