@@ -124,23 +124,11 @@ export default function StudyBuilder() {
 
   return (
     <main className="container py-8">
-      <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
-        <TabsList>
-          <TabsTrigger value="build">Build</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="results">Results</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="build">{builder}</TabsContent>
-
-        <TabsContent value="preview">
-          <InlinePreview study={study} shareUrl={shareUrl} />
-        </TabsContent>
-
-        <TabsContent value="results">
-          <StudyResultsView studyId={study.id} />
-        </TabsContent>
-      </Tabs>
+      {activeTab === "build" && builder}
+      {activeTab === "preview" && (
+        <InlinePreview study={study} shareUrl={shareUrl} />
+      )}
+      {activeTab === "results" && <StudyResultsView studyId={study.id} />}
     </main>
   );
 }
