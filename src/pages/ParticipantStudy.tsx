@@ -156,6 +156,7 @@ export default function ParticipantStudy() {
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
         startedAt={startedAt}
+        preview={isPreview}
         onDone={() => setDone(true)}
       />
     );
@@ -168,6 +169,7 @@ export default function ParticipantStudy() {
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
         startedAt={startedAt}
+        preview={isPreview}
         onDone={() => setDone(true)}
       />
     );
