@@ -180,7 +180,16 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
 
       <section className="grid grid-cols-3 gap-4">
         <Stat label="Responses" value={String(responses.length)} />
-        <Stat label="Completion" value={`${completionRate}%`} />
+        {study.type === "survey" ? (
+          <Stat
+            label="Questions"
+            value={String(((study.config as SurveyConfig)?.questions ?? []).length)}
+          />
+        ) : study.type === "card_sort" ? (
+          <Stat label="Cards" value={String(cards.length)} />
+        ) : (
+          <Stat label="Completion" value={`${completionRate}%`} />
+        )}
         <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
       </section>
 
