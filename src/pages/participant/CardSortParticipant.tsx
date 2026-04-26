@@ -146,6 +146,12 @@ export default function CardSortParticipant({
       }
     }
     setSubmitting(true);
+    if (preview) {
+      // Don't pollute real data with preview submissions.
+      setSubmitting(false);
+      onDone();
+      return;
+    }
     const data: CardSortResponseData = {
       sort_type: study.config.sort_type,
       groups: groups.map((g) => ({
