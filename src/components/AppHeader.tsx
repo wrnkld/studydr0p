@@ -18,7 +18,7 @@ export function InlineSignIn({ className = "" }: { className?: string }) {
     setSubmitting(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/studies` },
+      options: { emailRedirectTo: `${window.location.origin}/` },
     });
     setSubmitting(false);
     if (error) {
