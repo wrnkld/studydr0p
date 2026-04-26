@@ -181,28 +181,27 @@ function StudyBar() {
     <>
       <Shell>
         <Logo />
-        <Divider />
         <div className="flex items-center gap-3">
           <TabBtn value="build">Build</TabBtn>
           <TabBtn value="preview">Preview</TabBtn>
           <TabBtn value="results">Results</TabBtn>
+          <Divider />
+          <Button
+            size="sm"
+            disabled={!actions || actions.saving}
+            onClick={() => actions?.onSave()}
+          >
+            {actions?.saving ? "Saving…" : "Save"}
+          </Button>
+          <button
+            type="button"
+            className="text-sm text-muted-foreground hover:text-foreground"
+            disabled={!actions}
+            onClick={() => setConfirmDelete(true)}
+          >
+            Delete
+          </button>
         </div>
-        <Divider />
-        <Button
-          size="sm"
-          disabled={!actions || actions.saving}
-          onClick={() => actions?.onSave()}
-        >
-          {actions?.saving ? "Saving…" : "Save"}
-        </Button>
-        <button
-          type="button"
-          className="text-sm text-muted-foreground hover:text-foreground"
-          disabled={!actions}
-          onClick={() => setConfirmDelete(true)}
-        >
-          Delete
-        </button>
       </Shell>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
