@@ -251,11 +251,11 @@ function MatrixSection() {
                         backgroundColor:
                           p === 0
                             ? "transparent"
-                            : `hsl(var(${CAT_VAR[c]}) / ${alpha.toFixed(3)})`,
-                        color:
-                          p >= 60 && (c === "Door" || c === "Top shelf")
-                            ? "white"
-                            : "black",
+                            : CAT_COLOR[c].replace(
+                                /hsl\(([^)]+)\)/,
+                                `hsl($1 / ${alpha.toFixed(3)})`,
+                              ),
+                        color: p >= 55 ? "white" : "black",
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
