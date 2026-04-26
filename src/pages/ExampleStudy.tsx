@@ -36,15 +36,12 @@ export default function ExampleStudy() {
 
   if (!study && !isGasStation) {
     return (
-      <>
-
-        <main className="p-6 space-y-2">
-          <h1>Example not found</h1>
-          <Link to="/" className="underline">
-            Back home
-          </Link>
-        </main>
-      </>
+      <main className="container py-8 space-y-2">
+        <h1>Example not found</h1>
+        <Link to="/" className="underline">
+          Back home
+        </Link>
+      </main>
     );
   }
 
