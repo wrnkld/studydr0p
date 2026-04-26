@@ -148,7 +148,10 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
     }));
     if (cardRows.length) {
       const { error } = await supabase.from("cards").upsert(cardRows);
-      if (error) throw error;
+      if (error) {
+        console.error("[CardSortBuilder] cards upsert failed", error);
+        throw new Error(`Couldn't save cards: ${error.message}`);
+      }
     }
 
     if (sortType === "closed") {
@@ -160,7 +163,10 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
       }));
       if (catRows.length) {
         const { error } = await supabase.from("categories").upsert(catRows);
-        if (error) throw error;
+        if (error) {
+          console.error("[CardSortBuilder] categories upsert failed", error);
+          throw new Error(`Couldn't save categories: ${error.message}`);
+        }
       }
     } else {
       // open sort: drop any leftover categories
@@ -181,7 +187,24 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
   ) => {
     setSaving(true);
     try {
-      await persistChildren();
+      // Verify the study still exists and is owned by this researcher.
+      // Without this we'd silently update 0 rows or hit confusing RLS errors
+      // on the child tables.
+      const { data: existing, error: checkErr } = await supabase
+        .from("studies")
+        .select("id")
+        .eq("id", studyId)
+        .maybeSingle();
+      if (checkErr) {
+        console.error("[CardSortBuilder] study lookup failed", checkErr);
+        throw new Error(checkErr.message);
+      }
+      if (!existing) {
+        toast.error("This study no longer exists. Redirecting…");
+        navigate("/");
+        return null;
+      }
+
       const payload = {
         title: title.trim() || "Untitled study",
         description: description.trim() || null,
@@ -189,11 +212,21 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
         status: overrides.status ?? status,
         slug: overrides.slug !== undefined ? overrides.slug : slug,
       };
-      const { error } = await supabase.from("studies").update(payload).eq("id", studyId);
-      if (error) throw error;
+      const { error: updateErr } = await supabase
+        .from("studies")
+        .update(payload)
+        .eq("id", studyId);
+      if (updateErr) {
+        console.error("[CardSortBuilder] study update failed", updateErr);
+        throw new Error(`Couldn't save study: ${updateErr.message}`);
+      }
+
+      // Save cards/categories AFTER the study exists & is updated
+      await persistChildren();
+
       return payload;
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : "Failed to save";
+      const msg = e instanceof Error ? e.message : "Something went wrong while saving";
       toast.error(msg);
       return null;
     } finally {
