@@ -28,7 +28,7 @@ import { useStudyToolbar } from "./StudyToolbarContext";
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto flex h-12 w-[520px] items-center justify-center gap-3 rounded-full border bg-background px-4 shadow-lg">
+      <div className="pointer-events-auto flex h-11 w-[460px] items-center justify-between gap-3 rounded-full border bg-background pl-4 pr-1.5 shadow-lg">
         {children}
       </div>
     </div>
@@ -96,7 +96,6 @@ function LoggedOutBar() {
   return (
     <Shell>
       <Logo />
-      <Divider />
       <SignInForm />
     </Shell>
   );
@@ -108,20 +107,21 @@ function LoggedInHomeBar() {
   return (
     <Shell>
       <Logo />
-      <Divider />
-      <Button size="sm" onClick={() => navigate("/studies/new")}>
-        New study
-      </Button>
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={async () => {
-          await signOut();
-          navigate("/");
-        }}
-      >
-        Sign out
-      </Button>
+      <div className="flex items-center gap-2">
+        <Button size="sm" onClick={() => navigate("/studies/new")}>
+          New study
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={async () => {
+            await signOut();
+            navigate("/");
+          }}
+        >
+          Sign out
+        </Button>
+      </div>
     </Shell>
   );
 }
@@ -181,28 +181,27 @@ function StudyBar() {
     <>
       <Shell>
         <Logo />
-        <Divider />
         <div className="flex items-center gap-3">
           <TabBtn value="build">Build</TabBtn>
           <TabBtn value="preview">Preview</TabBtn>
           <TabBtn value="results">Results</TabBtn>
+          <Divider />
+          <Button
+            size="sm"
+            disabled={!actions || actions.saving}
+            onClick={() => actions?.onSave()}
+          >
+            {actions?.saving ? "Saving…" : "Save"}
+          </Button>
+          <button
+            type="button"
+            className="text-sm text-muted-foreground hover:text-foreground"
+            disabled={!actions}
+            onClick={() => setConfirmDelete(true)}
+          >
+            Delete
+          </button>
         </div>
-        <Divider />
-        <Button
-          size="sm"
-          disabled={!actions || actions.saving}
-          onClick={() => actions?.onSave()}
-        >
-          {actions?.saving ? "Saving…" : "Save"}
-        </Button>
-        <button
-          type="button"
-          className="text-sm text-muted-foreground hover:text-foreground"
-          disabled={!actions}
-          onClick={() => setConfirmDelete(true)}
-        >
-          Delete
-        </button>
       </Shell>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
