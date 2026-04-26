@@ -1,21 +1,24 @@
-// Hardcoded card sort results view for the "Where does it go in the fridge?"
-// example. Renders three stacked sections: BY CARD, MATRIX, DISAGREEMENT.
-// Strict visual rules: black on white, no rounded corners, no icons, no shadows.
+// Card sort results for the "Where does it go in the fridge?" example.
+// Three stacked sections: BY CARD (stacked bar), MATRIX (table),
+// DISAGREEMENT (entropy bar). Built on shadcn ChartContainer + Recharts.
 
-const CARDS = [
-  "Ketchup",
-  "Mayo",
-  "Leftover pizza",
-  "Beer",
-  "Oat milk",
-  "Mystery tupperware",
-  "Wilting spinach",
-  "Cheese",
-  "Hot sauce",
-  "Birthday cake",
-  "Baking soda",
-  "Eggs",
-];
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
+
+const TOTAL = 20;
 
 const CATEGORIES = [
   "Door",
@@ -24,75 +27,91 @@ const CATEGORIES = [
   "Bottom shelf",
   "Freezer",
   "Trash",
+] as const;
+type Category = (typeof CATEGORIES)[number];
+
+type Row = { card: string } & Record<Category, number>;
+
+const RAW: Row[] = [
+  { card: "Ketchup",            Door: 9,  "Top shelf": 0,  "Middle shelf": 7,  "Bottom shelf": 0, Freezer: 0, Trash: 4 },
+  { card: "Mayo",               Door: 4,  "Top shelf": 8,  "Middle shelf": 5,  "Bottom shelf": 0, Freezer: 0, Trash: 3 },
+  { card: "Leftover pizza",     Door: 0,  "Top shelf": 2,  "Middle shelf": 10, "Bottom shelf": 5, Freezer: 3, Trash: 0 },
+  { card: "Beer",               Door: 14, "Top shelf": 3,  "Middle shelf": 3,  "Bottom shelf": 0, Freezer: 0, Trash: 0 },
+  { card: "Oat milk",           Door: 2,  "Top shelf": 10, "Middle shelf": 8,  "Bottom shelf": 0, Freezer: 0, Trash: 0 },
+  { card: "Mystery tupperware", Door: 0,  "Top shelf": 0,  "Middle shelf": 2,  "Bottom shelf": 3, Freezer: 1, Trash: 14 },
+  { card: "Wilting spinach",    Door: 0,  "Top shelf": 0,  "Middle shelf": 1,  "Bottom shelf": 2, Freezer: 0, Trash: 17 },
+  { card: "Cheese",             Door: 1,  "Top shelf": 6,  "Middle shelf": 11, "Bottom shelf": 2, Freezer: 0, Trash: 0 },
+  { card: "Hot sauce",          Door: 12, "Top shelf": 2,  "Middle shelf": 4,  "Bottom shelf": 0, Freezer: 0, Trash: 2 },
+  { card: "Birthday cake",      Door: 0,  "Top shelf": 4,  "Middle shelf": 8,  "Bottom shelf": 3, Freezer: 5, Trash: 0 },
+  { card: "Baking soda",        Door: 3,  "Top shelf": 1,  "Middle shelf": 5,  "Bottom shelf": 8, Freezer: 0, Trash: 3 },
+  { card: "Eggs",               Door: 7,  "Top shelf": 1,  "Middle shelf": 3,  "Bottom shelf": 9, Freezer: 0, Trash: 0 },
 ];
 
-const TOTAL = 20;
-
-// Hardcoded distribution: card -> category -> count
-const DATA: Record<string, Record<string, number>> = {
-  Ketchup: { Door: 9, "Middle shelf": 7, Trash: 4 },
-  Mayo: { "Top shelf": 8, "Middle shelf": 5, Door: 4, Trash: 3 },
-  "Leftover pizza": { "Middle shelf": 10, "Bottom shelf": 5, Freezer: 3, "Top shelf": 2 },
-  Beer: { Door: 14, "Top shelf": 3, "Middle shelf": 3 },
-  "Oat milk": { "Top shelf": 10, "Middle shelf": 8, Door: 2 },
-  "Mystery tupperware": { Trash: 14, "Bottom shelf": 3, "Middle shelf": 2, Freezer: 1 },
-  "Wilting spinach": { Trash: 17, "Bottom shelf": 2, "Middle shelf": 1 },
-  Cheese: { "Middle shelf": 11, "Top shelf": 6, "Bottom shelf": 2, Door: 1 },
-  "Hot sauce": { Door: 12, "Middle shelf": 4, "Top shelf": 2, Trash: 2 },
-  "Birthday cake": { "Middle shelf": 8, "Top shelf": 4, "Bottom shelf": 3, Freezer: 5 },
-  "Baking soda": { "Bottom shelf": 8, "Middle shelf": 5, Door: 3, Trash: 3, "Top shelf": 1 },
-  Eggs: { "Bottom shelf": 9, Door: 7, "Middle shelf": 3, "Top shelf": 1 },
+// Recharts dataKeys can't include spaces cleanly with the chart config keys —
+// use safe slug keys for both data and config.
+const SLUG: Record<Category, string> = {
+  Door: "door",
+  "Top shelf": "top",
+  "Middle shelf": "middle",
+  "Bottom shelf": "bottom",
+  Freezer: "freezer",
+  Trash: "trash",
 };
 
-// Six shades of gray, one per category, used consistently across sections.
-// Ordered to give clear visual separation in stacked bars.
-const CATEGORY_SHADES: Record<string, string> = {
-  Door: "#000000",
-  "Top shelf": "#333333",
-  "Middle shelf": "#5c5c5c",
-  "Bottom shelf": "#858585",
-  Freezer: "#adadad",
-  Trash: "#d4d4d4",
-};
+const chartConfig = {
+  door:    { label: "Door",         color: "hsl(var(--chart-1))" },
+  top:     { label: "Top shelf",    color: "hsl(var(--chart-2))" },
+  middle:  { label: "Middle shelf", color: "hsl(var(--chart-3))" },
+  bottom:  { label: "Bottom shelf", color: "hsl(var(--chart-4))" },
+  freezer: { label: "Freezer",      color: "hsl(var(--chart-5))" },
+  trash:   { label: "Trash",        color: "hsl(var(--chart-6))" },
+} satisfies ChartConfig;
+
+const chaosConfig = {
+  chaos: { label: "Chaos", color: "hsl(var(--chart-1))" },
+} satisfies ChartConfig;
 
 function pct(n: number) {
   return Math.round((n / TOTAL) * 100);
 }
 
-// Shannon entropy normalized to 0..1, then to 0..100 for display.
-function chaos(counts: Record<string, number>) {
-  const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  if (total === 0) return 0;
+// Per-card percentage data, used by stacked bar chart.
+const BY_CARD = RAW.map((r) => {
+  const out: Record<string, number | string> = { card: r.card };
+  for (const c of CATEGORIES) out[SLUG[c]] = pct(r[c]);
+  return out;
+});
+
+// Entropy normalized to 0..100.
+function chaosOf(r: Row) {
   let h = 0;
-  for (const n of Object.values(counts)) {
-    if (n === 0) continue;
-    const p = n / total;
+  for (const c of CATEGORIES) {
+    const v = r[c];
+    if (v === 0) continue;
+    const p = v / TOTAL;
     h -= p * Math.log2(p);
   }
-  // Max entropy across the six categories
-  const maxH = Math.log2(CATEGORIES.length);
-  return Math.round((h / maxH) * 100);
+  return Math.round((h / Math.log2(CATEGORIES.length)) * 100);
 }
 
-function topCategory(counts: Record<string, number>) {
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  const [cat, n] = sorted[0];
-  return { cat, pct: pct(n) };
-}
+const DISAGREEMENT = RAW.map((r) => ({ card: r.card, chaos: chaosOf(r) }))
+  .sort((a, b) => b.chaos - a.chaos);
 
 export default function FridgeCardSortResults() {
   return (
-    <div className="bg-white text-black space-y-16">
+    <div className="bg-white text-black space-y-12">
       {/* Top metadata row */}
       <section className="flex flex-wrap gap-x-24 gap-y-8 pt-4">
         {[
           { n: TOTAL, label: "participants" },
-          { n: CARDS.length, label: "cards" },
+          { n: RAW.length, label: "cards" },
           { n: CATEGORIES.length, label: "categories" },
         ].map((m) => (
           <div key={m.label}>
-            <div className="text-7xl font-bold leading-none">{m.n}</div>
-            <div className="mt-3 text-xs text-gray-500 uppercase tracking-wide">
+            <div className="text-[64px] font-bold leading-none tracking-tight">
+              {m.n}
+            </div>
+            <div className="mt-3 text-[12px] text-gray-500 uppercase tracking-wide">
               {m.label}
             </div>
           </div>
@@ -108,7 +127,7 @@ export default function FridgeCardSortResults() {
 
 function SectionHeader({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-xs font-bold uppercase tracking-widest pb-2 border-b-4 border-black mb-6">
+    <h2 className="mt-12 text-[11px] font-bold uppercase tracking-[0.15em] pb-2 border-b-4 border-black mb-6 rounded-none">
       {children}
     </h2>
   );
@@ -118,66 +137,65 @@ function ByCardSection() {
   return (
     <section>
       <SectionHeader>By card</SectionHeader>
-
-      {/* Legend */}
-      <div className="flex flex-wrap gap-x-6 gap-y-2 mb-8 text-xs">
-        {CATEGORIES.map((c) => (
-          <div key={c} className="flex items-center gap-2">
-            <span
-              className="inline-block w-4 h-3"
-              style={{ backgroundColor: CATEGORY_SHADES[c] }}
-            />
-            <span>{c}</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="space-y-5">
-        {CARDS.map((card) => {
-          const counts = DATA[card];
-          const top = topCategory(counts);
-          return (
-            <div
-              key={card}
-              className="grid grid-cols-12 gap-4 items-center text-sm"
-            >
-              <div className="col-span-3 font-medium">{card}</div>
-              <div className="col-span-6 flex h-6 w-full">
-                {CATEGORIES.map((cat) => {
-                  const n = counts[cat] ?? 0;
-                  if (n === 0) return null;
+      <ChartContainer
+        config={chartConfig}
+        className="aspect-auto h-[480px] w-full"
+      >
+        <BarChart
+          data={BY_CARD}
+          layout="vertical"
+          margin={{ top: 8, right: 16, bottom: 8, left: 16 }}
+          stackOffset="expand"
+        >
+          <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+          <XAxis
+            type="number"
+            domain={[0, 1]}
+            tickFormatter={(v) => `${Math.round(Number(v) * 100)}%`}
+            stroke="hsl(0 0% 40%)"
+            fontSize={11}
+          />
+          <YAxis
+            type="category"
+            dataKey="card"
+            width={140}
+            stroke="hsl(0 0% 10%)"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                formatter={(value, name) => {
+                  const cfg = chartConfig[name as keyof typeof chartConfig];
                   return (
-                    <div
-                      key={cat}
-                      title={`${cat}: ${n} (${pct(n)}%)`}
-                      style={{
-                        width: `${(n / TOTAL) * 100}%`,
-                        backgroundColor: CATEGORY_SHADES[cat],
-                      }}
-                    />
+                    <div className="flex w-full justify-between gap-4">
+                      <span>{cfg?.label ?? name}</span>
+                      <span className="font-mono font-medium">{value}%</span>
+                    </div>
                   );
-                })}
-              </div>
-              <div className="col-span-3 text-xs text-gray-600">
-                {top.cat} {top.pct}%
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                }}
+              />
+            }
+          />
+          <ChartLegend content={<ChartLegendContent />} />
+          {CATEGORIES.map((c) => (
+            <Bar
+              key={c}
+              dataKey={SLUG[c]}
+              stackId="a"
+              fill={`var(--color-${SLUG[c]})`}
+              isAnimationActive={false}
+            />
+          ))}
+        </BarChart>
+      </ChartContainer>
     </section>
   );
 }
 
 function MatrixSection() {
-  // Darker fill for higher percentages. Pure black at 100%, white at 0%.
-  const fill = (p: number) => {
-    if (p === 0) return "transparent";
-    // Map 0..100 -> 0.05..0.95 alpha
-    const a = 0.05 + (p / 100) * 0.9;
-    return `rgba(0,0,0,${a.toFixed(3)})`;
-  };
-
   return (
     <section>
       <SectionHeader>Matrix</SectionHeader>
@@ -185,7 +203,7 @@ function MatrixSection() {
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr>
-              <th className="text-left p-2 border-b border-black font-medium"></th>
+              <th className="text-left p-2 border-b border-black font-medium" />
               {CATEGORIES.map((c) => (
                 <th
                   key={c}
@@ -197,67 +215,98 @@ function MatrixSection() {
             </tr>
           </thead>
           <tbody>
-            {CARDS.map((card) => {
-              const counts = DATA[card];
-              return (
-                <tr key={card}>
-                  <td className="p-2 font-medium border-b border-gray-200 whitespace-nowrap">
-                    {card}
-                  </td>
-                  {CATEGORIES.map((cat) => {
-                    const n = counts[cat] ?? 0;
-                    const p = pct(n);
-                    return (
-                      <td
-                        key={cat}
-                        className="p-2 border-b border-gray-200 text-center"
-                        style={{
-                          backgroundColor: fill(p),
-                          color: p >= 55 ? "white" : "black",
-                        }}
-                      >
-                        {p === 0 ? "" : `${p}%`}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+            {RAW.map((r) => (
+              <tr key={r.card}>
+                <td className="p-2 font-medium border-b border-gray-200 whitespace-nowrap">
+                  {r.card}
+                </td>
+                {CATEGORIES.map((c) => {
+                  const p = pct(r[c]);
+                  // Background = category color at low opacity, scaled.
+                  // Map 0..100% → 0..0.85 alpha.
+                  const alpha = p === 0 ? 0 : 0.1 + (p / 100) * 0.75;
+                  return (
+                    <td
+                      key={c}
+                      className="p-2 border-b border-gray-200 text-center"
+                      style={{
+                        backgroundColor:
+                          p === 0
+                            ? "transparent"
+                            : `hsl(var(--color-${SLUG[c]}) / ${alpha.toFixed(3)})`,
+                        color: p >= 60 && (c === "Door" || c === "Top shelf")
+                          ? "white"
+                          : "black",
+                        // The CSS var --color-* is provided by ChartContainer scope,
+                        // so we inline the literal HSL value instead.
+                      }}
+                    >
+                      {p === 0 ? "" : `${p}%`}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
+      {/* CSS shim: expose chart colors as CSS vars for the matrix cells */}
+      <style>{`
+        section :where(td) { --color-door: var(--chart-1); }
+      `}</style>
     </section>
   );
 }
 
 function DisagreementSection() {
-  const ranked = CARDS.map((card) => ({
-    card,
-    chaos: chaos(DATA[card]),
-  })).sort((a, b) => b.chaos - a.chaos);
-
   return (
     <section>
       <SectionHeader>Disagreement</SectionHeader>
-      <div className="space-y-3">
-        {ranked.map((r) => (
-          <div
-            key={r.card}
-            className="grid grid-cols-12 gap-4 items-center text-sm"
-          >
-            <div className="col-span-3 font-medium">{r.card}</div>
-            <div className="col-span-7 h-4 bg-gray-100">
-              <div
-                className="h-full bg-black"
-                style={{ width: `${r.chaos}%` }}
+      <ChartContainer
+        config={chaosConfig}
+        className="aspect-auto h-[420px] w-full"
+      >
+        <BarChart
+          data={DISAGREEMENT}
+          layout="vertical"
+          margin={{ top: 8, right: 32, bottom: 8, left: 16 }}
+        >
+          <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+          <XAxis
+            type="number"
+            domain={[0, 100]}
+            tickFormatter={(v) => `${v}%`}
+            stroke="hsl(0 0% 40%)"
+            fontSize={11}
+          />
+          <YAxis
+            type="category"
+            dataKey="card"
+            width={140}
+            stroke="hsl(0 0% 10%)"
+            fontSize={12}
+            tickLine={false}
+            axisLine={false}
+          />
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                formatter={(value) => (
+                  <div className="flex w-full justify-between gap-4">
+                    <span>Chaos</span>
+                    <span className="font-mono font-medium">{value}%</span>
+                  </div>
+                )}
               />
-            </div>
-            <div className="col-span-2 text-xs text-gray-600">
-              {r.chaos}% chaos
-            </div>
-          </div>
-        ))}
-      </div>
+            }
+          />
+          <Bar
+            dataKey="chaos"
+            fill="var(--color-chaos)"
+            isAnimationActive={false}
+          />
+        </BarChart>
+      </ChartContainer>
     </section>
   );
 }
