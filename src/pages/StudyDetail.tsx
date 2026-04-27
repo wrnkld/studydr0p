@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import StudyResultsView from "@/components/StudyResultsView";
+import { PageContainer } from "@/components/study/primitives";
 
 export default function StudyDetail() {
   const { id } = useParams();
@@ -56,18 +57,20 @@ export default function StudyDetail() {
   if (!id) return null;
 
   return (
-    <main className="container py-8 space-y-6">
-      <div className="flex items-center justify-between gap-3">
+    <PageContainer>
+      <header className="flex items-center justify-between gap-3">
         <div className="space-y-1">
           <Link to={`/studies/${id}`} className="text-sm underline">
             ← Back to builder
           </Link>
-          <h1>{title || "Untitled"} · Results</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            {title || "Untitled"} · Results
+          </h1>
         </div>
         <Button variant="outline" size="sm" onClick={() => setConfirmOpen(true)}>
           Delete
         </Button>
-      </div>
+      </header>
 
       <StudyResultsView studyId={id} />
 
