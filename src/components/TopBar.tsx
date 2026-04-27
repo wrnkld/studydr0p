@@ -17,6 +17,12 @@ export default function TopBar() {
 
   // Hide on participant-facing routes — they should be chrome-free.
   if (location.pathname.startsWith("/s/")) return null;
+  // Marketing/showcase pages use the floating pill instead.
+  if (
+    location.pathname === "/" ||
+    location.pathname.startsWith("/examples/")
+  )
+    return null;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">

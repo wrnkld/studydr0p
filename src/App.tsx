@@ -30,7 +30,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <StudyToolbarProvider>
-            <RouteChrome />
+            <TopBar />
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/examples/:id" element={<ExampleStudy />} />
