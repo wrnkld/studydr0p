@@ -263,7 +263,7 @@ function HBar({
           tickLine={false}
           axisLine={false}
           interval={0}
-          
+          width={120}
         />
         <ChartTooltip
           content={
