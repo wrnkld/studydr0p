@@ -8,6 +8,7 @@ import {
   BinaryDonut,
   type CountMap,
 } from "@/components/survey/SurveyChart";
+import { SectionHeader } from "@/components/study/primitives";
 
 interface ResponseRow {
   id: string;
@@ -77,12 +78,10 @@ export default function SurveyResults({ studyId, config, responses }: Props) {
     <div className="space-y-8">
       {summaries.map(({ q, counts, texts }, i) => (
         <section key={q.id} className="space-y-4">
-          <div className="border-b pb-2">
-            <div className="text-xs uppercase tracking-wide text-muted-foreground">
-              Question {i + 1}
-            </div>
-            <h3 className="mt-1 text-base font-medium">{q.label || q.id}</h3>
-          </div>
+          <SectionHeader
+            kicker={`Question ${i + 1}`}
+            title={q.label || q.id}
+          />
           <QuestionViz q={q} counts={counts} texts={texts} total={total} />
         </section>
       ))}
