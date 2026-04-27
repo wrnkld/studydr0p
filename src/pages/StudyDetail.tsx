@@ -91,6 +91,6 @@ export default function StudyDetail() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </main>
+    </PageContainer>
   );
 }
