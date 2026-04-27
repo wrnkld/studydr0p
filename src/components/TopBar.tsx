@@ -62,7 +62,7 @@ function BackLink() {
 }
 
 function StudyActions() {
-  const { actions } = useStudyToolbar();
+  const { actions, requestDelete } = useStudyToolbar();
   return (
     <>
       <Button
@@ -78,7 +78,7 @@ function StudyActions() {
         size="sm"
         className="h-8 px-3 text-xs"
         disabled={!actions}
-        onClick={() => actions?.onDelete()}
+        onClick={() => (requestDelete ? requestDelete() : actions?.onDelete())}
       >
         Delete
       </Button>
