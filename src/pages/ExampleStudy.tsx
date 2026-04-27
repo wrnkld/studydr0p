@@ -74,15 +74,23 @@ export default function ExampleStudy() {
             <TabsContent value="preview" className="pt-4">
               {isFridge ? (
                 <FridgeCardSortDemo
-                  onSubmit={() => {
-                    setSubmittedSort(true);
+                  onSubmit={(placement) => {
+                    setFridgePlacement(placement);
+                    toast.success("Thanks! Your answers are mixed into the results.");
                     setTab("results");
                   }}
                 />
               ) : (
                 <GasStationSurveyDemo
-                  onSubmit={() => {
-                    setSubmittedSort(true);
+                  onSubmit={(answers) => {
+                    setGasAnswers({
+                      q1: answers.q1 as string | undefined,
+                      q2: answers.q2 as number | undefined,
+                      q3: answers.q3 as string[] | undefined,
+                      q4: answers.q4 as string | undefined,
+                      q5: answers.q5 as string | undefined,
+                    });
+                    toast.success("Thanks! Your answers are mixed into the results.");
                     setTab("results");
                   }}
                 />
@@ -90,7 +98,11 @@ export default function ExampleStudy() {
             </TabsContent>
 
             <TabsContent value="results" className="space-y-4 pt-4">
-              {isFridge ? <FridgeCardSortResults /> : <GasStationSurveyResults />}
+              {isFridge ? (
+                <FridgeCardSortResults userPlacement={fridgePlacement} />
+              ) : (
+                <GasStationSurveyResults userAnswers={gasAnswers} />
+              )}
             </TabsContent>
           </Tabs>
         </>
