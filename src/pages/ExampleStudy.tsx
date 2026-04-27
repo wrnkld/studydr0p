@@ -57,14 +57,16 @@ export default function ExampleStudy() {
   };
 
   return (
-    <main className="container py-8 space-y-6">
+    <PageContainer>
       {isFridge || isGasStation ? (
         <>
-          <h1>
-            {isFridge
-              ? "Where does it go in the fridge?"
-              : "Gas station food. No judgment."}
-          </h1>
+          <PageHeader
+            title={
+              isFridge
+                ? "Where does it go in the fridge?"
+                : "Gas station food. No judgment."
+            }
+          />
 
           <Tabs value={tab} onValueChange={(v) => setTab(v as "preview" | "results")}>
             <TabsList>
@@ -109,13 +111,15 @@ export default function ExampleStudy() {
         </>
       ) : study ? (
         <>
-          <div className="space-y-1">
-            <Link to="/" className="text-sm underline text-muted-foreground">
-              ← Examples
-            </Link>
-            <h1>{study.title}</h1>
-            <p className="text-muted-foreground">{study.question}</p>
-          </div>
+          <PageHeader
+            kicker={
+              <Link to="/" className="underline">
+                ← Examples
+              </Link>
+            }
+            title={study.title}
+            description={study.question}
+          />
           {study.type === "survey" ? (
             <SurveyResultsView study={study} />
           ) : (
@@ -130,7 +134,7 @@ export default function ExampleStudy() {
           <Button onClick={onDuplicate}>Duplicate this study</Button>
         </section>
       )}
-    </main>
+    </PageContainer>
   );
 }
 
