@@ -28,14 +28,13 @@ const COLORS = {
   red:     "hsl(0 72% 51%)",
 } as const;
 
-const PALETTE = [
-  COLORS.primary,
-  COLORS.green,
-  COLORS.amber,
-  COLORS.purple,
-  COLORS.cyan,
-  COLORS.red,
-];
+// Map a value to a blue shade — higher value = darker.
+function shadeFor(value: number, max: number) {
+  const t = max > 0 ? value / max : 0;
+  // Lightness from 80% (lightest) down to 35% (darkest).
+  const lightness = 80 - t * 45;
+  return `hsl(221 83% ${lightness}%)`;
+}
 
 const barConfig = {
   value: { label: "Responses", color: COLORS.primary },
@@ -156,9 +155,10 @@ export default function GasStationSurveyResults() {
               fill="var(--color-value)"
               isAnimationActive={false}
             >
-              {Q2_DIST.map((_, i) => (
-                <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-              ))}
+              {Q2_DIST.map((d, i) => {
+                const max = Math.max(...Q2_DIST.map((x) => x.value));
+                return <Cell key={i} fill={shadeFor(d.value, max)} />;
+              })}
             </Bar>
           </BarChart>
         </ChartContainer>
@@ -288,9 +288,10 @@ function HBar({
           fill="var(--color-value)"
           isAnimationActive={false}
         >
-          {data.map((_, i) => (
-            <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-          ))}
+          {data.map((d, i) => {
+            const max = Math.max(...data.map((x) => x.value));
+            return <Cell key={i} fill={shadeFor(d.value, max)} />;
+          })}
         </Bar>
       </BarChart>
     </ChartContainer>
