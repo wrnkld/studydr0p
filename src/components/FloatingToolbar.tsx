@@ -109,12 +109,13 @@ export default function FloatingToolbar() {
   const { session } = useAuth();
   const location = useLocation();
 
-  // Floating pill is reserved for marketing/showcase pages.
-  // The authenticated app uses TopBar instead.
+  // Floating pill is reserved for the logged-out marketing/showcase pages.
+  // Once signed in (or anywhere in the app), TopBar takes over.
+  if (session) return null;
+
   const isShowcase =
     location.pathname === "/" || location.pathname.startsWith("/examples/");
   if (!isShowcase) return null;
 
-  if (session) return <LoggedInHomeBar />;
   return <LoggedOutBar />;
 }
