@@ -66,16 +66,25 @@ const SLUG: Record<Category, string> = {
   Trash: "trash",
 };
 
-// Local chart palette — overrides the monochrome app theme so categories
-// are visually distinguishable. Recharts-style defaults.
+// Category palette — references chart tokens so dark mode and theming work.
 const COLORS = {
-  door:    "hsl(221 83% 53%)",  // blue
-  top:     "hsl(142 71% 45%)",  // green
-  middle:  "hsl(38 92% 50%)",   // amber
-  bottom:  "hsl(271 76% 53%)",  // purple
-  freezer: "hsl(199 89% 48%)",  // cyan
-  trash:   "hsl(0 72% 51%)",    // red
+  door:    "hsl(var(--chart-1))",
+  top:     "hsl(var(--chart-2))",
+  middle:  "hsl(var(--chart-3))",
+  bottom:  "hsl(var(--chart-4))",
+  freezer: "hsl(var(--chart-5))",
+  trash:   "hsl(var(--chart-6))",
 } as const;
+
+// Raw HSL triplets for the matrix (we need to inject alpha for cell tinting).
+const COLOR_VARS: Record<keyof typeof COLORS, string> = {
+  door:    "var(--chart-1)",
+  top:     "var(--chart-2)",
+  middle:  "var(--chart-3)",
+  bottom:  "var(--chart-4)",
+  freezer: "var(--chart-5)",
+  trash:   "var(--chart-6)",
+};
 
 const chartConfig = {
   door:    { label: "Door",         color: COLORS.door },
