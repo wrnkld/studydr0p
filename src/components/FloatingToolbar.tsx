@@ -109,8 +109,11 @@ export default function FloatingToolbar() {
   const { session } = useAuth();
   const location = useLocation();
 
-  // Hide on participant-facing routes — they should be chrome-free.
-  if (location.pathname.startsWith("/s/")) return null;
+  // Floating pill is reserved for marketing/showcase pages.
+  // The authenticated app uses TopBar instead.
+  const isShowcase =
+    location.pathname === "/" || location.pathname.startsWith("/examples/");
+  if (!isShowcase) return null;
 
   if (session) return <LoggedInHomeBar />;
   return <LoggedOutBar />;
