@@ -189,7 +189,7 @@ export function BinaryDonut({
             nameKey="label"
             innerRadius="55%"
             outerRadius="85%"
-            stroke="hsl(0 0% 100%)"
+            stroke="hsl(var(--background))"
             strokeWidth={2}
             isAnimationActive={false}
           >
