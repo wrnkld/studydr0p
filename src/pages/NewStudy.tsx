@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 const TYPES: { id: StudyType; label: string }[] = [
   { id: "card_sort", label: "Card sort" },
@@ -58,8 +59,8 @@ export default function NewStudy() {
   }, [searchParams, user, creating]);
 
   return (
-    <main className="container py-8 space-y-4">
-      <h1>New study</h1>
+    <PageContainer space="md">
+      <PageHeader title="New study" />
       <div className="flex flex-wrap gap-2">
         {TYPES.map((t) => (
           <Button
@@ -72,6 +73,6 @@ export default function NewStudy() {
           </Button>
         ))}
       </div>
-    </main>
+    </PageContainer>
   );
 }

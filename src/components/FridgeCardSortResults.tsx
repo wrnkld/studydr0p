@@ -21,7 +21,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { SectionHeader } from "@/components/study/primitives";
+import { SectionHeader, Stat, StatGrid } from "@/components/study/primitives";
 
 const SEED_TOTAL = 20;
 
@@ -66,16 +66,25 @@ const SLUG: Record<Category, string> = {
   Trash: "trash",
 };
 
-// Local chart palette — overrides the monochrome app theme so categories
-// are visually distinguishable. Recharts-style defaults.
+// Category palette — references chart tokens so dark mode and theming work.
 const COLORS = {
-  door:    "hsl(221 83% 53%)",  // blue
-  top:     "hsl(142 71% 45%)",  // green
-  middle:  "hsl(38 92% 50%)",   // amber
-  bottom:  "hsl(271 76% 53%)",  // purple
-  freezer: "hsl(199 89% 48%)",  // cyan
-  trash:   "hsl(0 72% 51%)",    // red
+  door:    "hsl(var(--chart-1))",
+  top:     "hsl(var(--chart-2))",
+  middle:  "hsl(var(--chart-3))",
+  bottom:  "hsl(var(--chart-4))",
+  freezer: "hsl(var(--chart-5))",
+  trash:   "hsl(var(--chart-6))",
 } as const;
+
+// Raw HSL triplets for the matrix (we need to inject alpha for cell tinting).
+const COLOR_VARS: Record<keyof typeof COLORS, string> = {
+  door:    "var(--chart-1)",
+  top:     "var(--chart-2)",
+  middle:  "var(--chart-3)",
+  bottom:  "var(--chart-4)",
+  freezer: "var(--chart-5)",
+  trash:   "var(--chart-6)",
+};
 
 const chartConfig = {
   door:    { label: "Door",         color: COLORS.door },
@@ -132,11 +141,11 @@ export default function FridgeCardSortResults({ userPlacement }: Props) {
 
   return (
     <div className="space-y-8">
-      <section className="grid grid-cols-3 gap-4">
+      <StatGrid>
         <Stat label="Responses" value={String(total)} />
         <Stat label="Cards" value={String(rows.length)} />
         <Stat label="Categories" value={String(CATEGORIES.length)} />
-      </section>
+      </StatGrid>
 
       <ByCardSection data={byCard} />
       <MatrixSection rows={rows} pct={pct} />
@@ -145,14 +154,7 @@ export default function FridgeCardSortResults({ userPlacement }: Props) {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border p-4">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-xl font-medium">{value}</div>
-    </div>
-  );
-}
+// (local Stat removed — now imported from @/components/study/primitives)
 
 // (was a local SectionHeader — now using the shared one from primitives)
 
@@ -170,19 +172,19 @@ function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
           margin={{ top: 8, right: 16, bottom: 8, left: 16 }}
           stackOffset="expand"
         >
-          <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+          <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
           <XAxis
             type="number"
             domain={[0, 1]}
             tickFormatter={(v) => `${Math.round(Number(v) * 100)}%`}
-            stroke="hsl(0 0% 40%)"
+            stroke="hsl(var(--chart-axis))"
             fontSize={11}
           />
           <YAxis
             type="category"
             dataKey="card"
             width={140}
-            stroke="hsl(0 0% 10%)"
+            stroke="hsl(var(--foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
@@ -225,13 +227,15 @@ function MatrixSection({
   rows: Row[];
   pct: (n: number) => number;
 }) {
-  const CAT_COLOR: Record<Category, string> = {
-    Door: COLORS.door,
-    "Top shelf": COLORS.top,
-    "Middle shelf": COLORS.middle,
-    "Bottom shelf": COLORS.bottom,
-    Freezer: COLORS.freezer,
-    Trash: COLORS.trash,
+  // Map category → CSS variable name (without the hsl() wrapper) so we can
+  // inject alpha for cell tinting.
+  const CAT_VAR: Record<Category, string> = {
+    Door: COLOR_VARS.door,
+    "Top shelf": COLOR_VARS.top,
+    "Middle shelf": COLOR_VARS.middle,
+    "Bottom shelf": COLOR_VARS.bottom,
+    Freezer: COLOR_VARS.freezer,
+    Trash: COLOR_VARS.trash,
   };
   return (
     <section className="space-y-3">
@@ -268,10 +272,7 @@ function MatrixSection({
                         backgroundColor:
                           p === 0
                             ? "transparent"
-                            : CAT_COLOR[c].replace(
-                                /hsl\(([^)]+)\)/,
-                                `hsl($1 / ${alpha.toFixed(3)})`,
-                              ),
+                            : `hsl(${CAT_VAR[c]} / ${alpha.toFixed(3)})`,
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
@@ -304,19 +305,19 @@ function DisagreementSection({
           layout="vertical"
           margin={{ top: 8, right: 32, bottom: 8, left: 16 }}
         >
-          <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+          <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
           <XAxis
             type="number"
             domain={[0, 100]}
             tickFormatter={(v) => `${v}%`}
-            stroke="hsl(0 0% 40%)"
+            stroke="hsl(var(--chart-axis))"
             fontSize={11}
           />
           <YAxis
             type="category"
             dataKey="card"
             width={140}
-            stroke="hsl(0 0% 10%)"
+            stroke="hsl(var(--foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}

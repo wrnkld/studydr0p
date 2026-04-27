@@ -1,14 +1,89 @@
-// Shared visual primitives used by canned demos and results pages.
-// Goal: one vocabulary so previews and results read as the same product.
+// Shared visual primitives. The design system for the app.
+//
+// Rules:
+//   - Pills (rounded-full): tabs, choice options, draggable cards, scale numbers
+//   - Frames (rounded-md):  containers, drop zones, stat cards
+//   - All colors via design tokens (hsl(var(--*))). No hardcoded colors here.
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
+// ---------- Page shell ----------
+
 /**
- * Section header. Used everywhere a numbered question, a results section,
- * or a step indicator appears.
+ * Standard page shell. Replaces `<main className="container py-8 …">` everywhere.
  *
- * Layout: small uppercase kicker + heading + bottom border.
+ * `width` controls the max content width. Default is the global container.
+ * `space` controls vertical rhythm between immediate children.
+ */
+export function PageContainer({
+  children,
+  width = "default",
+  space = "lg",
+  className,
+}: {
+  children: React.ReactNode;
+  width?: "default" | "narrow" | "wide";
+  space?: "none" | "sm" | "md" | "lg";
+  className?: string;
+}) {
+  return (
+    <main
+      className={cn(
+        "container py-8",
+        width === "narrow" && "max-w-2xl",
+        width === "wide" && "max-w-5xl",
+        space === "sm" && "space-y-2",
+        space === "md" && "space-y-4",
+        space === "lg" && "space-y-6",
+        className,
+      )}
+    >
+      {children}
+    </main>
+  );
+}
+
+/**
+ * Page-level header. h1 + optional kicker + optional description.
+ */
+export function PageHeader({
+  kicker,
+  title,
+  description,
+  actions,
+  className,
+}: {
+  kicker?: React.ReactNode;
+  title: React.ReactNode;
+  description?: React.ReactNode;
+  /** Right-aligned actions (buttons, links). */
+  actions?: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <header className={cn("flex items-start justify-between gap-4", className)}>
+      <div className="space-y-1">
+        {kicker ? (
+          <div className="text-xs uppercase tracking-wide text-muted-foreground">
+            {kicker}
+          </div>
+        ) : null}
+        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+        {description ? (
+          <p className="text-sm text-muted-foreground">{description}</p>
+        ) : null}
+      </div>
+      {actions ? <div className="flex shrink-0 gap-2">{actions}</div> : null}
+    </header>
+  );
+}
+
+// ---------- Section header / kicker ----------
+
+/**
+ * Section header. Kicker + heading + bottom border. Use inside PageContainer
+ * for any sub-section ("Question 1", "By card", etc).
  */
 export function SectionHeader({
   kicker,
@@ -54,9 +129,10 @@ export function Kicker({
   );
 }
 
+// ---------- Frame ----------
+
 /**
- * Bordered container. Used for drop zones and any "card-like" grouping
- * where children need a frame.
+ * Bordered container. Used for drop zones, card-like groupings, stat cards.
  */
 export const Frame = React.forwardRef<
   HTMLDivElement,
@@ -82,14 +158,68 @@ export const Frame = React.forwardRef<
 });
 Frame.displayName = "Frame";
 
+// ---------- Stat ----------
+
 /**
- * Pill/chip primitive — the universal answer button + draggable card shape.
+ * Numeric stat card. Use inside a grid (e.g., 3-up summary at the top of
+ * a results page).
+ */
+export function Stat({
+  label,
+  value,
+  className,
+}: {
+  label: React.ReactNode;
+  value: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cn("rounded-md border p-4", className)}>
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="mt-1 text-xl font-medium">{value}</div>
+    </div>
+  );
+}
+
+/**
+ * Convenience grid wrapper for a row of stats. Defaults to 3 columns.
+ */
+export function StatGrid({
+  children,
+  cols = 3,
+  className,
+}: {
+  children: React.ReactNode;
+  cols?: 2 | 3 | 4;
+  className?: string;
+}) {
+  return (
+    <section
+      className={cn(
+        "grid gap-4",
+        cols === 2 && "grid-cols-2",
+        cols === 3 && "grid-cols-3",
+        cols === 4 && "grid-cols-2 md:grid-cols-4",
+        className,
+      )}
+    >
+      {children}
+    </section>
+  );
+}
+
+// ---------- Chip ----------
+
+/**
+ * Pill primitive — the universal answer button + draggable card shape.
  * Used for choice options, drag cards, scale numbers.
+ *
+ * Shape: rounded-full. Always.
  */
 export interface ChipProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
   selected?: boolean;
-  /** Compact square variant for scale numbers. */
+  /** Compact circular variant for scale numbers. */
   size?: "default" | "icon";
   /** Use grab cursor (drag affordance). */
   draggable?: boolean;
@@ -116,15 +246,15 @@ export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
         type="button"
         className={cn(
           // base
-          "inline-flex items-center justify-center rounded-md border bg-background text-sm font-medium select-none transition-colors",
+          "inline-flex items-center justify-center rounded-full border bg-background text-sm font-medium select-none transition-colors",
           "hover:bg-accent hover:text-accent-foreground",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           "disabled:pointer-events-none disabled:opacity-50",
           // size
-          size === "icon" ? "h-9 w-9 px-0" : "px-3 py-1.5",
+          size === "icon" ? "h-9 w-9 px-0" : "px-4 py-1.5",
           // block
           block && "w-full justify-start",
-          // selected — shadcn-default-button-equivalent: dark bg, light text
+          // selected — inverted fill via tokens
           selected &&
             "border-foreground bg-foreground text-background hover:bg-foreground hover:text-background",
           // draggable

@@ -24,25 +24,26 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 
-// Map a value to a blue shade — higher value = darker.
+// Map a value to a chart-1 (blue) shade — higher value = darker.
+// Uses HSL alpha to lighten so we don't need extra tokens.
 export function shadeFor(value: number, max: number) {
   const t = max > 0 ? value / max : 0;
-  const lightness = 80 - t * 45;
-  return `hsl(221 83% ${lightness}%)`;
+  // alpha 0.3 (lightest) → 1.0 (darkest)
+  const alpha = 0.3 + t * 0.7;
+  return `hsl(var(--chart-1) / ${alpha.toFixed(3)})`;
 }
 
-const AXIS_COLOR = "hsl(0 0% 40%)";
-const GRID_COLOR = "hsl(0 0% 92%)";
+const AXIS_COLOR = "hsl(var(--chart-axis))";
+const GRID_COLOR = "hsl(var(--chart-grid))";
 const CHART_HEIGHT = 240;
 const CHART_MARGIN = { top: 8, right: 16, bottom: 8, left: 8 };
 const Y_AXIS_WIDTH = 120;
 
-// Donut palette for binary: yes-ish answers get the primary blue, the other gets red-ish.
-// Falls back to two distinct hues for non-yes/no binaries.
-const BINARY_COLORS = ["hsl(221 83% 53%)", "hsl(0 72% 51%)"];
+// Donut palette for binary: yes-ish answers get chart-1, the other gets chart-6.
+const BINARY_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-6))"];
 
 const barConfig = {
-  value: { label: "Responses", color: "hsl(221 83% 53%)" },
+  value: { label: "Responses", color: "hsl(var(--chart-1))" },
 } satisfies ChartConfig;
 
 export type CountMap = Record<string, number>;
@@ -188,7 +189,7 @@ export function BinaryDonut({
             nameKey="label"
             innerRadius="55%"
             outerRadius="85%"
-            stroke="hsl(0 0% 100%)"
+            stroke="hsl(var(--background))"
             strokeWidth={2}
             isAnimationActive={false}
           >
