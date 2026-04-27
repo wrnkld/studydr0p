@@ -11,6 +11,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import FloatingToolbar from "@/components/FloatingToolbar";
+import TopBar from "@/components/TopBar";
 import { StudyToolbarProvider } from "@/components/StudyToolbarContext";
 import Landing from "./pages/Landing";
 import ExampleStudy from "./pages/ExampleStudy";
@@ -29,6 +30,7 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <StudyToolbarProvider>
+            <RouteChrome />
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/examples/:id" element={<ExampleStudy />} />
