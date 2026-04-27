@@ -154,11 +154,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function SectionHeader({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="text-base font-medium border-b pb-2">{children}</h3>
-  );
-}
+// (was a local SectionHeader — now using the shared one from primitives)
 
 function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
   return (
