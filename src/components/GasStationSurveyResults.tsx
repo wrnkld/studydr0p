@@ -36,6 +36,12 @@ function shadeFor(value: number, max: number) {
   return `hsl(221 83% ${lightness}%)`;
 }
 
+// Shared chart constants — applied to every chart on this page.
+const CHART_MARGIN = { top: 8, right: 16, bottom: 8, left: 8 };
+const CHART_HEIGHT = 240;
+const AXIS_COLOR = "hsl(0 0% 40%)";
+const GRID_COLOR = "hsl(0 0% 92%)";
+
 const barConfig = {
   value: { label: "Responses", color: COLORS.primary },
 } satisfies ChartConfig;
@@ -117,26 +123,25 @@ export default function GasStationSurveyResults() {
       >
         <ChartContainer
           config={barConfig}
-          className="aspect-auto h-[220px] w-full"
+          className="aspect-auto w-full"
+          style={{ height: CHART_HEIGHT }}
         >
-          <BarChart
-            data={Q2_DIST}
-            margin={{ top: 8, right: 16, bottom: 8, left: 8 }}
-          >
-            <CartesianGrid vertical={false} stroke="hsl(0 0% 90%)" />
+          <BarChart data={Q2_DIST} margin={CHART_MARGIN}>
+            <CartesianGrid vertical={false} stroke={GRID_COLOR} />
             <XAxis
               dataKey="score"
-              stroke="hsl(0 0% 10%)"
+              stroke={AXIS_COLOR}
               fontSize={12}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
-              stroke="hsl(0 0% 40%)"
-              fontSize={11}
+              stroke={AXIS_COLOR}
+              fontSize={12}
               tickLine={false}
               axisLine={false}
               allowDecimals={false}
+              width={32}
             />
             <ChartTooltip
               content={
@@ -233,40 +238,32 @@ function HBar({
 }: {
   data: { label: string; value: number }[];
 }) {
-  // Height scales with row count.
-  const h = Math.max(180, data.length * 44);
-  // Label column sized to the longest label (approx 7px per char), capped so
-  // the bar always has room. Tailwind clamps it tighter on small screens.
-  const longest = data.reduce((m, d) => Math.max(m, d.label.length), 0);
-  const labelW = Math.min(180, Math.max(80, longest * 7 + 12));
   return (
     <ChartContainer
       config={barConfig}
       className="aspect-auto w-full"
-      style={{ height: h }}
+      style={{ height: CHART_HEIGHT }}
     >
-      <BarChart
-        data={data}
-        layout="vertical"
-        margin={{ top: 8, right: 24, bottom: 8, left: 0 }}
-      >
-        <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+      <BarChart data={data} layout="vertical" margin={CHART_MARGIN}>
+        <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
         <XAxis
           type="number"
           domain={[0, TOTAL]}
-          stroke="hsl(0 0% 40%)"
-          fontSize={11}
+          stroke={AXIS_COLOR}
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
           allowDecimals={false}
         />
         <YAxis
           type="category"
           dataKey="label"
-          width={labelW}
-          stroke="hsl(0 0% 10%)"
+          stroke={AXIS_COLOR}
           fontSize={12}
           tickLine={false}
           axisLine={false}
           interval={0}
+          width="auto"
         />
         <ChartTooltip
           content={
