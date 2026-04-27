@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -13,8 +13,21 @@ import CardSortBuilder from "./builders/CardSortBuilder";
 
 import StudyResultsView from "@/components/StudyResultsView";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 interface StudyRow {
   id: string;
@@ -31,13 +44,23 @@ type TabKey = "build" | "preview" | "results";
 export default function StudyBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
+  const { actions } = useStudyToolbar();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const tabParam = searchParams.get("tab");
   const activeTab: TabKey =
     tabParam === "preview" || tabParam === "results" ? tabParam : "build";
+
+  const setTab = (next: TabKey) => {
+    const params = new URLSearchParams(searchParams);
+    if (next === "build") params.delete("tab");
+    else params.set("tab", next);
+    setSearchParams(params, { replace: true });
+  };
 
   useEffect(() => {
     if (!id) return;
@@ -75,11 +98,23 @@ export default function StudyBuilder() {
     [study?.slug],
   );
 
+  const handleDelete = async () => {
+    if (!actions) return;
+    setDeleting(true);
+    try {
+      await actions.onDelete();
+      navigate("/", { replace: true });
+    } finally {
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
+  };
+
   if (loading || !study) {
     return (
-      <main className="container py-8">
+      <PageContainer>
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </main>
+      </PageContainer>
     );
   }
 
@@ -116,13 +151,71 @@ export default function StudyBuilder() {
     );
 
   return (
-    <main className="container py-8">
-      {activeTab === "build" && builder}
-      {activeTab === "preview" && (
-        <InlinePreview study={study} shareUrl={shareUrl} />
-      )}
-      {activeTab === "results" && <StudyResultsView studyId={study.id} />}
-    </main>
+    <PageContainer>
+      <PageHeader
+        kicker={
+          <Link to="/" className="underline">
+            ← All studies
+          </Link>
+        }
+        title={study.title || "Untitled study"}
+        actions={
+          <>
+            <Button
+              size="sm"
+              disabled={!actions || actions.saving}
+              onClick={() => actions?.onSave()}
+            >
+              {actions?.saving ? "Saving…" : "Save"}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!actions}
+              onClick={() => setConfirmDelete(true)}
+            >
+              Delete
+            </Button>
+          </>
+        }
+      />
+
+      <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
+        <TabsList>
+          <TabsTrigger value="build">Build</TabsTrigger>
+          <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="results">Results</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="build" className="pt-4">
+          {builder}
+        </TabsContent>
+        <TabsContent value="preview" className="pt-4">
+          <InlinePreview study={study} shareUrl={shareUrl} />
+        </TabsContent>
+        <TabsContent value="results" className="pt-4">
+          <StudyResultsView studyId={study.id} />
+        </TabsContent>
+      </Tabs>
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this study?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes the study and all of its responses. This
+              action can't be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} disabled={deleting}>
+              {deleting ? "Deleting…" : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </PageContainer>
   );
 }
 
@@ -142,20 +235,18 @@ function InlinePreview({
   }, [study.id, study.config, study.title]);
 
   return (
-    <div className="pt-4">
-      <div className="rounded-md border p-6">
-        <PreviewBody
-          study={study}
-          started={started}
-          done={done}
-          onStart={() => setStarted(true)}
-          onDone={() => setDone(true)}
-          onRestart={() => {
-            setDone(false);
-            setStarted(false);
-          }}
-        />
-      </div>
+    <div className="rounded-md border p-6">
+      <PreviewBody
+        study={study}
+        started={started}
+        done={done}
+        onStart={() => setStarted(true)}
+        onDone={() => setDone(true)}
+        onRestart={() => {
+          setDone(false);
+          setStarted(false);
+        }}
+      />
     </div>
   );
 }

@@ -1,29 +1,10 @@
 import { FormEvent, useState } from "react";
-import {
-  Link,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
-import { useStudyToolbar } from "./StudyToolbarContext";
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
@@ -43,9 +24,6 @@ function Logo() {
   );
 }
 
-function Divider() {
-  return <Separator orientation="vertical" className="h-5" />;
-}
 
 function SignInForm() {
   const [email, setEmail] = useState("");
@@ -127,122 +105,13 @@ function LoggedInHomeBar() {
   );
 }
 
-function StudyBar() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const { actions } = useStudyToolbar();
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const navigate = useNavigate();
-
-  const tabParam = searchParams.get("tab");
-  const activeTab =
-    tabParam === "preview" || tabParam === "results" ? tabParam : "build";
-
-  const setTab = (next: "build" | "preview" | "results") => {
-    const params = new URLSearchParams(searchParams);
-    if (next === "build") params.delete("tab");
-    else params.set("tab", next);
-    setSearchParams(params, { replace: true });
-  };
-
-  const handleDelete = async () => {
-    if (!actions) return;
-    setDeleting(true);
-    try {
-      await actions.onDelete();
-      navigate("/", { replace: true });
-    } finally {
-      setDeleting(false);
-      setConfirmDelete(false);
-    }
-  };
-
-  const TabBtn = ({
-    value,
-    children,
-  }: {
-    value: "build" | "preview" | "results";
-    children: React.ReactNode;
-  }) => (
-    <button
-      type="button"
-      onClick={() => setTab(value)}
-      className={cn(
-        "text-sm transition-colors",
-        activeTab === value
-          ? "font-medium text-foreground"
-          : "font-normal text-muted-foreground hover:text-foreground",
-      )}
-    >
-      {children}
-    </button>
-  );
-
-  return (
-    <>
-      <Shell>
-        <Logo />
-        <div className="flex items-center gap-3">
-          <TabBtn value="build">Build</TabBtn>
-          <TabBtn value="preview">Preview</TabBtn>
-          <TabBtn value="results">Results</TabBtn>
-          <Divider />
-          <Button
-            size="sm"
-            className="h-7 px-3 text-xs"
-            disabled={!actions || actions.saving}
-            onClick={() => actions?.onSave()}
-          >
-            {actions?.saving ? "Saving…" : "Save"}
-          </Button>
-          <button
-            type="button"
-            className="text-sm text-muted-foreground hover:text-foreground"
-            disabled={!actions}
-            onClick={() => setConfirmDelete(true)}
-          >
-            Delete
-          </button>
-        </div>
-      </Shell>
-
-      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete this study?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This permanently removes the study and all of its responses. This
-              action can't be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} disabled={deleting}>
-              {deleting ? "Deleting…" : "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </>
-  );
-}
-
 export default function FloatingToolbar() {
   const { session } = useAuth();
   const location = useLocation();
-  const params = useParams();
 
   // Hide on participant-facing routes — they should be chrome-free.
   if (location.pathname.startsWith("/s/")) return null;
 
-  // Inside a study (builder) — show the full study toolbar.
-  const inStudy =
-    !!session &&
-    /^\/studies\/[^/]+(\/.*)?$/.test(location.pathname) &&
-    params.id !== "new" &&
-    !location.pathname.endsWith("/new");
-
-  if (inStudy) return <StudyBar />;
   if (session) return <LoggedInHomeBar />;
   return <LoggedOutBar />;
 }
