@@ -288,9 +288,10 @@ function HBar({
           fill="var(--color-value)"
           isAnimationActive={false}
         >
-          {data.map((_, i) => (
-            <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-          ))}
+          {data.map((d, i) => {
+            const max = Math.max(...data.map((x) => x.value));
+            return <Cell key={i} fill={shadeFor(d.value, max)} />;
+          })}
         </Bar>
       </BarChart>
     </ChartContainer>
