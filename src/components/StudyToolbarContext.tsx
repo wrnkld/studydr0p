@@ -23,13 +23,20 @@ export interface StudyActions {
 interface Ctx {
   actions: StudyActions | null;
   setActions: (a: StudyActions | null) => void;
+  /** If set, TopBar's Delete button calls this instead of actions.onDelete. */
+  requestDelete: (() => void) | null;
+  setRequestDelete: (fn: (() => void) | null) => void;
 }
 
 const StudyToolbarCtx = createContext<Ctx | null>(null);
 
 export function StudyToolbarProvider({ children }: { children: ReactNode }) {
   const [actions, setActions] = useState<StudyActions | null>(null);
-  const value = useMemo(() => ({ actions, setActions }), [actions]);
+  const [requestDelete, setRequestDelete] = useState<(() => void) | null>(null);
+  const value = useMemo(
+    () => ({ actions, setActions, requestDelete, setRequestDelete }),
+    [actions, requestDelete],
+  );
   return <StudyToolbarCtx.Provider value={value}>{children}</StudyToolbarCtx.Provider>;
 }
 

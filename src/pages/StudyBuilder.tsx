@@ -47,7 +47,7 @@ export default function StudyBuilder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
-  const { actions } = useStudyToolbar();
+  const { actions, setRequestDelete } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -92,6 +92,12 @@ export default function StudyBuilder() {
       if (data) setStudy(data as StudyRow);
     })();
   }, [id, activeTab]);
+
+  // Route TopBar's Delete button through the confirm dialog.
+  useEffect(() => {
+    setRequestDelete(() => () => setConfirmDelete(true));
+    return () => setRequestDelete(null);
+  }, [setRequestDelete]);
 
   const shareUrl = useMemo(
     () => (study?.slug ? `${window.location.origin}/s/${study.slug}` : null),
@@ -153,31 +159,7 @@ export default function StudyBuilder() {
   return (
     <PageContainer>
       <PageHeader
-        kicker={
-          <Link to="/" className="underline">
-            ← All studies
-          </Link>
-        }
         title={study.title || "Untitled study"}
-        actions={
-          <>
-            <Button
-              size="sm"
-              disabled={!actions || actions.saving}
-              onClick={() => actions?.onSave()}
-            >
-              {actions?.saving ? "Saving…" : "Save"}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={!actions}
-              onClick={() => setConfirmDelete(true)}
-            >
-              Delete
-            </Button>
-          </>
-        }
       />
 
       <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>

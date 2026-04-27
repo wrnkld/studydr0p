@@ -10,7 +10,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import FloatingToolbar from "@/components/FloatingToolbar";
 import TopBar from "@/components/TopBar";
 import { StudyToolbarProvider } from "@/components/StudyToolbarContext";
 import Landing from "./pages/Landing";
@@ -56,7 +55,6 @@ const App = () => (
 
               <Route path="*" element={<NotFound />} />
             </Routes>
-            <FloatingToolbar />
           </StudyToolbarProvider>
         </AuthProvider>
       </BrowserRouter>
