@@ -159,7 +159,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
   return (
     <section className="space-y-3">
-      <SectionHeader>By card</SectionHeader>
+      <SectionHeader title="By card" />
       <ChartContainer
         config={chartConfig}
         className="aspect-auto h-[480px] w-full"
@@ -235,7 +235,7 @@ function MatrixSection({
   };
   return (
     <section className="space-y-3">
-      <SectionHeader>Matrix</SectionHeader>
+      <SectionHeader title="Matrix" />
       <div className="overflow-x-auto rounded-md border">
         <table className="w-full border-collapse text-xs">
           <thead>
@@ -294,7 +294,7 @@ function DisagreementSection({
 }) {
   return (
     <section className="space-y-3">
-      <SectionHeader>Disagreement</SectionHeader>
+      <SectionHeader title="Disagreement" />
       <ChartContainer
         config={chaosConfig}
         className="aspect-auto h-[420px] w-full"
