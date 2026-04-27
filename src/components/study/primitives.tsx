@@ -58,18 +58,18 @@ export function Kicker({
  * Bordered container. Used for drop zones and any "card-like" grouping
  * where children need a frame.
  */
-export function Frame({
-  children,
-  className,
-  active,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  /** Highlight the frame (e.g., drop-zone hover state). */
-  active?: boolean;
-}) {
+export const Frame = React.forwardRef<
+  HTMLDivElement,
+  {
+    children: React.ReactNode;
+    className?: string;
+    /** Highlight the frame (e.g., drop-zone hover state). */
+    active?: boolean;
+  }
+>(({ children, className, active }, ref) => {
   return (
     <div
+      ref={ref}
       className={cn(
         "rounded-md border p-3 transition-colors",
         active && "bg-muted",
@@ -79,7 +79,8 @@ export function Frame({
       {children}
     </div>
   );
-}
+});
+Frame.displayName = "Frame";
 
 /**
  * Pill/chip primitive — the universal answer button + draggable card shape.
