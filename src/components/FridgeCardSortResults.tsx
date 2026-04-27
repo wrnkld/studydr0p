@@ -154,14 +154,7 @@ export default function FridgeCardSortResults({ userPlacement }: Props) {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border p-4">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-xl font-medium">{value}</div>
-    </div>
-  );
-}
+// (local Stat removed — now imported from @/components/study/primitives)
 
 // (was a local SectionHeader — now using the shared one from primitives)
 
