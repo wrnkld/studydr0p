@@ -42,8 +42,8 @@ const barConfig = {
 
 // ---------- Q1: Hot dog ----------
 const Q1_DATA = [
-  { label: "Yes", value: 10 },
-  { label: "No", value: 6 },
+  { label: "Yes", value: 13 },
+  { label: "No", value: 7 },
 ];
 
 // ---------- Q2: Rating 1-10 ----------
