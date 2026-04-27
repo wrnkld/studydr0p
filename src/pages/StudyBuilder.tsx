@@ -158,26 +158,46 @@ export default function StudyBuilder() {
 
   return (
     <PageContainer>
-      <PageHeader
-        title={study.title || "Untitled study"}
-      />
-
-      <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
-        <TabsList>
-          <TabsTrigger value="build">Build</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-          <TabsTrigger value="results">Results</TabsTrigger>
+      <Tabs
+        value={activeTab}
+        onValueChange={(v) => setTab(v as TabKey)}
+        orientation="vertical"
+        className="flex gap-8"
+      >
+        <TabsList className="flex h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0">
+          <TabsTrigger
+            value="build"
+            className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+          >
+            Build
+          </TabsTrigger>
+          <TabsTrigger
+            value="preview"
+            className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+          >
+            Preview
+          </TabsTrigger>
+          <TabsTrigger
+            value="results"
+            className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+          >
+            Results
+          </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="build" className="pt-4">
-          {builder}
-        </TabsContent>
-        <TabsContent value="preview" className="pt-4">
-          <InlinePreview study={study} shareUrl={shareUrl} />
-        </TabsContent>
-        <TabsContent value="results" className="pt-4">
-          <StudyResultsView studyId={study.id} />
-        </TabsContent>
+        <div className="min-w-0 flex-1 space-y-6">
+          <PageHeader title={study.title || "Untitled study"} />
+
+          <TabsContent value="build" className="mt-0">
+            {builder}
+          </TabsContent>
+          <TabsContent value="preview" className="mt-0">
+            <InlinePreview study={study} shareUrl={shareUrl} />
+          </TabsContent>
+          <TabsContent value="results" className="mt-0">
+            <StudyResultsView studyId={study.id} />
+          </TabsContent>
+        </div>
       </Tabs>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
