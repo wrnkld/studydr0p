@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -18,10 +19,10 @@ import {
 } from "@/lib/exampleStudies";
 import FridgeCardSortResults from "@/components/FridgeCardSortResults";
 import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
-import GasStationSurveyResults from "@/components/GasStationSurveyResults";
+import GasStationSurveyResults, {
+  type GasStationAnswers,
+} from "@/components/GasStationSurveyResults";
 import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
-
-
 
 // Renders a full results view for a hardcoded example study.
 // CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
@@ -32,8 +33,11 @@ export default function ExampleStudy() {
   const study = id ? getExampleStudy(id) : null;
   const { session } = useAuth();
   const navigate = useNavigate();
-  const [submittedSort, setSubmittedSort] = useState(false);
   const [tab, setTab] = useState<"preview" | "results">("preview");
+  const [gasAnswers, setGasAnswers] = useState<GasStationAnswers | undefined>();
+  const [fridgePlacement, setFridgePlacement] = useState<
+    Record<string, string> | undefined
+  >();
 
   if (!study && !isGasStation) {
     return (
