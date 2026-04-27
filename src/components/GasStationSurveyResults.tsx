@@ -155,9 +155,10 @@ export default function GasStationSurveyResults() {
               fill="var(--color-value)"
               isAnimationActive={false}
             >
-              {Q2_DIST.map((_, i) => (
-                <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
-              ))}
+              {Q2_DIST.map((d, i) => {
+                const max = Math.max(...Q2_DIST.map((x) => x.value));
+                return <Cell key={i} fill={shadeFor(d.value, max)} />;
+              })}
             </Bar>
           </BarChart>
         </ChartContainer>
