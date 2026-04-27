@@ -159,7 +159,7 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ByCardSection() {
+function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
   return (
     <section className="space-y-3">
       <SectionHeader>By card</SectionHeader>
@@ -168,7 +168,7 @@ function ByCardSection() {
         className="aspect-auto h-[480px] w-full"
       >
         <BarChart
-          data={BY_CARD}
+          data={data}
           layout="vertical"
           margin={{ top: 8, right: 16, bottom: 8, left: 16 }}
           stackOffset="expand"
@@ -221,7 +221,13 @@ function ByCardSection() {
   );
 }
 
-function MatrixSection() {
+function MatrixSection({
+  rows,
+  pct,
+}: {
+  rows: Row[];
+  pct: (n: number) => number;
+}) {
   const CAT_COLOR: Record<Category, string> = {
     Door: COLORS.door,
     "Top shelf": COLORS.top,
@@ -249,7 +255,7 @@ function MatrixSection() {
             </tr>
           </thead>
           <tbody>
-            {RAW.map((r) => (
+            {rows.map((r) => (
               <tr key={r.card} className="border-b last:border-b-0">
                 <td className="px-3 py-2 font-medium whitespace-nowrap">
                   {r.card}
@@ -284,7 +290,11 @@ function MatrixSection() {
   );
 }
 
-function DisagreementSection() {
+function DisagreementSection({
+  data,
+}: {
+  data: { card: string; chaos: number }[];
+}) {
   return (
     <section className="space-y-3">
       <SectionHeader>Disagreement</SectionHeader>
@@ -293,7 +303,7 @@ function DisagreementSection() {
         className="aspect-auto h-[420px] w-full"
       >
         <BarChart
-          data={DISAGREEMENT}
+          data={data}
           layout="vertical"
           margin={{ top: 8, right: 32, bottom: 8, left: 16 }}
         >
