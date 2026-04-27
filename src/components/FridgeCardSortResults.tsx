@@ -234,13 +234,15 @@ function MatrixSection({
   rows: Row[];
   pct: (n: number) => number;
 }) {
-  const CAT_COLOR: Record<Category, string> = {
-    Door: COLORS.door,
-    "Top shelf": COLORS.top,
-    "Middle shelf": COLORS.middle,
-    "Bottom shelf": COLORS.bottom,
-    Freezer: COLORS.freezer,
-    Trash: COLORS.trash,
+  // Map category → CSS variable name (without the hsl() wrapper) so we can
+  // inject alpha for cell tinting.
+  const CAT_VAR: Record<Category, string> = {
+    Door: COLOR_VARS.door,
+    "Top shelf": COLOR_VARS.top,
+    "Middle shelf": COLOR_VARS.middle,
+    "Bottom shelf": COLOR_VARS.bottom,
+    Freezer: COLOR_VARS.freezer,
+    Trash: COLOR_VARS.trash,
   };
   return (
     <section className="space-y-3">
@@ -277,10 +279,7 @@ function MatrixSection({
                         backgroundColor:
                           p === 0
                             ? "transparent"
-                            : CAT_COLOR[c].replace(
-                                /hsl\(([^)]+)\)/,
-                                `hsl($1 / ${alpha.toFixed(3)})`,
-                              ),
+                            : `hsl(${CAT_VAR[c]} / ${alpha.toFixed(3)})`,
                       }}
                     >
                       {p === 0 ? "" : `${p}%`}
