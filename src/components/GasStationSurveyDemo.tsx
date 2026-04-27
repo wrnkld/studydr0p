@@ -167,7 +167,7 @@ export default function GasStationSurveyDemo({
           </Button>
         )}
         {isLast ? (
-          <Button type="button" onClick={onSubmit} disabled={!canAdvance}>
+          <Button type="button" onClick={() => onSubmit(answers)} disabled={!canAdvance}>
             Submit
           </Button>
         ) : (
