@@ -28,14 +28,13 @@ const COLORS = {
   red:     "hsl(0 72% 51%)",
 } as const;
 
-const PALETTE = [
-  COLORS.primary,
-  COLORS.green,
-  COLORS.amber,
-  COLORS.purple,
-  COLORS.cyan,
-  COLORS.red,
-];
+// Map a value to a blue shade — higher value = darker.
+function shadeFor(value: number, max: number) {
+  const t = max > 0 ? value / max : 0;
+  // Lightness from 80% (lightest) down to 35% (darkest).
+  const lightness = 80 - t * 45;
+  return `hsl(221 83% ${lightness}%)`;
+}
 
 const barConfig = {
   value: { label: "Responses", color: COLORS.primary },
