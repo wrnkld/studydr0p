@@ -83,9 +83,9 @@ function SignInForm() {
         placeholder="you@team.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="h-8 w-52"
+        className="h-7 w-52 text-xs"
       />
-      <Button type="submit" size="sm" disabled={submitting}>
+      <Button type="submit" size="sm" disabled={submitting} className="h-7 px-3 text-xs">
         {submitting ? "Sending…" : "Sign in"}
       </Button>
     </form>
@@ -108,12 +108,13 @@ function LoggedInHomeBar() {
     <Shell>
       <Logo />
       <div className="flex items-center gap-2">
-        <Button size="sm" onClick={() => navigate("/studies/new")}>
+        <Button size="sm" className="h-7 px-3 text-xs" onClick={() => navigate("/studies/new")}>
           New study
         </Button>
         <Button
           variant="ghost"
           size="sm"
+          className="h-7 px-3 text-xs"
           onClick={async () => {
             await signOut();
             navigate("/");
@@ -188,6 +189,7 @@ function StudyBar() {
           <Divider />
           <Button
             size="sm"
+            className="h-7 px-3 text-xs"
             disabled={!actions || actions.saving}
             onClick={() => actions?.onSave()}
           >
