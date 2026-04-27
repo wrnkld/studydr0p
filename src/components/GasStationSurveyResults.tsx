@@ -11,7 +11,7 @@ import {
   TextResponses,
   type CountMap,
 } from "@/components/survey/SurveyChart";
-import { SectionHeader } from "@/components/study/primitives";
+import { SectionHeader, Stat, StatGrid } from "@/components/study/primitives";
 
 // ---------- Seed data ----------
 const SEED_TOTAL = 20;
