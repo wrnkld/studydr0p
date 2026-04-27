@@ -79,32 +79,6 @@ function LoggedOutBar() {
   );
 }
 
-function LoggedInHomeBar() {
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
-  return (
-    <Shell>
-      <Logo />
-      <div className="flex items-center gap-2">
-        <Button size="sm" className="h-7 px-3 text-xs" onClick={() => navigate("/studies/new")}>
-          New study
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 px-3 text-xs"
-          onClick={async () => {
-            await signOut();
-            navigate("/");
-          }}
-        >
-          Sign out
-        </Button>
-      </div>
-    </Shell>
-  );
-}
-
 export default function FloatingToolbar() {
   const { session } = useAuth();
   const location = useLocation();
