@@ -17,12 +17,11 @@ export default function TopBar() {
 
   // Hide on participant-facing routes — they should be chrome-free.
   if (location.pathname.startsWith("/s/")) return null;
-  // Marketing/showcase pages use the floating pill instead.
-  if (
+  // Logged-out marketing/showcase pages use the floating pill instead.
+  const isShowcase =
     location.pathname === "/" ||
-    location.pathname.startsWith("/examples/")
-  )
-    return null;
+    location.pathname.startsWith("/examples/");
+  if (isShowcase && !session) return null;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">

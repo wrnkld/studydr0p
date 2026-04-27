@@ -1,5 +1,5 @@
 import { FormEvent, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -79,42 +79,17 @@ function LoggedOutBar() {
   );
 }
 
-function LoggedInHomeBar() {
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
-  return (
-    <Shell>
-      <Logo />
-      <div className="flex items-center gap-2">
-        <Button size="sm" className="h-7 px-3 text-xs" onClick={() => navigate("/studies/new")}>
-          New study
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-7 px-3 text-xs"
-          onClick={async () => {
-            await signOut();
-            navigate("/");
-          }}
-        >
-          Sign out
-        </Button>
-      </div>
-    </Shell>
-  );
-}
-
 export default function FloatingToolbar() {
   const { session } = useAuth();
   const location = useLocation();
 
-  // Floating pill is reserved for marketing/showcase pages.
-  // The authenticated app uses TopBar instead.
+  // Floating pill is reserved for the logged-out marketing/showcase pages.
+  // Once signed in (or anywhere in the app), TopBar takes over.
+  if (session) return null;
+
   const isShowcase =
     location.pathname === "/" || location.pathname.startsWith("/examples/");
   if (!isShowcase) return null;
 
-  if (session) return <LoggedInHomeBar />;
   return <LoggedOutBar />;
 }
