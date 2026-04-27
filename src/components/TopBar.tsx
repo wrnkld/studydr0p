@@ -1,39 +1,88 @@
 import { FormEvent, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 /**
- * Thin, full-width sticky top bar. Used on the authenticated app
- * (study list, builder, results). For the marketing/showcase pages
- * (Landing, ExampleStudy) we use the floating pill instead.
+ * Single global top bar. Three modes:
+ *  - Logged out: StudyDrop · email + Get link
+ *  - Logged in (general): StudyDrop · New study · Sign out
+ *  - Logged in on a study page: ← Back · Save · Delete
+ * Hidden on participant routes.
  */
 export default function TopBar() {
   const { session } = useAuth();
   const location = useLocation();
+  const studyMatch = useMatch("/studies/:id");
+  const { actions } = useStudyToolbar();
 
-  // Hide on participant-facing routes — they should be chrome-free.
   if (location.pathname.startsWith("/s/")) return null;
-  // Logged-out marketing/showcase pages use the floating pill instead.
-  const isShowcase =
-    location.pathname === "/" ||
-    location.pathname.startsWith("/examples/");
-  if (isShowcase && !session) return null;
+
+  const onStudyPage = !!studyMatch && !!session;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur">
-      <div className="container flex h-12 items-center justify-between">
-        <Link to="/" className="text-sm font-medium">
-          StudyDrop
-        </Link>
+      <div className="container flex h-12 items-center justify-between gap-3">
+        {onStudyPage ? <BackLink /> : <Brand />}
         <div className="flex items-center gap-2">
-          {session ? <SignedInActions /> : <SignInForm />}
+          {onStudyPage ? (
+            <StudyActions />
+          ) : session ? (
+            <SignedInActions />
+          ) : (
+            <SignInForm />
+          )}
         </div>
       </div>
     </header>
+  );
+}
+
+function Brand() {
+  return (
+    <Link to="/" className="text-sm font-medium">
+      StudyDrop
+    </Link>
+  );
+}
+
+function BackLink() {
+  return (
+    <Link
+      to="/"
+      className="text-sm font-medium text-muted-foreground hover:text-foreground"
+    >
+      ← Back
+    </Link>
+  );
+}
+
+function StudyActions() {
+  const { actions } = useStudyToolbar();
+  return (
+    <>
+      <Button
+        size="sm"
+        className="h-8 px-3 text-xs"
+        disabled={!actions || actions.saving}
+        onClick={() => actions?.onSave()}
+      >
+        {actions?.saving ? "Saving…" : "Save"}
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8 px-3 text-xs"
+        disabled={!actions}
+        onClick={() => actions?.onDelete()}
+      >
+        Delete
+      </Button>
+    </>
   );
 }
 
@@ -42,6 +91,13 @@ function SignedInActions() {
   const navigate = useNavigate();
   return (
     <>
+      <Button
+        size="sm"
+        className="h-8 px-3 text-xs"
+        onClick={() => navigate("/studies/new")}
+      >
+        New study
+      </Button>
       <Button
         variant="ghost"
         size="sm"
