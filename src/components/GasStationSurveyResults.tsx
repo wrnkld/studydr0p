@@ -5,6 +5,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   XAxis,
   YAxis,
 } from "recharts";
@@ -26,6 +27,15 @@ const COLORS = {
   cyan:    "hsl(199 89% 48%)",
   red:     "hsl(0 72% 51%)",
 } as const;
+
+const PALETTE = [
+  COLORS.primary,
+  COLORS.green,
+  COLORS.amber,
+  COLORS.purple,
+  COLORS.cyan,
+  COLORS.red,
+];
 
 const barConfig = {
   value: { label: "Responses", color: COLORS.primary },
@@ -145,7 +155,11 @@ export default function GasStationSurveyResults() {
               dataKey="value"
               fill="var(--color-value)"
               isAnimationActive={false}
-            />
+            >
+              {Q2_DIST.map((_, i) => (
+                <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
+              ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </QuestionSection>
@@ -273,7 +287,11 @@ function HBar({
           dataKey="value"
           fill="var(--color-value)"
           isAnimationActive={false}
-        />
+        >
+          {data.map((_, i) => (
+            <Cell key={i} fill={PALETTE[i % PALETTE.length]} />
+          ))}
+        </Bar>
       </BarChart>
     </ChartContainer>
   );
