@@ -59,22 +59,37 @@ export default function ExampleStudy() {
   return (
     <PageContainer>
       {isFridge || isGasStation ? (
-        <>
-          <PageHeader
-            title={
-              isFridge
-                ? "Where does it go in the fridge?"
-                : "Gas station food. No judgment."
-            }
-          />
+        <Tabs
+          value={tab}
+          onValueChange={(v) => setTab(v as "preview" | "results")}
+          orientation="vertical"
+          className="flex gap-8"
+        >
+          <TabsList className="flex h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0">
+            <TabsTrigger
+              value="preview"
+              className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+            >
+              Preview
+            </TabsTrigger>
+            <TabsTrigger
+              value="results"
+              className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+            >
+              Results
+            </TabsTrigger>
+          </TabsList>
 
-          <Tabs value={tab} onValueChange={(v) => setTab(v as "preview" | "results")}>
-            <TabsList>
-              <TabsTrigger value="preview">Preview</TabsTrigger>
-              <TabsTrigger value="results">Results</TabsTrigger>
-            </TabsList>
+          <div className="min-w-0 flex-1 space-y-6">
+            <PageHeader
+              title={
+                isFridge
+                  ? "Where does it go in the fridge?"
+                  : "Gas station food. No judgment."
+              }
+            />
 
-            <TabsContent value="preview" className="pt-4">
+            <TabsContent value="preview" className="mt-0">
               {isFridge ? (
                 <FridgeCardSortDemo
                   onSubmit={(placement) => {
@@ -100,15 +115,15 @@ export default function ExampleStudy() {
               )}
             </TabsContent>
 
-            <TabsContent value="results" className="space-y-4 pt-4">
+            <TabsContent value="results" className="mt-0 space-y-4">
               {isFridge ? (
                 <FridgeCardSortResults userPlacement={fridgePlacement} />
               ) : (
                 <GasStationSurveyResults userAnswers={gasAnswers} />
               )}
             </TabsContent>
-          </Tabs>
-        </>
+          </div>
+        </Tabs>
       ) : study ? (
         <>
           <PageHeader
