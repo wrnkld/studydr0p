@@ -52,6 +52,7 @@ export default function ExampleStudy() {
   }
 
   const onDuplicate = () => {
+    if (!study) return;
     // Example studies are illustrative — duplicate sends them to new study flow.
     navigate(`/studies/new?type=${study.type}`);
   };
