@@ -9,7 +9,7 @@ import { toast } from "sonner";
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-6 z-50 flex justify-center px-4">
-      <div className="pointer-events-auto flex h-11 w-[460px] items-center justify-between gap-3 rounded-full border bg-background pl-4 pr-1.5 shadow-lg">
+      <div className="pointer-events-auto flex h-11 w-[460px] items-center justify-between gap-3 rounded-full border bg-background px-4 shadow-lg">
         {children}
       </div>
     </div>
