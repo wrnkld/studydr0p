@@ -179,19 +179,19 @@ function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
           margin={{ top: 8, right: 16, bottom: 8, left: 16 }}
           stackOffset="expand"
         >
-          <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+          <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
           <XAxis
             type="number"
             domain={[0, 1]}
             tickFormatter={(v) => `${Math.round(Number(v) * 100)}%`}
-            stroke="hsl(0 0% 40%)"
+            stroke="hsl(var(--chart-axis))"
             fontSize={11}
           />
           <YAxis
             type="category"
             dataKey="card"
             width={140}
-            stroke="hsl(0 0% 10%)"
+            stroke="hsl(var(--foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
@@ -313,19 +313,19 @@ function DisagreementSection({
           layout="vertical"
           margin={{ top: 8, right: 32, bottom: 8, left: 16 }}
         >
-          <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
+          <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
           <XAxis
             type="number"
             domain={[0, 100]}
             tickFormatter={(v) => `${v}%`}
-            stroke="hsl(0 0% 40%)"
+            stroke="hsl(var(--chart-axis))"
             fontSize={11}
           />
           <YAxis
             type="category"
             dataKey="card"
             width={140}
-            stroke="hsl(0 0% 10%)"
+            stroke="hsl(var(--foreground))"
             fontSize={12}
             tickLine={false}
             axisLine={false}
