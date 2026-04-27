@@ -19,6 +19,7 @@ import SurveyResults from "@/pages/results/SurveyResults";
 import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
+import { Stat, StatGrid } from "@/components/study/primitives";
 
 interface StudyData {
   id: string;
@@ -178,7 +179,7 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
         </div>
       )}
 
-      <section className="grid grid-cols-3 gap-4">
+      <StatGrid>
         <Stat label="Responses" value={String(responses.length)} />
         {study.type === "survey" ? (
           <Stat
@@ -191,7 +192,7 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
           <Stat label="Completion" value={`${completionRate}%`} />
         )}
         <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
-      </section>
+      </StatGrid>
 
       <section>
         {responses.length === 0 ? (
@@ -249,14 +250,7 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border p-4">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-xl font-medium">{value}</div>
-    </div>
-  );
-}
+// (local Stat removed — now imported from @/components/study/primitives)
 
 function csvEscape(v: string) {
   if (v == null) return "";
