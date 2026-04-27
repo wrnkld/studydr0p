@@ -51,7 +51,7 @@ function initial(): Placement {
 export default function FridgeCardSortDemo({
   onSubmit,
 }: {
-  onSubmit: () => void;
+  onSubmit: (placement: Placement) => void;
 }) {
   const [placement, setPlacement] = useState<Placement>(initial);
   const sensors = useSensors(
@@ -98,7 +98,7 @@ export default function FridgeCardSortDemo({
           ))}
         </div>
 
-        <Button onClick={onSubmit} disabled={!allPlaced}>
+        <Button onClick={() => onSubmit(placement)} disabled={!allPlaced}>
           Submit
         </Button>
       </div>
