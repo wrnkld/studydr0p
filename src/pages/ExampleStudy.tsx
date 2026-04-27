@@ -23,6 +23,7 @@ import GasStationSurveyResults, {
   type GasStationAnswers,
 } from "@/components/GasStationSurveyResults";
 import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
+import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 // Renders a full results view for a hardcoded example study.
 // CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
@@ -41,12 +42,12 @@ export default function ExampleStudy() {
 
   if (!study && !isGasStation) {
     return (
-      <main className="container py-8 space-y-2">
-        <h1>Example not found</h1>
+      <PageContainer space="sm">
+        <PageHeader title="Example not found" />
         <Link to="/" className="underline">
           Back home
         </Link>
-      </main>
+      </PageContainer>
     );
   }
 
