@@ -230,13 +230,15 @@ function QuestionSection({
 
 function HBar({
   data,
-  width,
 }: {
   data: { label: string; value: number }[];
-  width: number;
 }) {
   // Height scales with row count.
   const h = Math.max(180, data.length * 44);
+  // Label column sized to the longest label (approx 7px per char), capped so
+  // the bar always has room. Tailwind clamps it tighter on small screens.
+  const longest = data.reduce((m, d) => Math.max(m, d.label.length), 0);
+  const labelW = Math.min(180, Math.max(80, longest * 7 + 12));
   return (
     <ChartContainer
       config={barConfig}
@@ -246,7 +248,7 @@ function HBar({
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ top: 8, right: 48, bottom: 8, left: 8 }}
+        margin={{ top: 8, right: 24, bottom: 8, left: 0 }}
       >
         <CartesianGrid horizontal={false} stroke="hsl(0 0% 90%)" />
         <XAxis
@@ -259,11 +261,12 @@ function HBar({
         <YAxis
           type="category"
           dataKey="label"
-          width={width}
+          width={labelW}
           stroke="hsl(0 0% 10%)"
           fontSize={12}
           tickLine={false}
           axisLine={false}
+          interval={0}
         />
         <ChartTooltip
           content={
