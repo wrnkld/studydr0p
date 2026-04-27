@@ -62,6 +62,7 @@ export default function SurveyParticipant({
       })
       .eq("id", sessionId);
     setSubmitting(false);
+    toast.success("Thanks! Your response was recorded.");
     onDone();
   };
 
