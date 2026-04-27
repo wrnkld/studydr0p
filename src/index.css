@@ -36,6 +36,18 @@
 
     --radius: 0.5rem;
 
+    /* Chart palette — referenced as hsl(var(--chart-N)).
+       Used for category fills and the survey value-shading scale. */
+    --chart-1: 221 83% 53%;  /* blue */
+    --chart-2: 142 71% 45%;  /* green */
+    --chart-3: 38 92% 50%;   /* amber */
+    --chart-4: 271 76% 53%;  /* purple */
+    --chart-5: 199 89% 48%;  /* cyan */
+    --chart-6: 0 72% 51%;    /* red */
+    /* Axis/grid for charts — semantic aliases of muted/border. */
+    --chart-axis: 215.4 16.3% 46.9%;
+    --chart-grid: 214.3 31.8% 91.4%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -66,6 +78,16 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    /* Chart palette in dark mode — a touch lighter so they pop on dark bg. */
+    --chart-1: 217 91% 60%;
+    --chart-2: 142 71% 50%;
+    --chart-3: 38 92% 55%;
+    --chart-4: 271 76% 60%;
+    --chart-5: 199 89% 55%;
+    --chart-6: 0 72% 58%;
+    --chart-axis: 215 20.2% 65.1%;
+    --chart-grid: 217.2 32.6% 17.5%;
   }
 }
 
