@@ -13,6 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
+import { Chip, Frame, Kicker, SectionHeader } from "@/components/study/primitives";
 
 const CARDS = [
   "Ketchup",
@@ -74,11 +75,12 @@ export default function FridgeCardSortDemo({
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
       <div className="space-y-6">
-        <p className="text-sm text-muted-foreground">
-          Sort each item into the part of the fridge it belongs in.
-        </p>
+        <SectionHeader
+          kicker="Card sort"
+          title="Sort each item into the part of the fridge it belongs in."
+        />
 
-        <DropZone id={POOL} label={`Cards (${remaining} left)`}>
+        <DropZone id={POOL} label={`Cards · ${remaining} left`}>
           <div className="flex flex-wrap gap-2 min-h-[40px]">
             {cardsIn(POOL).map((c) => (
               <DraggableCard key={c} id={c} label={c} />
@@ -116,15 +118,15 @@ function DraggableCard({ id, label }: { id: string; label: string }) {
     opacity: isDragging ? 0.6 : 1,
   };
   return (
-    <button
+    <Chip
       ref={setNodeRef}
       style={style}
+      draggable
       {...listeners}
       {...attributes}
-      className="rounded-md border bg-background px-3 py-1.5 text-sm cursor-grab active:cursor-grabbing select-none hover:bg-accent"
     >
       {label}
-    </button>
+    </Chip>
   );
 }
 
@@ -139,12 +141,9 @@ function DropZone({
 }) {
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
-    <div
-      ref={setNodeRef}
-      className={`rounded-md border p-3 ${isOver ? "bg-muted" : ""}`}
-    >
-      <div className="text-xs text-muted-foreground mb-2">{label}</div>
+    <Frame ref={setNodeRef} active={isOver}>
+      <Kicker className="mb-2">{label}</Kicker>
       {children}
-    </div>
+    </Frame>
   );
 }

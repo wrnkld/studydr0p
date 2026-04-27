@@ -11,6 +11,7 @@ import {
   TextResponses,
   type CountMap,
 } from "@/components/survey/SurveyChart";
+import { SectionHeader } from "@/components/study/primitives";
 
 // ---------- Seed data ----------
 const SEED_TOTAL = 20;
@@ -207,12 +208,7 @@ function QuestionSection({
 }) {
   return (
     <section className="space-y-4">
-      <div className="border-b pb-2">
-        <div className="text-xs uppercase tracking-wide text-muted-foreground">
-          Question {number}
-        </div>
-        <h3 className="mt-1 text-base font-medium">{title}</h3>
-      </div>
+      <SectionHeader kicker={`Question ${number}`} title={title} />
       {children}
     </section>
   );

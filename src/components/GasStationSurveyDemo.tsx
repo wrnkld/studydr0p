@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Chip, SectionHeader } from "@/components/study/primitives";
 
 type Question =
   | { id: string; type: "single"; label: string; options: string[] }
@@ -86,25 +87,23 @@ export default function GasStationSurveyDemo({
 
   return (
     <div className="space-y-6">
-      <div className="text-xs text-muted-foreground">
-        Question {step + 1} of {QUESTIONS.length}
-      </div>
-
-      <h2 className="text-base font-medium">{q.label}</h2>
+      <SectionHeader
+        kicker={`Question ${step + 1} of ${QUESTIONS.length}`}
+        title={q.label}
+      />
 
       <div>
         {q.type === "single" && (
           <div className="flex flex-col gap-2">
             {q.options.map((opt) => (
-              <Button
+              <Chip
                 key={opt}
-                type="button"
-                variant={current === opt ? "default" : "outline"}
-                className="justify-start"
+                block
+                selected={current === opt}
                 onClick={() => setAnswer(opt)}
               >
                 {opt}
-              </Button>
+              </Chip>
             ))}
           </div>
         )}
@@ -115,15 +114,14 @@ export default function GasStationSurveyDemo({
               const list = Array.isArray(current) ? current : [];
               const selected = list.includes(opt);
               return (
-                <Button
+                <Chip
                   key={opt}
-                  type="button"
-                  variant={selected ? "default" : "outline"}
-                  className="justify-start"
+                  block
+                  selected={selected}
                   onClick={() => toggleMulti(opt)}
                 >
                   {opt}
-                </Button>
+                </Chip>
               );
             })}
           </div>
@@ -133,15 +131,14 @@ export default function GasStationSurveyDemo({
           <div className="flex flex-wrap gap-2">
             {Array.from({ length: q.max - q.min + 1 }, (_, i) => q.min + i).map(
               (n) => (
-                <Button
+                <Chip
                   key={n}
-                  type="button"
                   size="icon"
-                  variant={current === n ? "default" : "outline"}
+                  selected={current === n}
                   onClick={() => setAnswer(n)}
                 >
                   {n}
-                </Button>
+                </Chip>
               ),
             )}
           </div>
