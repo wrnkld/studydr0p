@@ -93,6 +93,12 @@ export default function StudyBuilder() {
     })();
   }, [id, activeTab]);
 
+  // Route TopBar's Delete button through the confirm dialog.
+  useEffect(() => {
+    setRequestDelete(() => () => setConfirmDelete(true));
+    return () => setRequestDelete(null);
+  }, [setRequestDelete]);
+
   const shareUrl = useMemo(
     () => (study?.slug ? `${window.location.origin}/s/${study.slug}` : null),
     [study?.slug],
