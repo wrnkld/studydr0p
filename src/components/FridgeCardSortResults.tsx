@@ -1,7 +1,11 @@
 // Card sort results for the "Where does it go in the fridge?" example.
 // Three stacked sections: BY CARD (stacked bar), MATRIX (table),
 // DISAGREEMENT (entropy bar). Built on shadcn ChartContainer + Recharts.
+//
+// If `userPlacement` is provided, the visitor's submission is merged in
+// (incrementing one cell per card) so displayed numbers tick up by 1.
 
+import { useMemo } from "react";
 import {
   Bar,
   BarChart,
@@ -18,7 +22,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 
-const TOTAL = 20;
+const SEED_TOTAL = 20;
 
 const CATEGORIES = [
   "Door",
@@ -32,7 +36,7 @@ type Category = (typeof CATEGORIES)[number];
 
 type Row = { card: string } & Record<Category, number>;
 
-const RAW: Row[] = [
+const SEED: Row[] = [
   { card: "Ketchup",            Door: 9,  "Top shelf": 0,  "Middle shelf": 7,  "Bottom shelf": 0, Freezer: 0, Trash: 4 },
   { card: "Mayo",               Door: 4,  "Top shelf": 8,  "Middle shelf": 5,  "Bottom shelf": 0, Freezer: 0, Trash: 3 },
   { card: "Leftover pizza",     Door: 0,  "Top shelf": 2,  "Middle shelf": 10, "Bottom shelf": 5, Freezer: 3, Trash: 0 },
@@ -46,6 +50,9 @@ const RAW: Row[] = [
   { card: "Baking soda",        Door: 3,  "Top shelf": 1,  "Middle shelf": 5,  "Bottom shelf": 8, Freezer: 0, Trash: 3 },
   { card: "Eggs",               Door: 7,  "Top shelf": 1,  "Middle shelf": 3,  "Bottom shelf": 9, Freezer: 0, Trash: 0 },
 ];
+
+// Map: card label -> category label.
+export type FridgePlacement = Record<string, string>;
 
 // Recharts dataKeys can't include spaces cleanly with the chart config keys —
 // use safe slug keys for both data and config.
@@ -82,44 +89,57 @@ const chaosConfig = {
   chaos: { label: "Chaos", color: COLORS.door },
 } satisfies ChartConfig;
 
-function pct(n: number) {
-  return Math.round((n / TOTAL) * 100);
+interface Props {
+  userPlacement?: FridgePlacement;
 }
 
-// Per-card percentage data, used by stacked bar chart.
-const BY_CARD = RAW.map((r) => {
-  const out: Record<string, number | string> = { card: r.card };
-  for (const c of CATEGORIES) out[SLUG[c]] = pct(r[c]);
-  return out;
-});
+export default function FridgeCardSortResults({ userPlacement }: Props) {
+  const { rows, total } = useMemo(() => {
+    if (!userPlacement) return { rows: SEED, total: SEED_TOTAL };
+    const next = SEED.map((r) => {
+      const cat = userPlacement[r.card];
+      if (!cat || !(CATEGORIES as readonly string[]).includes(cat)) return r;
+      return { ...r, [cat as Category]: r[cat as Category] + 1 } as Row;
+    });
+    return { rows: next, total: SEED_TOTAL + 1 };
+  }, [userPlacement]);
 
-// Entropy normalized to 0..100.
-function chaosOf(r: Row) {
-  let h = 0;
-  for (const c of CATEGORIES) {
-    const v = r[c];
-    if (v === 0) continue;
-    const p = v / TOTAL;
-    h -= p * Math.log2(p);
-  }
-  return Math.round((h / Math.log2(CATEGORIES.length)) * 100);
-}
+  const pct = (n: number) => Math.round((n / total) * 100);
 
-const DISAGREEMENT = RAW.map((r) => ({ card: r.card, chaos: chaosOf(r) }))
-  .sort((a, b) => b.chaos - a.chaos);
+  // Per-card percentage data, used by stacked bar chart.
+  const byCard = rows.map((r) => {
+    const out: Record<string, number | string> = { card: r.card };
+    for (const c of CATEGORIES) out[SLUG[c]] = pct(r[c]);
+    return out;
+  });
 
-export default function FridgeCardSortResults() {
+  // Entropy normalized to 0..100.
+  const chaosOf = (r: Row) => {
+    let h = 0;
+    for (const c of CATEGORIES) {
+      const v = r[c];
+      if (v === 0) continue;
+      const p = v / total;
+      h -= p * Math.log2(p);
+    }
+    return Math.round((h / Math.log2(CATEGORIES.length)) * 100);
+  };
+
+  const disagreement = rows
+    .map((r) => ({ card: r.card, chaos: chaosOf(r) }))
+    .sort((a, b) => b.chaos - a.chaos);
+
   return (
     <div className="space-y-8">
       <section className="grid grid-cols-3 gap-4">
-        <Stat label="Responses" value={String(TOTAL)} />
-        <Stat label="Cards" value={String(RAW.length)} />
+        <Stat label="Responses" value={String(total)} />
+        <Stat label="Cards" value={String(rows.length)} />
         <Stat label="Categories" value={String(CATEGORIES.length)} />
       </section>
 
-      <ByCardSection />
-      <MatrixSection />
-      <DisagreementSection />
+      <ByCardSection data={byCard} />
+      <MatrixSection rows={rows} pct={pct} />
+      <DisagreementSection data={disagreement} />
     </div>
   );
 }
@@ -139,7 +159,7 @@ function SectionHeader({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ByCardSection() {
+function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
   return (
     <section className="space-y-3">
       <SectionHeader>By card</SectionHeader>
@@ -148,7 +168,7 @@ function ByCardSection() {
         className="aspect-auto h-[480px] w-full"
       >
         <BarChart
-          data={BY_CARD}
+          data={data}
           layout="vertical"
           margin={{ top: 8, right: 16, bottom: 8, left: 16 }}
           stackOffset="expand"
@@ -201,7 +221,13 @@ function ByCardSection() {
   );
 }
 
-function MatrixSection() {
+function MatrixSection({
+  rows,
+  pct,
+}: {
+  rows: Row[];
+  pct: (n: number) => number;
+}) {
   const CAT_COLOR: Record<Category, string> = {
     Door: COLORS.door,
     "Top shelf": COLORS.top,
@@ -229,7 +255,7 @@ function MatrixSection() {
             </tr>
           </thead>
           <tbody>
-            {RAW.map((r) => (
+            {rows.map((r) => (
               <tr key={r.card} className="border-b last:border-b-0">
                 <td className="px-3 py-2 font-medium whitespace-nowrap">
                   {r.card}
@@ -264,7 +290,11 @@ function MatrixSection() {
   );
 }
 
-function DisagreementSection() {
+function DisagreementSection({
+  data,
+}: {
+  data: { card: string; chaos: number }[];
+}) {
   return (
     <section className="space-y-3">
       <SectionHeader>Disagreement</SectionHeader>
@@ -273,7 +303,7 @@ function DisagreementSection() {
         className="aspect-auto h-[420px] w-full"
       >
         <BarChart
-          data={DISAGREEMENT}
+          data={data}
           layout="vertical"
           margin={{ top: 8, right: 32, bottom: 8, left: 16 }}
         >

@@ -1,99 +1,76 @@
 // Survey results for the "Gas station food. No judgment." example.
-// Sections: metadata stats, then per-question visualizations.
+// Seed data is hand-crafted to tell a believable story; if `userAnswers`
+// is provided (the visitor just submitted the demo), their answers are
+// merged in so the displayed numbers tick up by 1 each.
 
+import { useMemo } from "react";
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "@/components/ui/chart";
+  ChoiceChart,
+  ScaleChart,
+  SurveyChart,
+  TextResponses,
+  type CountMap,
+} from "@/components/survey/SurveyChart";
 
-const TOTAL = 20;
+// ---------- Seed data ----------
+const SEED_TOTAL = 20;
 
-// Local palette — overrides the monochrome app theme.
-const COLORS = {
-  primary: "hsl(221 83% 53%)",
-  green:   "hsl(142 71% 45%)",
-  amber:   "hsl(38 92% 50%)",
-  purple:  "hsl(271 76% 53%)",
-  cyan:    "hsl(199 89% 48%)",
-  red:     "hsl(0 72% 51%)",
-} as const;
+// Q1: yes/no
+const Q1_OPTIONS = ["Yes", "No"];
+const Q1_SEED: CountMap = { Yes: 13, No: 7 };
 
-// Map a value to a blue shade — higher value = darker.
-function shadeFor(value: number, max: number) {
-  const t = max > 0 ? value / max : 0;
-  // Lightness from 80% (lightest) down to 35% (darkest).
-  const lightness = 80 - t * 45;
-  return `hsl(221 83% ${lightness}%)`;
-}
+// Q2: 1-10 rating, distribution averaging ~5.8
+const Q2_SEED: CountMap = {
+  "1": 1,
+  "2": 1,
+  "3": 2,
+  "4": 2,
+  "5": 3,
+  "6": 3,
+  "7": 3,
+  "8": 3,
+  "9": 1,
+  "10": 1,
+};
 
-// Shared chart constants — applied to every chart on this page.
-const CHART_MARGIN = { top: 8, right: 16, bottom: 8, left: 8 };
-const CHART_HEIGHT = 240;
-const AXIS_COLOR = "hsl(0 0% 40%)";
-const GRID_COLOR = "hsl(0 0% 92%)";
-
-const barConfig = {
-  value: { label: "Responses", color: COLORS.primary },
-} satisfies ChartConfig;
-
-// ---------- Q1: Hot dog ----------
-const Q1_DATA = [
-  { label: "Yes", value: 13 },
-  { label: "No", value: 7 },
+// Q3: multi-select. Counts can sum > total.
+const Q3_OPTIONS = [
+  "Beef jerky",
+  "Taquito",
+  "Donut",
+  "Hot dog",
+  "Just snacks",
+  "Pizza slice",
 ];
+const Q3_SEED: CountMap = {
+  "Beef jerky": 17,
+  Taquito: 16,
+  Donut: 13,
+  "Hot dog": 10,
+  "Just snacks": 8,
+  "Pizza slice": 7,
+};
 
-// ---------- Q2: Rating 1-10 ----------
-// Distribution that averages ~5.8
-const Q2_DIST = [
-  { score: "1", value: 1 },
-  { score: "2", value: 1 },
-  { score: "3", value: 2 },
-  { score: "4", value: 2 },
-  { score: "5", value: 3 },
-  { score: "6", value: 3 },
-  { score: "7", value: 3 },
-  { score: "8", value: 3 },
-  { score: "9", value: 1 },
-  { score: "10", value: 1 },
+// Q4: best chain
+const Q4_OPTIONS = [
+  "Wawa",
+  "Buc-ee's",
+  "Sheetz",
+  "Casey's",
+  "7-Eleven",
+  "They're all the same",
 ];
-const Q2_AVG =
-  Q2_DIST.reduce((s, d) => s + Number(d.score) * d.value, 0) /
-  Q2_DIST.reduce((s, d) => s + d.value, 0);
+const Q4_SEED: CountMap = {
+  Wawa: 7,
+  "Buc-ee's": 5,
+  Sheetz: 3,
+  "Casey's": 2,
+  "7-Eleven": 2,
+  "They're all the same": 1,
+};
 
-// ---------- Q3: Multi-select ----------
-// Counts can sum >20 (multi-select). Percentages can exceed nothing here
-// but bars represent share of participants.
-const Q3_DATA = [
-  { label: "Beef jerky", value: 17 },
-  { label: "Taquito", value: 16 },
-  { label: "Donut", value: 13 },
-  { label: "Hot dog", value: 10 },
-  { label: "Just snacks", value: 8 },
-  { label: "Pizza slice", value: 7 },
-];
-
-// ---------- Q4: Best chain ----------
-const Q4_DATA = [
-  { label: "Wawa", value: 7 },
-  { label: "Buc-ee's", value: 5 },
-  { label: "Sheetz", value: 3 },
-  { label: "Casey's", value: 2 },
-  { label: "7-Eleven", value: 2 },
-  { label: "They're all the same", value: 1 },
-];
-
-// ---------- Q5: Open text ----------
-const Q5_RESPONSES = [
+// Q5: open text
+const Q5_SEED: string[] = [
   "A Slim Jim and a large coffee, that's it.",
   "Hot chips and a Gatorade, every time.",
   "I only buy water",
@@ -101,102 +78,110 @@ const Q5_RESPONSES = [
   "Sheetz or Wawa sandwich",
 ];
 
-export default function GasStationSurveyResults() {
+// Shape of submission from GasStationSurveyDemo — keys are q1..q5.
+export interface GasStationAnswers {
+  q1?: string;
+  q2?: number;
+  q3?: string[];
+  q4?: string;
+  q5?: string;
+}
+
+interface Props {
+  /** When present, increment seed counts by the visitor's submission. */
+  userAnswers?: GasStationAnswers;
+}
+
+function withInc(seed: CountMap, key: string | undefined): CountMap {
+  if (!key) return seed;
+  return { ...seed, [key]: (seed[key] ?? 0) + 1 };
+}
+
+function withIncMany(seed: CountMap, keys: string[] | undefined): CountMap {
+  if (!keys || keys.length === 0) return seed;
+  const out = { ...seed };
+  keys.forEach((k) => (out[k] = (out[k] ?? 0) + 1));
+  return out;
+}
+
+export default function GasStationSurveyResults({ userAnswers }: Props) {
+  const data = useMemo(() => {
+    const total = SEED_TOTAL + (userAnswers ? 1 : 0);
+    return {
+      total,
+      q1: withInc(Q1_SEED, userAnswers?.q1),
+      q2: withInc(Q2_SEED, userAnswers?.q2 != null ? String(userAnswers.q2) : undefined),
+      q3: withIncMany(Q3_SEED, userAnswers?.q3),
+      q4: withInc(Q4_SEED, userAnswers?.q4),
+      q5: userAnswers?.q5 && userAnswers.q5.trim().length > 0
+        ? [userAnswers.q5.trim(), ...Q5_SEED]
+        : Q5_SEED,
+    };
+  }, [userAnswers]);
+
+  const q2Avg = useMemo(() => {
+    const entries = Object.entries(data.q2);
+    const sum = entries.reduce((s, [k, v]) => s + Number(k) * v, 0);
+    const n = entries.reduce((s, [, v]) => s + v, 0);
+    return n > 0 ? sum / n : 0;
+  }, [data.q2]);
+
   return (
     <div className="space-y-8">
       <section className="grid grid-cols-3 gap-4">
-        <Stat label="Responses" value={String(TOTAL)} />
+        <Stat label="Responses" value={String(data.total)} />
         <Stat label="Questions" value="5" />
-        <Stat label="Avg score" value={`${Q2_AVG.toFixed(1)} / 10`} />
+        <Stat label="Avg score" value={`${q2Avg.toFixed(1)} / 10`} />
       </section>
 
       <QuestionSection
         number={1}
         title="Have you ever eaten a gas station hot dog?"
       >
-        <HBar data={Q1_DATA} />
+        <SurveyChart
+          kind="choice"
+          options={Q1_OPTIONS}
+          counts={data.q1}
+          total={data.total}
+        />
       </QuestionSection>
 
       <QuestionSection
         number={2}
         title="Rate your go-to gas station on food quality."
       >
-        <ChartContainer
-          config={barConfig}
-          className="aspect-auto w-full"
-          style={{ height: CHART_HEIGHT }}
-        >
-          <BarChart data={Q2_DIST} margin={CHART_MARGIN}>
-            <CartesianGrid vertical={false} stroke={GRID_COLOR} />
-            <XAxis
-              dataKey="score"
-              stroke={AXIS_COLOR}
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-            />
-            <YAxis
-              stroke={AXIS_COLOR}
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              allowDecimals={false}
-              width={32}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  formatter={(value) => (
-                    <div className="flex w-full justify-between gap-4">
-                      <span>Responses</span>
-                      <span className="font-mono font-medium">{value}</span>
-                    </div>
-                  )}
-                />
-              }
-            />
-            <Bar
-              dataKey="value"
-              fill="var(--color-value)"
-              isAnimationActive={false}
-            >
-              {Q2_DIST.map((d, i) => {
-                const max = Math.max(...Q2_DIST.map((x) => x.value));
-                return <Cell key={i} fill={shadeFor(d.value, max)} />;
-              })}
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+        <ScaleChart min={1} max={10} counts={data.q2} />
       </QuestionSection>
 
       <QuestionSection
         number={3}
         title="Which of these have you eaten at a gas station?"
       >
-        <HBar data={Q3_DATA} />
+        {/* multi-select: total here is the participant count, not the sum of
+            checks, so percentages reflect "share of participants". */}
+        <ChoiceChart
+          options={Q3_OPTIONS}
+          counts={data.q3}
+          total={data.total}
+        />
       </QuestionSection>
 
       <QuestionSection
         number={4}
         title="What's the best gas station chain for food?"
       >
-        <HBar data={Q4_DATA} />
+        <ChoiceChart
+          options={Q4_OPTIONS}
+          counts={data.q4}
+          total={data.total}
+        />
       </QuestionSection>
 
       <QuestionSection
         number={5}
         title="Describe your ideal gas station snack in one sentence."
       >
-        <ul className="space-y-3">
-          {Q5_RESPONSES.map((r, i) => (
-            <li
-              key={i}
-              className="border-l-2 pl-4 text-sm leading-relaxed"
-            >
-              {r}
-            </li>
-          ))}
-        </ul>
+        <TextResponses responses={data.q5} />
       </QuestionSection>
     </div>
   );
@@ -230,70 +215,5 @@ function QuestionSection({
       </div>
       {children}
     </section>
-  );
-}
-
-function HBar({
-  data,
-}: {
-  data: { label: string; value: number }[];
-}) {
-  return (
-    <ChartContainer
-      config={barConfig}
-      className="aspect-auto w-full"
-      style={{ height: CHART_HEIGHT }}
-    >
-      <BarChart data={data} layout="vertical" margin={CHART_MARGIN}>
-        <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
-        <XAxis
-          type="number"
-          domain={[0, TOTAL]}
-          stroke={AXIS_COLOR}
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          allowDecimals={false}
-        />
-        <YAxis
-          type="category"
-          dataKey="label"
-          stroke={AXIS_COLOR}
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          interval={0}
-          width={120}
-        />
-        <ChartTooltip
-          content={
-            <ChartTooltipContent
-              formatter={(value) => {
-                const n = Number(value);
-                const pct = Math.round((n / TOTAL) * 100);
-                return (
-                  <div className="flex w-full justify-between gap-4">
-                    <span>Responses</span>
-                    <span className="font-mono font-medium">
-                      {n} · {pct}%
-                    </span>
-                  </div>
-                );
-              }}
-            />
-          }
-        />
-        <Bar
-          dataKey="value"
-          fill="var(--color-value)"
-          isAnimationActive={false}
-        >
-          {data.map((d, i) => {
-            const max = Math.max(...data.map((x) => x.value));
-            return <Cell key={i} fill={shadeFor(d.value, max)} />;
-          })}
-        </Bar>
-      </BarChart>
-    </ChartContainer>
   );
 }
