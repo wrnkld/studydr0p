@@ -21,6 +21,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { SectionHeader } from "@/components/study/primitives";
 
 const SEED_TOTAL = 20;
 
