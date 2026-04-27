@@ -153,31 +153,7 @@ export default function StudyBuilder() {
   return (
     <PageContainer>
       <PageHeader
-        kicker={
-          <Link to="/" className="underline">
-            ← All studies
-          </Link>
-        }
         title={study.title || "Untitled study"}
-        actions={
-          <>
-            <Button
-              size="sm"
-              disabled={!actions || actions.saving}
-              onClick={() => actions?.onSave()}
-            >
-              {actions?.saving ? "Saving…" : "Save"}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={!actions}
-              onClick={() => setConfirmDelete(true)}
-            >
-              Delete
-            </Button>
-          </>
-        }
       />
 
       <Tabs value={activeTab} onValueChange={(v) => setTab(v as TabKey)}>
