@@ -108,7 +108,7 @@ export default function GasStationSurveyResults() {
         number={1}
         title="Have you ever eaten a gas station hot dog?"
       >
-        <HBar data={Q1_DATA} width={260} />
+        <HBar data={Q1_DATA} />
       </QuestionSection>
 
       <QuestionSection
@@ -168,14 +168,14 @@ export default function GasStationSurveyResults() {
         number={3}
         title="Which of these have you eaten at a gas station?"
       >
-        <HBar data={Q3_DATA} width={220} />
+        <HBar data={Q3_DATA} />
       </QuestionSection>
 
       <QuestionSection
         number={4}
         title="What's the best gas station chain for food?"
       >
-        <HBar data={Q4_DATA} width={200} />
+        <HBar data={Q4_DATA} />
       </QuestionSection>
 
       <QuestionSection
