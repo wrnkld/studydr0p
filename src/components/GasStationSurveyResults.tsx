@@ -129,11 +129,11 @@ export default function GasStationSurveyResults({ userAnswers }: Props) {
 
   return (
     <div className="space-y-8">
-      <section className="grid grid-cols-3 gap-4">
+      <StatGrid>
         <Stat label="Responses" value={String(data.total)} />
         <Stat label="Questions" value="5" />
         <Stat label="Avg score" value={`${q2Avg.toFixed(1)} / 10`} />
-      </section>
+      </StatGrid>
 
       <QuestionSection
         number={1}
@@ -188,14 +188,7 @@ export default function GasStationSurveyResults({ userAnswers }: Props) {
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-md border p-4">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-xl font-medium">{value}</div>
-    </div>
-  );
-}
+// (local Stat removed — now imported from @/components/study/primitives)
 
 function QuestionSection({
   number,

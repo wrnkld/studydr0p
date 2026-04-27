@@ -21,7 +21,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { SectionHeader } from "@/components/study/primitives";
+import { SectionHeader, Stat, StatGrid } from "@/components/study/primitives";
 
 const SEED_TOTAL = 20;
 
@@ -141,11 +141,11 @@ export default function FridgeCardSortResults({ userPlacement }: Props) {
 
   return (
     <div className="space-y-8">
-      <section className="grid grid-cols-3 gap-4">
+      <StatGrid>
         <Stat label="Responses" value={String(total)} />
         <Stat label="Cards" value={String(rows.length)} />
         <Stat label="Categories" value={String(CATEGORIES.length)} />
-      </section>
+      </StatGrid>
 
       <ByCardSection data={byCard} />
       <MatrixSection rows={rows} pct={pct} />
