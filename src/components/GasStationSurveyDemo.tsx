@@ -52,12 +52,12 @@ const QUESTIONS: Question[] = [
   },
 ];
 
-type Answers = Record<string, string | string[] | number>;
+export type Answers = Record<string, string | string[] | number>;
 
 export default function GasStationSurveyDemo({
   onSubmit,
 }: {
-  onSubmit: () => void;
+  onSubmit: (answers: Answers) => void;
 }) {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
