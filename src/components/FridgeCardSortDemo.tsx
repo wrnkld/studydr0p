@@ -134,9 +134,6 @@ function PoolZone({
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
     <Frame ref={setNodeRef} active={isOver}>
-      <Kicker className="mb-2">
-        Cards <span className="text-muted-foreground/60">({remaining})</span>
-      </Kicker>
       {children}
     </Frame>
   );
