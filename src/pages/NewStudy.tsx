@@ -116,7 +116,6 @@ export default function NewStudy() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {TYPES.map((t) => {
           const Icon = t.icon;
-          const isPending = pendingType === t.id && creating;
           return (
             <button
               key={t.id}
@@ -132,16 +131,15 @@ export default function NewStudy() {
                 "shadow-[0_1px_2px_rgba(20,20,15,0.04)]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 t.enabled
-                  ? "hover:border-foreground/40 cursor-pointer"
+                  ? "hover:border-foreground/40 hover:shadow-[0_2px_8px_rgba(20,20,15,0.06)] cursor-pointer"
                   : "opacity-50 cursor-not-allowed",
-                isPending && "border-foreground ring-1 ring-foreground",
               )}
             >
               <div className="flex items-start gap-3">
                 <div
                   className={cn(
                     "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background transition-colors",
-                    isPending && "border-foreground bg-foreground text-background",
+                    t.enabled && "group-hover:border-foreground group-hover:bg-foreground group-hover:text-background",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -154,11 +152,6 @@ export default function NewStudy() {
                     {!t.enabled && (
                       <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
                         Soon
-                      </span>
-                    )}
-                    {isPending && (
-                      <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
-                        Creating…
                       </span>
                     )}
                   </div>

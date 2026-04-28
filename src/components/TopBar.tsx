@@ -28,17 +28,25 @@ export default function TopBar() {
   const { session } = useAuth();
   const location = useLocation();
   const studyMatch = useMatch("/studies/:id");
+  const newStudyMatch = useMatch("/studies/new");
   const { meta } = useStudyToolbar();
 
   if (location.pathname.startsWith("/s/")) return null;
 
-  const onStudyPage = !!studyMatch && !!session;
+  const onNewStudyPage = !!newStudyMatch && !!session;
+  const onStudyPage = !!studyMatch && !onNewStudyPage && !!session;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-12 items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
-          {onStudyPage ? <StudyCrumb title={meta?.title ?? "Untitled study"} /> : <Brand />}
+          {onStudyPage ? (
+            <StudyCrumb title={meta?.title ?? "Untitled study"} />
+          ) : onNewStudyPage ? (
+            <StudyCrumb title="New study" />
+          ) : (
+            <Brand />
+          )}
         </div>
         <div className="flex items-center gap-2">
           {onStudyPage ? (
