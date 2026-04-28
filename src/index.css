@@ -37,13 +37,13 @@
 
     --radius: 0.625rem;
 
-    /* Chart palette — muted, intentional. Slate, sage, amber, rose, teal, gray. */
-    --chart-1: 215 28% 52%;  /* slate blue */
-    --chart-2: 142 22% 55%;  /* sage green */
-    --chart-3: 35 65% 58%;   /* warm amber */
-    --chart-4: 350 35% 65%;  /* dusty rose */
-    --chart-5: 185 32% 52%;  /* cool teal */
-    --chart-6: 30 8% 75%;    /* light warm gray */
+    /* Chart palette — vibrant, intentional. Energetic but not garish. */
+    --chart-1: 226 100% 65%;  /* #4F75FF bright indigo */
+    --chart-2: 0 100% 71%;    /* #FF6B6B coral red */
+    --chart-3: 50 100% 62%;   /* #FFD93D warm yellow */
+    --chart-4: 128 47% 61%;   /* #6BCB77 fresh green */
+    --chart-5: 274 100% 74%;  /* #C77DFF soft purple */
+    --chart-6: 26 100% 62%;   /* #FF9A3C tangerine */
     /* Axis/grid for charts — semantic aliases of muted/border. */
     --chart-axis: 215.4 16.3% 46.9%;
     --chart-grid: 214.3 31.8% 91.4%;
