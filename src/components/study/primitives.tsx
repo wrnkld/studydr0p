@@ -120,7 +120,7 @@ export function Kicker({
   return (
     <div
       className={cn(
-        "text-xs uppercase tracking-wide text-muted-foreground",
+        "text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium",
         className,
       )}
     >
