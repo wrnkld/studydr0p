@@ -64,7 +64,7 @@ export default function NewStudy() {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [creating, setCreating] = useState(false);
-  const [selected, setSelected] = useState<StudyType | null>(null);
+  const [pendingType, setPendingType] = useState<StudyType | null>(null);
 
   const create = async (type: StudyType) => {
     if (!user || creating) return;
