@@ -288,7 +288,7 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
   const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
 
   return (
-    <div className="space-y-8 py-6">
+    <div className="space-y-6">
 
       <section className="space-y-4">
         <div className="space-y-2">
