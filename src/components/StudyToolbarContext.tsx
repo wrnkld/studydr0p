@@ -20,12 +20,20 @@ export interface StudyActions {
   saving?: boolean;
 }
 
+export interface StudyMeta {
+  title: string;
+  status: "draft" | "live" | "closed" | string;
+  shareUrl: string | null;
+}
+
 interface Ctx {
   actions: StudyActions | null;
   setActions: (a: StudyActions | null) => void;
   /** If set, TopBar's Delete button calls this instead of actions.onDelete. */
   requestDelete: (() => void) | null;
   setRequestDelete: (fn: (() => void) | null) => void;
+  meta: StudyMeta | null;
+  setMeta: (m: StudyMeta | null) => void;
 }
 
 const StudyToolbarCtx = createContext<Ctx | null>(null);
@@ -33,9 +41,10 @@ const StudyToolbarCtx = createContext<Ctx | null>(null);
 export function StudyToolbarProvider({ children }: { children: ReactNode }) {
   const [actions, setActions] = useState<StudyActions | null>(null);
   const [requestDelete, setRequestDelete] = useState<(() => void) | null>(null);
+  const [meta, setMeta] = useState<StudyMeta | null>(null);
   const value = useMemo(
-    () => ({ actions, setActions, requestDelete, setRequestDelete }),
-    [actions, requestDelete],
+    () => ({ actions, setActions, requestDelete, setRequestDelete, meta, setMeta }),
+    [actions, requestDelete, meta],
   );
   return <StudyToolbarCtx.Provider value={value}>{children}</StudyToolbarCtx.Provider>;
 }

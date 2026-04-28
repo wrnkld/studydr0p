@@ -118,6 +118,7 @@ export default function StudyBuilder() {
 
   const [liveTitle, setLiveTitle] = useState("");
   const [liveDescription, setLiveDescription] = useState("");
+  const { setMeta } = useStudyToolbar();
 
   useEffect(() => {
     if (study) {
@@ -125,6 +126,16 @@ export default function StudyBuilder() {
       setLiveDescription(study.description ?? "");
     }
   }, [study?.id]);
+
+  useEffect(() => {
+    if (!study) return;
+    setMeta({
+      title: liveTitle.trim() || "Untitled study",
+      status: study.status,
+      shareUrl,
+    });
+    return () => setMeta(null);
+  }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
   const onMetaChange = (meta: { title: string; description: string }) => {
     setLiveTitle(meta.title);
