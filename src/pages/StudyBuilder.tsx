@@ -124,10 +124,19 @@ export default function StudyBuilder() {
     );
   }
 
+  const [liveTitle, setLiveTitle] = useState(study.title);
+  const [liveDescription, setLiveDescription] = useState(study.description ?? "");
+
+  const onMetaChange = (meta: { title: string; description: string }) => {
+    setLiveTitle(meta.title);
+    setLiveDescription(meta.description);
+  };
+
   const builder =
     study.type === "survey" ? (
       <SurveyBuilder
         studyId={study.id}
+        onMetaChange={onMetaChange}
         initial={{
           title: study.title,
           description: study.description,
@@ -142,6 +151,7 @@ export default function StudyBuilder() {
     ) : study.type === "card_sort" ? (
       <CardSortBuilder
         studyId={study.id}
+        onMetaChange={onMetaChange}
         initial={{
           title: study.title,
           description: study.description,
@@ -187,8 +197,8 @@ export default function StudyBuilder() {
 
         <div className="min-w-0 flex-1 space-y-6">
           <PageHeader
-            title={study.title || "Untitled study"}
-            description={study.description || undefined}
+            title={liveTitle.trim() || "Untitled study"}
+            description={liveDescription.trim() || undefined}
           />
 
           <TabsContent value="build" className="mt-0">
