@@ -237,7 +237,7 @@ function InlinePreview({
   }, [study.id, study.config, study.title]);
 
   return (
-    <div className="rounded-md border p-6">
+    <div className="py-2">
       <PreviewBody
         study={study}
         started={started}
