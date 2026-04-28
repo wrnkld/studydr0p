@@ -203,15 +203,21 @@ export function BinaryDonut({
         {data.map((d, i) => {
           const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
           return (
-            <li key={d.label} className="flex items-center gap-3">
+            <li
+              key={d.label}
+              className="grid grid-cols-[12px_120px_3rem_3rem] items-center gap-x-3"
+            >
               <span
                 aria-hidden
                 className="inline-block h-3 w-3 rounded-sm"
                 style={{ backgroundColor: colorFor(i) }}
               />
-              <span className="min-w-[120px]">{d.label}</span>
-              <span className="font-mono text-muted-foreground">
-                {d.value} · {pct}%
+              <span>{d.label}</span>
+              <span className="font-mono text-right tabular-nums text-muted-foreground">
+                {d.value}
+              </span>
+              <span className="font-mono text-right tabular-nums text-muted-foreground">
+                {pct}%
               </span>
             </li>
           );
@@ -243,16 +249,21 @@ export function ScaleChart({
       : 0;
 
   return (
-    <div className="space-y-3">
-      <div className="text-xs text-muted-foreground">
-        Average:{" "}
-        <span className="font-mono font-medium text-foreground">
-          {avg.toFixed(1)} / {max}
-        </span>
+    <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+      <div className="shrink-0 sm:w-32">
+        <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80">
+          Average
+        </div>
+        <div className="mt-1 font-mono text-3xl font-medium tabular-nums text-foreground">
+          {avg.toFixed(1)}
+          <span className="ml-1 text-base font-normal text-muted-foreground">
+            / {max}
+          </span>
+        </div>
       </div>
       <ChartContainer
         config={barConfig}
-        className="aspect-auto w-full"
+        className="aspect-auto w-full flex-1"
         style={{ height: CHART_HEIGHT }}
       >
         <BarChart data={data} margin={CHART_MARGIN}>
