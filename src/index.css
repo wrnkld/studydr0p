@@ -37,14 +37,12 @@
 
     --radius: 0.625rem;
 
-    /* Chart palette — vibrant, intentional. Energetic but not garish. */
-    --chart-1: 226 100% 65%;  /* #4F75FF bright indigo */
-    --chart-2: 0 100% 71%;    /* #FF6B6B coral red */
-    --chart-3: 50 100% 62%;   /* #FFD93D warm yellow */
-    --chart-4: 128 47% 61%;   /* #6BCB77 fresh green */
-    --chart-5: 274 100% 74%;  /* #C77DFF soft purple */
-    --chart-6: 26 100% 62%;   /* #FF9A3C tangerine */
-    /* Axis/grid for charts — semantic aliases of muted/border. */
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --chart-6: 262 52% 47%;
     --chart-axis: 215.4 16.3% 46.9%;
     --chart-grid: 214.3 31.8% 91.4%;
 
@@ -79,13 +77,12 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Chart palette in dark mode — same vibrant family. */
-    --chart-1: 226 100% 65%;
-    --chart-2: 0 100% 71%;
-    --chart-3: 50 100% 62%;
-    --chart-4: 128 47% 61%;
-    --chart-5: 274 100% 74%;
-    --chart-6: 26 100% 62%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --chart-6: 200 70% 50%;
     --chart-axis: 215 20.2% 65.1%;
     --chart-grid: 217.2 32.6% 17.5%;
   }

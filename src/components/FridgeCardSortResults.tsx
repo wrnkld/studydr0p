@@ -204,23 +204,13 @@ function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
               />
             }
           />
-          <ChartLegend
-            verticalAlign="bottom"
-            align="center"
-            content={
-              <ChartLegendContent
-                className="justify-center gap-5 text-[13px] [&>div>div]:!h-[10px] [&>div>div]:!w-[10px] [&>div>div]:!rounded-[2px]"
-              />
-            }
-          />
+          <ChartLegend content={<ChartLegendContent />} />
           {CATEGORIES.map((c) => (
             <Bar
               key={c}
               dataKey={SLUG[c]}
               stackId="a"
               fill={`var(--color-${SLUG[c]})`}
-              stroke="#ffffff"
-              strokeWidth={1.5}
               isAnimationActive={false}
             />
           ))}
