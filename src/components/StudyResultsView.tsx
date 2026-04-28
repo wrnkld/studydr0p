@@ -179,7 +179,7 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
         </div>
       )}
 
-      <StatGrid>
+      <StatGrid cols={study.type === "survey" ? 2 : 3}>
         <Stat label="Responses" value={String(responses.length)} />
         {study.type === "survey" ? (
           <Stat
@@ -187,11 +187,16 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
             value={String(((study.config as SurveyConfig)?.questions ?? []).length)}
           />
         ) : study.type === "card_sort" ? (
-          <Stat label="Cards" value={String(cards.length)} />
+          <>
+            <Stat label="Cards" value={String(cards.length)} />
+            <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
+          </>
         ) : (
-          <Stat label="Completion" value={`${completionRate}%`} />
+          <>
+            <Stat label="Completion" value={`${completionRate}%`} />
+            <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
+          </>
         )}
-        <Stat label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
       </StatGrid>
 
       <section>
