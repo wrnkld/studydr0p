@@ -289,11 +289,6 @@ function PreviewBody({
     const intro = introCopy(study);
     return (
       <div className="space-y-4 py-2">
-        {study.description && (
-          <p className="whitespace-pre-wrap text-muted-foreground">
-            {study.description}
-          </p>
-        )}
         <p className="text-sm text-muted-foreground">{intro}</p>
         <Button onClick={onStart}>Start</Button>
       </div>
