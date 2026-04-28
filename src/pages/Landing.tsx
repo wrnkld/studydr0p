@@ -126,18 +126,14 @@ export default function Landing() {
               className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/40 cursor-pointer"
             >
               <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-medium tracking-tight text-foreground group-hover:underline underline-offset-4 decoration-border">
+                <div className="text-[15px] font-medium tracking-tight text-foreground">
                   {r.title}
                 </div>
                 <div className="mt-1.5 flex items-center gap-2">
                   <Badge variant="outline">
                     {STUDY_TYPE_META[r.type]?.label ?? r.type}
                   </Badge>
-                  {r.isExample && (
-                    <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
-                      Example
-                    </span>
-                  )}
+                  {r.isExample && <Badge variant="outline">Example</Badge>}
                 </div>
               </div>
 
