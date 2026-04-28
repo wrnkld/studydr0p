@@ -1,17 +1,10 @@
 import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
-import { ArrowLeft, Check, Copy, LogOut, MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, Copy, LogOut, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { cn } from "@/lib/utils";
