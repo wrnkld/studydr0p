@@ -25,6 +25,7 @@ import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
   studyId: string;
+  onMetaChange?: (meta: { title: string; description: string }) => void;
   initial: {
     title: string;
     description: string | null;
@@ -34,11 +35,19 @@ interface Props {
   };
 }
 
-export default function SurveyBuilder({ studyId, initial }: Props) {
+export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props) {
   const navigate = useNavigate();
   const [saving, setSaving] = useState(false);
-  const [title, setTitle] = useState(initial.title);
-  const [description, setDescription] = useState(initial.description ?? "");
+  const [title, setTitleState] = useState(initial.title);
+  const [description, setDescriptionState] = useState(initial.description ?? "");
+  const setTitle = (v: string) => {
+    setTitleState(v);
+    onMetaChange?.({ title: v, description });
+  };
+  const setDescription = (v: string) => {
+    setDescriptionState(v);
+    onMetaChange?.({ title, description: v });
+  };
   const [status, setStatus] = useState<StudyStatus>(initial.status);
   const [slug, setSlug] = useState<string | null>(initial.slug);
   // Surveys always render one question at a time — layout option removed from UI.

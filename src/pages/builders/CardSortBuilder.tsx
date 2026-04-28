@@ -20,6 +20,7 @@ import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
   studyId: string;
+  onMetaChange?: (meta: { title: string; description: string }) => void;
   initial: {
     title: string;
     description: string | null;
@@ -44,12 +45,20 @@ interface DraftCategory {
   persisted: boolean;
 }
 
-export default function CardSortBuilder({ studyId, initial }: Props) {
+export default function CardSortBuilder({ studyId, initial, onMetaChange }: Props) {
   const navigate = useNavigate();
   const [loadingChildren, setLoadingChildren] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [title, setTitle] = useState(initial.title);
-  const [description, setDescription] = useState(initial.description ?? "");
+  const [title, setTitleState] = useState(initial.title);
+  const [description, setDescriptionState] = useState(initial.description ?? "");
+  const setTitle = (v: string) => {
+    setTitleState(v);
+    onMetaChange?.({ title: v, description });
+  };
+  const setDescription = (v: string) => {
+    setDescriptionState(v);
+    onMetaChange?.({ title, description: v });
+  };
   const [status, setStatus] = useState<StudyStatus>(initial.status);
   const [slug, setSlug] = useState<string | null>(initial.slug);
   const [sortType, setSortType] = useState<"open" | "closed">(

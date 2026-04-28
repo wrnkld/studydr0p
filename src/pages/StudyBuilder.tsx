@@ -116,6 +116,21 @@ export default function StudyBuilder() {
     }
   };
 
+  const [liveTitle, setLiveTitle] = useState("");
+  const [liveDescription, setLiveDescription] = useState("");
+
+  useEffect(() => {
+    if (study) {
+      setLiveTitle(study.title);
+      setLiveDescription(study.description ?? "");
+    }
+  }, [study?.id]);
+
+  const onMetaChange = (meta: { title: string; description: string }) => {
+    setLiveTitle(meta.title);
+    setLiveDescription(meta.description);
+  };
+
   if (loading || !study) {
     return (
       <PageContainer>
@@ -128,6 +143,7 @@ export default function StudyBuilder() {
     study.type === "survey" ? (
       <SurveyBuilder
         studyId={study.id}
+        onMetaChange={onMetaChange}
         initial={{
           title: study.title,
           description: study.description,
@@ -142,6 +158,7 @@ export default function StudyBuilder() {
     ) : study.type === "card_sort" ? (
       <CardSortBuilder
         studyId={study.id}
+        onMetaChange={onMetaChange}
         initial={{
           title: study.title,
           description: study.description,
@@ -187,8 +204,8 @@ export default function StudyBuilder() {
 
         <div className="min-w-0 flex-1 space-y-6">
           <PageHeader
-            title={study.title || "Untitled study"}
-            description={study.description || undefined}
+            title={liveTitle.trim() || "Untitled study"}
+            description={liveDescription.trim() || undefined}
           />
 
           <TabsContent value="build" className="mt-0">
