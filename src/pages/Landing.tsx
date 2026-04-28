@@ -146,22 +146,6 @@ export default function Landing() {
                 </span>
               </div>
 
-              <div className="w-10 shrink-0 text-right">
-                {!r.isExample && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setToDelete(r);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
-                    aria-label={`Delete ${r.title}`}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
             </div>
           ))}
         </section>
