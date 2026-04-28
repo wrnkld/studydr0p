@@ -37,14 +37,13 @@
 
     --radius: 0.625rem;
 
-    /* Chart palette — referenced as hsl(var(--chart-N)).
-       Used for category fills and the survey value-shading scale. */
-    --chart-1: 221 83% 53%;  /* blue */
-    --chart-2: 142 71% 45%;  /* green */
-    --chart-3: 38 92% 50%;   /* amber */
-    --chart-4: 271 76% 53%;  /* purple */
-    --chart-5: 199 89% 48%;  /* cyan */
-    --chart-6: 0 72% 51%;    /* red */
+    /* Chart palette — muted, intentional. Slate, sage, amber, rose, teal, gray. */
+    --chart-1: 215 28% 52%;  /* slate blue */
+    --chart-2: 142 22% 55%;  /* sage green */
+    --chart-3: 35 65% 58%;   /* warm amber */
+    --chart-4: 350 35% 65%;  /* dusty rose */
+    --chart-5: 185 32% 52%;  /* cool teal */
+    --chart-6: 30 8% 75%;    /* light warm gray */
     /* Axis/grid for charts — semantic aliases of muted/border. */
     --chart-axis: 215.4 16.3% 46.9%;
     --chart-grid: 214.3 31.8% 91.4%;
