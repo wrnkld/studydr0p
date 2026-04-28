@@ -120,19 +120,11 @@ export default function GasStationSurveyResults({ userAnswers }: Props) {
     };
   }, [userAnswers]);
 
-  const q2Avg = useMemo(() => {
-    const entries = Object.entries(data.q2);
-    const sum = entries.reduce((s, [k, v]) => s + Number(k) * v, 0);
-    const n = entries.reduce((s, [, v]) => s + v, 0);
-    return n > 0 ? sum / n : 0;
-  }, [data.q2]);
-
   return (
     <div className="space-y-8">
-      <StatGrid>
+      <StatGrid cols={2}>
         <Stat label="Responses" value={String(data.total)} />
         <Stat label="Questions" value="5" />
-        <Stat label="Avg score" value={`${q2Avg.toFixed(1)} / 10`} />
       </StatGrid>
 
       <QuestionSection
