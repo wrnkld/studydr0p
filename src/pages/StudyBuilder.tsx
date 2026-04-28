@@ -186,7 +186,10 @@ export default function StudyBuilder() {
         </TabsList>
 
         <div className="min-w-0 flex-1 space-y-6">
-          <PageHeader title={study.title || "Untitled study"} />
+          <PageHeader
+            title={study.title || "Untitled study"}
+            description={study.description || undefined}
+          />
 
           <TabsContent value="build" className="mt-0">
             {builder}
@@ -283,15 +286,8 @@ function PreviewBody({
   }
 
   if (!started) {
-    const intro = introCopy(study);
     return (
       <div className="space-y-4 py-2">
-        {study.description && (
-          <p className="whitespace-pre-wrap text-muted-foreground">
-            {study.description}
-          </p>
-        )}
-        <p className="text-sm text-muted-foreground">{intro}</p>
         <Button onClick={onStart}>Start</Button>
       </div>
     );
@@ -347,16 +343,3 @@ function PreviewBody({
   );
 }
 
-function introCopy(study: StudyRow): string {
-  if (study.type === "survey") {
-    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
-    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
-  }
-  if (study.type === "card_sort") {
-    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
-    return sort === "open"
-      ? "You'll group cards into categories you create · Anonymous"
-      : "You'll sort cards into predefined categories · Anonymous";
-  }
-  return "Anonymous";
-}
