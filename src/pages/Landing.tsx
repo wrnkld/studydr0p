@@ -177,6 +177,6 @@ export default function Landing() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </main>
+    </PageContainer>
   );
 }
