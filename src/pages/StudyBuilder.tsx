@@ -186,7 +186,10 @@ export default function StudyBuilder() {
         </TabsList>
 
         <div className="min-w-0 flex-1 space-y-6">
-          <PageHeader title={study.title || "Untitled study"} />
+          <PageHeader
+            title={study.title || "Untitled study"}
+            description={study.description || undefined}
+          />
 
           <TabsContent value="build" className="mt-0">
             {builder}
