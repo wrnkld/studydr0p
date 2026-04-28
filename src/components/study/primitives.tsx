@@ -174,9 +174,16 @@ export function Stat({
   className?: string;
 }) {
   return (
-    <div className={cn("rounded-md border p-4", className)}>
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-xl font-medium">{value}</div>
+    <div
+      className={cn(
+        "rounded-lg border border-border/70 bg-card p-4 shadow-[0_1px_2px_rgba(20,20,15,0.04)]",
+        className,
+      )}
+    >
+      <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
+        {label}
+      </div>
+      <div className="mt-2 text-2xl font-semibold tracking-tight">{value}</div>
     </div>
   );
 }
