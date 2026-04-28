@@ -191,10 +191,8 @@ function StudyActions({
 }
 
 function SignedInActions() {
-  const { signOut, session } = useAuth();
+  const { signOut } = useAuth();
   const navigate = useNavigate();
-  const email = session?.user?.email ?? "";
-  const initial = email.slice(0, 1).toUpperCase() || "?";
   return (
     <>
       <Button
@@ -205,32 +203,19 @@ function SignedInActions() {
         <Plus className="h-3.5 w-3.5" />
         New study
       </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button
-            aria-label="Account"
-            className="flex h-8 w-8 items-center justify-center rounded-full border border-border/70 bg-muted text-[11px] font-medium text-foreground hover:bg-accent"
-          >
-            {initial}
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
-          {email && (
-            <div className="px-2 py-1.5 text-xs text-muted-foreground truncate">
-              {email}
-            </div>
-          )}
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={async () => {
-              await signOut();
-              navigate("/");
-            }}
-          >
-            Sign out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button
+        variant="ghost"
+        size="sm"
+        aria-label="Sign out"
+        title="Sign out"
+        className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+        onClick={async () => {
+          await signOut();
+          navigate("/");
+        }}
+      >
+        <LogOut className="h-4 w-4" />
+      </Button>
     </>
   );
 }
