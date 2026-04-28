@@ -207,7 +207,7 @@ function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
           <ChartLegend
             content={
               <ChartLegendContent
-                className="gap-4 [&>*]:gap-2 text-[13px] [&_[data-slot=indicator]]:!rounded-none [&_[data-slot=indicator]]:!h-2.5 [&_[data-slot=indicator]]:!w-2.5"
+                className="gap-5 text-[13px] [&>div>div]:!h-[10px] [&>div>div]:!w-[10px] [&>div>div]:!rounded-none"
               />
             }
           />
