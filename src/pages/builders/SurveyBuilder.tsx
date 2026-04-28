@@ -25,6 +25,7 @@ import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
   studyId: string;
+  onMetaChange?: (meta: { title: string; description: string }) => void;
   initial: {
     title: string;
     description: string | null;
