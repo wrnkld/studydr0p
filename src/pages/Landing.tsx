@@ -100,58 +100,64 @@ export default function Landing() {
   const rows = [...userRows, ...EXAMPLE_ROWS];
 
   return (
-    <main className="container py-8 space-y-6">
-      <div className="space-y-2">
-        <h1>UX research, without the friction.</h1>
-        <p className="text-muted-foreground">
-          Run unmoderated UX studies and share them with participants via a single
-          link.
-        </p>
-      </div>
+    <PageContainer space="lg">
+      <PageHeader
+        title="UX research, without the friction."
+        description="Run unmoderated UX studies and share them with participants via a single link."
+      />
 
       {session && loadingStudies ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
       ) : (
-        <div className="rounded-md border">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Study</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead className="text-right">Responses</TableHead>
-                <TableHead className="w-28" />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {rows.map((r) => (
-                <TableRow key={`${r.isExample ? "ex" : "us"}-${r.id}`}>
-                  <TableCell className="font-medium">
-                    <Link to={r.href} className="underline">
-                      {r.title}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
+        <section className="rounded-xl border border-border/70 bg-card divide-y divide-border/60 shadow-[0_1px_2px_rgba(20,20,15,0.04)] overflow-hidden">
+          {rows.map((r) => (
+            <div
+              key={`${r.isExample ? "ex" : "us"}-${r.id}`}
+              className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/40"
+            >
+              <div className="min-w-0 flex-1">
+                <Link
+                  to={r.href}
+                  className="text-[15px] font-medium tracking-tight text-foreground hover:underline underline-offset-4 decoration-border"
+                >
+                  {r.title}
+                </Link>
+                <div className="mt-1.5 flex items-center gap-2">
+                  <Badge variant="outline">
                     {STUDY_TYPE_META[r.type]?.label ?? r.type}
-                  </TableCell>
-                  <TableCell className="text-right">{r.responseCount}</TableCell>
-                  <TableCell className="text-right">
-                    {r.isExample ? (
-                      <span className="text-xs text-muted-foreground">Example</span>
-                    ) : (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setToDelete(r)}
-                      >
-                        Delete
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+                  </Badge>
+                </div>
+              </div>
+
+              <div className="hidden sm:flex flex-col items-end leading-tight w-20 shrink-0">
+                <span className="text-[15px] font-medium tabular-nums">
+                  {r.responseCount}
+                </span>
+                <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80">
+                  {r.responseCount === 1 ? "response" : "responses"}
+                </span>
+              </div>
+
+              <div className="w-20 shrink-0 text-right">
+                {r.isExample ? (
+                  <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
+                    Example
+                  </span>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setToDelete(r)}
+                    className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+                    aria-label={`Delete ${r.title}`}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))}
+        </section>
       )}
 
       <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
