@@ -197,8 +197,6 @@ function SignedInActions() {
   const initial = email.slice(0, 1).toUpperCase() || "?";
   return (
     <>
-      <Brand />
-      <span className="mx-1 hidden h-4 w-px bg-border sm:inline-block" />
       <Button
         size="sm"
         className="h-8 gap-1.5 px-3 text-xs"
