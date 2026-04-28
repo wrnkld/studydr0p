@@ -288,7 +288,7 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
   const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
 
   return (
-    <div className="space-y-8 py-6">
+    <div className="space-y-6">
 
       <section className="space-y-4">
         <div className="space-y-2">
@@ -322,60 +322,64 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
         </div>
       </section>
 
-      <section className="space-y-4">
-        <h2>Cards</h2>
-        <ul className="space-y-3">
-          {cards.map((c, i) => (
-            <li key={c.id} className="rounded-md border p-4">
-              <div className="flex items-start gap-3">
-                <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
-                <div className="flex-1 space-y-2">
-                  <Input
-                    placeholder="Card label"
-                    value={c.label}
-                    onChange={(e) => updateCard(c.id, { label: e.target.value })}
-                  />
-                  <Textarea
-                    rows={2}
-                    placeholder="Optional description"
-                    value={c.description}
-                    onChange={(e) => updateCard(c.id, { description: e.target.value })}
-                  />
+      <section className="space-y-2">
+        <Label>Cards</Label>
+        {cards.length > 0 && (
+          <ul className="space-y-3">
+            {cards.map((c, i) => (
+              <li key={c.id} className="rounded-md border p-4">
+                <div className="flex items-start gap-3">
+                  <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+                  <div className="flex-1 space-y-2">
+                    <Input
+                      placeholder="Card label"
+                      value={c.label}
+                      onChange={(e) => updateCard(c.id, { label: e.target.value })}
+                    />
+                    <Textarea
+                      rows={2}
+                      placeholder="Optional description"
+                      value={c.description}
+                      onChange={(e) => updateCard(c.id, { description: e.target.value })}
+                    />
+                  </div>
+                  <Button variant="ghost" size="icon" onClick={() => removeCard(c.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
-                <Button variant="ghost" size="icon" onClick={() => removeCard(c.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        )}
         <Button variant="outline" size="sm" onClick={addCard}>
           <Plus className="mr-1.5 h-3.5 w-3.5" /> Add card
         </Button>
       </section>
 
       {sortType === "closed" && (
-        <section className="space-y-4">
-          <h2>Categories</h2>
-          <ul className="space-y-2">
-            {categories.map((c, i) => (
-              <li key={c.id} className="flex items-center gap-2">
-                <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
-                <Input
-                  placeholder="Category label"
-                  value={c.label}
-                  onChange={(e) => updateCategory(c.id, { label: e.target.value })}
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeCategory(c.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </li>
-            ))}
-          </ul>
+        <section className="space-y-2">
+          <Label>Categories</Label>
+          {categories.length > 0 && (
+            <ul className="space-y-2">
+              {categories.map((c, i) => (
+                <li key={c.id} className="flex items-center gap-2">
+                  <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
+                  <Input
+                    placeholder="Category label"
+                    value={c.label}
+                    onChange={(e) => updateCategory(c.id, { label: e.target.value })}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeCategory(c.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
           <Button variant="outline" size="sm" onClick={addCategory}>
             <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
           </Button>
