@@ -49,6 +49,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
 
 export default function Landing() {
   const { user, session } = useAuth();
+  const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadingStudies, setLoadingStudies] = useState(false);
   const [toDelete, setToDelete] = useState<CombinedRow | null>(null);
