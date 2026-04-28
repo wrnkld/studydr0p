@@ -70,11 +70,18 @@ export default function NewStudy() {
     if (!user || creating) return;
 
     setCreating(true);
+    const defaultDescription =
+      type === "card_sort"
+        ? "Sort each item into the group where you think it belongs."
+        : type === "survey"
+          ? "A few quick questions — should only take a minute."
+          : null;
     const { data, error } = await supabase
       .from("studies")
       .insert({
         researcher_id: user.id,
         title: "Untitled",
+        description: defaultDescription,
         type,
         config:
           type === "survey"

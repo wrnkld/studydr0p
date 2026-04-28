@@ -13,7 +13,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
-import { Chip, Frame, Kicker, SectionHeader } from "@/components/study/primitives";
+import { Chip, Frame, Kicker } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
 
 const CARDS = [
@@ -76,10 +76,6 @@ export default function FridgeCardSortDemo({
   return (
     <DndContext sensors={sensors} onDragEnd={onDragEnd}>
       <div className="space-y-6">
-        <SectionHeader
-          kicker="Card sort"
-          title="Sort each item into the part of the fridge it belongs in."
-        />
 
         <PoolZone id={POOL} remaining={remaining}>
           <div className="flex flex-wrap gap-2 min-h-[40px]">
