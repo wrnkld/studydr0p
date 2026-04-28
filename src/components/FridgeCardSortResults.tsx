@@ -204,13 +204,21 @@ function ByCardSection({ data }: { data: Record<string, number | string>[] }) {
               />
             }
           />
-          <ChartLegend content={<ChartLegendContent />} />
+          <ChartLegend
+            content={
+              <ChartLegendContent
+                className="gap-4 [&>*]:gap-2 text-[13px] [&_[data-slot=indicator]]:!rounded-none [&_[data-slot=indicator]]:!h-2.5 [&_[data-slot=indicator]]:!w-2.5"
+              />
+            }
+          />
           {CATEGORIES.map((c) => (
             <Bar
               key={c}
               dataKey={SLUG[c]}
               stackId="a"
               fill={`var(--color-${SLUG[c]})`}
+              stroke="hsl(var(--background))"
+              strokeWidth={1}
               isAnimationActive={false}
             />
           ))}
