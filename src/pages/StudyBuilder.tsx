@@ -343,16 +343,3 @@ function PreviewBody({
   );
 }
 
-function introCopy(study: StudyRow): string {
-  if (study.type === "survey") {
-    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
-    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
-  }
-  if (study.type === "card_sort") {
-    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
-    return sort === "open"
-      ? "You'll group cards into categories you create · Anonymous"
-      : "You'll sort cards into predefined categories · Anonymous";
-  }
-  return "Anonymous";
-}
