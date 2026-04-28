@@ -203,15 +203,21 @@ export function BinaryDonut({
         {data.map((d, i) => {
           const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
           return (
-            <li key={d.label} className="flex items-center gap-3">
+            <li
+              key={d.label}
+              className="grid grid-cols-[12px_120px_3rem_3rem] items-center gap-x-3"
+            >
               <span
                 aria-hidden
                 className="inline-block h-3 w-3 rounded-sm"
                 style={{ backgroundColor: colorFor(i) }}
               />
-              <span className="min-w-[120px]">{d.label}</span>
-              <span className="font-mono text-muted-foreground">
-                {d.value} · {pct}%
+              <span>{d.label}</span>
+              <span className="font-mono text-right tabular-nums text-muted-foreground">
+                {d.value}
+              </span>
+              <span className="font-mono text-right tabular-nums text-muted-foreground">
+                {pct}%
               </span>
             </li>
           );
