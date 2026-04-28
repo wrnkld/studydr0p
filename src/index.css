@@ -77,13 +77,12 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
-    /* Chart palette in dark mode — same vibrant family. */
-    --chart-1: 226 100% 65%;
-    --chart-2: 0 100% 71%;
-    --chart-3: 50 100% 62%;
-    --chart-4: 128 47% 61%;
-    --chart-5: 274 100% 74%;
-    --chart-6: 26 100% 62%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+    --chart-6: 200 70% 50%;
     --chart-axis: 215 20.2% 65.1%;
     --chart-grid: 217.2 32.6% 17.5%;
   }
