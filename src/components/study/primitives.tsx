@@ -63,15 +63,15 @@ export function PageHeader({
 }) {
   return (
     <header className={cn("flex items-start justify-between gap-4", className)}>
-      <div className="space-y-1">
+      <div className="space-y-2">
         {kicker ? (
-          <div className="text-xs uppercase tracking-wide text-muted-foreground">
+          <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
             {kicker}
           </div>
         ) : null}
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight leading-tight">{title}</h1>
         {description ? (
-          <p className="text-sm text-muted-foreground">{description}</p>
+          <p className="text-[15px] text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
       {actions ? <div className="flex shrink-0 gap-2">{actions}</div> : null}
@@ -95,13 +95,13 @@ export function SectionHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("border-b pb-2", className)}>
+    <div className={cn("border-b border-border/70 pb-3", className)}>
       {kicker ? (
-        <div className="text-xs uppercase tracking-wide text-muted-foreground">
+        <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
           {kicker}
         </div>
       ) : null}
-      <h3 className="mt-1 text-base font-medium">{title}</h3>
+      <h3 className="mt-1.5 text-[17px] font-medium tracking-tight">{title}</h3>
     </div>
   );
 }
