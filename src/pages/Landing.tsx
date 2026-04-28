@@ -114,23 +114,34 @@ export default function Landing() {
           {rows.map((r) => (
             <div
               key={`${r.isExample ? "ex" : "us"}-${r.id}`}
-              className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/40"
+              role="link"
+              tabIndex={0}
+              onClick={() => navigate(r.href)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  navigate(r.href);
+                }
+              }}
+              className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/40 cursor-pointer"
             >
               <div className="min-w-0 flex-1">
-                <Link
-                  to={r.href}
-                  className="text-[15px] font-medium tracking-tight text-foreground hover:underline underline-offset-4 decoration-border"
-                >
+                <div className="text-[15px] font-medium tracking-tight text-foreground group-hover:underline underline-offset-4 decoration-border">
                   {r.title}
-                </Link>
+                </div>
                 <div className="mt-1.5 flex items-center gap-2">
                   <Badge variant="outline">
                     {STUDY_TYPE_META[r.type]?.label ?? r.type}
                   </Badge>
+                  {r.isExample && (
+                    <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
+                      Example
+                    </span>
+                  )}
                 </div>
               </div>
 
-              <div className="hidden sm:flex flex-col items-end leading-tight w-20 shrink-0">
+              <div className="hidden sm:flex flex-col items-start leading-tight w-20 shrink-0">
                 <span className="text-[15px] font-medium tabular-nums">
                   {r.responseCount}
                 </span>
@@ -139,16 +150,15 @@ export default function Landing() {
                 </span>
               </div>
 
-              <div className="w-20 shrink-0 text-right">
-                {r.isExample ? (
-                  <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
-                    Example
-                  </span>
-                ) : (
+              <div className="w-10 shrink-0 text-right">
+                {!r.isExample && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => setToDelete(r)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setToDelete(r);
+                    }}
                     className="opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
                     aria-label={`Delete ${r.title}`}
                   >
