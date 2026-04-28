@@ -116,6 +116,21 @@ export default function StudyBuilder() {
     }
   };
 
+  const [liveTitle, setLiveTitle] = useState("");
+  const [liveDescription, setLiveDescription] = useState("");
+
+  useEffect(() => {
+    if (study) {
+      setLiveTitle(study.title);
+      setLiveDescription(study.description ?? "");
+    }
+  }, [study?.id]);
+
+  const onMetaChange = (meta: { title: string; description: string }) => {
+    setLiveTitle(meta.title);
+    setLiveDescription(meta.description);
+  };
+
   if (loading || !study) {
     return (
       <PageContainer>
@@ -123,14 +138,6 @@ export default function StudyBuilder() {
       </PageContainer>
     );
   }
-
-  const [liveTitle, setLiveTitle] = useState(study.title);
-  const [liveDescription, setLiveDescription] = useState(study.description ?? "");
-
-  const onMetaChange = (meta: { title: string; description: string }) => {
-    setLiveTitle(meta.title);
-    setLiveDescription(meta.description);
-  };
 
   const builder =
     study.type === "survey" ? (
