@@ -286,7 +286,6 @@ function PreviewBody({
     const intro = introCopy(study);
     return (
       <div className="space-y-4 py-2">
-        <h2 className="text-lg font-medium">{study.title || "Untitled"}</h2>
         {study.description && (
           <p className="whitespace-pre-wrap text-muted-foreground">
             {study.description}
