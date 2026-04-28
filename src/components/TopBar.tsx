@@ -142,10 +142,7 @@ function StudyActions({
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
-    if (!shareUrl) {
-      toast.message("Publish the study to get a share link.");
-      return;
-    }
+    if (!shareUrl) return;
     await navigator.clipboard.writeText(shareUrl);
     setCopied(true);
     toast.success("Share link copied");
@@ -155,6 +152,29 @@ function StudyActions({
   return (
     <>
       <StatusPill status={status} />
+      {shareUrl && (
+        <Button
+          variant="ghost"
+          size="sm"
+          aria-label="Copy share link"
+          title="Copy share link"
+          className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+          onClick={copy}
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+        </Button>
+      )}
+      <Button
+        variant="ghost"
+        size="sm"
+        aria-label="Delete study"
+        title="Delete study"
+        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+        disabled={!actions}
+        onClick={() => (requestDelete ? requestDelete() : actions?.onDelete())}
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
       <Button
         size="sm"
         className="h-8 px-3 text-xs"
@@ -163,37 +183,6 @@ function StudyActions({
       >
         {actions?.saving ? "Saving…" : "Save"}
       </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="h-8 w-8 p-0"
-            aria-label="More actions"
-            disabled={!actions}
-          >
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-44">
-          <DropdownMenuItem onSelect={(e) => { e.preventDefault(); copy(); }}>
-            {copied ? (
-              <Check className="mr-2 h-4 w-4" />
-            ) : (
-              <Copy className="mr-2 h-4 w-4" />
-            )}
-            Copy share link
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onSelect={() => (requestDelete ? requestDelete() : actions?.onDelete())}
-            className="text-destructive focus:text-destructive"
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete study
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
     </>
   );
 }
