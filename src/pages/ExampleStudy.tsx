@@ -88,6 +88,11 @@ export default function ExampleStudy() {
                   ? "Where does it go in the fridge?"
                   : "Gas station food. No judgment."
               }
+              description={
+                isFridge
+                  ? "Sort each item into the part of the fridge it belongs in."
+                  : "Five quick questions about gas station snacks."
+              }
             />
 
             <TabsContent value="preview" className="mt-0">
