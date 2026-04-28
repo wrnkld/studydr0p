@@ -64,7 +64,7 @@ export default function NewStudy() {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [creating, setCreating] = useState(false);
-  const [selected, setSelected] = useState<StudyType | null>(null);
+  const [pendingType, setPendingType] = useState<StudyType | null>(null);
 
   const create = async (type: StudyType) => {
     if (!user || creating) return;
@@ -116,31 +116,32 @@ export default function NewStudy() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {TYPES.map((t) => {
           const Icon = t.icon;
-          const isSelected = selected === t.id;
+          const isPending = pendingType === t.id && creating;
           return (
             <button
               key={t.id}
               type="button"
-              onClick={() => t.enabled && setSelected(t.id)}
-              disabled={!t.enabled}
-              aria-pressed={isSelected}
+              onClick={() => {
+                if (!t.enabled || creating) return;
+                setPendingType(t.id);
+                void create(t.id);
+              }}
+              disabled={!t.enabled || creating}
               className={cn(
-                "group relative text-left rounded-xl border bg-card p-5 transition-all",
+                "group relative text-left rounded-xl border border-border/70 bg-card p-5 transition-all",
                 "shadow-[0_1px_2px_rgba(20,20,15,0.04)]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 t.enabled
                   ? "hover:border-foreground/40 cursor-pointer"
                   : "opacity-50 cursor-not-allowed",
-                isSelected
-                  ? "border-foreground ring-1 ring-foreground"
-                  : "border-border/70",
+                isPending && "border-foreground ring-1 ring-foreground",
               )}
             >
               <div className="flex items-start gap-3">
                 <div
                   className={cn(
                     "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background transition-colors",
-                    isSelected && "border-foreground bg-foreground text-background",
+                    isPending && "border-foreground bg-foreground text-background",
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -155,6 +156,11 @@ export default function NewStudy() {
                         Soon
                       </span>
                     )}
+                    {isPending && (
+                      <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
+                        Creating…
+                      </span>
+                    )}
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
                     {t.description}
@@ -164,32 +170,6 @@ export default function NewStudy() {
             </button>
           );
         })}
-      </div>
-
-      <div
-        className={cn(
-          "overflow-hidden transition-all duration-300 ease-out",
-          selected
-            ? "max-h-40 opacity-100 translate-y-0"
-            : "max-h-0 opacity-0 -translate-y-1 pointer-events-none",
-        )}
-      >
-        <div className="rounded-xl border border-border/70 bg-card p-5 shadow-[0_1px_2px_rgba(20,20,15,0.04)] flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
-              Selected
-            </div>
-            <div className="mt-1 text-[15px] font-medium tracking-tight">
-              {TYPES.find((t) => t.id === selected)?.label}
-            </div>
-          </div>
-          <Button
-            onClick={() => selected && void create(selected)}
-            disabled={!selected || creating}
-          >
-            {creating ? "Creating…" : "Create study"}
-          </Button>
-        </div>
       </div>
     </PageContainer>
   );

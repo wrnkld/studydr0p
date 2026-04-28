@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
+import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
@@ -111,36 +112,45 @@ export default function Landing() {
         <p className="text-sm text-muted-foreground">Loading…</p>
       ) : (
         <section className="rounded-xl border border-border/70 bg-card divide-y divide-border/60 shadow-[0_1px_2px_rgba(20,20,15,0.04)] overflow-hidden">
-          {rows.map((r) => (
-            <div
-              key={`${r.isExample ? "ex" : "us"}-${r.id}`}
-              role="link"
-              tabIndex={0}
-              onClick={() => navigate(r.href)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  navigate(r.href);
-                }
-              }}
-              className="group grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-6 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
-            >
-              <div className="min-w-0 text-[15px] font-medium tracking-tight text-foreground truncate">
-                {r.title}
-              </div>
+          {rows.map((r) => {
+            const Icon = STUDY_TYPE_ICONS[r.type];
+            const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
+            return (
+              <div
+                key={`${r.isExample ? "ex" : "us"}-${r.id}`}
+                role="link"
+                tabIndex={0}
+                onClick={() => navigate(r.href)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    navigate(r.href);
+                  }
+                }}
+                className="group grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-4 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
+              >
+                <div
+                  className="flex h-8 w-8 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
+                  aria-label={typeLabel}
+                  title={typeLabel}
+                >
+                  {Icon && <Icon className="h-4 w-4" />}
+                </div>
 
-              <div className="hidden sm:flex items-center gap-2 justify-self-start">
-                <Badge variant="outline">
-                  {STUDY_TYPE_META[r.type]?.label ?? r.type}
-                </Badge>
-                {r.isExample && <Badge variant="outline">Example</Badge>}
-              </div>
+                <div className="min-w-0 text-[15px] font-medium tracking-tight text-foreground truncate">
+                  {r.title}
+                </div>
 
-              <div className="hidden sm:block text-sm text-muted-foreground tabular-nums whitespace-nowrap">
-                {r.responseCount} {r.responseCount === 1 ? "response" : "responses"}
+                <div className="hidden sm:block">
+                  {r.isExample && <Badge variant="outline">Example</Badge>}
+                </div>
+
+                <div className="hidden sm:block text-sm text-muted-foreground tabular-nums whitespace-nowrap">
+                  {r.responseCount} {r.responseCount === 1 ? "response" : "responses"}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </section>
       )}
 
