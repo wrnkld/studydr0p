@@ -90,7 +90,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           {total} response{total === 1 ? "" : "s"} across {cards.length} card
           {cards.length === 1 ? "" : "s"}.
         </p>
-        <div className="overflow-x-auto rounded-md border">
+        <div className="overflow-x-auto rounded-lg border">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
@@ -121,7 +121,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
       <section className="space-y-3">
         <h3 className="text-base font-medium">Matrix</h3>
-        <div className="overflow-x-auto rounded-md border">
+        <div className="overflow-x-auto rounded-lg border">
           <table className="w-full border-collapse text-xs">
             <thead>
               <tr className="border-b">
