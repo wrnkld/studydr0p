@@ -147,8 +147,8 @@ export const Frame = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "rounded-md border p-3 transition-colors",
-        active && "bg-muted",
+        "rounded-lg border border-border/70 bg-card p-4 transition-colors",
+        active && "bg-muted/70 border-border",
         className,
       )}
     >
