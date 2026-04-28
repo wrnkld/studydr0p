@@ -123,29 +123,22 @@ export default function Landing() {
                   navigate(r.href);
                 }
               }}
-              className="group flex items-center gap-4 px-5 py-4 transition-colors hover:bg-muted/40 cursor-pointer"
+              className="group flex items-center gap-4 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
             >
-              <div className="min-w-0 flex-1">
-                <div className="text-[15px] font-medium tracking-tight text-foreground">
-                  {r.title}
-                </div>
-                <div className="mt-1.5 flex items-center gap-2">
-                  <Badge variant="outline">
-                    {STUDY_TYPE_META[r.type]?.label ?? r.type}
-                  </Badge>
-                  {r.isExample && <Badge variant="outline">Example</Badge>}
-                </div>
+              <div className="min-w-0 flex-1 text-[15px] font-medium tracking-tight text-foreground truncate">
+                {r.title}
               </div>
 
-              <div className="hidden sm:flex flex-col items-start leading-tight w-20 shrink-0">
-                <span className="text-[15px] font-medium tabular-nums">
-                  {r.responseCount}
-                </span>
-                <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80">
-                  {r.responseCount === 1 ? "response" : "responses"}
-                </span>
+              <div className="hidden sm:flex items-center gap-2 shrink-0">
+                <Badge variant="outline">
+                  {STUDY_TYPE_META[r.type]?.label ?? r.type}
+                </Badge>
+                {r.isExample && <Badge variant="outline">Example</Badge>}
               </div>
 
+              <div className="hidden sm:block w-28 shrink-0 text-right text-sm text-muted-foreground tabular-nums">
+                {r.responseCount} {r.responseCount === 1 ? "response" : "responses"}
+              </div>
             </div>
           ))}
         </section>
