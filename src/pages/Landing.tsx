@@ -123,20 +123,20 @@ export default function Landing() {
                   navigate(r.href);
                 }
               }}
-              className="group flex items-center gap-4 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
+              className="group grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-center gap-6 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
             >
-              <div className="min-w-0 flex-1 text-[15px] font-medium tracking-tight text-foreground truncate">
+              <div className="min-w-0 text-[15px] font-medium tracking-tight text-foreground truncate">
                 {r.title}
               </div>
 
-              <div className="hidden sm:flex items-center gap-2 shrink-0">
+              <div className="hidden sm:flex items-center gap-2 justify-self-start">
                 <Badge variant="outline">
                   {STUDY_TYPE_META[r.type]?.label ?? r.type}
                 </Badge>
                 {r.isExample && <Badge variant="outline">Example</Badge>}
               </div>
 
-              <div className="hidden sm:block w-28 shrink-0 text-right text-sm text-muted-foreground tabular-nums">
+              <div className="hidden sm:block text-sm text-muted-foreground tabular-nums whitespace-nowrap">
                 {r.responseCount} {r.responseCount === 1 ? "response" : "responses"}
               </div>
             </div>
