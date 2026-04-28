@@ -240,7 +240,7 @@ function MatrixSection({
   return (
     <section className="space-y-3">
       <SectionHeader title="Matrix" />
-      <div className="overflow-x-auto rounded-md border">
+      <div className="overflow-x-auto rounded-lg border">
         <table className="w-full border-collapse text-xs">
           <thead>
             <tr className="border-b">
