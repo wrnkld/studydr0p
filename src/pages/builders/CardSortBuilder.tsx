@@ -357,27 +357,29 @@ export default function CardSortBuilder({ studyId, initial }: Props) {
       </section>
 
       {sortType === "closed" && (
-        <section className="space-y-4">
-          <h2>Categories</h2>
-          <ul className="space-y-2">
-            {categories.map((c, i) => (
-              <li key={c.id} className="flex items-center gap-2">
-                <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
-                <Input
-                  placeholder="Category label"
-                  value={c.label}
-                  onChange={(e) => updateCategory(c.id, { label: e.target.value })}
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeCategory(c.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </li>
-            ))}
-          </ul>
+        <section className="space-y-2">
+          <Label>Categories</Label>
+          {categories.length > 0 && (
+            <ul className="space-y-2">
+              {categories.map((c, i) => (
+                <li key={c.id} className="flex items-center gap-2">
+                  <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
+                  <Input
+                    placeholder="Category label"
+                    value={c.label}
+                    onChange={(e) => updateCategory(c.id, { label: e.target.value })}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeCategory(c.id)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
           <Button variant="outline" size="sm" onClick={addCategory}>
             <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
           </Button>
