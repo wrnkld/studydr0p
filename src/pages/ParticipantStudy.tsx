@@ -182,9 +182,9 @@ export default function ParticipantStudy() {
   }
 
   return (
-    <main className="container py-16">
-      <h1>Unsupported study</h1>
-    </main>
+    <Shell>
+      <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
+    </Shell>
   );
 }
 
