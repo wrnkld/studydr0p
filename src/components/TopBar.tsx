@@ -101,9 +101,10 @@ function StudyCrumb({ title }: { title: string }) {
       </Link>
       <Link
         to="/"
-        className="hidden font-mono text-[12px] text-muted-foreground hover:text-foreground sm:inline"
+        className="hidden items-center gap-1.5 text-[12px] font-bold tracking-[-0.02em] text-muted-foreground hover:text-foreground sm:inline-flex"
       >
-        studydrop
+        <BrandMark className="opacity-80" />
+        StudyDrop
       </Link>
       <span className="hidden text-muted-foreground/50 sm:inline">/</span>
       <span className="truncate text-[13px] font-medium">{title}</span>
