@@ -228,7 +228,13 @@ export default function StudyBuilder() {
                 {builder}
               </TabsContent>
               <TabsContent value="preview" className="mt-0">
-                <InlinePreview study={study} shareUrl={shareUrl} />
+                <InlinePreview
+                  study={study}
+                  onSubmitted={() => {
+                    toast.success("Thanks! Your answers are mixed into the results.");
+                    setTab("results");
+                  }}
+                />
               </TabsContent>
               <TabsContent value="results" className="mt-0">
                 <StudyResultsView studyId={study.id} />
