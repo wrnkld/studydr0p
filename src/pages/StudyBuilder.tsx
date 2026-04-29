@@ -267,31 +267,11 @@ export default function StudyBuilder() {
 
 function InlinePreview({
   study,
+  onSubmitted,
 }: {
   study: StudyRow;
-  shareUrl: string | null;
+  onSubmitted: () => void;
 }) {
-  const [done, setDone] = useState(false);
-
-  // Reset preview state if the study changes (e.g. edit + return).
-  useEffect(() => {
-    setDone(false);
-  }, [study.id, study.config, study.title]);
-
-  if (done) {
-    return (
-      <div className="space-y-3 py-6 text-center">
-        <h2 className="text-lg font-medium">Thank you</h2>
-        <p className="text-sm text-muted-foreground">
-          Preview complete — nothing was saved.
-        </p>
-        <Button variant="outline" size="sm" onClick={() => setDone(false)}>
-          Restart preview
-        </Button>
-      </div>
-    );
-  }
-
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
@@ -312,7 +292,7 @@ function InlinePreview({
         sessionId="preview"
         startedAt={Date.now()}
         preview
-        onDone={() => setDone(true)}
+        onDone={onSubmitted}
       />
     );
   }
@@ -330,7 +310,7 @@ function InlinePreview({
         sessionId="preview"
         startedAt={Date.now()}
         preview
-        onDone={() => setDone(true)}
+        onDone={onSubmitted}
       />
     );
   }
