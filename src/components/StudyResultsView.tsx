@@ -65,7 +65,8 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
 
   useEffect(() => {
     if (!studyId) return;
-    (async () => {
+    let cancelled = false;
+    const load = async () => {
       const [studyRes, sessRes, respRes, cardsRes, catsRes] = await Promise.all([
         supabase
           .from("studies")
@@ -91,6 +92,7 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
           .eq("study_id", studyId)
           .order("position"),
       ]);
+      if (cancelled) return;
       if (studyRes.error || !studyRes.data) {
         toast.error("Study not found");
         return;
@@ -101,7 +103,29 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
       setCards((cardsRes.data ?? []) as CardRow[]);
       setCategories((catsRes.data ?? []) as CategoryRow[]);
       setLoading(false);
-    })();
+    };
+
+    load();
+
+    // Realtime: refetch when new responses or sessions land for this study.
+    const channel = supabase
+      .channel(`results-${studyId}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "responses", filter: `study_id=eq.${studyId}` },
+        () => load(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "sessions", filter: `study_id=eq.${studyId}` },
+        () => load(),
+      )
+      .subscribe();
+
+    return () => {
+      cancelled = true;
+      supabase.removeChannel(channel);
+    };
   }, [studyId]);
 
   const completionRate = useMemo(() => {
