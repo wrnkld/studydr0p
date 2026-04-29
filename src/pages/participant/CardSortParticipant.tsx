@@ -369,13 +369,43 @@ function DraggableCard({
   showUnsortedOption: boolean;
 }) {
   const [showMenu, setShowMenu] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   return (
     <div
       draggable
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      className="relative cursor-grab rounded-md border bg-card p-3 text-sm active:cursor-grabbing"
+      onDragStart={() => {
+        setIsDragging(true);
+        onDragStart();
+      }}
+      onDragEnd={() => {
+        setIsDragging(false);
+        onDragEnd();
+      }}
+      style={{
+        background: "#ffffff",
+        border: "1px solid #d0d0ca",
+        borderRadius: "6px",
+        boxShadow: isDragging
+          ? "0 8px 20px rgba(0,0,0,0.18)"
+          : "0 1px 3px rgba(0,0,0,0.08)",
+        transform: isDragging
+          ? "rotate(2deg) translateY(-1px)"
+          : "translateY(0)",
+        transition:
+          "transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease",
+      }}
+      onMouseEnter={(e) => {
+        if (isDragging) return;
+        e.currentTarget.style.transform = "translateY(-1px)";
+        e.currentTarget.style.boxShadow = "0 3px 8px rgba(0,0,0,0.12)";
+      }}
+      onMouseLeave={(e) => {
+        if (isDragging) return;
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
+      }}
+      className="relative cursor-grab p-3 text-sm active:cursor-grabbing"
     >
       <div className="font-medium">{card.label}</div>
       {card.description && (
