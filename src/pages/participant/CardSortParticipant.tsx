@@ -98,6 +98,7 @@ export default function CardSortParticipant({
   );
 
   useEffect(() => {
+    if (inMemory) return;
     (async () => {
       const [cardsRes, catsRes] = await Promise.all([
         supabase
@@ -131,7 +132,7 @@ export default function CardSortParticipant({
       }
       setLoading(false);
     })();
-  }, [study.id, study.config.sort_type]);
+  }, [study.id, study.config.sort_type, inMemory]);
 
   const moveCardTo = (cardId: string, targetGroupId: string) => {
     if (targetGroupId === UNSORTED) {
