@@ -69,13 +69,13 @@ export default function ExampleStudy() {
           <TabsList className="flex h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0">
             <TabsTrigger
               value="preview"
-              className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
             >
               Preview
             </TabsTrigger>
             <TabsTrigger
               value="results"
-              className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
+              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
             >
               Results
             </TabsTrigger>
