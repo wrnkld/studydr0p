@@ -73,31 +73,28 @@ export default function SurveyParticipant({
   };
   const answeredCount = questions.filter((q) => isAnswered(q.id)).length;
 
-  return (
-    <main className="container py-8 space-y-6">
-      <div className="space-y-3">
-        <h1>{study.title}</h1>
-        {questions.length > 0 && (
-          <div
-            className="flex gap-1.5"
-            role="progressbar"
-            aria-valuemin={0}
-            aria-valuemax={questions.length}
-            aria-valuenow={answeredCount}
-            aria-label={`${answeredCount} of ${questions.length} questions answered`}
-          >
-            {questions.map((q, i) => (
-              <div
-                key={q.id}
-                className="h-1 flex-1 rounded-full transition-colors"
-                style={{
-                  backgroundColor: isAnswered(q.id) ? "#4F75FF" : "#E5E7EB",
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+  const content = (
+    <div className="space-y-6">
+      {questions.length > 0 && (
+        <div
+          className="flex gap-1.5"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={questions.length}
+          aria-valuenow={answeredCount}
+          aria-label={`${answeredCount} of ${questions.length} questions answered`}
+        >
+          {questions.map((q) => (
+            <div
+              key={q.id}
+              className="h-1 flex-1 rounded-full transition-colors"
+              style={{
+                backgroundColor: isAnswered(q.id) ? "#4F75FF" : "#E5E7EB",
+              }}
+            />
+          ))}
+        </div>
+      )}
       <ol className="space-y-8">
         {questions.map((q, i) => (
           <li key={q.id} className="space-y-3">
@@ -113,6 +110,17 @@ export default function SurveyParticipant({
       <Button onClick={submit} disabled={submitting}>
         {submitting ? "Submitting…" : "Submit"}
       </Button>
+    </div>
+  );
+
+  if (preview) return content;
+
+  return (
+    <main className="container py-8 space-y-6">
+      <div className="space-y-3">
+        <h1>{study.title}</h1>
+      </div>
+      {content}
     </main>
   );
 }
