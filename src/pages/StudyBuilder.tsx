@@ -210,7 +210,7 @@ export default function StudyBuilder() {
             <TabsTrigger
               key={t}
               value={t}
-              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:bg-secondary data-[state=active]:shadow-none"
+              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
             >
               {t}
             </TabsTrigger>
