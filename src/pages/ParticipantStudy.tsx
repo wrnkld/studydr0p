@@ -94,29 +94,29 @@ export default function ParticipantStudy() {
 
   if (loading) {
     return (
-      <main className="container py-8">
+      <Shell>
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </main>
+      </Shell>
     );
   }
 
   if (error === "not_found") {
     return (
-      <main className="container py-16 space-y-2">
-        <h1>Study not found</h1>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
         <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
-      </main>
+      </Shell>
     );
   }
 
   if (error === "closed") {
     return (
-      <main className="container py-16 space-y-2">
-        <h1>This study is closed</h1>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
         <p className="text-muted-foreground">
           Thanks for your interest — the researcher is no longer collecting responses.
         </p>
-      </main>
+      </Shell>
     );
   }
 
@@ -124,30 +124,32 @@ export default function ParticipantStudy() {
 
   if (done) {
     return (
-      <main className="container py-16 space-y-2">
-        <h1>Thank you</h1>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
         <p className="text-muted-foreground">
           {isPreview
             ? "Preview complete — nothing was saved."
             : "Your response has been recorded."}
         </p>
-      </main>
+      </Shell>
     );
   }
 
   if (!started) {
     const intro = introCopy(study);
     return (
-      <main className="container py-12 space-y-4">
-        <h1>{study.title}</h1>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
         {study.description && (
           <p className="whitespace-pre-wrap text-muted-foreground">
             {study.description}
           </p>
         )}
         <p className="text-sm text-muted-foreground">{intro}</p>
-        <Button onClick={begin}>Start</Button>
-      </main>
+        <div className="pt-2">
+          <Button onClick={begin}>Start</Button>
+        </div>
+      </Shell>
     );
   }
 
