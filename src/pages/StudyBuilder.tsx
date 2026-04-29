@@ -266,47 +266,13 @@ function InlinePreview({
   study: StudyRow;
   shareUrl: string | null;
 }) {
-  const [started, setStarted] = useState(false);
   const [done, setDone] = useState(false);
 
   // Reset preview state if the study changes (e.g. edit + return).
   useEffect(() => {
-    setStarted(false);
     setDone(false);
   }, [study.id, study.config, study.title]);
 
-  return (
-    <div className="py-2">
-      <PreviewBody
-        study={study}
-        started={started}
-        done={done}
-        onStart={() => setStarted(true)}
-        onDone={() => setDone(true)}
-        onRestart={() => {
-          setDone(false);
-          setStarted(false);
-        }}
-      />
-    </div>
-  );
-}
-
-function PreviewBody({
-  study,
-  started,
-  done,
-  onStart,
-  onDone,
-  onRestart,
-}: {
-  study: StudyRow;
-  started: boolean;
-  done: boolean;
-  onStart: () => void;
-  onDone: () => void;
-  onRestart: () => void;
-}) {
   if (done) {
     return (
       <div className="space-y-3 py-6 text-center">
@@ -314,17 +280,9 @@ function PreviewBody({
         <p className="text-sm text-muted-foreground">
           Preview complete — nothing was saved.
         </p>
-        <Button variant="outline" size="sm" onClick={onRestart}>
+        <Button variant="outline" size="sm" onClick={() => setDone(false)}>
           Restart preview
         </Button>
-      </div>
-    );
-  }
-
-  if (!started) {
-    return (
-      <div className="space-y-4 py-2">
-        <Button onClick={onStart}>Start</Button>
       </div>
     );
   }
@@ -349,7 +307,7 @@ function PreviewBody({
         sessionId="preview"
         startedAt={Date.now()}
         preview
-        onDone={onDone}
+        onDone={() => setDone(true)}
       />
     );
   }
@@ -367,7 +325,7 @@ function PreviewBody({
         sessionId="preview"
         startedAt={Date.now()}
         preview
-        onDone={onDone}
+        onDone={() => setDone(true)}
       />
     );
   }
