@@ -17,6 +17,13 @@ interface Props {
   sessionId: string;
   startedAt: number;
   preview?: boolean;
+  /**
+   * In-memory mode: skip all Supabase writes. The submitted answers are
+   * passed back via `onSubmitInMemory`. Used by canned example studies
+   * so they exercise the same component as real studies.
+   */
+  inMemory?: boolean;
+  onSubmitInMemory?: (answers: Record<string, string | string[]>) => void;
   onDone: () => void;
 }
 
@@ -25,6 +32,8 @@ export default function SurveyParticipant({
   sessionId,
   startedAt,
   preview = false,
+  inMemory = false,
+  onSubmitInMemory,
   onDone,
 }: Props) {
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
@@ -39,6 +48,12 @@ export default function SurveyParticipant({
       }
     }
     setSubmitting(true);
+    if (inMemory) {
+      onSubmitInMemory?.(answers);
+      setSubmitting(false);
+      onDone();
+      return;
+    }
     if (preview) {
       setSubmitting(false);
       onDone();
