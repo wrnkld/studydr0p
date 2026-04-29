@@ -7,6 +7,17 @@ import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import { ContentPanel } from "@/components/study/primitives";
+
+function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <main className="container py-8">
+      <ContentPanel size="default" className="space-y-3">
+        {children}
+      </ContentPanel>
+    </main>
+  );
+}
 
 interface StudyData {
   id: string;
