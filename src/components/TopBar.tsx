@@ -31,11 +31,6 @@ export default function TopBar() {
       <div className="container flex h-12 items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
           <Brand />
-          {onStudyPage && meta?.title ? (
-            <span className="hidden truncate text-[12px] text-muted-foreground sm:inline">
-              / {meta.title}
-            </span>
-          ) : null}
         </div>
         <div className="flex items-center gap-2">
           {onStudyPage ? (
@@ -88,7 +83,7 @@ function StatusPill({ status }: { status?: string }) {
   return (
     <span
       className={cn(
-        "hidden items-center gap-1.5 border border-foreground bg-card px-2 py-0.5 text-[11px] font-medium sm:inline-flex",
+        "hidden items-center gap-1.5 text-[11px] font-medium sm:inline-flex",
         s.text,
       )}
     >
