@@ -200,11 +200,6 @@ export default function CardSortParticipant({
       }
     }
     setSubmitting(true);
-    if (preview) {
-      setSubmitting(false);
-      onDone();
-      return;
-    }
     const data: CardSortResponseData = {
       sort_type: study.config.sort_type,
       groups: groups.map((g) => ({
@@ -214,6 +209,17 @@ export default function CardSortParticipant({
       })),
       unsorted_card_ids: unsorted,
     };
+    if (inMemory) {
+      onSubmitInMemory?.(data);
+      setSubmitting(false);
+      onDone();
+      return;
+    }
+    if (preview) {
+      setSubmitting(false);
+      onDone();
+      return;
+    }
     const { error: respErr } = await supabase.from("responses").insert({
       study_id: study.id,
       session_id: sessionId,
