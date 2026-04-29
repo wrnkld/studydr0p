@@ -34,6 +34,15 @@ interface Props {
   startedAt: number;
   /** When true, skip writing responses/sessions to the database. */
   preview?: boolean;
+  /**
+   * In-memory mode: skip Supabase entirely. Caller passes cards (and
+   * categories for closed sort) and receives the response via
+   * `onSubmitInMemory`. Used by canned example studies.
+   */
+  inMemory?: boolean;
+  initialCards?: CardRow[];
+  initialCategories?: CategoryRow[];
+  onSubmitInMemory?: (data: CardSortResponseData) => void;
   onDone: () => void;
 }
 
@@ -52,12 +61,33 @@ export default function CardSortParticipant({
   sessionId,
   startedAt,
   preview = false,
+  inMemory = false,
+  initialCards,
+  initialCategories,
+  onSubmitInMemory,
   onDone,
 }: Props) {
-  const [loading, setLoading] = useState(true);
-  const [cards, setCards] = useState<CardRow[]>([]);
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [unsorted, setUnsorted] = useState<string[]>([]);
+  const [loading, setLoading] = useState(!inMemory);
+  const [cards, setCards] = useState<CardRow[]>(() => {
+    if (!inMemory || !initialCards) return [];
+    return [...initialCards].sort(() => Math.random() - 0.5);
+  });
+  const [groups, setGroups] = useState<Group[]>(() => {
+    if (!inMemory) return [];
+    if (study.config.sort_type === "closed" && initialCategories) {
+      return initialCategories.map((c) => ({
+        id: c.id,
+        label: c.label,
+        card_ids: [],
+        source_category_id: c.id,
+      }));
+    }
+    return [];
+  });
+  const [unsorted, setUnsorted] = useState<string[]>(() => {
+    if (!inMemory || !initialCards) return [];
+    return [...initialCards].sort(() => Math.random() - 0.5).map((c) => c.id);
+  });
   const [submitting, setSubmitting] = useState(false);
 
   const sensors = useSensors(
@@ -68,6 +98,7 @@ export default function CardSortParticipant({
   );
 
   useEffect(() => {
+    if (inMemory) return;
     (async () => {
       const [cardsRes, catsRes] = await Promise.all([
         supabase
@@ -101,7 +132,7 @@ export default function CardSortParticipant({
       }
       setLoading(false);
     })();
-  }, [study.id, study.config.sort_type]);
+  }, [study.id, study.config.sort_type, inMemory]);
 
   const moveCardTo = (cardId: string, targetGroupId: string) => {
     if (targetGroupId === UNSORTED) {
@@ -169,11 +200,6 @@ export default function CardSortParticipant({
       }
     }
     setSubmitting(true);
-    if (preview) {
-      setSubmitting(false);
-      onDone();
-      return;
-    }
     const data: CardSortResponseData = {
       sort_type: study.config.sort_type,
       groups: groups.map((g) => ({
@@ -183,6 +209,17 @@ export default function CardSortParticipant({
       })),
       unsorted_card_ids: unsorted,
     };
+    if (inMemory) {
+      onSubmitInMemory?.(data);
+      setSubmitting(false);
+      onDone();
+      return;
+    }
+    if (preview) {
+      setSubmitting(false);
+      onDone();
+      return;
+    }
     const { error: respErr } = await supabase.from("responses").insert({
       study_id: study.id,
       session_id: sessionId,

@@ -1,39 +1,70 @@
 // Hardcoded example studies for the landing page.
-// No backend calls — purely illustrative data showing realistic results.
+//
+// IMPORTANT: examples MUST feed the same components used by real studies
+// (CardSortParticipant, SurveyParticipant, CardSortResults, SurveyResults).
+// Never build parallel demo/result UIs — see mem://index.md core rule.
+//
+// This file only exports DATA (in the real component shapes) and seed
+// responses (in the real ResponseRow shape). The components themselves
+// are imported and rendered by the example study page directly.
 
-export type ExampleStudyId = "fridge" | "remote-work";
+import {
+  CardRow,
+  CardSortConfig,
+  CardSortResponseData,
+  CategoryRow,
+  SurveyConfig,
+  SurveyQuestion,
+} from "@/lib/types";
+
+export type ExampleStudyId = "fridge" | "gasstation";
+
+export interface ExampleResponseRow {
+  id: string;
+  session_id: string;
+  data: Record<string, unknown>;
+  created_at: string;
+}
 
 export interface ExampleCardSort {
   id: "fridge";
   type: "card_sort";
   title: string;
-  question: string;
-  cards: string[];
-  categories: string[];
-  // For each response, a mapping of card -> category
-  responses: Record<string, string>[];
+  description: string;
+  config: CardSortConfig;
+  cards: CardRow[];
+  categories: CategoryRow[];
+  /** Seed responses in the real ResponseRow shape. */
+  seedResponses: ExampleResponseRow[];
 }
 
 export interface ExampleSurvey {
-  id: "remote-work";
+  id: "gasstation";
   type: "survey";
   title: string;
-  question: string;
-  questions: {
-    id: string;
-    label: string;
-    type: "multiple_choice" | "likert" | "open_text";
-    options?: string[];
-  }[];
-  // Each response: question_id -> answer
-  responses: Record<string, string>[];
+  description: string;
+  config: SurveyConfig;
+  /** Seed responses in the real ResponseRow shape (data.answers). */
+  seedResponses: ExampleResponseRow[];
 }
 
 export type ExampleStudy = ExampleCardSort | ExampleSurvey;
 
+// ---------- Helpers ----------
+
+function makeCard(label: string, position: number): CardRow {
+  return { id: `fridge-${label.toLowerCase().replace(/\W+/g, "-")}`, label, description: null, position };
+}
+
+function makeCategory(label: string, position: number): CategoryRow {
+  return { id: `fridge-cat-${label.toLowerCase().replace(/\W+/g, "-")}`, label, position };
+}
+
+const ts = (i: number) => new Date(2026, 3, 1, 12, i).toISOString();
+
 // ---------- Card sort: Fridge ----------
 
-const FRIDGE_CARDS = [
+const FRIDGE_CARDS: CardRow[] = [
   "Ketchup",
   "Mayo",
   "Leftover pizza",
@@ -46,19 +77,24 @@ const FRIDGE_CARDS = [
   "Birthday cake",
   "Baking soda",
   "Eggs",
-];
+].map((l, i) => makeCard(l, i));
 
-const FRIDGE_CATS = [
+const FRIDGE_CATEGORIES: CategoryRow[] = [
   "Door",
   "Top shelf",
   "Middle shelf",
   "Bottom shelf",
   "Freezer",
   "Trash",
-];
+].map((l, i) => makeCategory(l, i));
 
-// 20 hand-crafted responses with realistic disagreement.
-const FRIDGE_RESPONSES: Record<string, string>[] = [
+const cardId = (label: string) =>
+  FRIDGE_CARDS.find((c) => c.label === label)!.id;
+const catId = (label: string) =>
+  FRIDGE_CATEGORIES.find((c) => c.label === label)!.id;
+
+// 20 hand-crafted card-sort placements (card label -> category label).
+const FRIDGE_PLACEMENTS: Record<string, string>[] = [
   { Ketchup: "Door", Mayo: "Door", "Leftover pizza": "Middle shelf", Beer: "Bottom shelf", "Oat milk": "Door", "Mystery tupperware": "Trash", "Wilting spinach": "Trash", Cheese: "Middle shelf", "Hot sauce": "Door", "Birthday cake": "Top shelf", "Baking soda": "Door", Eggs: "Top shelf" },
   { Ketchup: "Middle shelf", Mayo: "Middle shelf", "Leftover pizza": "Top shelf", Beer: "Door", "Oat milk": "Top shelf", "Mystery tupperware": "Middle shelf", "Wilting spinach": "Bottom shelf", Cheese: "Middle shelf", "Hot sauce": "Door", "Birthday cake": "Middle shelf", "Baking soda": "Top shelf", Eggs: "Door" },
   { Ketchup: "Door", Mayo: "Middle shelf", "Leftover pizza": "Middle shelf", Beer: "Bottom shelf", "Oat milk": "Door", "Mystery tupperware": "Trash", "Wilting spinach": "Trash", Cheese: "Middle shelf", "Hot sauce": "Door", "Birthday cake": "Freezer", "Baking soda": "Door", Eggs: "Middle shelf" },
@@ -81,115 +117,168 @@ const FRIDGE_RESPONSES: Record<string, string>[] = [
   { Ketchup: "Door", Mayo: "Door", "Leftover pizza": "Middle shelf", Beer: "Bottom shelf", "Oat milk": "Door", "Mystery tupperware": "Trash", "Wilting spinach": "Trash", Cheese: "Bottom shelf", "Hot sauce": "Door", "Birthday cake": "Top shelf", "Baking soda": "Door", Eggs: "Top shelf" },
 ];
 
+// Convert each placement into a CardSortResponseData (closed sort against
+// the seeded categories). The Results component groups by category_id, so
+// stable IDs matter.
+function placementToResponseData(
+  placement: Record<string, string>,
+): CardSortResponseData {
+  const groupsMap = new Map<string, { category_id: string; category_label: string; card_ids: string[] }>();
+  for (const cat of FRIDGE_CATEGORIES) {
+    groupsMap.set(cat.id, {
+      category_id: cat.id,
+      category_label: cat.label,
+      card_ids: [],
+    });
+  }
+  for (const [cardLabel, catLabel] of Object.entries(placement)) {
+    const cid = cardId(cardLabel);
+    const gid = catId(catLabel);
+    groupsMap.get(gid)!.card_ids.push(cid);
+  }
+  return {
+    sort_type: "closed",
+    groups: Array.from(groupsMap.values()),
+    unsorted_card_ids: [],
+  };
+}
+
+const FRIDGE_SEED_RESPONSES: ExampleResponseRow[] = FRIDGE_PLACEMENTS.map(
+  (p, i) => ({
+    id: `fridge-resp-${i}`,
+    session_id: `fridge-sess-${i}`,
+    data: placementToResponseData(p) as unknown as Record<string, unknown>,
+    created_at: ts(i),
+  }),
+);
+
 export const FRIDGE_STUDY: ExampleCardSort = {
   id: "fridge",
   type: "card_sort",
   title: "Where does it go in the fridge?",
-  question: "Sort each item into the part of the fridge it belongs in.",
+  description: "Sort each item into the part of the fridge it belongs in.",
+  config: { sort_type: "closed" },
   cards: FRIDGE_CARDS,
-  categories: FRIDGE_CATS,
-  responses: FRIDGE_RESPONSES,
+  categories: FRIDGE_CATEGORIES,
+  seedResponses: FRIDGE_SEED_RESPONSES,
 };
 
-// ---------- Survey: Remote work ----------
+// ---------- Survey: Gas station ----------
 
-const REMOTE_QUESTIONS = [
+const GAS_QUESTIONS: SurveyQuestion[] = [
   {
-    id: "days_office",
-    type: "multiple_choice" as const,
-    label: "How many days per week do you want to be in the office?",
-    options: ["0", "1", "2", "3", "4", "5"],
+    id: "q1",
+    type: "multiple_choice",
+    label: "Have you ever eaten a gas station hot dog?",
+    options: ["Yes", "No"],
   },
   {
-    id: "productivity",
-    type: "likert" as const,
-    label: "I'm more productive working from home than in the office.",
-    options: ["Strongly disagree", "Disagree", "Neutral", "Agree", "Strongly agree"],
+    id: "q2",
+    type: "likert",
+    label: "Rate your go-to gas station on food quality.",
   },
   {
-    id: "biggest_perk",
-    type: "multiple_choice" as const,
-    label: "Best thing about working remotely?",
-    options: ["No commute", "Flexible hours", "Quieter focus time", "Comfort of home", "More time with family"],
+    id: "q3",
+    type: "multiple_choice",
+    label: "Which of these have you eaten at a gas station?",
+    options: [
+      "Hot dog",
+      "Taquito",
+      "Donut",
+      "Beef jerky",
+      "Pizza slice",
+      "Just snacks",
+    ],
+  },
+  {
+    id: "q4",
+    type: "multiple_choice",
+    label: "What's the best gas station chain for food?",
+    options: ["Wawa", "Buc-ee's", "Sheetz", "Casey's", "7-Eleven", "They're all the same"],
+  },
+  {
+    id: "q5",
+    type: "open_text",
+    label: "Describe your ideal gas station snack in one sentence.",
   },
 ];
 
-const REMOTE_RESPONSES: Record<string, string>[] = [
-  { days_office: "2", productivity: "Agree", biggest_perk: "No commute" },
-  { days_office: "0", productivity: "Strongly agree", biggest_perk: "Flexible hours" },
-  { days_office: "3", productivity: "Neutral", biggest_perk: "No commute" },
-  { days_office: "1", productivity: "Agree", biggest_perk: "Quieter focus time" },
-  { days_office: "2", productivity: "Strongly agree", biggest_perk: "No commute" },
-  { days_office: "0", productivity: "Strongly agree", biggest_perk: "Flexible hours" },
-  { days_office: "5", productivity: "Disagree", biggest_perk: "Quieter focus time" },
-  { days_office: "2", productivity: "Agree", biggest_perk: "No commute" },
-  { days_office: "1", productivity: "Strongly agree", biggest_perk: "Comfort of home" },
-  { days_office: "3", productivity: "Neutral", biggest_perk: "More time with family" },
-  { days_office: "2", productivity: "Agree", biggest_perk: "No commute" },
-  { days_office: "0", productivity: "Strongly agree", biggest_perk: "Flexible hours" },
-  { days_office: "4", productivity: "Disagree", biggest_perk: "Quieter focus time" },
-  { days_office: "2", productivity: "Agree", biggest_perk: "Flexible hours" },
-  { days_office: "1", productivity: "Strongly agree", biggest_perk: "No commute" },
-  { days_office: "2", productivity: "Neutral", biggest_perk: "Comfort of home" },
-  { days_office: "3", productivity: "Agree", biggest_perk: "No commute" },
-  { days_office: "0", productivity: "Strongly agree", biggest_perk: "Flexible hours" },
-  { days_office: "2", productivity: "Agree", biggest_perk: "More time with family" },
-  { days_office: "1", productivity: "Strongly agree", biggest_perk: "No commute" },
+export const GAS_STATION_CONFIG: SurveyConfig = {
+  questions: GAS_QUESTIONS,
+  layout: "single_page",
+};
+
+// 20 hand-crafted survey answers shaped like real responses
+// ({ answers: { qid: value } }). q3 uses string[] for multi-select.
+const GAS_ANSWER_SETS: Record<string, string | string[]>[] = [
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito"], q4: "Wawa", q5: "Slim Jim and a Gatorade." },
+  { q1: "No",  q2: "2", q3: ["Just snacks"],         q4: "7-Eleven", q5: "Just water." },
+  { q1: "Yes", q2: "3", q3: ["Beef jerky", "Donut"], q4: "Buc-ee's", q5: "Coffee and a donut." },
+  { q1: "Yes", q2: "5", q3: ["Hot dog", "Pizza slice"], q4: "Sheetz", q5: "Hot pretzel, no question." },
+  { q1: "No",  q2: "3", q3: ["Just snacks", "Beef jerky"], q4: "Casey's", q5: "Sour Patch Kids." },
+  { q1: "Yes", q2: "4", q3: ["Taquito"], q4: "7-Eleven", q5: "Whatever's hot and rolling." },
+  { q1: "No",  q2: "1", q3: ["Just snacks"], q4: "They're all the same", q5: "I avoid them entirely." },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Pizza slice", "Donut"], q4: "Wawa", q5: "Sandwich, fresh, with chips." },
+  { q1: "Yes", q2: "5", q3: ["Hot dog"], q4: "Buc-ee's", q5: "Brisket sandwich, ideally." },
+  { q1: "No",  q2: "2", q3: ["Donut"], q4: "Sheetz", q5: "Glazed donut and orange juice." },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito", "Donut"], q4: "Wawa", q5: "Hoagie." },
+  { q1: "Yes", q2: "5", q3: ["Beef jerky", "Hot dog"], q4: "Casey's", q5: "Casey's pizza is unbeatable." },
+  { q1: "No",  q2: "2", q3: ["Just snacks"], q4: "7-Eleven", q5: "A bag of chips." },
+  { q1: "Yes", q2: "3", q3: ["Taquito", "Beef jerky"], q4: "Buc-ee's", q5: "Beaver Nuggets." },
+  { q1: "Yes", q2: "4", q3: ["Hot dog"], q4: "Sheetz", q5: "MTO sandwich at 2am." },
+  { q1: "Yes", q2: "3", q3: ["Donut", "Taquito"], q4: "7-Eleven", q5: "Tornado and a Slurpee." },
+  { q1: "No",  q2: "2", q3: ["Just snacks"], q4: "Wawa", q5: "Trail mix." },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Beef jerky"], q4: "Casey's", q5: "Pepperoni slice." },
+  { q1: "Yes", q2: "3", q3: ["Pizza slice"], q4: "Sheetz", q5: "Two slices and a slushie." },
+  { q1: "Yes", q2: "5", q3: ["Hot dog", "Donut"], q4: "Wawa", q5: "Sizzli for breakfast." },
 ];
 
-export const REMOTE_STUDY: ExampleSurvey = {
-  id: "remote-work",
+const GAS_SEED_RESPONSES: ExampleResponseRow[] = GAS_ANSWER_SETS.map(
+  (answers, i) => ({
+    id: `gas-resp-${i}`,
+    session_id: `gas-sess-${i}`,
+    data: { answers } as Record<string, unknown>,
+    created_at: ts(i),
+  }),
+);
+
+export const GAS_STATION_STUDY: ExampleSurvey = {
+  id: "gasstation",
   type: "survey",
-  title: "How do you actually want to work?",
-  question: "20 people answered three questions about remote work.",
-  questions: REMOTE_QUESTIONS,
-  responses: REMOTE_RESPONSES,
+  title: "Gas station food. No judgment.",
+  description: "Five quick questions about gas station snacks.",
+  config: GAS_STATION_CONFIG,
+  seedResponses: GAS_SEED_RESPONSES,
 };
 
-export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, REMOTE_STUDY];
+export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, GAS_STATION_STUDY];
 
 export function getExampleStudy(id: string): ExampleStudy | null {
   if (id === "fridge") return FRIDGE_STUDY;
-  if (id === "remote-work") return REMOTE_STUDY;
+  if (id === "gasstation") return GAS_STATION_STUDY;
   return null;
 }
 
-// ---------- Aggregation helpers ----------
-
-// For card sort: per-card breakdown of category counts and most-common.
-export function summarizeCardSort(study: ExampleCardSort) {
-  return study.cards.map((card) => {
-    const counts: Record<string, number> = {};
-    study.responses.forEach((r) => {
-      const cat = r[card];
-      if (!cat) return;
-      counts[cat] = (counts[cat] ?? 0) + 1;
-    });
-    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-    const total = study.responses.length;
-    const top = sorted[0];
-    const agreement = top ? Math.round((top[1] / total) * 100) : 0;
-    return {
-      card,
-      counts,
-      sorted,
-      total,
-      topCategory: top?.[0] ?? "—",
-      agreement,
-    };
-  });
+// Build a synthetic ResponseRow from a freshly-submitted card sort or survey
+// so it can be appended to the seed list and shown in the real Results view.
+export function makeUserCardSortResponse(
+  data: CardSortResponseData,
+): ExampleResponseRow {
+  return {
+    id: "user-card-sort",
+    session_id: "user",
+    data: data as unknown as Record<string, unknown>,
+    created_at: new Date().toISOString(),
+  };
 }
 
-// For survey: per-question breakdown of answer counts.
-export function summarizeSurvey(study: ExampleSurvey) {
-  return study.questions.map((q) => {
-    const counts: Record<string, number> = {};
-    study.responses.forEach((r) => {
-      const v = r[q.id];
-      if (!v) return;
-      counts[v] = (counts[v] ?? 0) + 1;
-    });
-    const total = study.responses.length;
-    return { question: q, counts, total };
-  });
+export function makeUserSurveyResponse(
+  answers: Record<string, string | string[]>,
+): ExampleResponseRow {
+  return {
+    id: "user-survey",
+    session_id: "user",
+    data: { answers } as Record<string, unknown>,
+    created_at: new Date().toISOString(),
+  };
 }
