@@ -173,6 +173,7 @@ export default function Landing() {
           })}
         </section>
       )}
+      </ContentPanel>
 
       <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
         <AlertDialogContent>
