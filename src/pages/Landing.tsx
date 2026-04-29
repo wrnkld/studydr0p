@@ -100,13 +100,32 @@ export default function Landing() {
   };
 
   const rows = [...userRows, ...EXAMPLE_ROWS];
+  const totalResponses = rows.reduce((sum, r) => sum + (r.responseCount || 0), 0);
 
   return (
     <PageContainer space="lg">
-      <PageHeader
-        title="UX research, without the friction."
-        description="Run unmoderated UX studies and share them with participants via a single link."
-      />
+      <div className="relative">
+        <PageHeader
+          title="UX research, without the friction."
+          description="Run unmoderated UX studies and share them with participants via a single link."
+        />
+        {session && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-4 right-0 hidden select-none text-foreground sm:block"
+            style={{
+              fontSize: "180px",
+              lineHeight: 1,
+              letterSpacing: "-0.06em",
+              fontWeight: 800,
+              opacity: 0.05,
+              fontFamily: '"Inter", system-ui, sans-serif',
+            }}
+          >
+            {totalResponses.toLocaleString()}
+          </div>
+        )}
+      </div>
 
       {session && loadingStudies ? (
         <p className="text-sm text-muted-foreground">Loading…</p>
