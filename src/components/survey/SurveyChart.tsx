@@ -1,5 +1,5 @@
-// Shared survey question visualization. Drives both the canned example
-// results (GasStationSurveyResults) and real study results (SurveyResults).
+// Shared survey question visualization used by SurveyResults
+// (which renders both real studies and canned examples).
 //
 // Chart rules:
 //  - kind="binary"        → donut (exactly 2 options)
