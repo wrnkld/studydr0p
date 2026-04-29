@@ -10,6 +10,8 @@ import {
 } from "@/lib/types";
 import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
+import { Chip, Frame, Kicker } from "@/components/study/primitives";
+import { cn } from "@/lib/utils";
 
 interface Props {
   study: {
