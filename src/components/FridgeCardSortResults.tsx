@@ -142,9 +142,9 @@ export default function FridgeCardSortResults({ userPlacement }: Props) {
   return (
     <div className="space-y-8">
       <StatGrid>
-        <Stat label="Responses" value={String(total)} />
-        <Stat label="Cards" value={String(rows.length)} />
-        <Stat label="Categories" value={String(CATEGORIES.length)} />
+        <Stat tone="indigo" label="Responses" value={String(total)} />
+        <Stat tone="green" label="Cards" value={String(rows.length)} />
+        <Stat tone="amber" label="Categories" value={String(CATEGORIES.length)} />
       </StatGrid>
 
       <ByCardSection data={byCard} />
