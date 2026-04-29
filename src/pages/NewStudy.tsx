@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
 
 type TypeMeta = {
@@ -111,7 +111,9 @@ export default function NewStudy() {
 
   return (
     <PageContainer space="lg">
-      <PageHeader title="What kind of study?" />
+      <ContentPanel size="default" className="space-y-6">
+        <BackButton to="/" />
+        <PageHeader title="What kind of study?" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {TYPES.map((t) => {
@@ -164,6 +166,7 @@ export default function NewStudy() {
           );
         })}
       </div>
+      </ContentPanel>
     </PageContainer>
   );
 }

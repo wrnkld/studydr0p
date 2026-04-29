@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
-import { ArrowLeft, Check, Copy, LogOut, Plus, Trash2 } from "lucide-react";
+import { Check, Copy, LogOut, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,12 +10,9 @@ import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { cn } from "@/lib/utils";
 
 /**
- * Global top bar.
- *  - Logged out: wordmark + email magic-link form.
- *  - Logged in (general): wordmark + New study + account menu.
- *  - Study page: back arrow · breadcrumb (wordmark / live title) · status pill ·
- *                Save · overflow menu (copy link, delete).
- * Hidden on participant routes.
+ * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
+ * contextual actions on the right. No breadcrumb, no back arrow (back
+ * navigation lives inside each page's content panel for consistency).
  */
 export default function TopBar() {
   const { session } = useAuth();
@@ -30,16 +27,15 @@ export default function TopBar() {
   const onStudyPage = !!studyMatch && !onNewStudyPage && !!session;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 w-full border-b border-foreground bg-card">
       <div className="container flex h-12 items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-2">
-          {onStudyPage ? (
-            <StudyCrumb title={meta?.title ?? "Untitled study"} />
-          ) : onNewStudyPage ? (
-            <StudyCrumb title="New study" />
-          ) : (
-            <Brand />
-          )}
+        <div className="flex min-w-0 items-center gap-3">
+          <Brand />
+          {onStudyPage && meta?.title ? (
+            <span className="hidden truncate text-[12px] text-muted-foreground sm:inline">
+              / {meta.title}
+            </span>
+          ) : null}
         </div>
         <div className="flex items-center gap-2">
           {onStudyPage ? (
@@ -55,60 +51,17 @@ export default function TopBar() {
   );
 }
 
-function BrandMark({ className }: { className?: string }) {
-  // 2x2 dot grid, top-right dot displaced + accent color.
-  return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-      className={className}
-    >
-      <circle cx="4" cy="4" r="1.6" fill="currentColor" />
-      <circle cx="4" cy="12" r="1.6" fill="currentColor" />
-      <circle cx="12" cy="12" r="1.6" fill="currentColor" />
-      {/* displaced + accent */}
-      <circle cx="14" cy="2" r="1.8" fill="#4F75FF" />
-    </svg>
-  );
-}
-
 function Brand() {
   return (
-    <Link to="/" className="group flex items-center gap-2 text-foreground">
-      <BrandMark />
-      <span
-        className="text-[15px] font-extrabold tracking-[-0.02em] [font-stretch:condensed]"
-        style={{ fontFamily: '"Inter", "Helvetica Neue", system-ui, sans-serif' }}
-      >
+    <Link
+      to="/"
+      className="text-foreground hover:opacity-80"
+      aria-label="StudyDrop home"
+    >
+      <span className="font-mono text-[15px] font-semibold tracking-[-0.01em]">
         StudyDrop
       </span>
     </Link>
-  );
-}
-
-function StudyCrumb({ title }: { title: string }) {
-  return (
-    <div className="flex min-w-0 items-center gap-2">
-      <Link
-        to="/"
-        aria-label="Back to studies"
-        className="flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-      </Link>
-      <Link
-        to="/"
-        className="hidden items-center gap-1.5 text-[12px] font-bold tracking-[-0.02em] text-muted-foreground hover:text-foreground sm:inline-flex"
-      >
-        <BrandMark className="opacity-80" />
-        StudyDrop
-      </Link>
-      <span className="hidden text-muted-foreground/50 sm:inline">/</span>
-      <span className="truncate text-[13px] font-medium">{title}</span>
-    </div>
   );
 }
 
@@ -116,17 +69,17 @@ function StatusPill({ status }: { status?: string }) {
   if (!status) return null;
   const map: Record<string, { label: string; dot: string; text: string }> = {
     draft: {
-      label: "Draft",
+      label: "draft",
       dot: "bg-muted-foreground/60",
       text: "text-muted-foreground",
     },
     live: {
-      label: "Live",
+      label: "live",
       dot: "bg-emerald-500",
       text: "text-foreground",
     },
     closed: {
-      label: "Closed",
+      label: "closed",
       dot: "bg-muted-foreground/60",
       text: "text-muted-foreground",
     },
@@ -135,7 +88,7 @@ function StatusPill({ status }: { status?: string }) {
   return (
     <span
       className={cn(
-        "hidden items-center gap-1.5 rounded-full border border-border/70 bg-background px-2 py-0.5 text-[11px] font-medium sm:inline-flex",
+        "hidden items-center gap-1.5 border border-foreground bg-card px-2 py-0.5 text-[11px] font-medium sm:inline-flex",
         s.text,
       )}
     >
@@ -169,10 +122,10 @@ function StudyActions({
       {shareUrl && (
         <Button
           variant="ghost"
-          size="sm"
+          size="icon"
           aria-label="Copy share link"
           title="Copy share link"
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+          className="h-8 w-8 text-muted-foreground hover:text-foreground"
           onClick={copy}
         >
           {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -180,10 +133,10 @@ function StudyActions({
       )}
       <Button
         variant="ghost"
-        size="sm"
+        size="icon"
         aria-label="Delete study"
         title="Delete study"
-        className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+        className="h-8 w-8 text-muted-foreground hover:text-destructive"
         disabled={!actions}
         onClick={() => (requestDelete ? requestDelete() : actions?.onDelete())}
       >
@@ -216,10 +169,10 @@ function SignedInActions() {
       </Button>
       <Button
         variant="ghost"
-        size="sm"
+        size="icon"
         aria-label="Sign out"
         title="Sign out"
-        className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+        className="h-8 w-8 text-muted-foreground hover:text-foreground"
         onClick={async () => {
           await signOut();
           navigate("/");

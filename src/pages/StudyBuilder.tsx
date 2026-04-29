@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
-import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 interface StudyRow {
@@ -189,45 +189,56 @@ export default function StudyBuilder() {
       <Tabs
         value={activeTab}
         onValueChange={(v) => setTab(v as TabKey)}
-        orientation="vertical"
-        className="flex gap-8"
+        className="md:flex md:flex-row md:gap-8"
       >
-        <TabsList className="flex h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0">
-          <TabsTrigger
-            value="build"
-            className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
-          >
-            Build
-          </TabsTrigger>
-          <TabsTrigger
-            value="preview"
-            className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
-          >
-            Preview
-          </TabsTrigger>
-          <TabsTrigger
-            value="results"
-            className="justify-start rounded-md px-3 py-2 data-[state=active]:bg-muted data-[state=active]:shadow-none"
-          >
-            Results
-          </TabsTrigger>
+        {/* Mobile: top tab bar (full width, equal columns, underline active). */}
+        <TabsList className="grid h-auto w-full grid-cols-3 gap-0 rounded-none border-b border-foreground bg-card p-0 md:hidden">
+          {(["build", "preview", "results"] as const).map((t) => (
+            <TabsTrigger
+              key={t}
+              value={t}
+              className="rounded-none border-b-[3px] border-transparent bg-card px-2 py-3 text-[12px] font-medium uppercase tracking-[0.08em] text-muted-foreground data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
+            >
+              {t}
+            </TabsTrigger>
+          ))}
         </TabsList>
 
-        <div className="min-w-0 flex-1 space-y-6">
-          <PageHeader
-            title={liveTitle.trim() || "Untitled study"}
-            description={liveDescription.trim() || undefined}
-          />
+        {/* Desktop: vertical sidebar tabs. */}
+        <TabsList className="hidden h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0 md:flex">
+          {(["build", "preview", "results"] as const).map((t) => (
+            <TabsTrigger
+              key={t}
+              value={t}
+              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:bg-secondary data-[state=active]:shadow-none"
+            >
+              {t}
+            </TabsTrigger>
+          ))}
+        </TabsList>
 
-          <TabsContent value="build" className="mt-0">
-            {builder}
-          </TabsContent>
-          <TabsContent value="preview" className="mt-0">
-            <InlinePreview study={study} shareUrl={shareUrl} />
-          </TabsContent>
-          <TabsContent value="results" className="mt-0">
-            <StudyResultsView studyId={study.id} />
-          </TabsContent>
+        <div className="min-w-0 flex-1 space-y-6 px-4 pt-4 md:px-0 md:pt-0">
+          <ContentPanel size="wide">
+            <div className="mb-4">
+              <BackButton to="/" />
+            </div>
+            <PageHeader
+              title={liveTitle.trim() || "Untitled study"}
+              description={liveDescription.trim() || undefined}
+            />
+
+            <div className="mt-6">
+              <TabsContent value="build" className="mt-0">
+                {builder}
+              </TabsContent>
+              <TabsContent value="preview" className="mt-0">
+                <InlinePreview study={study} shareUrl={shareUrl} />
+              </TabsContent>
+              <TabsContent value="results" className="mt-0">
+                <StudyResultsView studyId={study.id} />
+              </TabsContent>
+            </div>
+          </ContentPanel>
         </div>
       </Tabs>
 
