@@ -1,4 +1,14 @@
 import { useEffect, useState } from "react";
+import {
+  DndContext,
+  DragEndEvent,
+  PointerSensor,
+  TouchSensor,
+  useDraggable,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,8 +59,13 @@ export default function CardSortParticipant({
   const [groups, setGroups] = useState<Group[]>([]);
   const [unsorted, setUnsorted] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  const [draggedCardId, setDraggedCardId] = useState<string | null>(null);
-  const [dragOver, setDragOver] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    }),
+  );
 
   useEffect(() => {
     (async () => {
@@ -67,7 +82,6 @@ export default function CardSortParticipant({
           .order("position"),
       ]);
       const loadedCards = (cardsRes.data ?? []) as CardRow[];
-      // shuffle for unbiased order
       const shuffled = [...loadedCards].sort(() => Math.random() - 0.5);
       setCards(shuffled);
       setUnsorted(shuffled.map((c) => c.id));
@@ -107,6 +121,13 @@ export default function CardSortParticipant({
         return { ...g, card_ids: g.card_ids.filter((id) => id !== cardId) };
       }),
     );
+  };
+
+  const onDragEnd = (e: DragEndEvent) => {
+    const cardId = String(e.active.id);
+    const overId = e.over?.id ? String(e.over.id) : null;
+    if (!overId) return;
+    moveCardTo(cardId, overId);
   };
 
   const addOpenCategory = () => {
@@ -149,7 +170,6 @@ export default function CardSortParticipant({
     }
     setSubmitting(true);
     if (preview) {
-      // Don't pollute real data with preview submissions.
       setSubmitting(false);
       onDone();
       return;
@@ -191,131 +211,94 @@ export default function CardSortParticipant({
   const cardById = (id: string) => cards.find((c) => c.id === id);
 
   return (
-    <div className="space-y-6">
-      {/* Pool of unsorted cards */}
-      <PoolZone
-        id={UNSORTED}
-        label={`Cards (${unsorted.length})`}
-        isDragOver={dragOver === UNSORTED}
-        onDragEnter={() => setDragOver(UNSORTED)}
-        onDragLeave={() => setDragOver(null)}
-        onDrop={() => {
-          if (draggedCardId) moveCardTo(draggedCardId, UNSORTED);
-          setDragOver(null);
-          setDraggedCardId(null);
-        }}
-      >
-        <div className="flex flex-wrap gap-2 min-h-[40px]">
-          {unsorted.map((id) => {
-            const c = cardById(id);
-            if (!c) return null;
-            return (
-              <DraggableCard
-                key={id}
-                card={c}
-                onDragStart={() => setDraggedCardId(id)}
-                onDragEnd={() => setDraggedCardId(null)}
-                onMobileMove={(targetId) => moveCardTo(id, targetId)}
-                groups={groups}
-                showUnsortedOption={false}
-              />
-            );
-          })}
-        </div>
-      </PoolZone>
+    <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+      <div className="space-y-6">
+        {/* Pool of unsorted cards */}
+        <PoolZone id={UNSORTED} label={`Cards (${unsorted.length})`}>
+          <div className="flex flex-wrap gap-2 min-h-[40px]">
+            {unsorted.map((id) => {
+              const c = cardById(id);
+              if (!c) return null;
+              return <DraggableCard key={id} id={id} label={c.label} />;
+            })}
+          </div>
+        </PoolZone>
 
-      {/* Categories */}
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {groups.map((g) => (
-            <CategoryZone
-              key={g.id}
-              id={g.id}
-              label={g.label}
-              isOpenSort={study.config.sort_type === "open"}
-              isDragOver={dragOver === g.id}
-              onRename={(label) => renameGroup(g.id, label)}
-              onRemove={() => removeOpenGroup(g.id)}
-              onDragEnter={() => setDragOver(g.id)}
-              onDragLeave={() => setDragOver(null)}
-              onDrop={() => {
-                if (draggedCardId) moveCardTo(draggedCardId, g.id);
-                setDragOver(null);
-                setDraggedCardId(null);
-              }}
-            >
-              {g.card_ids.map((id) => {
-                const c = cardById(id);
-                if (!c) return null;
-                return (
-                  <DraggableCard
-                    key={id}
-                    card={c}
-                    onDragStart={() => setDraggedCardId(id)}
-                    onDragEnd={() => setDraggedCardId(null)}
-                    onMobileMove={(targetId) => moveCardTo(id, targetId)}
-                    groups={groups}
-                    showUnsortedOption
-                  />
-                );
-              })}
-            </CategoryZone>
-          ))}
+        {/* Categories */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            {groups.map((g) => (
+              <CategoryZone
+                key={g.id}
+                id={g.id}
+                label={g.label}
+                isOpenSort={study.config.sort_type === "open"}
+                cardCount={g.card_ids.length}
+                onRename={(label) => renameGroup(g.id, label)}
+                onRemove={() => removeOpenGroup(g.id)}
+              >
+                {g.card_ids.map((id) => {
+                  const c = cardById(id);
+                  if (!c) return null;
+                  return <DraggableCard key={id} id={id} label={c.label} />;
+                })}
+              </CategoryZone>
+            ))}
+          </div>
+
+          {study.config.sort_type === "open" && (
+            <Button variant="outline" size="sm" onClick={addOpenCategory}>
+              <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
+            </Button>
+          )}
         </div>
 
-        {study.config.sort_type === "open" && (
-          <Button variant="outline" size="sm" onClick={addOpenCategory}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
+        <div className="border-t border-foreground pt-6">
+          <Button onClick={submit} disabled={submitting}>
+            {submitting ? "Submitting…" : "Submit"}
           </Button>
-        )}
+        </div>
       </div>
-
-      <div className="space-y-2 border-t border-foreground pt-6">
-        <Button onClick={submit} disabled={submitting}>
-          {submitting ? "Submitting…" : "Submit"}
-        </Button>
-        <p className="text-xs text-muted-foreground">
-          {unsorted.length > 0
-            ? `${unsorted.length} card${unsorted.length === 1 ? "" : "s"} left to sort.`
-            : "All cards sorted."}
-        </p>
-      </div>
-    </div>
+    </DndContext>
   );
 }
 
-/** Top pool — Frame with header showing count. */
+function DraggableCard({ id, label }: { id: string; label: string }) {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({ id });
+  const style: React.CSSProperties = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    opacity: isDragging ? 0.6 : 1,
+    touchAction: "none",
+  };
+  return (
+    <Chip
+      ref={setNodeRef}
+      style={style}
+      draggable
+      {...listeners}
+      {...attributes}
+    >
+      {label}
+    </Chip>
+  );
+}
+
 function PoolZone({
   id,
   label,
-  isDragOver,
-  onDragEnter,
-  onDragLeave,
-  onDrop,
   children,
 }: {
   id: string;
   label: string;
-  isDragOver: boolean;
-  onDragEnter: () => void;
-  onDragLeave: () => void;
-  onDrop: () => void;
   children: React.ReactNode;
 }) {
+  const { setNodeRef, isOver } = useDroppable({ id });
   return (
-    <div
-      onDragOver={(e) => {
-        e.preventDefault();
-        onDragEnter();
-      }}
-      onDragLeave={onDragLeave}
-      onDrop={(e) => {
-        e.preventDefault();
-        onDrop();
-      }}
-      data-zone-id={id}
-    >
-      <Frame active={isDragOver}>
+    <div ref={setNodeRef}>
+      <Frame active={isOver}>
         <Kicker className="mb-2">{label}</Kicker>
         {children}
       </Frame>
@@ -323,52 +306,35 @@ function PoolZone({
   );
 }
 
-/** Category drop zone — dashed when empty, solid card when filled or hovered. */
 function CategoryZone({
   id,
   label,
   isOpenSort,
-  isDragOver,
+  cardCount,
   onRename,
   onRemove,
-  onDragEnter,
-  onDragLeave,
-  onDrop,
   children,
 }: {
   id: string;
   label: string;
   isOpenSort: boolean;
-  isDragOver: boolean;
+  cardCount: number;
   onRename: (v: string) => void;
   onRemove: () => void;
-  onDragEnter: () => void;
-  onDragLeave: () => void;
-  onDrop: () => void;
   children: React.ReactNode;
 }) {
-  const hasCards = Array.isArray(children)
-    ? children.filter(Boolean).length > 0
-    : Boolean(children);
-  const showSolid = isDragOver || hasCards;
+  const { setNodeRef, isOver } = useDroppable({ id });
+  const isEmpty = cardCount === 0;
+  const showSolid = isOver || !isEmpty;
 
   return (
     <div
-      onDragOver={(e) => {
-        e.preventDefault();
-        onDragEnter();
-      }}
-      onDragLeave={onDragLeave}
-      onDrop={(e) => {
-        e.preventDefault();
-        onDrop();
-      }}
-      data-zone-id={id}
+      ref={setNodeRef}
       className={cn(
         "rounded-lg p-3 transition-colors min-h-[88px] flex",
         !showSolid && "border border-dashed border-foreground/40",
         showSolid && "border border-foreground bg-card",
-        isDragOver && "bg-muted/70",
+        isOver && "bg-muted/70",
       )}
     >
       <div className="flex w-full flex-col gap-2">
@@ -393,91 +359,16 @@ function CategoryZone({
         ) : (
           <Kicker>{label}</Kicker>
         )}
-        {hasCards ? (
-          <div className="flex flex-wrap gap-2">{children}</div>
-        ) : (
+        {isEmpty ? (
           <div className="flex flex-1 items-center justify-center py-3">
             <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70 font-medium">
               Drop cards here
             </span>
           </div>
+        ) : (
+          <div className="flex flex-wrap gap-2">{children}</div>
         )}
       </div>
-    </div>
-  );
-}
-
-function DraggableCard({
-  card,
-  onDragStart,
-  onDragEnd,
-  onMobileMove,
-  groups,
-  showUnsortedOption,
-}: {
-  card: CardRow;
-  onDragStart: () => void;
-  onDragEnd: () => void;
-  onMobileMove: (targetId: string) => void;
-  groups: Group[];
-  showUnsortedOption: boolean;
-}) {
-  const [showMenu, setShowMenu] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-
-  return (
-    <div className="relative inline-block">
-      <Chip
-        draggable
-        onDragStart={() => {
-          setIsDragging(true);
-          onDragStart();
-        }}
-        onDragEnd={() => {
-          setIsDragging(false);
-          onDragEnd();
-        }}
-        style={{ opacity: isDragging ? 0.6 : 1 }}
-      >
-        {card.label}
-      </Chip>
-      <button
-        type="button"
-        onClick={() => setShowMenu((s) => !s)}
-        className="absolute -right-1 -top-1 rounded p-1 text-muted-foreground hover:bg-accent sm:hidden"
-        aria-label="Move card"
-      >
-        ⋯
-      </button>
-      {showMenu && (
-        <div className="absolute right-0 top-8 z-10 w-44 rounded-md border border-foreground bg-popover p-1 shadow-md sm:hidden">
-          {showUnsortedOption && (
-            <button
-              type="button"
-              onClick={() => {
-                onMobileMove(UNSORTED);
-                setShowMenu(false);
-              }}
-              className="block w-full rounded px-2 py-1.5 text-left text-xs hover:bg-accent"
-            >
-              ← Move to unsorted
-            </button>
-          )}
-          {groups.map((g) => (
-            <button
-              key={g.id}
-              type="button"
-              onClick={() => {
-                onMobileMove(g.id);
-                setShowMenu(false);
-              }}
-              className="block w-full truncate rounded px-2 py-1.5 text-left text-xs hover:bg-accent"
-            >
-              → {g.label || "Untitled"}
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
