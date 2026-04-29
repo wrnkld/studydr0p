@@ -28,7 +28,7 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground bg-card">
-      <div className="container flex h-12 items-center justify-between gap-3">
+      <div className="container flex h-16 items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <Brand />
         </div>
