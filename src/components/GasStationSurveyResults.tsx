@@ -123,8 +123,8 @@ export default function GasStationSurveyResults({ userAnswers }: Props) {
   return (
     <div className="space-y-8">
       <StatGrid cols={2}>
-        <Stat label="Responses" value={String(data.total)} />
-        <Stat label="Questions" value="5" />
+        <Stat tone="indigo" label="Responses" value={String(data.total)} />
+        <Stat tone="green" label="Questions" value="5" />
       </StatGrid>
 
       <QuestionSection

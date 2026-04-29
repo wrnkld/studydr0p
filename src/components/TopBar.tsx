@@ -55,15 +55,35 @@ export default function TopBar() {
   );
 }
 
+function BrandMark({ className }: { className?: string }) {
+  // 2x2 dot grid, top-right dot displaced + accent color.
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      className={className}
+    >
+      <circle cx="4" cy="4" r="1.6" fill="currentColor" />
+      <circle cx="4" cy="12" r="1.6" fill="currentColor" />
+      <circle cx="12" cy="12" r="1.6" fill="currentColor" />
+      {/* displaced + accent */}
+      <circle cx="14" cy="2" r="1.8" fill="#4F75FF" />
+    </svg>
+  );
+}
+
 function Brand() {
   return (
-    <Link to="/" className="group flex items-center gap-2">
-      <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-60" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
-      </span>
-      <span className="font-mono text-[13px] font-medium tracking-tight">
-        studydrop
+    <Link to="/" className="group flex items-center gap-2 text-foreground">
+      <BrandMark />
+      <span
+        className="text-[15px] font-extrabold tracking-[-0.02em] [font-stretch:condensed]"
+        style={{ fontFamily: '"Inter", "Helvetica Neue", system-ui, sans-serif' }}
+      >
+        StudyDrop
       </span>
     </Link>
   );
@@ -81,9 +101,10 @@ function StudyCrumb({ title }: { title: string }) {
       </Link>
       <Link
         to="/"
-        className="hidden font-mono text-[12px] text-muted-foreground hover:text-foreground sm:inline"
+        className="hidden items-center gap-1.5 text-[12px] font-bold tracking-[-0.02em] text-muted-foreground hover:text-foreground sm:inline-flex"
       >
-        studydrop
+        <BrandMark className="opacity-80" />
+        StudyDrop
       </Link>
       <span className="hidden text-muted-foreground/50 sm:inline">/</span>
       <span className="truncate text-[13px] font-medium">{title}</span>

@@ -164,26 +164,46 @@ Frame.displayName = "Frame";
  * Numeric stat card. Use inside a grid (e.g., 3-up summary at the top of
  * a results page).
  */
+export type StatTone = "indigo" | "green" | "amber" | "neutral";
+
+const TONE_BORDER: Record<StatTone, string> = {
+  indigo: "#4F75FF",
+  green: "#16a34a",
+  amber: "#d97706",
+  neutral: "hsl(var(--border))",
+};
+
 export function Stat({
   label,
   value,
+  tone = "neutral",
   className,
 }: {
   label: React.ReactNode;
   value: React.ReactNode;
+  tone?: StatTone;
   className?: string;
 }) {
   return (
     <div
-      className={cn(
-        "rounded-lg border border-border/70 bg-card p-4 shadow-[0_1px_2px_rgba(20,20,15,0.04)]",
-        className,
-      )}
+      className={cn("relative pl-5 py-2", className)}
+      style={{ borderLeft: `3px solid ${TONE_BORDER[tone]}` }}
     >
       <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
         {label}
       </div>
-      <div className="mt-2 text-2xl font-semibold tracking-tight">{value}</div>
+      <div
+        className="mt-1 text-foreground"
+        style={{
+          fontSize: "48px",
+          fontWeight: 700,
+          lineHeight: 1,
+          letterSpacing: "-0.03em",
+          fontVariantNumeric: "tabular-nums",
+        }}
+      >
+        {value}
+      </div>
     </div>
   );
 }
