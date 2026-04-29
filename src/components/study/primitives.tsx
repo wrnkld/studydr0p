@@ -296,3 +296,67 @@ export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
   },
 );
 Chip.displayName = "Chip";
+
+// ---------- ContentPanel ----------
+
+/**
+ * White content panel with the hard offset shadow on warm bg.
+ * Use as the inner wrapper for app pages so they all share one container.
+ */
+export function ContentPanel({
+  children,
+  className,
+  size = "default",
+}: {
+  children: React.ReactNode;
+  className?: string;
+  /** Panel max-width. */
+  size?: "narrow" | "default" | "wide";
+}) {
+  return (
+    <div
+      className={cn(
+        "panel-press mx-auto w-full p-6 sm:p-8",
+        size === "narrow" && "max-w-2xl",
+        size === "default" && "max-w-3xl",
+        size === "wide" && "max-w-5xl",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+// ---------- BackButton ----------
+
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
+
+/**
+ * Chunky back button placed at the top-left of a page's content panel.
+ * Anchors to the same position relative to the panel on every screen.
+ */
+export function BackButton({
+  to = "/",
+  label = "← Back",
+  className,
+}: {
+  to?: string;
+  label?: string;
+  className?: string;
+}) {
+  return (
+    <Link
+      to={to}
+      aria-label={label}
+      className={cn(
+        "btn-press inline-flex h-8 items-center gap-1.5 rounded-[4px] bg-card px-3 text-[12px] font-medium text-foreground hover:bg-secondary",
+        className,
+      )}
+    >
+      <ArrowLeft className="h-3.5 w-3.5" />
+      <span>Back</span>
+    </Link>
+  );
+}
