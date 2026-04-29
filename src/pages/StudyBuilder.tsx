@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -12,7 +12,6 @@ import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 
 import StudyResultsView from "@/components/StudyResultsView";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   AlertDialog,
@@ -229,7 +228,13 @@ export default function StudyBuilder() {
                 {builder}
               </TabsContent>
               <TabsContent value="preview" className="mt-0">
-                <InlinePreview study={study} shareUrl={shareUrl} />
+                <InlinePreview
+                  study={study}
+                  onSubmitted={() => {
+                    toast.success("Thanks! Your answers are mixed into the results.");
+                    setTab("results");
+                  }}
+                />
               </TabsContent>
               <TabsContent value="results" className="mt-0">
                 <StudyResultsView studyId={study.id} />
@@ -262,31 +267,11 @@ export default function StudyBuilder() {
 
 function InlinePreview({
   study,
+  onSubmitted,
 }: {
   study: StudyRow;
-  shareUrl: string | null;
+  onSubmitted: () => void;
 }) {
-  const [done, setDone] = useState(false);
-
-  // Reset preview state if the study changes (e.g. edit + return).
-  useEffect(() => {
-    setDone(false);
-  }, [study.id, study.config, study.title]);
-
-  if (done) {
-    return (
-      <div className="space-y-3 py-6 text-center">
-        <h2 className="text-lg font-medium">Thank you</h2>
-        <p className="text-sm text-muted-foreground">
-          Preview complete — nothing was saved.
-        </p>
-        <Button variant="outline" size="sm" onClick={() => setDone(false)}>
-          Restart preview
-        </Button>
-      </div>
-    );
-  }
-
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
@@ -307,7 +292,7 @@ function InlinePreview({
         sessionId="preview"
         startedAt={Date.now()}
         preview
-        onDone={() => setDone(true)}
+        onDone={onSubmitted}
       />
     );
   }
@@ -325,7 +310,7 @@ function InlinePreview({
         sessionId="preview"
         startedAt={Date.now()}
         preview
-        onDone={() => setDone(true)}
+        onDone={onSubmitted}
       />
     );
   }
