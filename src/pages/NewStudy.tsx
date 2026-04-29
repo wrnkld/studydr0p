@@ -111,7 +111,9 @@ export default function NewStudy() {
 
   return (
     <PageContainer space="lg">
-      <PageHeader title="What kind of study?" />
+      <ContentPanel size="default" className="space-y-6">
+        <BackButton to="/" />
+        <PageHeader title="What kind of study?" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {TYPES.map((t) => {
