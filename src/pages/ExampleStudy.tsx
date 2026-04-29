@@ -1,3 +1,9 @@
+// Renders the canned example studies using the EXACT SAME participant
+// and results components used by real studies. The only difference is
+// the data is in-memory (seeded). See mem://index.md core rule:
+// "Canned example studies MUST render the real participant + results
+// components with seeded data — never parallel implementations."
+
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -5,42 +11,29 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
+  EXAMPLE_STUDIES,
+  ExampleResponseRow,
   getExampleStudy,
-  summarizeCardSort,
-  summarizeSurvey,
+  makeUserCardSortResponse,
+  makeUserSurveyResponse,
 } from "@/lib/exampleStudies";
-import FridgeCardSortResults from "@/components/FridgeCardSortResults";
-import FridgeCardSortDemo from "@/components/FridgeCardSortDemo";
-import GasStationSurveyResults, {
-  type GasStationAnswers,
-} from "@/components/GasStationSurveyResults";
-import GasStationSurveyDemo from "@/components/GasStationSurveyDemo";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
+import CardSortParticipant from "@/pages/participant/CardSortParticipant";
+import SurveyParticipant from "@/pages/participant/SurveyParticipant";
+import CardSortResults from "@/pages/results/CardSortResults";
+import SurveyResults from "@/pages/results/SurveyResults";
 
-// Renders a full results view for a hardcoded example study.
-// CTA at the bottom: sign-in form (logged out) or duplicate (logged in).
 export default function ExampleStudy() {
   const { id } = useParams();
-  const isFridge = id === "fridge";
-  const isGasStation = id === "gasstation";
   const study = id ? getExampleStudy(id) : null;
   const { session } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState<"preview" | "results">("preview");
-  const [gasAnswers, setGasAnswers] = useState<GasStationAnswers | undefined>();
-  const [fridgePlacement, setFridgePlacement] = useState<
-    Record<string, string> | undefined
-  >();
+  const [userResponse, setUserResponse] = useState<ExampleResponseRow | null>(
+    null,
+  );
 
-  if (!study && !isGasStation) {
+  if (!study) {
     return (
       <PageContainer space="sm">
         <PageHeader title="Example not found" />
@@ -52,104 +45,106 @@ export default function ExampleStudy() {
   }
 
   const onDuplicate = () => {
-    if (!study) return;
-    // Example studies are illustrative — duplicate sends them to new study flow.
     navigate(`/studies/new?type=${study.type}`);
   };
 
+  // Seed responses + the visitor's submission (if any). This is exactly
+  // what the real Results component expects (a list of ResponseRow).
+  const allResponses = userResponse
+    ? [userResponse, ...study.seedResponses]
+    : study.seedResponses;
+
   return (
     <PageContainer>
-      {isFridge || isGasStation ? (
-        <Tabs
-          value={tab}
-          onValueChange={(v) => setTab(v as "preview" | "results")}
-          orientation="vertical"
-          className="flex gap-8"
-        >
-          <TabsList className="flex h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0">
-            <TabsTrigger
-              value="preview"
-              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
-            >
-              Preview
-            </TabsTrigger>
-            <TabsTrigger
-              value="results"
-              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
-            >
-              Results
-            </TabsTrigger>
-          </TabsList>
+      <Tabs
+        value={tab}
+        onValueChange={(v) => setTab(v as "preview" | "results")}
+        orientation="vertical"
+        className="flex gap-8"
+      >
+        <TabsList className="flex h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0">
+          <TabsTrigger
+            value="preview"
+            className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            Preview
+          </TabsTrigger>
+          <TabsTrigger
+            value="results"
+            className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
+          >
+            Results
+          </TabsTrigger>
+        </TabsList>
 
-          <div className="min-w-0 flex-1 space-y-6">
-            <PageHeader
-              title={
-                isFridge
-                  ? "Where does it go in the fridge?"
-                  : "Gas station food. No judgment."
-              }
-              description={
-                isFridge
-                  ? "Sort each item into the part of the fridge it belongs in."
-                  : "Five quick questions about gas station snacks."
-              }
-            />
+        <div className="min-w-0 flex-1 space-y-6">
+          <PageHeader title={study.title} description={study.description} />
 
-            <TabsContent value="preview" className="mt-0">
-              {isFridge ? (
-                <FridgeCardSortDemo
-                  onSubmit={(placement) => {
-                    setFridgePlacement(placement);
-                    toast.success("Thanks! Your answers are mixed into the results.");
-                    setTab("results");
-                  }}
-                />
-              ) : (
-                <GasStationSurveyDemo
-                  onSubmit={(answers) => {
-                    setGasAnswers({
-                      q1: answers.q1 as string | undefined,
-                      q2: answers.q2 as number | undefined,
-                      q3: answers.q3 as string[] | undefined,
-                      q4: answers.q4 as string | undefined,
-                      q5: answers.q5 as string | undefined,
-                    });
-                    toast.success("Thanks! Your answers are mixed into the results.");
-                    setTab("results");
-                  }}
-                />
-              )}
-            </TabsContent>
+          <TabsContent value="preview" className="mt-0">
+            {study.type === "card_sort" ? (
+              <CardSortParticipant
+                study={{
+                  id: study.id,
+                  title: study.title,
+                  description: study.description,
+                  config: study.config,
+                }}
+                sessionId="example"
+                startedAt={Date.now()}
+                inMemory
+                initialCards={study.cards}
+                initialCategories={study.categories}
+                onSubmitInMemory={(data) => {
+                  setUserResponse(makeUserCardSortResponse(data));
+                  toast.success(
+                    "Thanks! Your answers are mixed into the results.",
+                  );
+                  setTab("results");
+                }}
+                onDone={() => {}}
+              />
+            ) : (
+              <SurveyParticipant
+                study={{
+                  id: study.id,
+                  title: study.title,
+                  description: study.description,
+                  config: study.config,
+                }}
+                sessionId="example"
+                startedAt={Date.now()}
+                inMemory
+                onSubmitInMemory={(answers) => {
+                  setUserResponse(makeUserSurveyResponse(answers));
+                  toast.success(
+                    "Thanks! Your answers are mixed into the results.",
+                  );
+                  setTab("results");
+                }}
+                onDone={() => {}}
+              />
+            )}
+          </TabsContent>
 
-            <TabsContent value="results" className="mt-0 space-y-4">
-              {isFridge ? (
-                <FridgeCardSortResults userPlacement={fridgePlacement} />
-              ) : (
-                <GasStationSurveyResults userAnswers={gasAnswers} />
-              )}
-            </TabsContent>
-          </div>
-        </Tabs>
-      ) : study ? (
-        <>
-          <PageHeader
-            kicker={
-              <Link to="/" className="underline">
-                ← Examples
-              </Link>
-            }
-            title={study.title}
-            description={study.question}
-          />
-          {study.type === "survey" ? (
-            <SurveyResultsView study={study} />
-          ) : (
-            <CardSortResultsView study={study} />
-          )}
-        </>
-      ) : null}
+          <TabsContent value="results" className="mt-0 space-y-4">
+            {study.type === "card_sort" ? (
+              <CardSortResults
+                studyId={study.id}
+                cards={study.cards}
+                responses={allResponses}
+              />
+            ) : (
+              <SurveyResults
+                studyId={study.id}
+                config={study.config}
+                responses={allResponses}
+              />
+            )}
+          </TabsContent>
+        </div>
+      </Tabs>
 
-      {!isFridge && !isGasStation && session && (
+      {session && (
         <section className="rounded-md border p-4 space-y-3">
           <p>Like this? Make your own version in your dashboard.</p>
           <Button onClick={onDuplicate}>Duplicate this study</Button>
@@ -159,78 +154,5 @@ export default function ExampleStudy() {
   );
 }
 
-function CardSortResultsView({
-  study,
-}: {
-  study: ReturnType<typeof getExampleStudy> & { type: "card_sort" };
-}) {
-  const summary = summarizeCardSort(study);
-  return (
-    <div className="overflow-x-auto rounded-lg border border-border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Card</TableHead>
-            <TableHead>Most common</TableHead>
-            <TableHead>Agreement</TableHead>
-            <TableHead>Breakdown</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {summary.map((s) => (
-            <TableRow key={s.card}>
-              <TableCell className="font-medium">{s.card}</TableCell>
-              <TableCell>{s.topCategory}</TableCell>
-              <TableCell>{s.agreement}%</TableCell>
-              <TableCell className="text-sm text-muted-foreground">
-                {s.sorted.map(([cat, n]) => `${cat} (${n})`).join(", ")}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
-}
-
-function SurveyResultsView({
-  study,
-}: {
-  study: ReturnType<typeof getExampleStudy> & { type: "survey" };
-}) {
-  const summary = summarizeSurvey(study);
-  return (
-    <div className="space-y-6">
-      {summary.map((s) => {
-        const sorted = Object.entries(s.counts).sort((a, b) => b[1] - a[1]);
-        const max = sorted[0]?.[1] ?? 1;
-        return (
-          <div key={s.question.id} className="space-y-2">
-            <h3 className="font-medium">{s.question.label}</h3>
-            <ul className="space-y-1">
-              {sorted.map(([opt, n]) => {
-                const pct = Math.round((n / s.total) * 100);
-                return (
-                  <li key={opt} className="text-sm">
-                    <div className="flex justify-between">
-                      <span>{opt}</span>
-                      <span className="text-muted-foreground">
-                        {n} · {pct}%
-                      </span>
-                    </div>
-                    <div className="h-2 rounded bg-muted overflow-hidden">
-                      <div
-                        className="h-full bg-primary"
-                        style={{ width: `${(n / max) * 100}%` }}
-                      />
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
+// Re-export so existing imports continue to work.
+export { EXAMPLE_STUDIES };
