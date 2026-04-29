@@ -7,7 +7,7 @@ import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
-import { Trash2 } from "lucide-react";
+
 import {
   AlertDialog,
   AlertDialogAction,
