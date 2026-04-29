@@ -34,6 +34,15 @@ interface Props {
   startedAt: number;
   /** When true, skip writing responses/sessions to the database. */
   preview?: boolean;
+  /**
+   * In-memory mode: skip Supabase entirely. Caller passes cards (and
+   * categories for closed sort) and receives the response via
+   * `onSubmitInMemory`. Used by canned example studies.
+   */
+  inMemory?: boolean;
+  initialCards?: CardRow[];
+  initialCategories?: CategoryRow[];
+  onSubmitInMemory?: (data: CardSortResponseData) => void;
   onDone: () => void;
 }
 
@@ -52,12 +61,33 @@ export default function CardSortParticipant({
   sessionId,
   startedAt,
   preview = false,
+  inMemory = false,
+  initialCards,
+  initialCategories,
+  onSubmitInMemory,
   onDone,
 }: Props) {
-  const [loading, setLoading] = useState(true);
-  const [cards, setCards] = useState<CardRow[]>([]);
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [unsorted, setUnsorted] = useState<string[]>([]);
+  const [loading, setLoading] = useState(!inMemory);
+  const [cards, setCards] = useState<CardRow[]>(() => {
+    if (!inMemory || !initialCards) return [];
+    return [...initialCards].sort(() => Math.random() - 0.5);
+  });
+  const [groups, setGroups] = useState<Group[]>(() => {
+    if (!inMemory) return [];
+    if (study.config.sort_type === "closed" && initialCategories) {
+      return initialCategories.map((c) => ({
+        id: c.id,
+        label: c.label,
+        card_ids: [],
+        source_category_id: c.id,
+      }));
+    }
+    return [];
+  });
+  const [unsorted, setUnsorted] = useState<string[]>(() => {
+    if (!inMemory || !initialCards) return [];
+    return [...initialCards].sort(() => Math.random() - 0.5).map((c) => c.id);
+  });
   const [submitting, setSubmitting] = useState(false);
 
   const sensors = useSensors(
