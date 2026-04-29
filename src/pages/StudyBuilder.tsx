@@ -219,9 +219,6 @@ export default function StudyBuilder() {
 
         <div className="min-w-0 flex-1 space-y-6 px-4 pt-4 md:px-0 md:pt-0">
           <ContentPanel size="wide">
-            <div className="mb-4">
-              <BackButton to="/" />
-            </div>
             <PageHeader
               title={liveTitle.trim() || "Untitled study"}
               description={liveDescription.trim() || undefined}

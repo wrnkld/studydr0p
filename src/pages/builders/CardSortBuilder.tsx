@@ -332,7 +332,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
       </section>
 
       <section className="space-y-2">
-        <Label>Cards</Label>
+        <div><Label>Cards</Label></div>
         {cards.length > 0 && (
           <ul className="space-y-3">
             {cards.map((c, i) => (
@@ -360,14 +360,14 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
             ))}
           </ul>
         )}
-        <Button variant="outline" size="sm" onClick={addCard}>
+        <Button variant="outline" size="sm" onClick={addCard} className="self-start">
           <Plus className="mr-1.5 h-3.5 w-3.5" /> Add card
         </Button>
       </section>
 
       {sortType === "closed" && (
         <section className="space-y-2">
-          <Label>Categories</Label>
+          <div><Label>Categories</Label></div>
           {categories.length > 0 && (
             <ul className="space-y-2">
               {categories.map((c, i) => (
@@ -389,7 +389,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
               ))}
             </ul>
           )}
-          <Button variant="outline" size="sm" onClick={addCategory}>
+          <Button variant="outline" size="sm" onClick={addCategory} className="self-start">
             <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
           </Button>
         </section>
