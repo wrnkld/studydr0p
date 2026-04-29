@@ -17,6 +17,15 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["'IBM Plex Mono'", "'Fira Code'", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+        mono: ["'IBM Plex Mono'", "'Fira Code'", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+      },
+      boxShadow: {
+        press: "4px 4px 0px #1a1a1a",
+        "press-hover": "2px 2px 0px #1a1a1a",
+        panel: "6px 6px 0px #d0cdc4",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -73,9 +82,9 @@ export default {
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "4px",
+        md: "4px",
+        sm: "2px",
       },
       keyframes: {
         "accordion-down": {
