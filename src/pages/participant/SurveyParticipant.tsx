@@ -128,7 +128,7 @@ export default function SurveyParticipant({
     </div>
   );
 
-  if (preview) return content;
+  if (preview || inMemory) return content;
 
   return (
     <main className="container py-8 space-y-6">
