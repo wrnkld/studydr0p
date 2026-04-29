@@ -111,8 +111,7 @@ export default function NewStudy() {
 
   return (
     <PageContainer space="lg">
-      <ContentPanel size="default" className="space-y-6">
-        <BackButton to="/" />
+      <ContentPanel size="wide" className="space-y-6">
         <PageHeader title="What kind of study?" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
