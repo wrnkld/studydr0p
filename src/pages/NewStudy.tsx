@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
 
 type TypeMeta = {
@@ -164,6 +164,7 @@ export default function NewStudy() {
           );
         })}
       </div>
+      </ContentPanel>
     </PageContainer>
   );
 }
