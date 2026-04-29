@@ -360,7 +360,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
             ))}
           </ul>
         )}
-        <Button variant="outline" size="sm" onClick={addCard}>
+        <Button variant="outline" size="sm" onClick={addCard} className="self-start">
           <Plus className="mr-1.5 h-3.5 w-3.5" /> Add card
         </Button>
       </section>
