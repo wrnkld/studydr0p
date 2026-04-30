@@ -128,7 +128,13 @@ export function ChoiceChart({
             />
           }
         />
-        <Bar dataKey="value" fill="var(--color-value)" isAnimationActive={false}>
+        <Bar
+          dataKey="value"
+          fill="var(--color-value)"
+          isAnimationActive={false}
+          barSize={BAR_SIZE}
+          radius={BAR_RADIUS}
+        >
           {data.map((d, i) => (
             <Cell key={i} fill={shadeFor(d.value, max)} />
           ))}
