@@ -51,7 +51,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     })();
   }, [studyId, responses]);
 
-  const { categories, byCard, total } = useMemo(() => {
+  const { categories, byCard } = useMemo(() => {
     const list = rows ?? [];
     const catSet = new Set<string>();
     // card_id -> category_label -> count
@@ -70,7 +70,6 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return {
       categories: Array.from(catSet),
       byCard,
-      total: list.length,
     };
   }, [rows]);
 
