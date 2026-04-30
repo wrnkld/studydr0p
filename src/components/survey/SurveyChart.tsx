@@ -60,6 +60,8 @@ export function ChoiceChart({
   counts: CountMap;
   total: number;
 }) {
+  const isMobile = useIsMobile();
+  const yAxisWidth = isMobile ? 96 : 140;
   // Always show all configured options, including zero-count ones, in given order.
   const data = options.map((label) => ({ label, value: counts[label] ?? 0 }));
   // Append any extras (answers that aren't in `options`).
@@ -100,7 +102,7 @@ export function ChoiceChart({
           tickLine={false}
           axisLine={false}
           interval={0}
-          width={Y_AXIS_WIDTH}
+          width={yAxisWidth}
         />
         <ChartTooltip
           content={
