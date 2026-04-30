@@ -48,7 +48,7 @@ export default function StudyBuilder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
-  const { actions, setRequestDelete } = useStudyToolbar();
+  const { actions, setRequestDelete, setHeaderTabs } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
