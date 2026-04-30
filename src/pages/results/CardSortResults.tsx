@@ -93,79 +93,68 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
   const colorFor = (cat: string) =>
     palette[categories.indexOf(cat) % palette.length];
 
-  // Build stacked-bar dataset: one row per card, one numeric key per category.
-  const chartData = summary.map((s) => {
-    const row: Record<string, string | number> = { card: s.card.label };
-    categories.forEach((c) => {
-      row[c] = s.counts[c] ?? 0;
-    });
-    return row;
+  // Per-card category breakdown for the minimal segmented bars.
+  const distribution = summary.map((s) => {
+    const total = Object.values(s.counts).reduce((a, b) => a + b, 0);
+    const segments = categories
+      .map((c) => ({ label: c, value: s.counts[c] ?? 0 }))
+      .filter((seg) => seg.value > 0)
+      .sort((a, b) => b.value - a.value);
+    return { card: s.card, total, segments };
   });
-
-  const chartConfig: ChartConfig = {};
-  categories.forEach((c) => {
-    chartConfig[c] = { label: c, color: colorFor(c) };
-  });
-
-  const chartHeight = Math.max(140, summary.length * 44 + 40);
 
   return (
     <div className="space-y-8">
-      <section className="space-y-3">
-        <h3 className="text-base font-medium">By card</h3>
-        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
-          {categories.map((c) => (
-            <span key={c} className="inline-flex items-center gap-1.5">
-              <span
-                className="inline-block h-3 w-3 rounded-sm"
-                style={{ backgroundColor: colorFor(c) }}
-              />
-              {c}
-            </span>
-          ))}
+      <section className="space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-base font-medium">By card</h3>
+          <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+            {categories.map((c) => (
+              <span key={c} className="inline-flex items-center gap-1.5">
+                <span
+                  aria-hidden
+                  className="inline-block h-2 w-2 rounded-full"
+                  style={{ backgroundColor: colorFor(c) }}
+                />
+                {c}
+              </span>
+            ))}
+          </div>
         </div>
 
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto w-full"
-          style={{ height: chartHeight }}
-        >
-          <BarChart
-            data={chartData}
-            layout="vertical"
-            margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
-          >
-            <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
-            <XAxis
-              type="number"
-              stroke="hsl(var(--chart-axis))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              allowDecimals={false}
-            />
-            <YAxis
-              type="category"
-              dataKey="card"
-              stroke="hsl(var(--chart-axis))"
-              fontSize={12}
-              tickLine={false}
-              axisLine={false}
-              interval={0}
-              width={isMobile ? 80 : 120}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            {categories.map((c) => (
-              <Bar
-                key={c}
-                dataKey={c}
-                stackId="cards"
-                fill={colorFor(c)}
-                isAnimationActive={false}
-              />
-            ))}
-          </BarChart>
-        </ChartContainer>
+        <ul className="divide-y rounded-lg border">
+          {distribution.map(({ card, total, segments }) => (
+            <li
+              key={card.id}
+              className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)_2.5rem] items-center gap-4 px-3 py-2.5"
+            >
+              <span className="truncate text-sm font-medium">{card.label}</span>
+              <div
+                className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                role="img"
+                aria-label={`${card.label} placement distribution`}
+              >
+                {total > 0 &&
+                  segments.map((seg) => (
+                    <span
+                      key={seg.label}
+                      title={`${seg.label}: ${seg.value} (${Math.round(
+                        (seg.value / total) * 100,
+                      )}%)`}
+                      className="h-full"
+                      style={{
+                        width: `${(seg.value / total) * 100}%`,
+                        backgroundColor: colorFor(seg.label),
+                      }}
+                    />
+                  ))}
+              </div>
+              <span className="text-right font-mono text-xs tabular-nums text-muted-foreground">
+                {total}
+              </span>
+            </li>
+          ))}
+        </ul>
 
         <div className="overflow-x-auto rounded-lg border">
           <table className="w-full text-sm">
