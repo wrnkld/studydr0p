@@ -82,14 +82,6 @@ export default function ExampleStudy() {
       >
         <PageHeader title={study.title} description={study.description} />
 
-        <TabsList className="mt-4">
-          {(["preview", "results"] as const).map((t) => (
-            <TabsTrigger key={t} value={t} className="capitalize">
-              {t}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
         <div className="mt-6 space-y-6">
           <TabsContent value="preview" className="mt-0">
             {study.type === "card_sort" ? (
