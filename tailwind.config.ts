@@ -7,24 +7,15 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "1.5rem",
+      padding: "2rem",
       screens: {
-        sm: "960px",
-        md: "960px",
-        lg: "960px",
-        xl: "960px",
-        "2xl": "960px",
+        "2xl": "1400px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ["'IBM Plex Mono'", "'Fira Code'", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
-        mono: ["'IBM Plex Mono'", "'Fira Code'", "ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
-      },
-      boxShadow: {
-        press: "4px 4px 0px #1a1a1a",
-        "press-hover": "2px 2px 0px #1a1a1a",
-        panel: "6px 6px 0px #d0cdc4",
+        sans: ["'Inter'", "ui-sans-serif", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
+        mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -82,26 +73,18 @@ export default {
         },
       },
       borderRadius: {
-        lg: "4px",
-        md: "4px",
-        sm: "2px",
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {
