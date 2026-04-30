@@ -214,6 +214,7 @@ export default function StudyBuilder() {
         <PageHeader
           title={liveTitle.trim() || "Untitled study"}
           description={liveDescription.trim() || undefined}
+          actions={tabsNode}
         />
 
         <div className="mt-6">
