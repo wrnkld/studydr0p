@@ -290,7 +290,7 @@ export default function CardSortParticipant({
           )}
         </div>
 
-        <div className="border-t border-foreground pt-6">
+        <div>
           <Button onClick={submit} disabled={submitting}>
             {submitting ? "Submitting…" : "Submit"}
           </Button>
