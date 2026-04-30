@@ -241,7 +241,11 @@ export default function StudyBuilder() {
               }}
             />
           </TabsContent>
-          <TabsContent value="results" className="mt-0">
+          <TabsContent
+            value="results"
+            forceMount
+            className="mt-0 data-[state=inactive]:hidden"
+          >
             <StudyResultsView studyId={study.id} />
           </TabsContent>
         </div>
