@@ -14,6 +14,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponseRow {
   id: string;
@@ -31,6 +32,7 @@ interface Props {
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (responses) {
@@ -150,7 +152,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           <BarChart
             data={chartData}
             layout="vertical"
-            margin={{ top: 8, right: 16, bottom: 8, left: 8 }}
+            margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
           >
             <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
             <XAxis
@@ -169,7 +171,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
               tickLine={false}
               axisLine={false}
               interval={0}
-              width={120}
+              width={isMobile ? 80 : 120}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
             {categories.map((c) => (

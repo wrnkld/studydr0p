@@ -23,6 +23,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Map a value to a chart-1 (blue) shade — higher value = darker.
 // Uses HSL alpha to lighten so we don't need extra tokens.
@@ -36,8 +37,8 @@ export function shadeFor(value: number, max: number) {
 const AXIS_COLOR = "hsl(var(--chart-axis))";
 const GRID_COLOR = "hsl(var(--chart-grid))";
 const CHART_HEIGHT = 240;
-const CHART_MARGIN = { top: 8, right: 16, bottom: 8, left: 8 };
-const Y_AXIS_WIDTH = 120;
+// Tight margins so the plotted area uses the full container width.
+const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 };
 
 // Donut palette for binary: yes-ish answers get chart-1, the other gets chart-6.
 const BINARY_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-6))"];
@@ -59,6 +60,8 @@ export function ChoiceChart({
   counts: CountMap;
   total: number;
 }) {
+  const isMobile = useIsMobile();
+  const yAxisWidth = isMobile ? 96 : 140;
   // Always show all configured options, including zero-count ones, in given order.
   const data = options.map((label) => ({ label, value: counts[label] ?? 0 }));
   // Append any extras (answers that aren't in `options`).
@@ -99,7 +102,7 @@ export function ChoiceChart({
           tickLine={false}
           axisLine={false}
           interval={0}
-          width={Y_AXIS_WIDTH}
+          width={yAxisWidth}
         />
         <ChartTooltip
           content={
