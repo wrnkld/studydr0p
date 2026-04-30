@@ -28,12 +28,9 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground bg-card">
-      <div className="container max-w-5xl grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-4">
+      <div className="container max-w-5xl flex h-16 items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <Brand />
-        </div>
-        <div className="flex justify-center">
-          {headerTabs}
         </div>
         <div className="flex items-center justify-end gap-2">
           {onStudyPage ? (
