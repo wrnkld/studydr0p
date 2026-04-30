@@ -108,7 +108,7 @@ export default function Landing() {
       <div className="relative">
         <PageHeader
           title="UX research, without the friction."
-          description="Run unmoderated UX studies and share them with participants via a single link."
+          description="Run and share unmoderated UX studies with a single link."
         />
         {session && (
           <div
