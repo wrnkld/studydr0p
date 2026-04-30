@@ -222,17 +222,17 @@ export default function StudyBuilder() {
           description={liveDescription.trim() || undefined}
         />
 
-        <TabsList className="mt-4">
-          {(["build", "preview", "results"] as const).map((t) => (
-            <TabsTrigger key={t} value={t} className="capitalize">
-              {t}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
         <div className="mt-6">
-          <TabsContent value="build" className="mt-0">
+          <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
+            <div className="flex justify-end pt-2">
+              <Button
+                disabled={!actions || actions.saving}
+                onClick={() => actions?.onSave()}
+              >
+                {actions?.saving ? "Saving…" : "Save"}
+              </Button>
+            </div>
           </TabsContent>
           <TabsContent value="preview" className="mt-0">
             <InlinePreview
