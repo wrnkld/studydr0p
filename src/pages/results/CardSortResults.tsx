@@ -103,6 +103,12 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return { card: s.card, total, segments };
   });
 
+  // Merge summary + distribution into one row per card.
+  const rowsByCard = summary.map((s) => {
+    const dist = distribution.find((d) => d.card.id === s.card.id)!;
+    return { ...s, total: dist.total, segments: dist.segments };
+  });
+
   return (
     <div className="space-y-8">
       <section className="space-y-4">
@@ -123,59 +129,42 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
         </div>
 
         <ul className="divide-y rounded-lg border">
-          {distribution.map(({ card, total, segments }) => (
+          {rowsByCard.map((r) => (
             <li
-              key={card.id}
-              className="grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)_2.5rem] items-center gap-4 px-3 py-2.5"
+              key={r.card.id}
+              className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)_minmax(0,1fr)_3rem_2.5rem] items-center gap-4 px-3 py-2.5"
             >
-              <span className="truncate text-sm font-medium">{card.label}</span>
+              <span className="truncate text-sm font-medium">{r.card.label}</span>
               <div
                 className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted"
                 role="img"
-                aria-label={`${card.label} placement distribution`}
+                aria-label={`${r.card.label} placement distribution`}
               >
-                {total > 0 &&
-                  segments.map((seg) => (
+                {r.total > 0 &&
+                  r.segments.map((seg) => (
                     <span
                       key={seg.label}
                       title={`${seg.label}: ${seg.value} (${Math.round(
-                        (seg.value / total) * 100,
+                        (seg.value / r.total) * 100,
                       )}%)`}
                       className="h-full"
                       style={{
-                        width: `${(seg.value / total) * 100}%`,
+                        width: `${(seg.value / r.total) * 100}%`,
                         backgroundColor: colorFor(seg.label),
                       }}
                     />
                   ))}
               </div>
+              <span className="truncate text-xs text-muted-foreground">{r.topCategory}</span>
+              <span className="text-right font-mono text-xs tabular-nums">
+                {r.agreement}%
+              </span>
               <span className="text-right font-mono text-xs tabular-nums text-muted-foreground">
-                {total}
+                {r.total}
               </span>
             </li>
           ))}
         </ul>
-
-        <div className="overflow-x-auto rounded-lg border">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="px-3 py-2 text-left font-medium">Card</th>
-                <th className="px-3 py-2 text-left font-medium">Most common</th>
-                <th className="px-3 py-2 text-right font-medium">Agreement</th>
-              </tr>
-            </thead>
-            <tbody>
-              {summary.map((s) => (
-                <tr key={s.card.id} className="border-b last:border-b-0">
-                  <td className="px-3 py-2 font-medium align-middle">{s.card.label}</td>
-                  <td className="px-3 py-2 align-middle">{s.topCategory}</td>
-                  <td className="px-3 py-2 text-right align-middle">{s.agreement}%</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </section>
 
       <section className="space-y-3">
