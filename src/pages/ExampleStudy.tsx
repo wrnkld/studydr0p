@@ -74,7 +74,11 @@ export default function ExampleStudy() {
         value={tab}
         onValueChange={(v) => setTab(v as "preview" | "results")}
       >
-        <PageHeader title={study.title} description={study.description} />
+        <PageHeader
+          title={study.title}
+          description={study.description}
+          actions={tabsNode}
+        />
 
         <div className="mt-6 space-y-6">
           <TabsContent value="preview" className="mt-0">
