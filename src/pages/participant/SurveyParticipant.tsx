@@ -160,6 +160,37 @@ function QuestionInput({
       </div>
     );
   }
+  if (q.multi) {
+    const selected = Array.isArray(value) ? value : [];
+    const toggle = (opt: string) => {
+      if (selected.includes(opt)) onChange(selected.filter((o) => o !== opt));
+      else onChange([...selected, opt]);
+    };
+    return (
+      <div className="space-y-3">
+        <Label>{q.label}</Label>
+        <div className="space-y-2">
+          {(q.options ?? []).map((opt, i) => {
+            const checked = selected.includes(opt);
+            return (
+              <label
+                key={i}
+                className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
+              >
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={() => toggle(opt)}
+                  className="h-4 w-4"
+                />
+                <span>{opt}</span>
+              </label>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-3">
       <Label>{q.label}</Label>

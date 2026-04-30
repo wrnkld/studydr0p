@@ -230,6 +230,15 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
                   />
                   {q.type === "multiple_choice" && (
                     <div className="space-y-2">
+                      <label className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <input
+                          type="checkbox"
+                          checked={!!q.multi}
+                          onChange={(e) => updateQuestion(q.id, { multi: e.target.checked })}
+                          className="h-4 w-4"
+                        />
+                        Allow multiple selections
+                      </label>
                       {(q.options ?? []).map((opt, oi) => (
                         <div key={oi} className="flex items-center gap-2">
                           <Input
