@@ -26,7 +26,12 @@ export default function TopBar() {
   const onNewStudyPage = !!newStudyMatch && !!session;
   const onStudyPage = !!studyMatch && !onNewStudyPage && !!session;
 
-  const { meta: _meta, headerTabs } = useStudyToolbar();
+  const { meta, headerTabs } = useStudyToolbar();
+
+  if (location.pathname.startsWith("/s/")) return null;
+
+  const onNewStudyPage = !!newStudyMatch && !!session;
+  const onStudyPage = !!studyMatch && !onNewStudyPage && !!session;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground bg-card">
@@ -39,7 +44,7 @@ export default function TopBar() {
         </div>
         <div className="flex items-center justify-end gap-2">
           {onStudyPage ? (
-            <StudyActions status={useStudyToolbar().meta?.status} shareUrl={useStudyToolbar().meta?.shareUrl ?? null} />
+            <StudyActions status={meta?.status} shareUrl={meta?.shareUrl ?? null} />
           ) : session ? (
             <SignedInActions />
           ) : (
