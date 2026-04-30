@@ -103,7 +103,9 @@ function StudyActions({
   status?: string;
   shareUrl: string | null;
 }) {
-  const { actions, requestDelete } = useStudyToolbar();
+  const { actions: _actions, requestDelete } = useStudyToolbar();
+  const { actions } = useStudyToolbar();
+  void _actions;
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
