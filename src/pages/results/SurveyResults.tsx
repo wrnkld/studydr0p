@@ -74,39 +74,8 @@ export default function SurveyResults({ studyId, config, responses }: Props) {
     return <div className="text-sm text-muted-foreground">No responses yet.</div>;
   }
 
-  // Find the single strongest agreement across all non-text questions.
-  const topInsight = (() => {
-    let best: { question: string; option: string; pct: number } | null = null;
-    summaries.forEach(({ q, counts }) => {
-      if (q.type === "open_text") return;
-      const totalAns = Object.values(counts).reduce((a, b) => a + b, 0);
-      if (totalAns === 0) return;
-      const [opt, n] = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
-      const pct = Math.round((n / totalAns) * 100);
-      if (!best || pct > best.pct) {
-        best = { question: q.label || q.id, option: opt, pct };
-      }
-    });
-    return best;
-  })();
-
   return (
     <div className="space-y-8">
-      {topInsight && (
-        <div
-          className="flex items-start gap-3 rounded-lg border px-4 py-3 text-sm"
-          style={{ backgroundColor: "#F0F4FF", borderColor: "#DCE4FF" }}
-        >
-          <span className="mt-0.5 text-base" aria-hidden="true">🎯</span>
-          <p className="leading-relaxed text-foreground">
-            Most participants agreed:{" "}
-            <strong className="font-semibold">
-              {topInsight.option}
-            </strong>{" "}
-            ({topInsight.pct}%) on “{topInsight.question}”.
-          </p>
-        </div>
-      )}
 
       {summaries.map(({ q, counts, texts }, i) => (
         <section key={q.id} className="space-y-4">

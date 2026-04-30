@@ -82,27 +82,8 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     };
   });
 
-  const topInsight = [...summary]
-    .filter((s) => s.agreement > 0 && s.topCategory !== "—")
-    .sort((a, b) => b.agreement - a.agreement)[0];
-
   return (
     <div className="space-y-8">
-      {topInsight && (
-        <div
-          className="flex items-start gap-3 rounded-lg border px-4 py-3 text-sm"
-          style={{ backgroundColor: "#F0F4FF", borderColor: "#DCE4FF" }}
-        >
-          <span className="mt-0.5 text-base" aria-hidden="true">🎯</span>
-          <p className="leading-relaxed text-foreground">
-            Most participants agreed:{" "}
-            <strong className="font-semibold">
-              {topInsight.card.label} → {topInsight.topCategory}
-            </strong>{" "}
-            ({topInsight.agreement}%).
-          </p>
-        </div>
-      )}
 
       <section className="space-y-3">
         <h3 className="text-base font-medium">By card</h3>
