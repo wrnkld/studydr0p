@@ -32,6 +32,9 @@ interface Ctx {
   /** If set, TopBar's Delete button calls this instead of actions.onDelete. */
   requestDelete: (() => void) | null;
   setRequestDelete: (fn: (() => void) | null) => void;
+  /** If set, TopBar shows an Export option that calls this. */
+  exportCsv: (() => void) | null;
+  setExportCsv: (fn: (() => void) | null) => void;
   meta: StudyMeta | null;
   setMeta: (m: StudyMeta | null) => void;
   /** Optional tabs rendered centered in the TopBar. */
@@ -44,6 +47,7 @@ const StudyToolbarCtx = createContext<Ctx | null>(null);
 export function StudyToolbarProvider({ children }: { children: ReactNode }) {
   const [actions, setActions] = useState<StudyActions | null>(null);
   const [requestDelete, setRequestDelete] = useState<(() => void) | null>(null);
+  const [exportCsv, setExportCsv] = useState<(() => void) | null>(null);
   const [meta, setMeta] = useState<StudyMeta | null>(null);
   const [headerTabs, setHeaderTabsState] = useState<ReactNode | null>(null);
   const setHeaderTabs = useCallback(
@@ -56,12 +60,14 @@ export function StudyToolbarProvider({ children }: { children: ReactNode }) {
       setActions,
       requestDelete,
       setRequestDelete,
+      exportCsv,
+      setExportCsv,
       meta,
       setMeta,
       headerTabs,
       setHeaderTabs,
     }),
-    [actions, requestDelete, meta, headerTabs, setHeaderTabs],
+    [actions, requestDelete, exportCsv, meta, headerTabs, setHeaderTabs],
   );
   return <StudyToolbarCtx.Provider value={value}>{children}</StudyToolbarCtx.Provider>;
 }
