@@ -32,16 +32,16 @@ export default function ExampleStudy() {
   );
 
   const tabsNode = study ? (
-    <div className="inline-flex items-center gap-1">
+    <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
       {(["preview", "results"] as const).map((t) => (
         <button
           key={t}
           type="button"
           onClick={() => setTab(t)}
           className={cn(
-            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
+            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
             tab === t
-              ? "bg-muted text-foreground"
+              ? "bg-background text-foreground shadow-sm"
               : "text-muted-foreground hover:text-foreground",
           )}
         >
