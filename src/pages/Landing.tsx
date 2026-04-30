@@ -6,7 +6,7 @@ import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { PageContainer, PageHeader, ContentPanel } from "@/components/study/primitives";
+import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 import {
   AlertDialog,
@@ -103,8 +103,7 @@ export default function Landing() {
   const totalResponses = rows.reduce((sum, r) => sum + (r.responseCount || 0), 0);
 
   return (
-    <PageContainer space="lg">
-      <ContentPanel size="wide" className="space-y-6">
+    <PageContainer width="wide" space="lg">
       <div className="relative">
         <PageHeader
           title="UX research, without the friction."
@@ -173,7 +172,7 @@ export default function Landing() {
           })}
         </section>
       )}
-      </ContentPanel>
+      
 
       <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
         <AlertDialogContent>

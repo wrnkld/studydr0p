@@ -47,42 +47,22 @@ export default function ExampleStudy() {
     : study.seedResponses;
 
   return (
-    <PageContainer>
+    <PageContainer width="wide">
       <Tabs
         value={tab}
         onValueChange={(v) => setTab(v as "preview" | "results")}
-        orientation="vertical"
-        className="md:flex md:flex-row md:gap-8"
       >
-        {/* Mobile: top tab bar */}
-        <TabsList className="grid h-auto w-full grid-cols-2 gap-0 rounded-none border-b border-foreground bg-card p-0 md:hidden">
+        <PageHeader title={study.title} description={study.description} />
+
+        <TabsList className="mt-4">
           {(["preview", "results"] as const).map((t) => (
-            <TabsTrigger
-              key={t}
-              value={t}
-              className="rounded-none border-b-[3px] border-transparent bg-card px-2 py-3 text-[12px] font-medium uppercase tracking-[0.08em] text-muted-foreground data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
-            >
+            <TabsTrigger key={t} value={t} className="capitalize">
               {t}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        {/* Desktop: vertical sidebar */}
-        <TabsList className="hidden h-auto w-40 shrink-0 flex-col items-stretch justify-start gap-1 bg-transparent p-0 md:flex">
-          {(["preview", "results"] as const).map((t) => (
-            <TabsTrigger
-              key={t}
-              value={t}
-              className="justify-start rounded-[4px] px-3 py-2 capitalize data-[state=active]:border data-[state=active]:border-foreground data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-none"
-            >
-              {t}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
-        <div className="min-w-0 flex-1 space-y-6 pt-4 md:pt-0">
-          <PageHeader title={study.title} description={study.description} />
-
+        <div className="mt-6 space-y-6">
           <TabsContent value="preview" className="mt-0">
             {study.type === "card_sort" ? (
               <CardSortParticipant
@@ -146,7 +126,6 @@ export default function ExampleStudy() {
           </TabsContent>
         </div>
       </Tabs>
-
     </PageContainer>
   );
 }
