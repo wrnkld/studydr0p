@@ -14,6 +14,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponseRow {
   id: string;
