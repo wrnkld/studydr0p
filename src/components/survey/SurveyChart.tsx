@@ -25,13 +25,13 @@ import {
 } from "@/components/ui/chart";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Minimal monochrome shading: leading value uses foreground, the rest fade
-// toward muted. Keeps the visual hierarchy without color noise.
+// Map a value to a chart-1 (blue) shade — higher value = darker.
+// Uses HSL alpha to lighten so we don't need extra tokens.
 export function shadeFor(value: number, max: number) {
   const t = max > 0 ? value / max : 0;
-  // alpha 0.18 (lightest) → 0.85 (darkest)
-  const alpha = 0.18 + t * 0.67;
-  return `hsl(var(--foreground) / ${alpha.toFixed(3)})`;
+  // alpha 0.3 (lightest) → 1.0 (darkest)
+  const alpha = 0.3 + t * 0.7;
+  return `hsl(var(--chart-1) / ${alpha.toFixed(3)})`;
 }
 
 const AXIS_COLOR = "hsl(var(--chart-axis))";
@@ -39,18 +39,12 @@ const GRID_COLOR = "hsl(var(--chart-grid))";
 const CHART_HEIGHT = 240;
 // Tight margins so the plotted area uses the full container width.
 const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 };
-// Slim bars so the chart reads as data, not decoration.
-const BAR_SIZE = 10;
-const BAR_RADIUS: [number, number, number, number] = [3, 3, 3, 3];
 
-// Donut palette for binary: keep two distinct but restrained tones.
-const BINARY_COLORS = [
-  "hsl(var(--foreground) / 0.85)",
-  "hsl(var(--foreground) / 0.25)",
-];
+// Donut palette for binary: yes-ish answers get chart-1, the other gets chart-6.
+const BINARY_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-6))"];
 
 const barConfig = {
-  value: { label: "Responses", color: "hsl(var(--foreground))" },
+  value: { label: "Responses", color: "hsl(var(--chart-1))" },
 } satisfies ChartConfig;
 
 export type CountMap = Record<string, number>;
