@@ -12,7 +12,7 @@ import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 
 import StudyResultsView from "@/components/StudyResultsView";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +27,8 @@ import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface StudyRow {
   id: string;
@@ -46,7 +48,7 @@ export default function StudyBuilder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
-  const { actions, setRequestDelete } = useStudyToolbar();
+  const { actions, setRequestDelete, setHeaderTabs } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -136,6 +138,32 @@ export default function StudyBuilder() {
     return () => setMeta(null);
   }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
+  // Render the Build / Preview / Results tabs centered in the TopBar.
+  useEffect(() => {
+    if (!study) return;
+    const tabs: TabKey[] = ["build", "preview", "results"];
+    setHeaderTabs(
+      <div className="inline-flex items-center gap-1">
+        {tabs.map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setTab(t)}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
+              activeTab === t
+                ? "bg-muted text-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>,
+    );
+    return () => setHeaderTabs(null);
+  }, [study?.id, activeTab, setHeaderTabs]);
+
   const onMetaChange = (meta: { title: string; description: string }) => {
     setLiveTitle(meta.title);
     setLiveDescription(meta.description);
@@ -194,17 +222,17 @@ export default function StudyBuilder() {
           description={liveDescription.trim() || undefined}
         />
 
-        <TabsList className="mt-4">
-          {(["build", "preview", "results"] as const).map((t) => (
-            <TabsTrigger key={t} value={t} className="capitalize">
-              {t}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-
         <div className="mt-6">
-          <TabsContent value="build" className="mt-0">
+          <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
+            <div className="flex justify-end pt-2">
+              <Button
+                disabled={!actions || actions.saving}
+                onClick={() => actions?.onSave()}
+              >
+                {actions?.saving ? "Saving…" : "Save"}
+              </Button>
+            </div>
           </TabsContent>
           <TabsContent value="preview" className="mt-0">
             <InlinePreview

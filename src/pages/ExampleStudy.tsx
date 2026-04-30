@@ -4,10 +4,10 @@
 // "Canned example studies MUST render the real participant + results
 // components with seeded data — never parallel implementations."
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   EXAMPLE_STUDIES,
   ExampleResponseRow,
@@ -16,6 +16,8 @@ import {
   makeUserSurveyResponse,
 } from "@/lib/exampleStudies";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { useStudyToolbar } from "@/components/StudyToolbarContext";
+import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
 import SurveyParticipant from "@/pages/participant/SurveyParticipant";
 import CardSortResults from "@/pages/results/CardSortResults";
@@ -28,6 +30,32 @@ export default function ExampleStudy() {
   const [userResponse, setUserResponse] = useState<ExampleResponseRow | null>(
     null,
   );
+  const { setHeaderTabs } = useStudyToolbar();
+
+  useEffect(() => {
+    if (!study) return;
+    const tabs: Array<"preview" | "results"> = ["preview", "results"];
+    setHeaderTabs(
+      <div className="inline-flex items-center gap-1">
+        {tabs.map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setTab(t)}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
+              tab === t
+                ? "bg-muted text-foreground"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>,
+    );
+    return () => setHeaderTabs(null);
+  }, [study?.id, tab, setHeaderTabs]);
 
   if (!study) {
     return (
@@ -53,14 +81,6 @@ export default function ExampleStudy() {
         onValueChange={(v) => setTab(v as "preview" | "results")}
       >
         <PageHeader title={study.title} description={study.description} />
-
-        <TabsList className="mt-4">
-          {(["preview", "results"] as const).map((t) => (
-            <TabsTrigger key={t} value={t} className="capitalize">
-              {t}
-            </TabsTrigger>
-          ))}
-        </TabsList>
 
         <div className="mt-6 space-y-6">
           <TabsContent value="preview" className="mt-0">

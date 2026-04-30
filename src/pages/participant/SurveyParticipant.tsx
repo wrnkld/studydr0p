@@ -82,34 +82,9 @@ export default function SurveyParticipant({
   };
 
   const questions = study.config.questions;
-  const isAnswered = (qid: string) => {
-    const a = answers[qid];
-    return !(a === undefined || a === "" || (Array.isArray(a) && a.length === 0));
-  };
-  const answeredCount = questions.filter((q) => isAnswered(q.id)).length;
 
   const content = (
     <div className="space-y-6">
-      {questions.length > 0 && (
-        <div
-          className="flex gap-1.5"
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={questions.length}
-          aria-valuenow={answeredCount}
-          aria-label={`${answeredCount} of ${questions.length} questions answered`}
-        >
-          {questions.map((q) => (
-            <div
-              key={q.id}
-              className="h-1 flex-1 rounded-full transition-colors"
-              style={{
-                backgroundColor: isAnswered(q.id) ? "#4F75FF" : "#E5E7EB",
-              }}
-            />
-          ))}
-        </div>
-      )}
       <ol className="space-y-8">
         {questions.map((q, i) => (
           <li key={q.id} className="space-y-3">

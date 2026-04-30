@@ -19,7 +19,7 @@ export default function TopBar() {
   const location = useLocation();
   const studyMatch = useMatch("/studies/:id");
   const newStudyMatch = useMatch("/studies/new");
-  const { meta } = useStudyToolbar();
+  const { meta, headerTabs } = useStudyToolbar();
 
   if (location.pathname.startsWith("/s/")) return null;
 
@@ -28,11 +28,14 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground bg-card">
-      <div className="container flex h-16 items-center justify-between gap-4">
+      <div className="container grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <Brand />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex justify-center">
+          {headerTabs}
+        </div>
+        <div className="flex items-center justify-end gap-2">
           {onStudyPage ? (
             <StudyActions status={meta?.status} shareUrl={meta?.shareUrl ?? null} />
           ) : session ? (
@@ -136,14 +139,6 @@ function StudyActions({
         onClick={() => (requestDelete ? requestDelete() : actions?.onDelete())}
       >
         <Trash2 className="h-4 w-4" />
-      </Button>
-      <Button
-        size="sm"
-        className="h-8 px-3 text-xs"
-        disabled={!actions || actions.saving}
-        onClick={() => actions?.onSave()}
-      >
-        {actions?.saving ? "Saving…" : "Save"}
       </Button>
     </>
   );
