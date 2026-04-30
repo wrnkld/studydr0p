@@ -103,8 +103,7 @@ export default function Landing() {
   const totalResponses = rows.reduce((sum, r) => sum + (r.responseCount || 0), 0);
 
   return (
-    <PageContainer space="lg">
-      <ContentPanel size="wide" className="space-y-6">
+    <PageContainer width="wide" space="lg">
       <div className="relative">
         <PageHeader
           title="UX research, without the friction."
