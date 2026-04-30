@@ -140,23 +140,26 @@ export default function StudyBuilder() {
   }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
   const tabsNode = study ? (
-    <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
-      {(["build", "preview", "results"] as TabKey[]).map((t) => (
-        <button
-          key={t}
-          type="button"
-          onClick={() => setTab(t)}
-          className={cn(
-            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
-            activeTab === t
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {t}
-        </button>
-      ))}
-    </div>
+    <>
+      <StatusBadge status={study.status} />
+      <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
+        {(["build", "preview", "results"] as TabKey[]).map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setTab(t)}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
+              activeTab === t
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    </>
   ) : null;
 
   const onMetaChange = (meta: { title: string; description: string }) => {
