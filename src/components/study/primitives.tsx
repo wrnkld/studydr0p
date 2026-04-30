@@ -62,8 +62,13 @@ export function PageHeader({
   className?: string;
 }) {
   return (
-    <header className={cn("flex items-start justify-between gap-4", className)}>
-      <div className="space-y-2">
+    <header
+      className={cn(
+        "flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between",
+        className,
+      )}
+    >
+      <div className="min-w-0 space-y-2">
         {kicker ? (
           <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
             {kicker}
@@ -74,7 +79,9 @@ export function PageHeader({
           <p className="text-[15px] text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
-      {actions ? <div className="flex shrink-0 gap-2">{actions}</div> : null}
+      {actions ? (
+        <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>
+      ) : null}
     </header>
   );
 }

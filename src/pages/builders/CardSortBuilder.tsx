@@ -5,13 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
 import { CardSortConfig, CardRow, CategoryRow, StudyStatus } from "@/lib/types";
@@ -316,18 +310,26 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
         </div>
         <div className="space-y-2">
           <Label>Sort type</Label>
-          <Select
+          <RadioGroup
             value={sortType}
             onValueChange={(v) => setSortType(v as "open" | "closed")}
+            className="gap-2"
           >
-            <SelectTrigger className="w-[260px]">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="open">Open — participants name categories</SelectItem>
-              <SelectItem value="closed">Closed — you define categories</SelectItem>
-            </SelectContent>
-          </Select>
+            <label className="flex cursor-pointer items-start gap-2 text-sm font-normal">
+              <RadioGroupItem value="open" id="sort-open" className="mt-0.5" />
+              <span>
+                <span className="font-medium">Open</span>
+                <span className="text-muted-foreground"> — participants name categories</span>
+              </span>
+            </label>
+            <label className="flex cursor-pointer items-start gap-2 text-sm font-normal">
+              <RadioGroupItem value="closed" id="sort-closed" className="mt-0.5" />
+              <span>
+                <span className="font-medium">Closed</span>
+                <span className="text-muted-foreground"> — you define categories</span>
+              </span>
+            </label>
+          </RadioGroup>
         </div>
       </section>
 

@@ -28,6 +28,7 @@ import CardSortParticipant from "./participant/CardSortParticipant";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface StudyRow {
@@ -139,23 +140,26 @@ export default function StudyBuilder() {
   }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
   const tabsNode = study ? (
-    <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
-      {(["build", "preview", "results"] as TabKey[]).map((t) => (
-        <button
-          key={t}
-          type="button"
-          onClick={() => setTab(t)}
-          className={cn(
-            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
-            activeTab === t
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {t}
-        </button>
-      ))}
-    </div>
+    <>
+      <StatusBadge status={study.status} />
+      <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
+        {(["build", "preview", "results"] as TabKey[]).map((t) => (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setTab(t)}
+            className={cn(
+              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
+              activeTab === t
+                ? "bg-background text-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+    </>
   ) : null;
 
   const onMetaChange = (meta: { title: string; description: string }) => {
@@ -220,7 +224,7 @@ export default function StudyBuilder() {
         <div className="mt-6">
           <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-start pt-2">
               <Button
                 disabled={!actions || actions.saving}
                 onClick={() => actions?.onSave()}
@@ -262,6 +266,32 @@ export default function StudyBuilder() {
         </AlertDialogContent>
       </AlertDialog>
     </PageContainer>
+  );
+}
+
+function StatusBadge({ status }: { status: StudyStatus }) {
+  if (status === "live") {
+    return (
+      <Badge
+        variant="outline"
+        className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400"
+      >
+        <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        Live
+      </Badge>
+    );
+  }
+  if (status === "draft") {
+    return (
+      <Badge variant="outline" className="text-muted-foreground">
+        Draft
+      </Badge>
+    );
+  }
+  return (
+    <Badge variant="outline" className="text-muted-foreground">
+      Closed
+    </Badge>
   );
 }
 
