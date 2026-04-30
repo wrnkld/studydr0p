@@ -113,29 +113,48 @@ function StudyActions({
   return (
     <>
       <StatusPill status={status} />
-      {shareUrl && (
-        <Button
-          variant="ghost"
-          size="icon"
-          aria-label="Copy share link"
-          title="Copy share link"
-          className="h-8 w-8 text-muted-foreground hover:text-foreground"
-          onClick={copy}
-        >
-          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        </Button>
-      )}
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label="Delete study"
-        title="Delete study"
-        className="h-8 w-8 text-muted-foreground hover:text-destructive"
-        disabled={!actions}
-        onClick={() => (requestDelete ? requestDelete() : actions?.onDelete())}
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Study actions"
+            title="Study actions"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48">
+          {shareUrl && (
+            <DropdownMenuItem onSelect={copy}>
+              {copied ? (
+                <Check className="mr-2 h-4 w-4" />
+              ) : (
+                <Copy className="mr-2 h-4 w-4" />
+              )}
+              Copy share link
+            </DropdownMenuItem>
+          )}
+          {exportCsv && (
+            <DropdownMenuItem onSelect={() => exportCsv()}>
+              <Download className="mr-2 h-4 w-4" />
+              Export CSV
+            </DropdownMenuItem>
+          )}
+          {(shareUrl || exportCsv) && <DropdownMenuSeparator />}
+          <DropdownMenuItem
+            disabled={!actions}
+            onSelect={() =>
+              requestDelete ? requestDelete() : actions?.onDelete()
+            }
+            className="text-destructive focus:text-destructive"
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete study
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </>
   );
 }
