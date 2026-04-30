@@ -110,9 +110,8 @@ export default function NewStudy() {
   }, [searchParams, user, creating]);
 
   return (
-    <PageContainer space="lg">
-      <ContentPanel size="wide" className="space-y-6">
-        <PageHeader title="What kind of study?" />
+    <PageContainer space="lg" width="wide">
+      <PageHeader title="What kind of study?" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {TYPES.map((t) => {
