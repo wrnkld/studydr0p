@@ -269,6 +269,32 @@ export default function StudyBuilder() {
   );
 }
 
+function StatusBadge({ status }: { status: StudyStatus }) {
+  if (status === "live") {
+    return (
+      <Badge
+        variant="outline"
+        className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400"
+      >
+        <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        Live
+      </Badge>
+    );
+  }
+  if (status === "draft") {
+    return (
+      <Badge variant="outline" className="text-muted-foreground">
+        Draft
+      </Badge>
+    );
+  }
+  return (
+    <Badge variant="outline" className="text-muted-foreground">
+      Closed
+    </Badge>
+  );
+}
+
 function InlinePreview({
   study,
   onSubmitted,
