@@ -144,7 +144,7 @@ function StudyActions({
           )}
           {(shareUrl || exportCsv) && <DropdownMenuSeparator />}
           <DropdownMenuItem
-            disabled={!actions}
+            disabled={!requestDelete && !actions}
             onSelect={() =>
               requestDelete ? requestDelete() : actions?.onDelete()
             }
