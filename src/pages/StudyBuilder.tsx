@@ -141,7 +141,6 @@ export default function StudyBuilder() {
 
   const tabsNode = study ? (
     <>
-      <StatusBadge status={study.status} />
       <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
         {(["build", "preview", "results"] as TabKey[]).map((t) => (
           <button
