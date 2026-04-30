@@ -164,7 +164,6 @@ export default function NewStudy() {
           );
         })}
       </div>
-      </ContentPanel>
     </PageContainer>
   );
 }
