@@ -19,7 +19,7 @@ export default function TopBar() {
   const location = useLocation();
   const studyMatch = useMatch("/studies/:id");
   const newStudyMatch = useMatch("/studies/new");
-  const { meta, headerTabs } = useStudyToolbar();
+  const { meta } = useStudyToolbar();
 
   if (location.pathname.startsWith("/s/")) return null;
 
