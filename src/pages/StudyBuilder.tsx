@@ -272,6 +272,44 @@ function InlinePreview({
   study: StudyRow;
   onSubmitted: () => void;
 }) {
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [startedAt, setStartedAt] = useState<number>(0);
+  const [creating, setCreating] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setCreating(true);
+      const ua = navigator.userAgent;
+      const isMobile = /Mobi|Android|iPhone/.test(ua);
+      const { data, error } = await supabase
+        .from("sessions")
+        .insert({
+          study_id: study.id,
+          metadata: { device: isMobile ? "mobile" : "desktop", ua, source: "builder_preview" },
+        })
+        .select("id")
+        .single();
+      if (cancelled) return;
+      if (error || !data) {
+        toast.error(error?.message ?? "Could not start preview session");
+        setCreating(false);
+        return;
+      }
+      setSessionId(data.id);
+      setStartedAt(Date.now());
+      setCreating(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+    // Re-create a fresh session each time the study id changes.
+  }, [study.id]);
+
+  if (creating || !sessionId) {
+    return <p className="text-sm text-muted-foreground">Loading preview…</p>;
+  }
+
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
@@ -289,9 +327,8 @@ function InlinePreview({
           description: study.description,
           config: cfg,
         }}
-        sessionId="preview"
-        startedAt={Date.now()}
-        preview
+        sessionId={sessionId}
+        startedAt={startedAt}
         onDone={onSubmitted}
       />
     );
@@ -307,9 +344,8 @@ function InlinePreview({
           description: study.description,
           config: cfg,
         }}
-        sessionId="preview"
-        startedAt={Date.now()}
-        preview
+        sessionId={sessionId}
+        startedAt={startedAt}
         onDone={onSubmitted}
       />
     );
