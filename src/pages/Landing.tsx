@@ -27,6 +27,7 @@ interface CombinedRow {
   type: StudyType;
   responseCount: number;
   isExample: boolean;
+  status?: "draft" | "live" | "closed";
 }
 
 const EXAMPLE_ROWS: CombinedRow[] = [
@@ -65,7 +66,7 @@ export default function Landing() {
     (async () => {
       const { data } = await supabase
         .from("studies")
-        .select("id, title, type, responses(count)")
+        .select("id, title, type, status, responses(count)")
         .eq("researcher_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -78,6 +79,7 @@ export default function Landing() {
             type: s.type as StudyType,
             responseCount: s.responses?.[0]?.count ?? 0,
             isExample: false,
+            status: s.status as "draft" | "live" | "closed" | undefined,
           })),
         );
       }
@@ -161,7 +163,22 @@ export default function Landing() {
                 </div>
 
                 <div className="hidden sm:block">
-                  {r.isExample && <Badge variant="outline">Example</Badge>}
+                  {r.isExample ? (
+                    <Badge variant="outline">Example</Badge>
+                  ) : r.status === "live" ? (
+                    <Badge variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400">
+                      <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                      Live
+                    </Badge>
+                  ) : r.status === "draft" ? (
+                    <Badge variant="outline" className="text-muted-foreground">
+                      Draft
+                    </Badge>
+                  ) : r.status === "closed" ? (
+                    <Badge variant="outline" className="text-muted-foreground">
+                      Closed
+                    </Badge>
+                  ) : null}
                 </div>
 
                 <div className="hidden sm:block text-sm text-muted-foreground tabular-nums whitespace-nowrap">
