@@ -32,6 +32,9 @@ interface Ctx {
   /** If set, TopBar's Delete button calls this instead of actions.onDelete. */
   requestDelete: (() => void) | null;
   setRequestDelete: (fn: (() => void) | null) => void;
+  /** If set, TopBar shows an Export option that calls this. */
+  exportCsv: (() => void) | null;
+  setExportCsv: (fn: (() => void) | null) => void;
   meta: StudyMeta | null;
   setMeta: (m: StudyMeta | null) => void;
   /** Optional tabs rendered centered in the TopBar. */
