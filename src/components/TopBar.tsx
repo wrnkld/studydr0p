@@ -103,9 +103,7 @@ function StudyActions({
   status?: string;
   shareUrl: string | null;
 }) {
-  const { actions: _actions, requestDelete } = useStudyToolbar();
-  const { actions } = useStudyToolbar();
-  void _actions;
+  const { actions, requestDelete } = useStudyToolbar();
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
@@ -141,14 +139,6 @@ function StudyActions({
         onClick={() => (requestDelete ? requestDelete() : actions?.onDelete())}
       >
         <Trash2 className="h-4 w-4" />
-      </Button>
-      <Button
-        size="sm"
-        className="h-8 px-3 text-xs"
-        disabled={!actions || actions.saving}
-        onClick={() => actions?.onSave()}
-      >
-        {actions?.saving ? "Saving…" : "Save"}
       </Button>
     </>
   );
