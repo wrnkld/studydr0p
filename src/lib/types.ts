@@ -17,6 +17,7 @@ export interface SurveyQuestion {
   type: SurveyQuestionType;
   label: string;
   options?: string[]; // for multiple_choice
+  multi?: boolean; // for multiple_choice: allow selecting multiple options
 }
 
 export interface SurveyConfig {
