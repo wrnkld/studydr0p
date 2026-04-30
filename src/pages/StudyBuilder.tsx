@@ -224,7 +224,7 @@ export default function StudyBuilder() {
         <div className="mt-6">
           <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
-            <div className="flex justify-end pt-2">
+            <div className="flex justify-start pt-2">
               <Button
                 disabled={!actions || actions.saving}
                 onClick={() => actions?.onSave()}
