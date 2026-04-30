@@ -144,12 +144,6 @@ export default function ExampleStudy() {
         </div>
       </Tabs>
 
-      {session && (
-        <section className="rounded-md border p-4 space-y-3">
-          <p>Like this? Make your own version in your dashboard.</p>
-          <Button onClick={onDuplicate}>Duplicate this study</Button>
-        </section>
-      )}
     </PageContainer>
   );
 }
