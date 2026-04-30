@@ -4,10 +4,10 @@
 // "Canned example studies MUST render the real participant + results
 // components with seeded data — never parallel implementations."
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import {
   EXAMPLE_STUDIES,
   ExampleResponseRow,
@@ -16,6 +16,8 @@ import {
   makeUserSurveyResponse,
 } from "@/lib/exampleStudies";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { useStudyToolbar } from "@/components/StudyToolbarContext";
+import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
 import SurveyParticipant from "@/pages/participant/SurveyParticipant";
 import CardSortResults from "@/pages/results/CardSortResults";
