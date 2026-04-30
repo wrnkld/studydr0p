@@ -128,10 +128,6 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     <div className="space-y-8">
       <section className="space-y-3">
         <h3 className="text-base font-medium">By card</h3>
-        <p className="text-sm text-muted-foreground">
-          {total} response{total === 1 ? "" : "s"} across {cards.length} card
-          {cards.length === 1 ? "" : "s"}.
-        </p>
         <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
           {categories.map((c) => (
             <span key={c} className="inline-flex items-center gap-1.5">
