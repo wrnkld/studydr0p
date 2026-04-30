@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
-import { Check, Copy, Download, LogOut, MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { Check, Download, Link2, LogOut, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
