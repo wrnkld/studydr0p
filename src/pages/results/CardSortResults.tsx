@@ -142,24 +142,38 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
             >
               <span className="truncate text-sm font-medium">{r.card.label}</span>
               <div
-                className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted"
+                className="group relative flex h-4 w-full items-center"
                 role="img"
                 aria-label={`${r.card.label} placement distribution`}
               >
-                {r.total > 0 &&
-                  r.segments.map((seg) => (
-                    <span
-                      key={seg.label}
-                      title={`${seg.label}: ${seg.value} (${Math.round(
-                        (seg.value / r.total) * 100,
-                      )}%)`}
-                      className="h-full"
-                      style={{
-                        width: `${(seg.value / r.total) * 100}%`,
-                        backgroundColor: colorFor(seg.label),
-                      }}
-                    />
-                  ))}
+                <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted transition-all group-hover:h-2.5">
+                  {r.total > 0 && (
+                    <TooltipProvider delayDuration={100}>
+                      {r.segments.map((seg) => {
+                        const pct = Math.round((seg.value / r.total) * 100);
+                        return (
+                          <Tooltip key={seg.label}>
+                            <TooltipTrigger asChild>
+                              <span
+                                className="h-full cursor-default transition-opacity hover:opacity-80"
+                                style={{
+                                  width: `${(seg.value / r.total) * 100}%`,
+                                  backgroundColor: colorFor(seg.label),
+                                }}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="text-xs">
+                              <span className="font-medium">{seg.label}</span>
+                              <span className="ml-2 text-muted-foreground">
+                                {seg.value} · {pct}%
+                              </span>
+                            </TooltipContent>
+                          </Tooltip>
+                        );
+                      })}
+                    </TooltipProvider>
+                  )}
+                </div>
               </div>
               <span className="truncate text-xs text-muted-foreground">{r.topCategory}</span>
               <span className="text-right font-mono text-xs tabular-nums">
