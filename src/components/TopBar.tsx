@@ -63,34 +63,25 @@ function Brand() {
 
 function StatusPill({ status }: { status?: string }) {
   if (!status) return null;
-  const map: Record<string, { label: string; dot: string; text: string }> = {
-    draft: {
-      label: "draft",
-      dot: "bg-muted-foreground/60",
-      text: "text-muted-foreground",
-    },
-    live: {
-      label: "live",
-      dot: "bg-emerald-500",
-      text: "text-foreground",
-    },
-    closed: {
-      label: "closed",
-      dot: "bg-muted-foreground/60",
-      text: "text-muted-foreground",
-    },
-  };
-  const s = map[status] ?? map.draft;
+  if (status === "live") {
+    return (
+      <Badge
+        variant="outline"
+        className="h-6 gap-1.5 border-emerald-500/40 px-2 py-0 text-[10px] text-emerald-700 dark:text-emerald-400"
+      >
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        Live
+      </Badge>
+    );
+  }
+  const label = status === "closed" ? "Closed" : "Draft";
   return (
-    <span
-      className={cn(
-        "hidden items-center gap-1.5 text-[11px] font-medium sm:inline-flex",
-        s.text,
-      )}
+    <Badge
+      variant="outline"
+      className="h-6 px-2 py-0 text-[10px] text-muted-foreground"
     >
-      <span className={cn("h-1.5 w-1.5 rounded-full", s.dot)} />
-      {s.label}
-    </span>
+      {label}
+    </Badge>
   );
 }
 
