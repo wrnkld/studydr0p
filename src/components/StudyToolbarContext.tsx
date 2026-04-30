@@ -34,6 +34,9 @@ interface Ctx {
   setRequestDelete: (fn: (() => void) | null) => void;
   meta: StudyMeta | null;
   setMeta: (m: StudyMeta | null) => void;
+  /** Optional tabs rendered centered in the TopBar. */
+  headerTabs: ReactNode | null;
+  setHeaderTabs: (n: ReactNode | null) => void;
 }
 
 const StudyToolbarCtx = createContext<Ctx | null>(null);
@@ -42,9 +45,23 @@ export function StudyToolbarProvider({ children }: { children: ReactNode }) {
   const [actions, setActions] = useState<StudyActions | null>(null);
   const [requestDelete, setRequestDelete] = useState<(() => void) | null>(null);
   const [meta, setMeta] = useState<StudyMeta | null>(null);
+  const [headerTabs, setHeaderTabsState] = useState<ReactNode | null>(null);
+  const setHeaderTabs = useCallback(
+    (n: ReactNode | null) => setHeaderTabsState(n),
+    [],
+  );
   const value = useMemo(
-    () => ({ actions, setActions, requestDelete, setRequestDelete, meta, setMeta }),
-    [actions, requestDelete, meta],
+    () => ({
+      actions,
+      setActions,
+      requestDelete,
+      setRequestDelete,
+      meta,
+      setMeta,
+      headerTabs,
+      setHeaderTabs,
+    }),
+    [actions, requestDelete, meta, headerTabs, setHeaderTabs],
   );
   return <StudyToolbarCtx.Provider value={value}>{children}</StudyToolbarCtx.Provider>;
 }
