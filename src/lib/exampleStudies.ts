@@ -180,6 +180,7 @@ const GAS_QUESTIONS: SurveyQuestion[] = [
   {
     id: "q3",
     type: "multiple_choice",
+    multi: true,
     label: "Which of these have you eaten at a gas station?",
     options: [
       "Hot dog",
