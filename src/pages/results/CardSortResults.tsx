@@ -82,8 +82,74 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     };
   });
 
+  // Color palette pulled from design tokens (chart-1..chart-5).
+  const palette = [
+    "hsl(var(--chart-1))",
+    "hsl(var(--chart-2))",
+    "hsl(var(--chart-3))",
+    "hsl(var(--chart-4))",
+    "hsl(var(--chart-5))",
+  ];
+  const colorFor = (cat: string) =>
+    palette[categories.indexOf(cat) % palette.length];
+
   return (
     <div className="space-y-8">
+      <section className="space-y-3">
+        <h3 className="text-base font-medium">Distribution by card</h3>
+        <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
+          {categories.map((c) => (
+            <span key={c} className="inline-flex items-center gap-1.5">
+              <span
+                className="inline-block h-3 w-3 rounded-sm"
+                style={{ backgroundColor: colorFor(c) }}
+              />
+              {c}
+            </span>
+          ))}
+        </div>
+        <div className="space-y-3 rounded-lg border p-4">
+          {cards.map((card) => {
+            const counts = byCard[card.id] ?? {};
+            const placedTotal = Object.values(counts).reduce((a, b) => a + b, 0);
+            return (
+              <div key={card.id} className="space-y-1">
+                <div className="flex items-baseline justify-between text-sm">
+                  <span className="font-medium">{card.label}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {placedTotal} placement{placedTotal === 1 ? "" : "s"}
+                  </span>
+                </div>
+                <div
+                  className="flex w-full overflow-hidden rounded bg-muted"
+                  style={{ height: 24 }}
+                >
+                  {placedTotal === 0
+                    ? null
+                    : categories.map((c) => {
+                        const n = counts[c] ?? 0;
+                        if (n === 0) return null;
+                        const pct = (n / placedTotal) * 100;
+                        return (
+                          <div
+                            key={c}
+                            title={`${c}: ${n} (${Math.round(pct)}%)`}
+                            className="flex items-center justify-center text-[10px] font-medium text-white"
+                            style={{
+                              width: `${pct}%`,
+                              backgroundColor: colorFor(c),
+                            }}
+                          >
+                            {pct >= 12 ? `${Math.round(pct)}%` : ""}
+                          </div>
+                        );
+                      })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       <section className="space-y-3">
         <h3 className="text-base font-medium">By card</h3>
