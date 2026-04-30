@@ -48,7 +48,7 @@ export default function StudyBuilder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
-  const { actions, setRequestDelete, setHeaderTabs } = useStudyToolbar();
+  const { actions, setRequestDelete } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -138,31 +138,25 @@ export default function StudyBuilder() {
     return () => setMeta(null);
   }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
-  // Render the Build / Preview / Results tabs centered in the TopBar.
-  useEffect(() => {
-    if (!study) return;
-    const tabs: TabKey[] = ["build", "preview", "results"];
-    setHeaderTabs(
-      <div className="inline-flex items-center gap-1">
-        {tabs.map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
-              activeTab === t
-                ? "bg-muted text-foreground"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {t}
-          </button>
-        ))}
-      </div>,
-    );
-    return () => setHeaderTabs(null);
-  }, [study?.id, activeTab, setHeaderTabs]);
+  const tabsNode = study ? (
+    <div className="inline-flex items-center gap-1">
+      {(["build", "preview", "results"] as TabKey[]).map((t) => (
+        <button
+          key={t}
+          type="button"
+          onClick={() => setTab(t)}
+          className={cn(
+            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
+            activeTab === t
+              ? "bg-muted text-foreground"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {t}
+        </button>
+      ))}
+    </div>
+  ) : null;
 
   const onMetaChange = (meta: { title: string; description: string }) => {
     setLiveTitle(meta.title);
@@ -220,6 +214,7 @@ export default function StudyBuilder() {
         <PageHeader
           title={liveTitle.trim() || "Untitled study"}
           description={liveDescription.trim() || undefined}
+          actions={tabsNode}
         />
 
         <div className="mt-6">
