@@ -138,7 +138,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           {rowsByCard.map((r) => (
             <li
               key={r.card.id}
-              className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)_minmax(0,1fr)_3rem_2.5rem] items-center gap-4 px-3 py-2.5"
+              className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)_minmax(0,1.4fr)_auto] items-center gap-4 px-3 py-2.5"
             >
               <span className="truncate text-sm font-medium">{r.card.label}</span>
               <div
@@ -175,12 +175,17 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                   )}
                 </div>
               </div>
-              <span className="truncate text-xs text-muted-foreground">{r.topCategory}</span>
-              <span className="text-right font-mono text-xs tabular-nums">
-                {r.agreement}%
+              <span className="truncate text-xs text-muted-foreground">
+                <span className="font-mono tabular-nums text-foreground">
+                  {r.agreement}%
+                </span>{" "}
+                {r.topCategory}
               </span>
-              <span className="text-right font-mono text-xs tabular-nums text-muted-foreground">
-                {r.total}
+              <span className="whitespace-nowrap text-right text-xs text-muted-foreground">
+                <span className="font-mono tabular-nums text-foreground">
+                  {r.total}
+                </span>{" "}
+                {r.total === 1 ? "response" : "responses"}
               </span>
             </li>
           ))}
