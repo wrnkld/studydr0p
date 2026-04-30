@@ -5,10 +5,8 @@
 // components with seeded data — never parallel implementations."
 
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   EXAMPLE_STUDIES,
@@ -26,8 +24,6 @@ import SurveyResults from "@/pages/results/SurveyResults";
 export default function ExampleStudy() {
   const { id } = useParams();
   const study = id ? getExampleStudy(id) : null;
-  const { session } = useAuth();
-  const navigate = useNavigate();
   const [tab, setTab] = useState<"preview" | "results">("preview");
   const [userResponse, setUserResponse] = useState<ExampleResponseRow | null>(
     null,
@@ -43,10 +39,6 @@ export default function ExampleStudy() {
       </PageContainer>
     );
   }
-
-  const onDuplicate = () => {
-    navigate(`/studies/new?type=${study.type}`);
-  };
 
   // Seed responses + the visitor's submission (if any). This is exactly
   // what the real Results component expects (a list of ResponseRow).
@@ -144,12 +136,6 @@ export default function ExampleStudy() {
         </div>
       </Tabs>
 
-      {session && (
-        <section className="rounded-md border p-4 space-y-3">
-          <p>Like this? Make your own version in your dashboard.</p>
-          <Button onClick={onDuplicate}>Duplicate this study</Button>
-        </section>
-      )}
     </PageContainer>
   );
 }
