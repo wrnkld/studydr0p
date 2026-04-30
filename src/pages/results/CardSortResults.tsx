@@ -18,7 +18,7 @@ interface Props {
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
-  const isMobile = useIsMobile();
+  
 
   useEffect(() => {
     if (responses) {
