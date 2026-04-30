@@ -99,7 +99,7 @@ function StudyActions({
   status?: string;
   shareUrl: string | null;
 }) {
-  const { actions, requestDelete } = useStudyToolbar();
+  const { actions, requestDelete, exportCsv } = useStudyToolbar();
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {
