@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
-import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
+import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 interface StudyRow {
