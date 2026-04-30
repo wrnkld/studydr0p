@@ -336,7 +336,7 @@ function PoolZone({
   return (
     <div ref={setNodeRef} className="space-y-3">
       <div className="text-sm text-muted-foreground">{label}</div>
-      <div className={cn("transition-colors rounded-md", isOver && "bg-muted/50 -mx-2 px-2 py-1")}>
+      <div className={cn("transition-colors rounded-md -mx-2 px-2 py-1", isOver && "bg-muted/50")}>
         {children}
       </div>
     </div>
