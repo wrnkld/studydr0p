@@ -187,22 +187,28 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
     URL.revokeObjectURL(url);
   };
 
+  const canExport =
+    !!study &&
+    (study.type === "survey" || study.type === "card_sort") &&
+    responses.length > 0;
+
+  const { setExportCsv } = useStudyToolbar();
+  useEffect(() => {
+    if (!canExport) {
+      setExportCsv(null);
+      return;
+    }
+    setExportCsv(() => exportCsv);
+    return () => setExportCsv(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [canExport, study?.id, responses.length, cards.length]);
+
   if (loading || !study) {
     return <div className="text-sm text-muted-foreground">Loading…</div>;
   }
 
-  const canExport =
-    (study.type === "survey" || study.type === "card_sort") && responses.length > 0;
-
   return (
     <div className="space-y-6 py-6">
-      {showHeader && canExport && (
-        <div className="flex justify-end">
-          <button onClick={exportCsv} className="text-sm underline">
-            Export CSV
-          </button>
-        </div>
-      )}
 
       <StatGrid cols={study.type === "survey" ? 2 : 3}>
         <Stat tone="indigo" label="Responses" value={String(responses.length)} />
