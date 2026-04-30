@@ -96,7 +96,11 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
   return (
     <div className="space-y-8">
       <section className="space-y-3">
-        <h3 className="text-base font-medium">Distribution by card</h3>
+        <h3 className="text-base font-medium">By card</h3>
+        <p className="text-sm text-muted-foreground">
+          {total} response{total === 1 ? "" : "s"} across {cards.length} card
+          {cards.length === 1 ? "" : "s"}.
+        </p>
         <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-muted-foreground">
           {categories.map((c) => (
             <span key={c} className="inline-flex items-center gap-1.5">
@@ -108,55 +112,6 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
             </span>
           ))}
         </div>
-        <div className="space-y-3 rounded-lg border p-4">
-          {cards.map((card) => {
-            const counts = byCard[card.id] ?? {};
-            const placedTotal = Object.values(counts).reduce((a, b) => a + b, 0);
-            return (
-              <div key={card.id} className="space-y-1">
-                <div className="flex items-baseline justify-between text-sm">
-                  <span className="font-medium">{card.label}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {placedTotal} placement{placedTotal === 1 ? "" : "s"}
-                  </span>
-                </div>
-                <div
-                  className="flex w-full overflow-hidden rounded bg-muted"
-                  style={{ height: 24 }}
-                >
-                  {placedTotal === 0
-                    ? null
-                    : categories.map((c) => {
-                        const n = counts[c] ?? 0;
-                        if (n === 0) return null;
-                        const pct = (n / placedTotal) * 100;
-                        return (
-                          <div
-                            key={c}
-                            title={`${c}: ${n} (${Math.round(pct)}%)`}
-                            className="flex items-center justify-center text-[10px] font-medium text-white"
-                            style={{
-                              width: `${pct}%`,
-                              backgroundColor: colorFor(c),
-                            }}
-                          >
-                            {pct >= 12 ? `${Math.round(pct)}%` : ""}
-                          </div>
-                        );
-                      })}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="space-y-3">
-        <h3 className="text-base font-medium">By card</h3>
-        <p className="text-sm text-muted-foreground">
-          {total} response{total === 1 ? "" : "s"} across {cards.length} card
-          {cards.length === 1 ? "" : "s"}.
-        </p>
         <div className="overflow-x-auto rounded-lg border">
           <table className="w-full text-sm">
             <thead>
@@ -164,23 +119,50 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                 <th className="px-3 py-2 text-left font-medium">Card</th>
                 <th className="px-3 py-2 text-left font-medium">Most common</th>
                 <th className="px-3 py-2 text-right font-medium">Agreement</th>
-                <th className="px-3 py-2 text-left font-medium">Breakdown</th>
+                <th className="px-3 py-2 text-left font-medium w-[40%]">Breakdown</th>
               </tr>
             </thead>
             <tbody>
-              {summary.map((s) => (
-                <tr key={s.card.id} className="border-b last:border-b-0">
-                  <td className="px-3 py-2 font-medium">{s.card.label}</td>
-                  <td className="px-3 py-2">{s.topCategory}</td>
-                  <td className="px-3 py-2 text-right">{s.agreement}%</td>
-                  <td className="px-3 py-2 text-muted-foreground">
-                    {Object.entries(s.counts)
-                      .sort((a, b) => b[1] - a[1])
-                      .map(([cat, n]) => `${cat} (${n})`)
-                      .join(", ") || "—"}
-                  </td>
-                </tr>
-              ))}
+              {summary.map((s) => {
+                const counts = s.counts;
+                const placedTotal = Object.values(counts).reduce((a, b) => a + b, 0);
+                return (
+                  <tr key={s.card.id} className="border-b last:border-b-0">
+                    <td className="px-3 py-2 font-medium align-middle">{s.card.label}</td>
+                    <td className="px-3 py-2 align-middle">{s.topCategory}</td>
+                    <td className="px-3 py-2 text-right align-middle">{s.agreement}%</td>
+                    <td className="px-3 py-2 align-middle">
+                      {placedTotal === 0 ? (
+                        <span className="text-muted-foreground">—</span>
+                      ) : (
+                        <div
+                          className="flex w-full overflow-hidden rounded bg-muted"
+                          style={{ height: 20 }}
+                        >
+                          {categories.map((c) => {
+                            const n = counts[c] ?? 0;
+                            if (n === 0) return null;
+                            const pct = (n / placedTotal) * 100;
+                            return (
+                              <div
+                                key={c}
+                                title={`${c}: ${n} (${Math.round(pct)}%)`}
+                                className="flex items-center justify-center text-[10px] font-medium text-white"
+                                style={{
+                                  width: `${pct}%`,
+                                  backgroundColor: colorFor(c),
+                                }}
+                              >
+                                {pct >= 12 ? `${Math.round(pct)}%` : ""}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
