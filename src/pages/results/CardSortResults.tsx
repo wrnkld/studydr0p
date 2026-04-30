@@ -1,6 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 
 interface ResponseRow {
   id: string;
@@ -93,6 +106,22 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
   const colorFor = (cat: string) =>
     palette[categories.indexOf(cat) % palette.length];
 
+  // Build stacked-bar dataset: one row per card, one numeric key per category.
+  const chartData = summary.map((s) => {
+    const row: Record<string, string | number> = { card: s.card.label };
+    categories.forEach((c) => {
+      row[c] = s.counts[c] ?? 0;
+    });
+    return row;
+  });
+
+  const chartConfig: ChartConfig = {};
+  categories.forEach((c) => {
+    chartConfig[c] = { label: c, color: colorFor(c) };
+  });
+
+  const chartHeight = Math.max(140, summary.length * 44 + 40);
+
   return (
     <div className="space-y-8">
       <section className="space-y-3">
@@ -112,6 +141,49 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
             </span>
           ))}
         </div>
+
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto w-full"
+          style={{ height: chartHeight }}
+        >
+          <BarChart
+            data={chartData}
+            layout="vertical"
+            margin={{ top: 8, right: 16, bottom: 8, left: 8 }}
+          >
+            <CartesianGrid horizontal={false} stroke="hsl(var(--chart-grid))" />
+            <XAxis
+              type="number"
+              stroke="hsl(var(--chart-axis))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              allowDecimals={false}
+            />
+            <YAxis
+              type="category"
+              dataKey="card"
+              stroke="hsl(var(--chart-axis))"
+              fontSize={12}
+              tickLine={false}
+              axisLine={false}
+              interval={0}
+              width={120}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            {categories.map((c) => (
+              <Bar
+                key={c}
+                dataKey={c}
+                stackId="cards"
+                fill={colorFor(c)}
+                isAnimationActive={false}
+              />
+            ))}
+          </BarChart>
+        </ChartContainer>
+
         <div className="overflow-x-auto rounded-lg border">
           <table className="w-full text-sm">
             <thead>
@@ -119,50 +191,16 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                 <th className="px-3 py-2 text-left font-medium">Card</th>
                 <th className="px-3 py-2 text-left font-medium">Most common</th>
                 <th className="px-3 py-2 text-right font-medium">Agreement</th>
-                <th className="px-3 py-2 text-left font-medium w-[40%]">Breakdown</th>
               </tr>
             </thead>
             <tbody>
-              {summary.map((s) => {
-                const counts = s.counts;
-                const placedTotal = Object.values(counts).reduce((a, b) => a + b, 0);
-                return (
-                  <tr key={s.card.id} className="border-b last:border-b-0">
-                    <td className="px-3 py-2 font-medium align-middle">{s.card.label}</td>
-                    <td className="px-3 py-2 align-middle">{s.topCategory}</td>
-                    <td className="px-3 py-2 text-right align-middle">{s.agreement}%</td>
-                    <td className="px-3 py-2 align-middle">
-                      {placedTotal === 0 ? (
-                        <span className="text-muted-foreground">—</span>
-                      ) : (
-                        <div
-                          className="flex w-full overflow-hidden rounded bg-muted"
-                          style={{ height: 20 }}
-                        >
-                          {categories.map((c) => {
-                            const n = counts[c] ?? 0;
-                            if (n === 0) return null;
-                            const pct = (n / placedTotal) * 100;
-                            return (
-                              <div
-                                key={c}
-                                title={`${c}: ${n} (${Math.round(pct)}%)`}
-                                className="flex items-center justify-center text-[10px] font-medium text-white"
-                                style={{
-                                  width: `${pct}%`,
-                                  backgroundColor: colorFor(c),
-                                }}
-                              >
-                                {pct >= 12 ? `${Math.round(pct)}%` : ""}
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+              {summary.map((s) => (
+                <tr key={s.card.id} className="border-b last:border-b-0">
+                  <td className="px-3 py-2 font-medium align-middle">{s.card.label}</td>
+                  <td className="px-3 py-2 align-middle">{s.topCategory}</td>
+                  <td className="px-3 py-2 text-right align-middle">{s.agreement}%</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
