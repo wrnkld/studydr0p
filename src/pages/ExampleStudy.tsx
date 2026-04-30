@@ -30,32 +30,26 @@ export default function ExampleStudy() {
   const [userResponse, setUserResponse] = useState<ExampleResponseRow | null>(
     null,
   );
-  const { setHeaderTabs } = useStudyToolbar();
 
-  useEffect(() => {
-    if (!study) return;
-    const tabs: Array<"preview" | "results"> = ["preview", "results"];
-    setHeaderTabs(
-      <div className="inline-flex items-center gap-1">
-        {tabs.map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
-              tab === t
-                ? "bg-muted text-foreground"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {t}
-          </button>
-        ))}
-      </div>,
-    );
-    return () => setHeaderTabs(null);
-  }, [study?.id, tab, setHeaderTabs]);
+  const tabsNode = study ? (
+    <div className="inline-flex items-center gap-1">
+      {(["preview", "results"] as const).map((t) => (
+        <button
+          key={t}
+          type="button"
+          onClick={() => setTab(t)}
+          className={cn(
+            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-colors",
+            tab === t
+              ? "bg-muted text-foreground"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {t}
+        </button>
+      ))}
+    </div>
+  ) : null;
 
   if (!study) {
     return (
