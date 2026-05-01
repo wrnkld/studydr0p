@@ -214,10 +214,10 @@ export default function StudyBuilder() {
         value={activeTab}
         onValueChange={(v) => setTab(v as TabKey)}
       >
+        {tabsNode}
         <PageHeader
           title={liveTitle.trim() || "Untitled study"}
           description={liveDescription.trim() || undefined}
-          actions={tabsNode}
         />
 
         <div className="mt-6">
