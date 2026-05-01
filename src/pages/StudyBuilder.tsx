@@ -141,7 +141,7 @@ export default function StudyBuilder() {
 
   const tabsNode = study ? (
     <>
-      <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
+      <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 mb-4">
         {(["build", "preview", "results"] as TabKey[]).map((t) => (
           <button
             key={t}
