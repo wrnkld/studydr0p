@@ -32,7 +32,7 @@ export default function ExampleStudy() {
   );
 
   const tabsNode = study ? (
-    <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
+    <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 mb-4">
       {(["preview", "results"] as const).map((t) => (
         <button
           key={t}
