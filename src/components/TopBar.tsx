@@ -35,7 +35,7 @@ export default function TopBar() {
   const onStudyPage = !!studyMatch && !onNewStudyPage && !!session;
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-foreground bg-card">
+    <header className="sticky top-0 z-40 w-full border-b border-border bg-card">
       <div className="container max-w-5xl flex h-16 items-center justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">
           <Brand />
