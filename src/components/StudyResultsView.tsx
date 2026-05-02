@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -19,7 +19,6 @@ import SurveyResults from "@/pages/results/SurveyResults";
 import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
-import { Stat, StatGrid } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 interface StudyData {
@@ -129,20 +128,6 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
     };
   }, [studyId]);
 
-  const completionRate = useMemo(() => {
-    if (sessions.length === 0) return 0;
-    const completed = sessions.filter((s) => s.completed_at).length;
-    return Math.round((completed / sessions.length) * 100);
-  }, [sessions]);
-
-  const avgTime = useMemo(() => {
-    const durations = sessions
-      .map((s) => s.metadata?.duration_ms)
-      .filter((d): d is number => typeof d === "number");
-    if (!durations.length) return null;
-    const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
-    return Math.round(avg / 1000);
-  }, [sessions]);
 
   const exportCsv = () => {
     if (!study) return;
@@ -209,28 +194,6 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
 
   return (
     <div className="space-y-6 py-6">
-
-      <StatGrid cols={study.type === "survey" ? 2 : 3}>
-        <Stat tone="indigo" label="Responses" value={String(responses.length)} />
-        {study.type === "survey" ? (
-          <Stat
-            tone="green"
-            label="Questions"
-            value={String(((study.config as SurveyConfig)?.questions ?? []).length)}
-          />
-        ) : study.type === "card_sort" ? (
-          <>
-            <Stat tone="green" label="Cards" value={String(cards.length)} />
-            <Stat tone="amber" label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
-          </>
-        ) : (
-          <>
-            <Stat tone="green" label="Completion" value={`${completionRate}%`} />
-            <Stat tone="amber" label="Avg time" value={avgTime !== null ? `${avgTime}s` : "—"} />
-          </>
-        )}
-      </StatGrid>
-
       <section>
         {responses.length === 0 ? (
           <p className="text-sm text-muted-foreground">

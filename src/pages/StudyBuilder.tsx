@@ -362,6 +362,7 @@ function InlinePreview({
         }}
         sessionId={sessionId}
         startedAt={startedAt}
+        preview
         onDone={onSubmitted}
       />
     );
@@ -379,6 +380,7 @@ function InlinePreview({
         }}
         sessionId={sessionId}
         startedAt={startedAt}
+        preview
         onDone={onSubmitted}
       />
     );
