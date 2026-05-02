@@ -175,7 +175,7 @@ function QuestionInput({
           return (
             <label
               key={i}
-              className="flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent"
+              className="flex cursor-pointer items-center gap-3 rounded-md border p-3"
             >
               <input
                 type="checkbox"
@@ -195,7 +195,7 @@ function QuestionInput({
       {(q.options ?? []).map((opt, i) => (
         <label
           key={i}
-          className="flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent"
+          className="flex cursor-pointer items-center gap-3 rounded-md border p-3"
         >
           <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
           <span>{opt}</span>
