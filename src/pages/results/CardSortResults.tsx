@@ -209,7 +209,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-lg border text-sm">
+        <div className="rounded-lg border text-sm">
           <div className="divide-y">
             {rowsByCard.map((r) => (
               <div key={r.card.id} className="grid grid-cols-[minmax(72px,max-content)_1fr_auto_auto] items-center gap-2 px-4 py-3 sm:gap-4">
