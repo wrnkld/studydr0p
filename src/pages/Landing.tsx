@@ -160,13 +160,16 @@ export default function Landing() {
                   {r.title}
                 </div>
 
-                <div className="hidden sm:block text-xs uppercase tracking-wider text-muted-foreground">
-                  {r.isExample ? "Example" : r.status === "live" ? (
-                    <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                      Live
-                    </span>
-                  ) : r.status === "draft" ? "Draft" : r.status === "closed" ? "Closed" : null}
+                <div className="hidden sm:flex justify-end">
+                  {r.isExample ? (
+                    <Badge variant="secondary">Example</Badge>
+                  ) : r.status === "live" ? (
+                    <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400">Live</Badge>
+                  ) : r.status === "draft" ? (
+                    <Badge variant="outline">Draft</Badge>
+                  ) : r.status === "closed" ? (
+                    <Badge variant="secondary">Closed</Badge>
+                  ) : null}
                 </div>
 
                 <div className="hidden sm:block text-sm text-muted-foreground tabular-nums text-right whitespace-nowrap">
