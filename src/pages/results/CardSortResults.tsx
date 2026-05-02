@@ -142,6 +142,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           <BarChart
             data={chartData}
             layout="vertical"
+            barSize={14}
             margin={{ top: 4, right: 8, bottom: 0, left: 0 }}
           >
             <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
