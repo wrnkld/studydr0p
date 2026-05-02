@@ -50,6 +50,10 @@ interface Props {
   studyId: string;
   /** When true, show the export button + stats header. Defaults to true. */
   showHeader?: boolean;
+  /** Hint that a response was just submitted — suppress empty state briefly. */
+  pendingResponse?: boolean;
+  /** Called once responses have loaded after a pending submission. */
+  onResponsesLoaded?: () => void;
 }
 
 /**
