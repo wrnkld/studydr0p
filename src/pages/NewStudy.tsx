@@ -127,7 +127,7 @@ export default function NewStudy() {
               }}
               disabled={!t.enabled || creating}
               className={cn(
-                "group relative text-left rounded-xl border border-border/70 bg-card p-5 transition-colors",
+                "group relative text-left rounded-lg border border-border/70 bg-card p-5 transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 t.enabled
                   ? "hover:bg-muted/40 cursor-pointer"
