@@ -45,7 +45,7 @@ export default function ExampleStudy() {
               : "text-muted-foreground hover:text-foreground",
           )}
         >
-          {t}
+          {{ preview: "Preview", results: "Responses" }[t]}
         </button>
       ))}
     </div>
