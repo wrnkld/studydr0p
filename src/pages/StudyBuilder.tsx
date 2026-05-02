@@ -221,7 +221,7 @@ export default function StudyBuilder() {
         />
 
         <div className="mt-6">
-          <TabsContent value="build" className="mt-0 space-y-6">
+          <TabsContent value="build" forceMount className="mt-0 space-y-6 data-[state=inactive]:hidden">
             {builder}
             <div className="flex justify-start pt-2">
               <Button
