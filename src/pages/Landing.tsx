@@ -160,7 +160,7 @@ export default function Landing() {
                   {r.title}
                 </div>
 
-                <div className="hidden sm:flex justify-end">
+                <div className="hidden sm:flex">
                   {r.isExample ? (
                     <Badge variant="secondary">Example</Badge>
                   ) : r.status === "live" ? (
