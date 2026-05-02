@@ -128,20 +128,6 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
     };
   }, [studyId]);
 
-  const completionRate = useMemo(() => {
-    if (sessions.length === 0) return 0;
-    const completed = sessions.filter((s) => s.completed_at).length;
-    return Math.round((completed / sessions.length) * 100);
-  }, [sessions]);
-
-  const avgTime = useMemo(() => {
-    const durations = sessions
-      .map((s) => s.metadata?.duration_ms)
-      .filter((d): d is number => typeof d === "number");
-    if (!durations.length) return null;
-    const avg = durations.reduce((a, b) => a + b, 0) / durations.length;
-    return Math.round(avg / 1000);
-  }, [sessions]);
 
   const exportCsv = () => {
     if (!study) return;
