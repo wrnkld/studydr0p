@@ -140,22 +140,24 @@ function QuestionInput({
   if (q.type === "likert") {
     return (
       <div className="space-y-3">
-        <div className="flex gap-2">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <Button
-              key={n}
-              type="button"
-              variant={value === String(n) ? "default" : "outline"}
-              onClick={() => onChange(String(n))}
-              className="h-12 w-12"
-            >
-              {n}
-            </Button>
-          ))}
-        </div>
-        <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Strongly disagree</span>
-          <span>Strongly agree</span>
+      <div className="inline-flex flex-col">
+          <div className="flex gap-2">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <Button
+                key={n}
+                type="button"
+                variant={value === String(n) ? "default" : "outline"}
+                onClick={() => onChange(String(n))}
+                className="h-12 w-12"
+              >
+                {n}
+              </Button>
+            ))}
+          </div>
+          <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
+            <span>Strongly disagree</span>
+            <span>Strongly agree</span>
+          </div>
         </div>
       </div>
     );
