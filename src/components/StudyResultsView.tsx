@@ -199,9 +199,8 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
       <section>
         {responses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <BarChart3 className="h-8 w-8 text-muted-foreground/50 mb-4" />
-            <p className="text-sm font-medium text-foreground">No responses yet</p>
-            <p className="mt-1 text-sm text-muted-foreground max-w-xs">
+            <p className="text-lg font-medium text-foreground">No responses yet</p>
+            <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
               Share your study link with participants to start collecting data.
             </p>
             {study.slug && (
