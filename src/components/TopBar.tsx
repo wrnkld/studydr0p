@@ -76,10 +76,7 @@ function StatusPill({ status }: { status?: string }) {
   }
   const label = status === "closed" ? "Closed" : "Draft";
   return (
-    <Badge
-      variant="outline"
-      className="pointer-events-none h-6 px-2 py-0 text-[10px] text-muted-foreground"
-    >
+    <Badge variant="outline" className="text-muted-foreground">
       {label}
     </Badge>
   );
