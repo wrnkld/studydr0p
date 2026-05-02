@@ -38,7 +38,10 @@ function CardSortSegment({
   const showTemporarily = () => {
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
     setOpen(true);
-    closeTimer.current = window.setTimeout(() => setOpen(false), 2400);
+    closeTimer.current = window.setTimeout(() => {
+      setOpen(false);
+      closeTimer.current = null;
+    }, 2400);
   };
 
   const show = () => {
@@ -47,6 +50,7 @@ function CardSortSegment({
   };
 
   const hide = () => {
+    if (closeTimer.current) return;
     if (closeTimer.current) window.clearTimeout(closeTimer.current);
     setOpen(false);
   };
