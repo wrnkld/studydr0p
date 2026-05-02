@@ -130,7 +130,7 @@ export default function Landing() {
       </div>
 
       {(
-        <section className="rounded-xl border border-border/70 bg-card divide-y divide-border/60 shadow-[0_1px_2px_rgba(20,20,15,0.04)] overflow-hidden">
+        <section className="rounded-lg border border-border/70 bg-card divide-y divide-border/60 shadow-[0_1px_2px_rgba(20,20,15,0.04)] overflow-hidden">
           {rows.map((r) => {
             const Icon = STUDY_TYPE_ICONS[r.type];
             const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
