@@ -111,8 +111,8 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
   });
 
   const yAxisWidth = isMobile ? 72 : 120;
-  const barHeight = 36;
-  const chartHeight = Math.max(200, chartData.length * barHeight + 48);
+  const rowHeight = 28;
+  const chartHeight = Math.max(180, chartData.length * rowHeight + 48);
 
   return (
     <div className="space-y-8">
@@ -142,6 +142,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           <BarChart
             data={chartData}
             layout="vertical"
+            barSize={14}
             margin={{ top: 4, right: 8, bottom: 0, left: 0 }}
           >
             <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
