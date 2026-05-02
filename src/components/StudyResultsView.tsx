@@ -134,6 +134,12 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
     };
   }, [studyId]);
 
+  // Clear pendingResponse flag once responses actually arrive
+  useEffect(() => {
+    if (pendingResponse && responses.length > 0) {
+      onResponsesLoaded?.();
+    }
+  }, [pendingResponse, responses.length, onResponsesLoaded]);
 
   const exportCsv = () => {
     if (!study) return;
