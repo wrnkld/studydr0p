@@ -67,6 +67,14 @@ function CardSortSegment({
         )}
         style={{ backgroundColor: color }}
       />
+      {selected && (
+        <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md">
+          <span className="font-medium">{label}</span>
+          <span className="ml-2 text-muted-foreground">
+            {value} · {pct}%
+          </span>
+        </span>
+      )}
     </button>
   );
 }
@@ -74,6 +82,7 @@ function CardSortSegment({
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
+  const [selectedSegment, setSelectedSegment] = useState<string | null>(null);
   
 
   useEffect(() => {
