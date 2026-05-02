@@ -154,7 +154,7 @@ export default function StudyBuilder() {
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
-            {t}
+            {{ build: "Build", preview: "Preview", results: "Responses" }[t]}
           </button>
         ))}
       </div>
