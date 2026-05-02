@@ -146,7 +146,7 @@ export default function Landing() {
                     navigate(r.href);
                   }
                 }}
-                className="group grid grid-cols-[auto_1fr_6rem_6rem] items-center gap-x-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
+                className="group grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_6rem_6rem] items-center gap-x-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
               >
                 <div
                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
