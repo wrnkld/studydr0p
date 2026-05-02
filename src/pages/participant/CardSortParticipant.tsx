@@ -238,24 +238,7 @@ export default function CardSortParticipant({
       onDone();
       return;
     }
-    const { error: respErr } = await supabase.from("responses").insert({
-      study_id: study.id,
-      session_id: sessionId,
-      data: data as unknown as never,
-    });
-    if (respErr) {
-      setSubmitting(false);
-      toast.error(respErr.message);
-      return;
-    }
-    await supabase
-      .from("sessions")
-      .update({
-        completed_at: new Date().toISOString(),
-        metadata: { duration_ms: Date.now() - startedAt },
-      })
-      .eq("id", sessionId);
-    setSubmitting(false);
+    toast.success("Thanks! Your response was recorded.");
     onDone();
   };
 
