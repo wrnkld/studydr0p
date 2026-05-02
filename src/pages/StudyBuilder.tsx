@@ -79,6 +79,7 @@ export default function StudyBuilder() {
         return;
       }
       setStudy(data as StudyRow);
+      setLoadKey((k) => k + 1);
       setLoading(false);
     })();
   }, [id, navigate]);
