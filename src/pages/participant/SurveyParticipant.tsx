@@ -6,6 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { SurveyConfig, SurveyQuestion } from "@/lib/types";
 import { toast } from "sonner";
+import { SectionHeader } from "@/components/study/primitives";
 
 interface Props {
   study: {
@@ -87,8 +88,11 @@ export default function SurveyParticipant({
     <div className="space-y-6">
       <ol className="space-y-8">
         {questions.map((q, i) => (
-          <li key={q.id} className="space-y-3">
-            <div className="text-sm text-muted-foreground">Question {i + 1}</div>
+          <li key={q.id} className="space-y-4">
+            <SectionHeader
+              kicker={`Question ${i + 1}`}
+              title={q.label || q.id}
+            />
             <QuestionInput
               q={q}
               value={answers[q.id]}
