@@ -53,6 +53,7 @@ export default function StudyBuilder() {
   const { actions, setRequestDelete } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [pendingResponse, setPendingResponse] = useState(false);
 
   const tabParam = searchParams.get("tab");
   const activeTab: TabKey =
