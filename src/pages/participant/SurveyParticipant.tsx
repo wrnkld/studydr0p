@@ -175,7 +175,7 @@ function QuestionInput({
           return (
             <label
               key={i}
-              className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
+              className={`flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent ${checked ? "bg-accent border-primary/30" : ""}`}
             >
               <input
                 type="checkbox"
