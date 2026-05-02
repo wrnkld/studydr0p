@@ -146,7 +146,7 @@ export default function Landing() {
                     navigate(r.href);
                   }
                 }}
-                className="group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
+                className="group grid grid-cols-[auto_1fr_6rem_6rem] items-center gap-x-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
               >
                 <div
                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
@@ -160,26 +160,16 @@ export default function Landing() {
                   {r.title}
                 </div>
 
-                <div className="hidden sm:block">
-                  {r.isExample ? (
-                    <Badge variant="outline">Example</Badge>
-                  ) : r.status === "live" ? (
-                    <Badge variant="outline" className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400">
-                      <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <div className="hidden sm:block text-xs uppercase tracking-wider text-muted-foreground">
+                  {r.isExample ? "Example" : r.status === "live" ? (
+                    <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
                       Live
-                    </Badge>
-                  ) : r.status === "draft" ? (
-                    <Badge variant="outline" className="text-muted-foreground">
-                      Draft
-                    </Badge>
-                  ) : r.status === "closed" ? (
-                    <Badge variant="outline" className="text-muted-foreground">
-                      Closed
-                    </Badge>
-                  ) : null}
+                    </span>
+                  ) : r.status === "draft" ? "Draft" : r.status === "closed" ? "Closed" : null}
                 </div>
 
-                <div className="hidden sm:block ml-auto text-sm text-muted-foreground tabular-nums whitespace-nowrap">
+                <div className="hidden sm:block text-sm text-muted-foreground tabular-nums text-right whitespace-nowrap">
                   {r.responseCount} {r.responseCount === 1 ? "response" : "responses"}
                 </div>
               </div>
