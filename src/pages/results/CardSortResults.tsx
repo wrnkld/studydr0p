@@ -2,15 +2,19 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
 import {
-  BarChart,
   Bar,
+  BarChart,
+  CartesianGrid,
   XAxis,
   YAxis,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  CartesianGrid,
 } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponseRow {
   id: string;
@@ -25,9 +29,22 @@ interface Props {
   responses?: ResponseRow[];
 }
 
+const PALETTE = [
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-5))",
+];
+
+const AXIS_COLOR = "hsl(var(--chart-axis))";
+const GRID_COLOR = "hsl(var(--chart-grid))";
+const AXIS_FONT = "'Calibre', ui-sans-serif, system-ui, sans-serif";
+
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (responses) {
@@ -46,7 +63,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     })();
   }, [studyId, responses]);
 
-  const { categories, chartData } = useMemo(() => {
+  const { categories, chartData, byCard } = useMemo(() => {
     const list = rows ?? [];
     const catSet = new Set<string>();
     const byCard: Record<string, Record<string, number>> = {};
@@ -74,7 +91,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
       return entry;
     });
 
-    return { categories, chartData };
+    return { categories, chartData, byCard };
   }, [rows, cards]);
 
   if (loading) return <div className="text-sm text-muted-foreground">Loading…</div>;
@@ -85,79 +102,150 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return <div className="text-sm text-muted-foreground">No sorted cards yet.</div>;
   }
 
-  const palette = [
-    "hsl(var(--chart-1))",
-    "hsl(var(--chart-2))",
-    "hsl(var(--chart-3))",
-    "hsl(var(--chart-4))",
-    "hsl(var(--chart-5))",
-    "hsl(var(--chart-6, var(--chart-1)))",
-  ];
+  const colorFor = (cat: string) => PALETTE[categories.indexOf(cat) % PALETTE.length];
 
-  const barHeight = 40;
-  const chartHeight = Math.max(300, chartData.length * barHeight + 80);
+  // Build ChartConfig for ChartContainer
+  const chartConfig: ChartConfig = {};
+  categories.forEach((cat) => {
+    chartConfig[cat] = { label: cat, color: colorFor(cat) };
+  });
+
+  const yAxisWidth = isMobile ? 72 : 120;
+  const barHeight = 36;
+  const chartHeight = Math.max(200, chartData.length * barHeight + 48);
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-base font-medium">Category distribution</h3>
-      <div className="rounded-lg border bg-card p-4">
-        <ResponsiveContainer width="100%" height={chartHeight}>
+    <div className="space-y-8">
+      {/* ---------- Stacked bar chart ---------- */}
+      <section className="space-y-3">
+        <h3 className="text-base font-medium">Category distribution</h3>
+
+        {/* Legend */}
+        <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
+          {categories.map((c) => (
+            <span key={c} className="inline-flex items-center gap-1.5">
+              <span
+                aria-hidden
+                className="inline-block h-2 w-2 rounded-full"
+                style={{ backgroundColor: colorFor(c) }}
+              />
+              {c}
+            </span>
+          ))}
+        </div>
+
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto w-full"
+          style={{ height: chartHeight }}
+        >
           <BarChart
             data={chartData}
             layout="vertical"
-            margin={{ top: 4, right: 16, bottom: 4, left: 4 }}
+            margin={{ top: 4, right: 8, bottom: 0, left: 0 }}
           >
-            <CartesianGrid
-              horizontal={false}
-              strokeDasharray="3 3"
-              stroke="hsl(var(--chart-grid))"
-            />
+            <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
             <XAxis
               type="number"
-              tick={{ fontSize: 12, fill: "hsl(var(--chart-axis))" }}
-              axisLine={{ stroke: "hsl(var(--chart-grid))" }}
+              stroke={AXIS_COLOR}
+              fontSize={12}
+              fontFamily={AXIS_FONT}
               tickLine={false}
+              axisLine={false}
               allowDecimals={false}
             />
             <YAxis
               type="category"
               dataKey="name"
-              width={100}
-              tick={{ fontSize: 12, fill: "hsl(var(--chart-axis))" }}
-              axisLine={false}
+              width={yAxisWidth}
+              stroke={AXIS_COLOR}
+              fontSize={12}
+              fontFamily={AXIS_FONT}
               tickLine={false}
+              axisLine={false}
+              interval={0}
             />
-            <Tooltip
-              cursor={{ fill: "hsl(var(--muted))", opacity: 0.4 }}
-              contentStyle={{
-                backgroundColor: "hsl(var(--popover))",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: "var(--radius)",
-                fontSize: 12,
-                color: "hsl(var(--popover-foreground))",
-              }}
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  formatter={(value, name) => {
+                    return (
+                      <div className="flex w-full justify-between gap-4">
+                        <span>{String(name)}</span>
+                        <span className="font-medium tabular-nums">{value}</span>
+                      </div>
+                    );
+                  }}
+                />
+              }
             />
-            <Legend
-              wrapperStyle={{ fontSize: 12, color: "hsl(var(--muted-foreground))" }}
-            />
-            {categories.map((cat, i) => (
+            {categories.map((cat) => (
               <Bar
                 key={cat}
                 dataKey={cat}
                 stackId="stack"
-                fill={palette[i % palette.length]}
-                radius={
-                  i === categories.length - 1
-                    ? [0, 4, 4, 0]
-                    : i === 0
-                      ? [4, 0, 0, 4]
-                      : undefined
-                }
+                fill={`var(--color-${CSS.escape(cat)})`}
+                style={{ fill: colorFor(cat) }}
+                isAnimationActive={false}
               />
             ))}
           </BarChart>
-        </ResponsiveContainer>
-      </div>
+        </ChartContainer>
+      </section>
+
+      {/* ---------- Matrix table ---------- */}
+      <section className="space-y-3">
+        <h3 className="text-base font-medium">Matrix</h3>
+        <div className="overflow-x-auto rounded-lg border">
+          <table className="w-full border-collapse text-xs">
+            <thead>
+              <tr className="border-b">
+                <th className="px-3 py-2 text-left font-medium" />
+                {categories.map((c) => (
+                  <th
+                    key={c}
+                    className="px-3 py-2 text-center font-medium whitespace-nowrap"
+                  >
+                    {c}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {cards.map((card) => {
+                const counts = byCard[card.id] ?? {};
+                const placedTotal = Object.values(counts).reduce((a, b) => a + b, 0);
+                return (
+                  <tr key={card.id} className="border-b last:border-b-0">
+                    <td className="px-3 py-2 font-medium whitespace-nowrap">
+                      {card.label}
+                    </td>
+                    {categories.map((c) => {
+                      const n = counts[c] ?? 0;
+                      const pct = placedTotal > 0 ? Math.round((n / placedTotal) * 100) : 0;
+                      const alpha = pct === 0 ? 0 : 0.08 + (pct / 100) * 0.6;
+                      return (
+                        <td
+                          key={c}
+                          className="px-3 py-2 text-center"
+                          style={{
+                            backgroundColor:
+                              pct === 0
+                                ? "transparent"
+                                : `hsl(var(--chart-1) / ${alpha.toFixed(3)})`,
+                          }}
+                        >
+                          {n === 0 ? "" : `${pct}%`}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
