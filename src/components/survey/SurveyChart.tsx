@@ -215,7 +215,7 @@ export function BinaryDonut({
             >
               <span
                 aria-hidden
-                className="inline-block h-3 w-3 rounded-sm"
+                className="inline-block h-3 w-3 rounded-full"
                 style={{ backgroundColor: colorFor(i) }}
               />
               <span>{d.label}</span>
