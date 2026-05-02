@@ -233,7 +233,7 @@ function SignInForm() {
         className="h-8 min-w-0 flex-1 text-xs sm:w-52 sm:flex-none"
       />
       <Button type="submit" size="sm" disabled={submitting} className="h-8 shrink-0 px-3 text-xs">
-        {submitting ? "Sending…" : "Sign in"}
+        {submitting ? "Sending…" : "Get link"}
       </Button>
     </form>
   );
