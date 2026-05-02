@@ -72,22 +72,11 @@ function Brand() {
 function StatusPill({ status }: { status?: string }) {
   if (!status) return null;
   if (status === "live") {
-    return (
-      <Badge
-        variant="outline"
-        className="pointer-events-none h-6 gap-1.5 border-primary/40 bg-transparent px-2 py-0 text-[10px] text-primary"
-      >
-        <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-        Live
-      </Badge>
-    );
+    return <Badge variant="outline">Live</Badge>;
   }
   const label = status === "closed" ? "Closed" : "Draft";
   return (
-    <Badge
-      variant="outline"
-      className="pointer-events-none h-6 px-2 py-0 text-[10px] text-muted-foreground"
-    >
+    <Badge variant="outline" className="text-muted-foreground">
       {label}
     </Badge>
   );
