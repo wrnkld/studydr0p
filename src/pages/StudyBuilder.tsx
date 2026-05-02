@@ -286,9 +286,9 @@ function StatusBadge({ status }: { status: StudyStatus }) {
     return (
       <Badge
         variant="outline"
-        className="border-emerald-500/40 text-emerald-700 dark:text-emerald-400"
+        className="pointer-events-none border-primary/40 bg-transparent text-primary"
       >
-        <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-primary" />
         Live
       </Badge>
     );
