@@ -49,6 +49,7 @@ export default function StudyBuilder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
+  const [loadKey, setLoadKey] = useState(0);
   const { actions, setRequestDelete } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -78,6 +79,7 @@ export default function StudyBuilder() {
         return;
       }
       setStudy(data as StudyRow);
+      setLoadKey((k) => k + 1);
       setLoading(false);
     })();
   }, [id, navigate]);
@@ -127,7 +129,7 @@ export default function StudyBuilder() {
       setLiveTitle(study.title);
       setLiveDescription(study.description ?? "");
     }
-  }, [study?.id]);
+  }, [study]);
 
   useEffect(() => {
     if (!study) return;
@@ -177,6 +179,7 @@ export default function StudyBuilder() {
   const builder =
     study.type === "survey" ? (
       <SurveyBuilder
+        key={loadKey}
         studyId={study.id}
         onMetaChange={onMetaChange}
         initial={{
@@ -192,6 +195,7 @@ export default function StudyBuilder() {
       />
     ) : study.type === "card_sort" ? (
       <CardSortBuilder
+        key={loadKey}
         studyId={study.id}
         onMetaChange={onMetaChange}
         initial={{
