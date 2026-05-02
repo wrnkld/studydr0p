@@ -164,7 +164,7 @@ export default function Landing() {
                   {r.isExample ? (
                     <Badge variant="secondary">Example</Badge>
                   ) : r.status === "live" ? (
-                    <Badge className="border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-800 dark:bg-emerald-950 dark:text-emerald-400">Live</Badge>
+                    <Badge variant="outline" className="pointer-events-none border-primary/40 bg-transparent text-primary">Live</Badge>
                   ) : r.status === "draft" ? (
                     <Badge variant="outline">Draft</Badge>
                   ) : r.status === "closed" ? (
