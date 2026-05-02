@@ -259,7 +259,7 @@ export function ScaleChart({
         </div>
         <div className="mt-1 font-mono text-3xl font-medium tabular-nums text-foreground">
           {avg.toFixed(1)}
-          <span className="ml-1 text-base font-normal text-muted-foreground">
+          <span className="ml-1 text-baseormal text-muted-foreground">
             / {max}
           </span>
         </div>
