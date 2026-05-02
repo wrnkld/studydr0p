@@ -53,6 +53,7 @@ export default function StudyBuilder() {
   const { actions, setRequestDelete } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [pendingResponse, setPendingResponse] = useState(false);
 
   const tabParam = searchParams.get("tab");
   const activeTab: TabKey =
@@ -246,6 +247,7 @@ export default function StudyBuilder() {
               study={study}
               onSubmitted={() => {
                 toast.success("Thanks! Your answers are mixed into the results.");
+                setPendingResponse(true);
                 setTab("results");
               }}
             />
@@ -255,7 +257,7 @@ export default function StudyBuilder() {
             forceMount
             className="mt-0 data-[state=inactive]:hidden"
           >
-            <StudyResultsView studyId={study.id} />
+            <StudyResultsView studyId={study.id} pendingResponse={pendingResponse} onResponsesLoaded={() => setPendingResponse(false)} />
           </TabsContent>
         </div>
       </Tabs>

@@ -50,6 +50,10 @@ interface Props {
   studyId: string;
   /** When true, show the export button + stats header. Defaults to true. */
   showHeader?: boolean;
+  /** Hint that a response was just submitted — suppress empty state briefly. */
+  pendingResponse?: boolean;
+  /** Called once responses have loaded after a pending submission. */
+  onResponsesLoaded?: () => void;
 }
 
 /**
@@ -57,7 +61,7 @@ interface Props {
  * Used both by the standalone /studies/:id/results page and by the Results
  * tab inside the builder.
  */
-export default function StudyResultsView({ studyId, showHeader = true }: Props) {
+export default function StudyResultsView({ studyId, showHeader = true, pendingResponse, onResponsesLoaded }: Props) {
   const [study, setStudy] = useState<StudyData | null>(null);
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [responses, setResponses] = useState<ResponseRow[]>([]);
@@ -130,6 +134,12 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
     };
   }, [studyId]);
 
+  // Clear pendingResponse flag once responses actually arrive
+  useEffect(() => {
+    if (pendingResponse && responses.length > 0) {
+      onResponsesLoaded?.();
+    }
+  }, [pendingResponse, responses.length, onResponsesLoaded]);
 
   const exportCsv = () => {
     if (!study) return;
@@ -197,7 +207,7 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
   return (
     <div className="space-y-6 py-6">
       <section>
-        {responses.length === 0 ? (
+        {responses.length === 0 && !pendingResponse ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <p className="text-lg font-medium text-foreground">No responses yet</p>
             <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
@@ -218,6 +228,10 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
                 Copy share link
               </Button>
             )}
+          </div>
+        ) : responses.length === 0 && pendingResponse ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <p className="text-sm text-muted-foreground">Loading responses…</p>
           </div>
         ) : (
           <>
