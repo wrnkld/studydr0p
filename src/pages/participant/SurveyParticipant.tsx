@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { SurveyConfig, SurveyQuestion } from "@/lib/types";
 import { toast } from "sonner";
+import { SectionHeader } from "@/components/study/primitives";
 
 interface Props {
   study: {
@@ -87,8 +88,11 @@ export default function SurveyParticipant({
     <div className="space-y-6">
       <ol className="space-y-8">
         {questions.map((q, i) => (
-          <li key={q.id} className="space-y-3">
-            <div className="text-sm text-muted-foreground">Question {i + 1}</div>
+          <li key={q.id} className="space-y-4">
+            <SectionHeader
+              kicker={`Question ${i + 1}`}
+              title={q.label || q.id}
+            />
             <QuestionInput
               q={q}
               value={answers[q.id]}
@@ -126,20 +130,16 @@ function QuestionInput({
 }) {
   if (q.type === "open_text") {
     return (
-      <div className="space-y-2">
-        <Label>{q.label}</Label>
-        <Textarea
-          rows={4}
-          value={(value as string) ?? ""}
-          onChange={(e) => onChange(e.target.value)}
-        />
-      </div>
+      <Textarea
+        rows={4}
+        value={(value as string) ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+      />
     );
   }
   if (q.type === "likert") {
     return (
       <div className="space-y-3">
-        <Label>{q.label}</Label>
         <div className="flex gap-2">
           {[1, 2, 3, 4, 5].map((n) => (
             <Button
@@ -167,44 +167,38 @@ function QuestionInput({
       else onChange([...selected, opt]);
     };
     return (
-      <div className="space-y-3">
-        <Label>{q.label}</Label>
-        <div className="space-y-2">
-          {(q.options ?? []).map((opt, i) => {
-            const checked = selected.includes(opt);
-            return (
-              <label
-                key={i}
-                className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
-              >
-                <input
-                  type="checkbox"
-                  checked={checked}
-                  onChange={() => toggle(opt)}
-                  className="h-4 w-4"
-                />
-                <span>{opt}</span>
-              </label>
-            );
-          })}
-        </div>
+      <div className="space-y-2">
+        {(q.options ?? []).map((opt, i) => {
+          const checked = selected.includes(opt);
+          return (
+            <label
+              key={i}
+              className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
+            >
+              <input
+                type="checkbox"
+                checked={checked}
+                onChange={() => toggle(opt)}
+                className="h-4 w-4"
+              />
+              <span>{opt}</span>
+            </label>
+          );
+        })}
       </div>
     );
   }
   return (
-    <div className="space-y-3">
-      <Label>{q.label}</Label>
-      <RadioGroup value={(value as string) ?? ""} onValueChange={onChange}>
-        {(q.options ?? []).map((opt, i) => (
-          <label
-            key={i}
-            className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
-          >
-            <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
-            <span>{opt}</span>
-          </label>
-        ))}
-      </RadioGroup>
-    </div>
+    <RadioGroup value={(value as string) ?? ""} onValueChange={onChange}>
+      {(q.options ?? []).map((opt, i) => (
+        <label
+          key={i}
+          className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
+        >
+          <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
+          <span>{opt}</span>
+        </label>
+      ))}
+    </RadioGroup>
   );
 }
