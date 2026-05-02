@@ -20,7 +20,6 @@ import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
-import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 interface StudyData {
   id: string;
