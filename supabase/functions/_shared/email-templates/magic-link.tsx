@@ -32,7 +32,7 @@ export const MagicLinkEmail = ({
           Click the button below to sign in securely using your one-time link:
         </Text>
         <Button style={button} href={confirmationUrl}>
-          Sign In
+          Sign in
         </Button>
         <Text style={footer}>
           If you didn't request it, you can safely ignore this email.
