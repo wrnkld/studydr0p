@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Badge } from "@/components/ui/badge";
@@ -172,19 +173,23 @@ function SignedInActions() {
         <Plus className="h-3.5 w-3.5" />
         New study
       </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        aria-label="Sign out"
-        title="Sign out"
-        className="h-8 w-8 text-muted-foreground hover:text-foreground"
-        onClick={async () => {
-          await signOut();
-          navigate("/");
-        }}
-      >
-        <LogOut className="h-4 w-4" />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Sign out"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
+            onClick={async () => {
+              await signOut();
+              navigate("/");
+            }}
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Sign out</TooltipContent>
+      </Tooltip>
     </>
   );
 }
