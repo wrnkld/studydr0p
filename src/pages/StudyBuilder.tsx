@@ -283,15 +283,7 @@ export default function StudyBuilder() {
 
 function StatusBadge({ status }: { status: StudyStatus }) {
   if (status === "live") {
-    return (
-      <Badge
-        variant="outline"
-        className="pointer-events-none border-primary/40 bg-transparent text-primary"
-      >
-        <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-primary" />
-        Live
-      </Badge>
-    );
+    return <Badge variant="outline">Live</Badge>;
   }
   if (status === "draft") {
     return (
