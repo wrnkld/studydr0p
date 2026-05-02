@@ -74,7 +74,7 @@ export function PageHeader({
             {kicker}
           </div>
         ) : null}
-        <h1 className="text-3xl font-semibold tracking-tight leading-tight">{title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">{title}</h1>
         {description ? (
           <p className="text-[15px] text-muted-foreground leading-relaxed">{description}</p>
         ) : null}

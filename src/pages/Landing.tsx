@@ -156,7 +156,7 @@ export default function Landing() {
                   {Icon && <Icon className="h-4 w-4" />}
                 </div>
 
-                <div className="min-w-0 text-[15px] font-medium tracking-tight text-foreground truncate">
+                <div className="min-w-0 text-[15px] font-medium tracking-tight text-foreground truncate font-serif">
                   {r.title}
                 </div>
 
