@@ -66,13 +66,10 @@ export default function AppHeader() {
       <div className="container flex h-14 items-center justify-between">
         <Link
           to="/"
-          className="flex items-center gap-2.5 text-foreground hover:opacity-80"
+          className="text-foreground hover:opacity-80"
           aria-label="StudyDrop home"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background">
-            <ClipboardList className="h-4 w-4" />
-          </div>
-          <span className="text-[15px] font-semibold tracking-tight font-serif">
+          <span className="text-[15px] font-bold font-serif" style={{ letterSpacing: '-0.03em' }}>
             StudyDrop
           </span>
         </Link>
