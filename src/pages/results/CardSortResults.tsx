@@ -134,33 +134,19 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           </div>
         </div>
 
-        <ul className="space-y-2">
+        <ul className="divide-y rounded-lg border">
           {rowsByCard.map((r) => (
             <li
               key={r.card.id}
-              className="rounded-lg border bg-card px-4 py-3.5 space-y-2"
+              className="grid grid-cols-[minmax(0,1.2fr)_minmax(0,1.6fr)_minmax(0,1.4fr)_auto] items-center gap-4 px-3 py-2.5"
             >
+              <span className="truncate text-sm font-medium">{r.card.label}</span>
               <div
-                className="grid items-baseline gap-x-4 text-left"
-                style={{ gridTemplateColumns: "minmax(12rem, 1fr) 4.5rem minmax(8rem, 12rem) 7.5rem" }}
-              >
-                <span className="truncate text-sm font-medium">{r.card.label}</span>
-                <span className="font-mono tabular-nums text-xs text-foreground font-medium whitespace-nowrap">
-                  {r.agreement}%
-                </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  {r.topCategory}
-                </span>
-                <span className="text-xs text-muted-foreground tabular-nums whitespace-nowrap">
-                  {r.total} {r.total === 1 ? "response" : "responses"}
-                </span>
-              </div>
-              <div
-                className="group relative flex h-5 w-full items-center"
+                className="group relative flex h-4 w-full items-center"
                 role="img"
                 aria-label={`${r.card.label} placement distribution`}
               >
-                <div className="flex h-2 w-full overflow-hidden rounded-full bg-muted transition-all group-hover:h-3">
+                <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted transition-all group-hover:h-2.5">
                   {r.total > 0 && (
                     <TooltipProvider delayDuration={100}>
                       {r.segments.map((seg) => {
@@ -189,6 +175,18 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                   )}
                 </div>
               </div>
+              <span className="truncate text-xs text-muted-foreground">
+                <span className="font-mono tabular-nums text-foreground">
+                  {r.agreement}%
+                </span>{" "}
+                {r.topCategory}
+              </span>
+              <span className="whitespace-nowrap text-right text-xs text-muted-foreground">
+                <span className="font-mono tabular-nums text-foreground">
+                  {r.total}
+                </span>{" "}
+                {r.total === 1 ? "response" : "responses"}
+              </span>
             </li>
           ))}
         </ul>
