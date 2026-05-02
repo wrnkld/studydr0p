@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
-import { Check, Download, Link2, LogOut, MoreHorizontal, Plus, Trash2 } from "lucide-react";
+import { Check, Download, Droplets, Link2, LogOut, MoreHorizontal, Plus, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -59,12 +59,10 @@ function Brand() {
   return (
     <Link
       to="/"
-      className="text-foreground hover:opacity-80"
+      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-foreground hover:opacity-80"
       aria-label="StudyDrop home"
     >
-      <span className="font-mono text-[15px] font-semibold tracking-[-0.01em]">
-        StudyDrop
-      </span>
+      <Droplets className="h-4 w-4" />
     </Link>
   );
 }
