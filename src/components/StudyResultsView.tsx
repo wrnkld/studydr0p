@@ -20,6 +20,7 @@ import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
+import { BarChart3 } from "lucide-react";
 
 interface StudyData {
   id: string;
