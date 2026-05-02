@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Droplets } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -66,10 +66,15 @@ export default function AppHeader() {
       <div className="container flex h-14 items-center justify-between">
         <Link
           to="/"
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-foreground hover:opacity-80"
+          className="flex items-center gap-2.5 text-foreground hover:opacity-80"
           aria-label="StudyDrop home"
         >
-          <Droplets className="h-4 w-4" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background">
+            <ClipboardList className="h-4 w-4" />
+          </div>
+          <span className="text-[15px] font-semibold tracking-tight font-serif">
+            StudyDrop
+          </span>
         </Link>
 
         {session ? (
