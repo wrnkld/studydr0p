@@ -140,19 +140,17 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
               key={r.card.id}
               className="rounded-lg border bg-card px-4 py-3.5 space-y-2"
             >
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-baseline gap-3">
                 <span className="truncate text-sm font-medium">{r.card.label}</span>
-                <div className="flex items-center gap-3 shrink-0">
-                  <span className="text-xs text-muted-foreground">
-                    <span className="font-mono tabular-nums text-foreground font-medium">
-                      {r.agreement}%
-                    </span>{" "}
-                    {r.topCategory}
-                  </span>
-                  <span className="whitespace-nowrap text-xs text-muted-foreground">
-                    {r.total} {r.total === 1 ? "resp." : "resp."}
-                  </span>
-                </div>
+                <span className="shrink-0 text-xs text-muted-foreground">
+                  <span className="font-mono tabular-nums text-foreground font-medium">
+                    {r.agreement}%
+                  </span>{" "}
+                  {r.topCategory}
+                </span>
+                <span className="shrink-0 text-xs text-muted-foreground ml-auto">
+                  {r.total} {r.total === 1 ? "response" : "responses"}
+                </span>
               </div>
               <div
                 className="group relative flex h-5 w-full items-center"
