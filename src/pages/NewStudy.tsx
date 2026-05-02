@@ -127,21 +127,15 @@ export default function NewStudy() {
               }}
               disabled={!t.enabled || creating}
               className={cn(
-                "group relative text-left rounded-xl border border-border/70 bg-card p-5 transition-all",
-                "shadow-[0_1px_2px_rgba(20,20,15,0.04)]",
+                "group relative text-left rounded-xl border border-border/70 bg-card p-5 transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 t.enabled
-                  ? "hover:border-foreground/40 hover:shadow-[0_2px_8px_rgba(20,20,15,0.06)] cursor-pointer"
+                  ? "hover:bg-muted/40 cursor-pointer"
                   : "opacity-50 cursor-not-allowed",
               )}
             >
               <div className="flex items-start gap-3">
-                <div
-                  className={cn(
-                    "flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background transition-colors",
-                    t.enabled && "group-hover:border-foreground group-hover:bg-foreground group-hover:text-background",
-                  )}
-                >
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
                   <Icon className="h-4 w-4" />
                 </div>
                 <div className="min-w-0 flex-1">
