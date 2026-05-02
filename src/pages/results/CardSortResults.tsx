@@ -211,6 +211,9 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                           color={colorFor(seg.label)}
                           isFirst={index === 0}
                           isLast={index === r.segments.length - 1}
+                          selected={selectedSegment === `${r.card.id}:${seg.label}`}
+                          onSelect={() => setSelectedSegment(`${r.card.id}:${seg.label}`)}
+                          onClear={() => setSelectedSegment(null)}
                         />
                       ))}
                     </div>
