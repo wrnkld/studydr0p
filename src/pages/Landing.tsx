@@ -146,10 +146,10 @@ export default function Landing() {
                     navigate(r.href);
                   }
                 }}
-                className="group grid grid-cols-[auto_minmax(0,1fr)_auto_1fr_auto] items-center gap-x-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
+                className="group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
               >
                 <div
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
                   aria-label={typeLabel}
                   title={typeLabel}
                 >
@@ -179,7 +179,7 @@ export default function Landing() {
                   ) : null}
                 </div>
 
-                <div className="hidden sm:block text-sm text-muted-foreground tabular-nums whitespace-nowrap">
+                <div className="hidden sm:block ml-auto text-sm text-muted-foreground tabular-nums whitespace-nowrap">
                   {r.responseCount} {r.responseCount === 1 ? "response" : "responses"}
                 </div>
               </div>
