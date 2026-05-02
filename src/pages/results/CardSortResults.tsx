@@ -134,48 +134,42 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-lg border">
+        <div className="rounded-lg border">
           <table className="w-full border-collapse text-sm">
             <tbody className="divide-y">
               {rowsByCard.map((r) => (
                 <tr key={r.card.id}>
-                  <td className="w-[180px] min-w-[120px] px-4 py-3 font-medium whitespace-nowrap">
+                  <td className="min-w-[100px] px-4 py-3 font-medium whitespace-nowrap">
                     {r.card.label}
                   </td>
-                  <td className="px-4 py-3">
-                    <div
-                      className="group relative flex w-full items-center"
-                      role="img"
-                      aria-label={`${r.card.label} placement distribution`}
-                    >
-                      <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
-                        {r.total > 0 && (
-                          <TooltipProvider delayDuration={100}>
-                            {r.segments.map((seg) => {
-                              const pct = Math.round((seg.value / r.total) * 100);
-                              return (
-                                <Tooltip key={seg.label}>
-                                  <TooltipTrigger asChild>
-                                    <span
-                                      className="h-full cursor-default transition-opacity hover:opacity-80"
-                                      style={{
-                                        width: `${(seg.value / r.total) * 100}%`,
-                                        backgroundColor: colorFor(seg.label),
-                                      }}
-                                    />
-                                  </TooltipTrigger>
-                                  <TooltipContent side="top" className="text-xs">
-                                    <span className="font-medium">{seg.label}</span>
-                                    <span className="ml-2 text-muted-foreground">
-                                      {seg.value} · {pct}%
-                                    </span>
-                                  </TooltipContent>
-                                </Tooltip>
-                              );
-                            })}
-                          </TooltipProvider>
-                        )}
-                      </div>
+                  <td className="hidden sm:table-cell px-4 py-3">
+                    <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                      {r.total > 0 && (
+                        <TooltipProvider delayDuration={100}>
+                          {r.segments.map((seg) => {
+                            const pct = Math.round((seg.value / r.total) * 100);
+                            return (
+                              <Tooltip key={seg.label}>
+                                <TooltipTrigger asChild>
+                                  <span
+                                    className="h-full cursor-default transition-opacity hover:opacity-80"
+                                    style={{
+                                      width: `${(seg.value / r.total) * 100}%`,
+                                      backgroundColor: colorFor(seg.label),
+                                    }}
+                                  />
+                                </TooltipTrigger>
+                                <TooltipContent side="top" className="text-xs">
+                                  <span className="font-medium">{seg.label}</span>
+                                  <span className="ml-2 text-muted-foreground">
+                                    {seg.value} · {pct}%
+                                  </span>
+                                </TooltipContent>
+                              </Tooltip>
+                            );
+                          })}
+                        </TooltipProvider>
+                      )}
                     </div>
                   </td>
                   <td className="whitespace-nowrap px-4 py-3 text-sm text-muted-foreground">
@@ -187,8 +181,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                   <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-muted-foreground">
                     <span className="font-mono tabular-nums text-foreground">
                       {r.total}
-                    </span>{" "}
-                    {r.total === 1 ? "response" : "responses"}
+                    </span>
                   </td>
                 </tr>
               ))}
