@@ -19,7 +19,7 @@ import SurveyResults from "@/pages/results/SurveyResults";
 import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
-import { Stat, StatGrid } from "@/components/study/primitives";
+import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 interface StudyData {
