@@ -195,6 +195,7 @@ export default function StudyBuilder() {
       />
     ) : study.type === "card_sort" ? (
       <CardSortBuilder
+        key={loadKey}
         studyId={study.id}
         onMetaChange={onMetaChange}
         initial={{
