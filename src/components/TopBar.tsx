@@ -37,11 +37,11 @@ export default function TopBar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-card">
-      <div className="container max-w-5xl flex h-16 items-center justify-between gap-4">
+      <div className="container max-w-5xl flex h-16 items-center justify-between gap-2 sm:gap-4">
         <div className="flex shrink-0 items-center gap-3">
           <Brand />
         </div>
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
           {onStudyPage ? (
             <StudyActions status={meta?.status} shareUrl={meta?.shareUrl ?? null} />
           ) : session ? (
@@ -222,7 +222,7 @@ function SignInForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex items-center gap-2">
+    <form onSubmit={onSubmit} className="flex min-w-0 flex-1 items-center gap-2">
       <Input
         type="email"
         required
@@ -230,9 +230,9 @@ function SignInForm() {
         placeholder="you@team.com"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="h-8 w-52 text-xs"
+        className="h-8 min-w-0 flex-1 text-xs sm:w-52 sm:flex-none"
       />
-      <Button type="submit" size="sm" disabled={submitting} className="h-8 px-3 text-xs">
+      <Button type="submit" size="sm" disabled={submitting} className="h-8 shrink-0 px-3 text-xs">
         {submitting ? "Sending…" : "Get link"}
       </Button>
     </form>
