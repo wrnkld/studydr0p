@@ -230,7 +230,10 @@ export default function StudyBuilder() {
             <div className="flex justify-start pt-2">
               <Button
                 disabled={!actions || actions.saving}
-                onClick={() => actions?.onSave()}
+                onClick={async () => {
+                  await actions?.onSave();
+                  setTab("preview");
+                }}
               >
                 {actions?.saving ? "Saving…" : "Save"}
               </Button>

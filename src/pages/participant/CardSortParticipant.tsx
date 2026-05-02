@@ -215,11 +215,7 @@ export default function CardSortParticipant({
       onDone();
       return;
     }
-    if (preview) {
-      setSubmitting(false);
-      onDone();
-      return;
-    }
+    // Preview mode: still persist the response so it shows in results
     const { error: respErr } = await supabase.from("responses").insert({
       study_id: study.id,
       session_id: sessionId,
@@ -238,6 +234,11 @@ export default function CardSortParticipant({
       })
       .eq("id", sessionId);
     setSubmitting(false);
+    if (preview) {
+      onDone();
+      return;
+    }
+    toast.success("Thanks! Your response was recorded.");
     onDone();
   };
 
