@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Calibre';
+  src: url('/fonts/calibre-web-regular.woff2') format('woff2'),
+       url('/fonts/calibre-web-regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Calibre';
+  src: url('/fonts/calibre-web-semibold.woff2') format('woff2'),
+       url('/fonts/calibre-web-semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Calibre';
+  src: url('/fonts/calibre-web-bold.woff2') format('woff2'),
+       url('/fonts/calibre-web-bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Default shadcn slate design system. */
 
 @layer base {
@@ -83,7 +108,7 @@
     @apply border-border;
   }
   html, body {
-    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Calibre', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   body {
     @apply text-foreground;
