@@ -113,9 +113,9 @@ export function ChoiceChart({
                 return (
                   <div className="flex w-full justify-between gap-4">
                     <span>Responses</span>
-                    <span className="font-mono font-medium">
-                      {n} · {pct}%
-                    </span>
+                     <span className="font-medium tabular-nums">
+                       {n} · {pct}%
+                     </span>
                   </div>
                 );
               }}
@@ -175,12 +175,12 @@ export function BinaryDonut({
                   const n = Number(value);
                   const pct = total > 0 ? Math.round((n / total) * 100) : 0;
                   return (
-                    <div className="flex w-full justify-between gap-4">
-                      <span>{String(name)}</span>
-                      <span className="font-mono font-medium">
-                        {n} · {pct}%
-                      </span>
-                    </div>
+                     <div className="flex w-full justify-between gap-4">
+                       <span>{String(name)}</span>
+                       <span className="font-medium tabular-nums">
+                         {n} · {pct}%
+                       </span>
+                     </div>
                   );
                 }}
               />
@@ -216,12 +216,12 @@ export function BinaryDonut({
                 style={{ backgroundColor: colorFor(i) }}
               />
               <span>{d.label}</span>
-              <span className="font-mono text-right tabular-nums text-muted-foreground">
-                {d.value}
-              </span>
-              <span className="font-mono text-right tabular-nums text-muted-foreground">
-                {pct}%
-              </span>
+              <span className="text-right tabular-nums text-muted-foreground">
+                 {d.value}
+               </span>
+               <span className="text-right tabular-nums text-muted-foreground">
+                 {pct}%
+               </span>
             </li>
           );
         })}
@@ -257,12 +257,12 @@ export function ScaleChart({
         <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80">
           Average
         </div>
-        <div className="mt-1 font-mono text-3xl font-medium tabular-nums text-foreground">
-          {avg.toFixed(1)}
-          <span className="ml-1 text-baseormal text-muted-foreground">
-            / {max}
-          </span>
-        </div>
+        <div className="mt-1 text-3xl font-medium tabular-nums text-foreground">
+           {avg.toFixed(1)}
+           <span className="ml-1 text-base font-normal text-muted-foreground">
+             / {max}
+           </span>
+         </div>
       </div>
       <ChartContainer
         config={barConfig}
@@ -290,9 +290,9 @@ export function ScaleChart({
             content={
               <ChartTooltipContent
                 formatter={(value) => (
-                  <div className="flex w-full justify-between gap-4">
-                    <span>Responses</span>
-                    <span className="font-mono font-medium">{value}</span>
+                   <div className="flex w-full justify-between gap-4">
+                     <span>Responses</span>
+                     <span className="font-medium tabular-nums">{value}</span>
                   </div>
                 )}
               />
