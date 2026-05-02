@@ -140,32 +140,30 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                 <div className="min-w-0 truncate font-medium">{r.card.label}</div>
                 <div className="min-w-0">
                   <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
-                    {r.total > 0 && (
-                      <TooltipProvider delayDuration={100}>
-                        {r.segments.map((seg) => {
-                          const pct = Math.round((seg.value / r.total) * 100);
-                          return (
-                            <Tooltip key={seg.label}>
-                              <TooltipTrigger asChild>
-                                <span
-                                  className="h-full min-w-1 cursor-default transition-opacity hover:opacity-80"
-                                  style={{
-                                    width: `${(seg.value / r.total) * 100}%`,
-                                    backgroundColor: colorFor(seg.label),
-                                  }}
-                                />
-                              </TooltipTrigger>
-                              <TooltipContent side="top" className="text-xs">
-                                <span className="font-medium">{seg.label}</span>
-                                <span className="ml-2 text-muted-foreground">
-                                  {seg.value} · {pct}%
-                                </span>
-                              </TooltipContent>
-                            </Tooltip>
-                          );
-                        })}
-                      </TooltipProvider>
-                    )}
+                    {r.total > 0 &&
+                      r.segments.map((seg) => {
+                        const pct = Math.round((seg.value / r.total) * 100);
+                        return (
+                          <Popover key={seg.label}>
+                            <PopoverTrigger asChild>
+                              <button
+                                type="button"
+                                className="h-full min-w-1 cursor-pointer transition-opacity hover:opacity-80 focus:outline-none"
+                                style={{
+                                  width: `${(seg.value / r.total) * 100}%`,
+                                  backgroundColor: colorFor(seg.label),
+                                }}
+                              />
+                            </PopoverTrigger>
+                            <PopoverContent side="top" className="w-auto px-3 py-1.5 text-xs">
+                              <span className="font-medium">{seg.label}</span>
+                              <span className="ml-2 text-muted-foreground">
+                                {seg.value} · {pct}%
+                              </span>
+                            </PopoverContent>
+                          </Popover>
+                        );
+                      })}
                   </div>
                 </div>
                 <div className="whitespace-nowrap text-sm text-muted-foreground">
