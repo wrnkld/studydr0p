@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         sans: ["'Calibre'", "ui-sans-serif", "system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif"],
         mono: ["ui-monospace", "SFMono-Regular", "Menlo", "Consolas", "monospace"],
+        serif: ["'Tiempos Text'", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
