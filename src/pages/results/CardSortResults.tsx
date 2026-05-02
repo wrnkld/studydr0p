@@ -169,6 +169,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
             <ChartTooltip
               content={
                 <ChartTooltipContent
+                  filterZero
                   formatter={(value, name) => {
                     return (
                       <div className="flex w-full justify-between gap-4">
