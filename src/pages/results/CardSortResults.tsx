@@ -111,8 +111,8 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
   });
 
   const yAxisWidth = isMobile ? 72 : 120;
-  const barHeight = 36;
-  const chartHeight = Math.max(200, chartData.length * barHeight + 48);
+  const rowHeight = 28;
+  const chartHeight = Math.max(180, chartData.length * rowHeight + 48);
 
   return (
     <div className="space-y-8">
