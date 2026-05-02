@@ -20,7 +20,8 @@ import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Link as LinkIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface StudyData {
   id: string;
@@ -198,13 +199,26 @@ export default function StudyResultsView({ studyId, showHeader = true }: Props) 
       <section>
         {responses.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted mb-4">
-              <BarChart3 className="h-5 w-5 text-muted-foreground" />
-            </div>
+            <BarChart3 className="h-8 w-8 text-muted-foreground/50 mb-4" />
             <p className="text-sm font-medium text-foreground">No responses yet</p>
             <p className="mt-1 text-sm text-muted-foreground max-w-xs">
               Share your study link with participants to start collecting data.
             </p>
+            {study.slug && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-4"
+                onClick={() => {
+                  const url = `${window.location.origin}/s/${study.slug}`;
+                  navigator.clipboard.writeText(url);
+                  toast.success("Link copied");
+                }}
+              >
+                <LinkIcon className="h-3.5 w-3.5 mr-1.5" />
+                Copy share link
+              </Button>
+            )}
           </div>
         ) : (
           <>
