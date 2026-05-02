@@ -178,10 +178,9 @@ function QuestionInput({
               key={i}
               className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
             >
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={checked}
-                onChange={() => toggle(opt)}
+                onCheckedChange={() => toggle(opt)}
                 className="h-4 w-4"
               />
               <span>{opt}</span>
