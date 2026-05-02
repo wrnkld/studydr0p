@@ -2,10 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ResponseRow {
   id: string;
@@ -144,24 +144,24 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                       r.segments.map((seg) => {
                         const pct = Math.round((seg.value / r.total) * 100);
                         return (
-                          <Popover key={seg.label}>
-                            <PopoverTrigger asChild>
+                          <Tooltip key={seg.label}>
+                            <TooltipTrigger asChild>
                               <button
                                 type="button"
-                                className="h-full min-w-1 cursor-pointer transition-opacity hover:opacity-80 focus:outline-none"
+                                className="h-full min-w-1 cursor-default transition-opacity hover:opacity-80 focus:outline-none"
                                 style={{
                                   width: `${(seg.value / r.total) * 100}%`,
                                   backgroundColor: colorFor(seg.label),
                                 }}
                               />
-                            </PopoverTrigger>
-                            <PopoverContent side="top" className="w-auto px-3 py-1.5 text-xs">
+                            </TooltipTrigger>
+                            <TooltipContent side="top" className="px-3 py-1.5 text-xs">
                               <span className="font-medium">{seg.label}</span>
                               <span className="ml-2 text-muted-foreground">
                                 {seg.value} · {pct}%
                               </span>
-                            </PopoverContent>
-                          </Popover>
+                            </TooltipContent>
+                          </Tooltip>
                         );
                       })}
                   </div>
