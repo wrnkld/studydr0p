@@ -36,6 +36,7 @@ export function shadeFor(value: number, max: number) {
 
 const AXIS_COLOR = "hsl(var(--chart-axis))";
 const GRID_COLOR = "hsl(var(--chart-grid))";
+const AXIS_FONT = "'Calibre', ui-sans-serif, system-ui, sans-serif";
 const CHART_HEIGHT = 240;
 // Tight margins so the plotted area uses the full container width.
 const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 };
