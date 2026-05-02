@@ -19,7 +19,7 @@ const corsHeaders = {
 const EMAIL_SUBJECTS: Record<string, string> = {
   signup: 'Confirm your email',
   invite: "You've been invited",
-  magiclink: 'Your login link',
+  magiclink: 'One-time link',
   recovery: 'Reset your password',
   email_change: 'Confirm your new email',
   reauthentication: 'Your verification code',
@@ -36,7 +36,7 @@ const EMAIL_TEMPLATES: Record<string, React.ComponentType<any>> = {
 }
 
 // Configuration
-const SITE_NAME = "studydr0p"
+const SITE_NAME = "StudyDrop"
 const SENDER_DOMAIN = "notify.studydrop.app"
 const ROOT_DOMAIN = "studydrop.app"
 const FROM_DOMAIN = "notify.studydrop.app" // Domain shown in From address (may be root or sender subdomain)
