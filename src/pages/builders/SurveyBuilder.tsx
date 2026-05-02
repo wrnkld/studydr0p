@@ -298,30 +298,6 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
         </div>
       </section>
 
-      {status === "live" && shareUrl && (
-        <section className="space-y-2 rounded-md border p-4">
-          <div className="text-sm font-medium">Participant link</div>
-          <div className="flex flex-wrap gap-2">
-            <Input
-              readOnly
-              value={shareUrl}
-              onFocus={(e) => e.currentTarget.select()}
-            />
-            <Button
-              variant="outline"
-              onClick={() => {
-                navigator.clipboard.writeText(shareUrl);
-                toast.success("Copied");
-              }}
-            >
-              Copy
-            </Button>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Use the Preview tab above to try it as a participant.
-          </p>
-        </section>
-      )}
     </div>
   );
 }
