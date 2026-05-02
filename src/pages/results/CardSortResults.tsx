@@ -134,59 +134,55 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           </div>
         </div>
 
-        <div className="rounded-lg border">
-          <table className="w-full border-collapse text-sm">
-            <tbody className="divide-y">
-              {rowsByCard.map((r) => (
-                <tr key={r.card.id}>
-                  <td className="min-w-[100px] px-4 py-3 font-medium whitespace-nowrap">
-                    {r.card.label}
-                  </td>
-                  <td className="hidden sm:table-cell px-4 py-3">
-                    <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
-                      {r.total > 0 && (
-                        <TooltipProvider delayDuration={100}>
-                          {r.segments.map((seg) => {
-                            const pct = Math.round((seg.value / r.total) * 100);
-                            return (
-                              <Tooltip key={seg.label}>
-                                <TooltipTrigger asChild>
-                                  <span
-                                    className="h-full cursor-default transition-opacity hover:opacity-80"
-                                    style={{
-                                      width: `${(seg.value / r.total) * 100}%`,
-                                      backgroundColor: colorFor(seg.label),
-                                    }}
-                                  />
-                                </TooltipTrigger>
-                                <TooltipContent side="top" className="text-xs">
-                                  <span className="font-medium">{seg.label}</span>
-                                  <span className="ml-2 text-muted-foreground">
-                                    {seg.value} · {pct}%
-                                  </span>
-                                </TooltipContent>
-                              </Tooltip>
-                            );
-                          })}
-                        </TooltipProvider>
-                      )}
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-sm text-muted-foreground">
-                    <span className="font-mono tabular-nums text-foreground">
-                      {r.agreement}%
-                    </span>{" "}
-                    {r.topCategory}
-                  </td>
-                  <td className="whitespace-nowrap px-4 py-3 text-right text-sm text-muted-foreground">
-                    <span className="font-mono tabular-nums text-foreground">
-                      {r.total}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="overflow-hidden rounded-lg border text-sm">
+          <div className="divide-y">
+            {rowsByCard.map((r) => (
+              <div key={r.card.id} className="grid grid-cols-[minmax(84px,max-content)_minmax(48px,1fr)_max-content_max-content] items-center gap-2 px-4 py-3 sm:gap-4">
+                <div className="min-w-0 truncate font-medium">{r.card.label}</div>
+                <div className="min-w-0">
+                  <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                    {r.total > 0 && (
+                      <TooltipProvider delayDuration={100}>
+                        {r.segments.map((seg) => {
+                          const pct = Math.round((seg.value / r.total) * 100);
+                          return (
+                            <Tooltip key={seg.label}>
+                              <TooltipTrigger asChild>
+                                <span
+                                  className="h-full min-w-1 cursor-default transition-opacity hover:opacity-80"
+                                  style={{
+                                    width: `${(seg.value / r.total) * 100}%`,
+                                    backgroundColor: colorFor(seg.label),
+                                  }}
+                                />
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="text-xs">
+                                <span className="font-medium">{seg.label}</span>
+                                <span className="ml-2 text-muted-foreground">
+                                  {seg.value} · {pct}%
+                                </span>
+                              </TooltipContent>
+                            </Tooltip>
+                          );
+                        })}
+                      </TooltipProvider>
+                    )}
+                  </div>
+                </div>
+                <div className="whitespace-nowrap text-sm text-muted-foreground">
+                  <span className="font-mono tabular-nums text-foreground">
+                    {r.agreement}%
+                  </span>{" "}
+                  <span className="hidden sm:inline">{r.topCategory}</span>
+                </div>
+                <div className="text-right text-sm text-muted-foreground">
+                  <span className="font-mono tabular-nums text-foreground">
+                    {r.total}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
