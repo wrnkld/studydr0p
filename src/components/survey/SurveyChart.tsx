@@ -91,6 +91,7 @@ export function ChoiceChart({
           domain={[0, domainMax]}
           stroke={AXIS_COLOR}
           fontSize={12}
+          fontFamily={AXIS_FONT}
           tickLine={false}
           axisLine={false}
           allowDecimals={false}
@@ -100,6 +101,7 @@ export function ChoiceChart({
           dataKey="label"
           stroke={AXIS_COLOR}
           fontSize={12}
+          fontFamily={AXIS_FONT}
           tickLine={false}
           axisLine={false}
           interval={0}
@@ -276,12 +278,14 @@ export function ScaleChart({
             dataKey="score"
             stroke={AXIS_COLOR}
             fontSize={12}
+            fontFamily={AXIS_FONT}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
             stroke={AXIS_COLOR}
             fontSize={12}
+            fontFamily={AXIS_FONT}
             tickLine={false}
             axisLine={false}
             allowDecimals={false}
