@@ -61,7 +61,7 @@ interface Props {
  * Used both by the standalone /studies/:id/results page and by the Results
  * tab inside the builder.
  */
-export default function StudyResultsView({ studyId, showHeader = true }: Props) {
+export default function StudyResultsView({ studyId, showHeader = true, pendingResponse, onResponsesLoaded }: Props) {
   const [study, setStudy] = useState<StudyData | null>(null);
   const [sessions, setSessions] = useState<SessionRow[]>([]);
   const [responses, setResponses] = useState<ResponseRow[]>([]);
