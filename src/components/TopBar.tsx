@@ -75,9 +75,9 @@ function StatusPill({ status }: { status?: string }) {
     return (
       <Badge
         variant="outline"
-        className="pointer-events-none h-6 gap-1.5 border-emerald-500/40 bg-transparent px-2 py-0 text-[10px] text-emerald-700 dark:text-emerald-400"
+        className="pointer-events-none h-6 gap-1.5 border-primary/40 bg-transparent px-2 py-0 text-[10px] text-primary"
       >
-        <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary" />
         Live
       </Badge>
     );
