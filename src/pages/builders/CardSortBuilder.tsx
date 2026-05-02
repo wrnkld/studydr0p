@@ -319,14 +319,14 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
               <RadioGroupItem value="open" id="sort-open" className="mt-0.5" />
               <span className="flex flex-col">
                 <span className="font-medium">Open</span>
-                <span className="text-xs text-muted-foreground">Participants name categories</span>
+                <span className="text-sm text-muted-foreground">Participants name categories</span>
               </span>
             </label>
             <label className="flex cursor-pointer items-start gap-2 text-sm font-normal">
               <RadioGroupItem value="closed" id="sort-closed" className="mt-0.5" />
               <span className="flex flex-col">
                 <span className="font-medium">Closed</span>
-                <span className="text-xs text-muted-foreground">You define categories</span>
+                <span className="text-sm text-muted-foreground">You define categories</span>
               </span>
             </label>
           </RadioGroup>
