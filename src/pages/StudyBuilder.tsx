@@ -170,8 +170,10 @@ export default function StudyBuilder() {
 
   if (loading || !study) {
     return (
-      <PageContainer>
-        <p className="text-sm text-muted-foreground">Loading…</p>
+      <PageContainer width="wide">
+        <div className="flex items-center justify-center py-24">
+          <p className="text-sm text-muted-foreground">Loading…</p>
+        </div>
       </PageContainer>
     );
   }
