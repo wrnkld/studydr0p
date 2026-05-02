@@ -207,7 +207,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   return (
     <div className="space-y-6 py-6">
       <section>
-        {responses.length === 0 ? (
+        {responses.length === 0 && !pendingResponse ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <p className="text-lg font-medium text-foreground">No responses yet</p>
             <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
