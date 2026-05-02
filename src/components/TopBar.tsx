@@ -86,7 +86,7 @@ function StatusPill({ status }: { status?: string }) {
   return (
     <Badge
       variant="outline"
-      className="h-6 px-2 py-0 text-[10px] text-muted-foreground"
+      className="pointer-events-none h-6 px-2 py-0 text-[10px] text-muted-foreground"
     >
       {label}
     </Badge>
