@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
@@ -177,10 +178,9 @@ function QuestionInput({
               key={i}
               className="flex cursor-pointer items-center gap-3 rounded-md border p-3 hover:bg-accent"
             >
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={checked}
-                onChange={() => toggle(opt)}
+                onCheckedChange={() => toggle(opt)}
                 className="h-4 w-4"
               />
               <span>{opt}</span>
