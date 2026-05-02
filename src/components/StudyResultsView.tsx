@@ -22,7 +22,6 @@ import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { BarChart3, Link as LinkIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 
 interface StudyData {
   id: string;
