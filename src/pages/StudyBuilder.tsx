@@ -179,6 +179,7 @@ export default function StudyBuilder() {
   const builder =
     study.type === "survey" ? (
       <SurveyBuilder
+        key={loadKey}
         studyId={study.id}
         onMetaChange={onMetaChange}
         initial={{
