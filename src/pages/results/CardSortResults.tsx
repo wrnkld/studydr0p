@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import {
   Tooltip,
   TooltipContent,
@@ -18,6 +19,74 @@ interface Props {
   studyId: string;
   cards: CardRow[];
   responses?: ResponseRow[];
+}
+
+function CardSortSegment({
+  label,
+  value,
+  total,
+  color,
+  isFirst,
+  isLast,
+}: {
+  label: string;
+  value: number;
+  total: number;
+  color: string;
+  isFirst: boolean;
+  isLast: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const closeTimer = useRef<number | null>(null);
+  const pct = Math.round((value / total) * 100);
+
+  const showTemporarily = () => {
+    if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    setOpen(true);
+    closeTimer.current = window.setTimeout(() => setOpen(false), 2400);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current) window.clearTimeout(closeTimer.current);
+    };
+  }, []);
+
+  return (
+    <Tooltip open={open} onOpenChange={setOpen}>
+      <TooltipTrigger asChild>
+        <button
+          type="button"
+          aria-label={`${label}: ${value} ${value === 1 ? "response" : "responses"}, ${pct}%`}
+          className="group relative h-8 min-w-1 cursor-default touch-manipulation focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          style={{ width: `${(value / total) * 100}%` }}
+          onClick={showTemporarily}
+          onPointerDown={(event) => {
+            if (event.pointerType !== "mouse") {
+              event.preventDefault();
+              showTemporarily();
+            }
+          }}
+        >
+          <span
+            aria-hidden
+            className={cn(
+              "absolute inset-x-0 top-1/2 h-2.5 -translate-y-1/2 transition-opacity group-hover:opacity-80",
+              isFirst && "rounded-l-full",
+              isLast && "rounded-r-full",
+            )}
+            style={{ backgroundColor: color }}
+          />
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="top" className="px-3 py-1.5 text-xs">
+        <span className="font-medium">{label}</span>
+        <span className="ml-2 text-muted-foreground">
+          {value} · {pct}%
+        </span>
+      </TooltipContent>
+    </Tooltip>
+  );
 }
 
 export default function CardSortResults({ studyId, cards, responses }: Props) {
@@ -139,31 +208,21 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
               <div key={r.card.id} className="grid grid-cols-[minmax(72px,max-content)_1fr_auto_auto] items-center gap-2 px-4 py-3 sm:gap-4">
                 <div className="min-w-0 truncate font-medium">{r.card.label}</div>
                 <div className="min-w-0">
-                  <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
+                  <div className="flex h-8 w-full items-center">
+                    <div className="flex h-2.5 w-full items-center rounded-full bg-muted">
                     {r.total > 0 &&
-                      r.segments.map((seg) => {
-                        const pct = Math.round((seg.value / r.total) * 100);
-                        return (
-                          <Tooltip key={seg.label}>
-                            <TooltipTrigger asChild>
-                              <button
-                                type="button"
-                                className="h-full min-w-1 cursor-default transition-opacity hover:opacity-80 focus:outline-none"
-                                style={{
-                                  width: `${(seg.value / r.total) * 100}%`,
-                                  backgroundColor: colorFor(seg.label),
-                                }}
-                              />
-                            </TooltipTrigger>
-                            <TooltipContent side="top" className="px-3 py-1.5 text-xs">
-                              <span className="font-medium">{seg.label}</span>
-                              <span className="ml-2 text-muted-foreground">
-                                {seg.value} · {pct}%
-                              </span>
-                            </TooltipContent>
-                          </Tooltip>
-                        );
-                      })}
+                      r.segments.map((seg, index) => (
+                        <CardSortSegment
+                          key={seg.label}
+                          label={seg.label}
+                          value={seg.value}
+                          total={r.total}
+                          color={colorFor(seg.label)}
+                          isFirst={index === 0}
+                          isLast={index === r.segments.length - 1}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <div className="whitespace-nowrap text-sm tabular-nums">
