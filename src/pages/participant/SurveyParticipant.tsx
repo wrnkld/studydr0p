@@ -175,7 +175,7 @@ function QuestionInput({
           return (
             <label
               key={i}
-              className={`flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent ${checked ? "bg-accent border-primary/30" : ""}`}
+              className="flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent"
             >
               <input
                 type="checkbox"
@@ -195,7 +195,7 @@ function QuestionInput({
       {(q.options ?? []).map((opt, i) => (
         <label
           key={i}
-          className={`flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent ${(value as string) === opt ? "bg-accent border-primary/30" : ""}`}
+          className="flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-accent"
         >
           <RadioGroupItem value={opt} id={`${q.id}-${i}`} />
           <span>{opt}</span>
