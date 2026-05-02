@@ -127,7 +127,7 @@ export default function StudyBuilder() {
       setLiveTitle(study.title);
       setLiveDescription(study.description ?? "");
     }
-  }, [study?.id]);
+  }, [study]);
 
   useEffect(() => {
     if (!study) return;
