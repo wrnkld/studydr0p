@@ -136,7 +136,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
         <div className="overflow-hidden rounded-lg border text-sm">
           <div className="divide-y">
             {rowsByCard.map((r) => (
-              <div key={r.card.id} className="grid grid-cols-[minmax(84px,max-content)_minmax(48px,1fr)_max-content_max-content] items-center gap-2 px-4 py-3 sm:gap-4">
+              <div key={r.card.id} className="grid grid-cols-[minmax(72px,max-content)_1fr_auto_auto] items-center gap-2 px-4 py-3 sm:gap-4">
                 <div className="min-w-0 truncate font-medium">{r.card.label}</div>
                 <div className="min-w-0">
                   <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
@@ -166,16 +166,12 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                       })}
                   </div>
                 </div>
-                <div className="whitespace-nowrap text-sm text-muted-foreground">
-                  <span className="font-mono tabular-nums text-foreground">
-                    {r.agreement}%
-                  </span>{" "}
-                  <span className="hidden sm:inline">{r.topCategory}</span>
+                <div className="whitespace-nowrap text-sm tabular-nums">
+                  <span className="text-foreground">{r.agreement}%</span>{" "}
+                  <span className="text-muted-foreground">{r.topCategory}</span>
                 </div>
-                <div className="text-right text-sm text-muted-foreground">
-                  <span className="font-mono tabular-nums text-foreground">
-                    {r.total}
-                  </span>
+                <div className="whitespace-nowrap text-right text-sm text-muted-foreground">
+                  {r.total} {r.total === 1 ? "response" : "responses"}
                 </div>
               </div>
             ))}
