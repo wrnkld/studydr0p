@@ -229,6 +229,10 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               </Button>
             )}
           </div>
+        ) : responses.length === 0 && pendingResponse ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <p className="text-sm text-muted-foreground">Loading responses…</p>
+          </div>
         ) : (
           <>
             {study.type === "survey" && (
