@@ -144,11 +144,11 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                   </td>
                   <td className="px-4 py-3">
                     <div
-                      className="group relative flex h-4 w-full items-center"
+                      className="group relative flex w-full items-center"
                       role="img"
                       aria-label={`${r.card.label} placement distribution`}
                     >
-                      <div className="flex h-1.5 w-full overflow-hidden rounded-full bg-muted transition-all group-hover:h-2.5">
+                      <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-muted">
                         {r.total > 0 && (
                           <TooltipProvider delayDuration={100}>
                             {r.segments.map((seg) => {
