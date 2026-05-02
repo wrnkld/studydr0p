@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,9 @@ function CardSortSegment({
   color,
   isFirst,
   isLast,
+  selected,
+  onSelect,
+  onClear,
 }: {
   label: string;
   value: number;
@@ -30,52 +33,28 @@ function CardSortSegment({
   color: string;
   isFirst: boolean;
   isLast: boolean;
+  selected: boolean;
+  onSelect: () => void;
+  onClear: () => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const closeTimer = useRef<number | null>(null);
   const pct = Math.round((value / total) * 100);
-
-  const showTemporarily = () => {
-    if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    setOpen(true);
-    closeTimer.current = window.setTimeout(() => {
-      setOpen(false);
-      closeTimer.current = null;
-    }, 2400);
-  };
-
-  const show = () => {
-    if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    setOpen(true);
-  };
-
-  const hide = () => {
-    if (closeTimer.current) return;
-    if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    setOpen(false);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (closeTimer.current) window.clearTimeout(closeTimer.current);
-    };
-  }, []);
 
   return (
     <button
       type="button"
       aria-label={`${label}: ${value} ${value === 1 ? "response" : "responses"}, ${pct}%`}
+      aria-pressed={selected}
       className="group relative h-8 min-w-1 cursor-default touch-manipulation focus:outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       style={{ width: `${(value / total) * 100}%` }}
-      onMouseEnter={show}
-      onMouseLeave={hide}
-      onFocus={show}
-      onBlur={hide}
-      onClick={showTemporarily}
+      onMouseEnter={onSelect}
+      onMouseLeave={onClear}
+      onFocus={onSelect}
+      onBlur={onClear}
+      onClick={onSelect}
       onPointerDown={(event) => {
         if (event.pointerType !== "mouse") {
           event.preventDefault();
-          showTemporarily();
+          onSelect();
         }
       }}
     >
@@ -88,14 +67,6 @@ function CardSortSegment({
         )}
         style={{ backgroundColor: color }}
       />
-      {open && (
-        <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md border bg-popover px-3 py-1.5 text-xs text-popover-foreground shadow-md">
-          <span className="font-medium">{label}</span>
-          <span className="ml-2 text-muted-foreground">
-            {value} · {pct}%
-          </span>
-        </span>
-      )}
     </button>
   );
 }
