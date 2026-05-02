@@ -72,7 +72,7 @@ export default function FiveSecondResults({ studyId, config, responses }: Props)
                 <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
                   {new Date(r.created_at).toLocaleString()}
                 </TableCell>
-                <TableCell className="font-mono text-xs">
+                <TableCell className="text-xs tabular-nums">
                   {r.session_id.slice(0, 8)}
                 </TableCell>
                 {questions.map((q) => {
