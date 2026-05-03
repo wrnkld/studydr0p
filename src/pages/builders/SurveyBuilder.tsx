@@ -158,22 +158,23 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<boolean> => {
     if (config.questions.length === 0) {
       toast.error("Add at least one question first");
-      return;
+      return false;
     }
     if (config.questions.some((q) => !q.label.trim())) {
       toast.error("All questions need a label");
-      return;
+      return false;
     }
     const newSlug = slug ?? generateSlug();
     const ok = await save({ status: "live", slug: newSlug });
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      // toast handled by StudyBuilder
+      return true;
     }
+    return false;
   };
 
   const handleDelete = useCallback(async () => {
