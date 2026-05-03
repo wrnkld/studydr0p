@@ -44,6 +44,14 @@ export default function SurveyParticipant({
   const submit = async () => {
     for (const q of study.config.questions) {
       const a = answers[q.id];
+      // Multi-select: empty array is valid (means "none of the above")
+      if (q.type === "multiple_choice" && q.multi) {
+        if (a === undefined) {
+          // Treat as explicitly empty
+          setAnswers((prev) => ({ ...prev, [q.id]: [] }));
+        }
+        continue;
+      }
       if (a === undefined || a === "" || (Array.isArray(a) && a.length === 0)) {
         toast.error("Please answer all questions");
         return;
