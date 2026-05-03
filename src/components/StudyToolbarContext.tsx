@@ -15,7 +15,7 @@ import {
  */
 export interface StudyActions {
   studyId: string;
-  onSave: () => void | Promise<void>;
+  onSave: () => void | Promise<void> | Promise<boolean>;
   onDelete: () => void | Promise<void>;
   saving?: boolean;
 }
