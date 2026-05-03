@@ -137,7 +137,7 @@ function StudyActions({
               Export CSV
             </DropdownMenuItem>
           )}
-          {exportCsv && <DropdownMenuSeparator />}
+          
           <DropdownMenuItem
             disabled={!requestDelete && !actions}
             onSelect={() =>
