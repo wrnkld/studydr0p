@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -230,15 +231,16 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
                   />
                   {q.type === "multiple_choice" && (
                     <div className="space-y-2">
-                      <label className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <input
-                          type="checkbox"
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id={`${q.id}-multi`}
                           checked={!!q.multi}
-                          onChange={(e) => updateQuestion(q.id, { multi: e.target.checked })}
-                          className="h-4 w-4"
+                          onCheckedChange={(checked) => updateQuestion(q.id, { multi: checked === true })}
                         />
+                        <Label htmlFor={`${q.id}-multi`} className="text-sm font-normal text-muted-foreground">
                         Allow multiple selections
-                      </label>
+                        </Label>
+                      </div>
                       {(q.options ?? []).map((opt, oi) => (
                         <div key={oi} className="flex items-center gap-2">
                           <Input
