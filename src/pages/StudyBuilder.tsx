@@ -350,9 +350,11 @@ function InlinePreview({
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
       return (
-        <p className="text-sm text-muted-foreground">
-          No questions yet — add some in the Build tab.
-        </p>
+        <div className="flex items-center justify-center py-16">
+          <p className="text-sm text-muted-foreground">
+            No questions yet — add some in the Build tab.
+          </p>
+        </div>
       );
     }
     return (
