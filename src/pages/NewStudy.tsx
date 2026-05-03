@@ -172,7 +172,8 @@ export default function NewStudy() {
 
             return card;
           })}
-      </div>
+        </div>
+      </TooltipProvider>
     </PageContainer>
   );
 }
