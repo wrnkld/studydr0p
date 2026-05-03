@@ -114,50 +114,64 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {TYPES.map((t) => {
-          const Icon = t.icon;
-          return (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => {
-                if (!t.enabled || creating) return;
-                setPendingType(t.id);
-                void create(t.id);
-              }}
-              disabled={!t.enabled || creating}
-              className={cn(
-                "group relative text-left rounded-lg border border-border/70 bg-card p-5 transition-colors",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                t.enabled
-                  ? "hover:bg-muted/40 cursor-pointer"
-                  : "opacity-50 cursor-not-allowed",
-              )}
-            >
-              <div className="flex items-start gap-3">
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[15px] font-medium tracking-tight">
-                      {t.label}
-                    </span>
-                    {!t.enabled && (
-                      <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
-                        Soon
-                      </span>
-                    )}
+      <TooltipProvider>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {TYPES.map((t) => {
+            const Icon = t.icon;
+            const card = (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => {
+                  if (!t.enabled || creating) return;
+                  setPendingType(t.id);
+                  void create(t.id);
+                }}
+                disabled={!t.enabled || creating}
+                className={cn(
+                  "group relative text-left rounded-lg border border-border/70 bg-card p-5 transition-colors",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                  t.enabled
+                    ? "hover:bg-muted/40 cursor-pointer"
+                    : "opacity-50 cursor-not-allowed",
+                )}
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                    {t.description}
-                  </p>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[15px] font-medium tracking-tight">
+                        {t.label}
+                      </span>
+                      {!t.enabled && (
+                        <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
+                          Soon
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
+                      {t.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </button>
-          );
-        })}
+              </button>
+            );
+
+            if (!t.enabled) {
+              return (
+                <Tooltip key={t.id}>
+                  <TooltipTrigger asChild>
+                    <span>{card}</span>
+                  </TooltipTrigger>
+                  <TooltipContent>Coming soon</TooltipContent>
+                </Tooltip>
+              );
+            }
+
+            return card;
+          })}
       </div>
     </PageContainer>
   );
