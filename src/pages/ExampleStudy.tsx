@@ -97,9 +97,7 @@ export default function ExampleStudy() {
                 initialCategories={study.categories}
                 onSubmitInMemory={(data) => {
                   setUserResponse(makeUserCardSortResponse(data));
-                  toast.success(
-                    "Thanks! Your answers are mixed into the results.",
-                  );
+                  toast.success("Thank you");
                   setTab("results");
                 }}
                 onDone={() => {}}
@@ -117,9 +115,7 @@ export default function ExampleStudy() {
                 inMemory
                 onSubmitInMemory={(answers) => {
                   setUserResponse(makeUserSurveyResponse(answers));
-                  toast.success(
-                    "Thanks! Your answers are mixed into the results.",
-                  );
+                  toast.success("Thank you");
                   setTab("results");
                 }}
                 onDone={() => {}}
