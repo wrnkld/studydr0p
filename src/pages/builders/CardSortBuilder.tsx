@@ -262,7 +262,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Saved");
+      // toast handled by StudyBuilder
     }
   };
 
