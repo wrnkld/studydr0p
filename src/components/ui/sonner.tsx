@@ -8,6 +8,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
+      style={{ fontFamily: "'Calibre', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       toastOptions={{
