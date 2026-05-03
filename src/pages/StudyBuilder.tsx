@@ -242,7 +242,9 @@ export default function StudyBuilder() {
               <Button
                 disabled={!actions || actions.saving}
                 onClick={async () => {
-                  await actions?.onSave();
+                  const result = await actions?.onSave();
+                  // If onSave returns false, validation failed — stay on Build tab
+                  if (result === false) return;
                   // Re-fetch study to get updated slug/status
                   const { data: updated } = await supabase
                     .from("studies")
