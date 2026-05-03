@@ -344,8 +344,12 @@ function InlinePreview({
 
   if (creating || !sessionId) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <p className="text-sm text-muted-foreground">Loading preview…</p>
+      <div className="space-y-6 py-6">
+        <section>
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <p className="text-sm text-muted-foreground">Loading preview…</p>
+          </div>
+        </section>
       </div>
     );
   }
@@ -354,11 +358,15 @@ function InlinePreview({
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <p className="text-lg font-medium text-foreground">No questions yet</p>
-          <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
-            Add some in the Build tab.
-          </p>
+        <div className="space-y-6 py-6">
+          <section>
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-medium text-foreground">No questions yet</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+                Add some in the Build tab.
+              </p>
+            </div>
+          </section>
         </div>
       );
     }
@@ -397,10 +405,14 @@ function InlinePreview({
   }
 
   return (
-    <div className="flex items-center justify-center py-16">
-      <p className="text-sm text-muted-foreground">
-        This study type can't be previewed yet.
-      </p>
+    <div className="space-y-6 py-6">
+      <section>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-sm text-muted-foreground">
+            This study type can't be previewed yet.
+          </p>
+        </div>
+      </section>
     </div>
   );
 }
