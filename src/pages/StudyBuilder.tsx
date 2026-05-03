@@ -343,7 +343,7 @@ function InlinePreview({
   }, [study.id]);
 
   if (creating || !sessionId) {
-    return <p className="text-sm text-muted-foreground">Loading preview…</p>;
+    return <div className="flex items-center justify-center py-16"><p className="text-sm text-muted-foreground">Loading preview…</p></div>;
   }
 
   if (study.type === "survey") {
