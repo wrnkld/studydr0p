@@ -392,9 +392,11 @@ function InlinePreview({
   }
 
   return (
-    <p className="text-sm text-muted-foreground">
-      This study type can't be previewed yet.
-    </p>
+    <div className="flex items-center justify-center py-16">
+      <p className="text-sm text-muted-foreground">
+        This study type can't be previewed yet.
+      </p>
+    </div>
   );
 }
 
