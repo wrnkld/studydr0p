@@ -106,28 +106,10 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <div className="relative">
-        <PageHeader
-          title="UX research, without the friction."
-          description="Run and share unmoderated UX studies with a single link."
-        />
-        {session && (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-4 right-0 hidden select-none text-foreground sm:block"
-            style={{
-              fontSize: "180px",
-              lineHeight: 1,
-              letterSpacing: "-0.06em",
-              fontWeight: 800,
-              opacity: 0.05,
-              fontFamily: '"Inter", system-ui, sans-serif',
-            }}
-          >
-            {totalResponses.toLocaleString()}
-          </div>
-        )}
-      </div>
+    <PageHeader
+        title="UX research, without the friction."
+        description="Run and share unmoderated UX studies with a single link."
+      />
 
       {(
         <section className="rounded-lg border border-border/70 bg-card divide-y divide-border/60 shadow-[0_1px_2px_rgba(20,20,15,0.04)] overflow-hidden">
