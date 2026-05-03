@@ -343,16 +343,21 @@ function InlinePreview({
   }, [study.id]);
 
   if (creating || !sessionId) {
-    return <div className="flex items-center justify-center py-16"><p className="text-sm text-muted-foreground">Loading preview…</p></div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <p className="text-sm text-muted-foreground">Loading preview…</p>
+      </div>
+    );
   }
 
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
       return (
-        <div className="flex items-center justify-center py-16">
-          <p className="text-sm text-muted-foreground">
-            No questions yet — add some in the Build tab.
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-lg font-medium text-foreground">No questions yet</p>
+          <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+            Add some in the Build tab.
           </p>
         </div>
       );
