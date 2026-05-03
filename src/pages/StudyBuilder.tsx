@@ -110,10 +110,18 @@ export default function StudyBuilder() {
   );
 
   const handleDelete = async () => {
-    if (!actions) return;
     setDeleting(true);
     try {
-      await actions.onDelete();
+      if (actions?.onDelete) {
+        await actions.onDelete();
+      } else if (id) {
+        const { error } = await supabase.from("studies").delete().eq("id", id);
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+        toast.success("Study deleted");
+      }
       navigate("/", { replace: true });
     } finally {
       setDeleting(false);
