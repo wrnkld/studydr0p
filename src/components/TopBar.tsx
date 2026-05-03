@@ -96,13 +96,28 @@ function StudyActions({
     if (!shareUrl) return;
     await navigator.clipboard.writeText(shareUrl);
     setCopied(true);
-    toast.success("Share link copied");
+    toast.success("Link copied — share it to start collecting responses.");
     setTimeout(() => setCopied(false), 1500);
   };
 
   return (
     <>
       <StatusPill status={status} />
+      {status === "live" && shareUrl && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 gap-1.5 px-3 text-xs"
+          onClick={copy}
+        >
+          {copied ? (
+            <Check className="h-3.5 w-3.5" />
+          ) : (
+            <LinkIcon className="h-3.5 w-3.5" />
+          )}
+          {copied ? "Copied" : "Copy link"}
+        </Button>
+      )}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -116,23 +131,13 @@ function StudyActions({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          {shareUrl && (
-            <DropdownMenuItem onSelect={copy}>
-              {copied ? (
-                <Check className="mr-2 h-4 w-4" />
-              ) : (
-                <LinkIcon className="mr-2 h-4 w-4" />
-              )}
-              Copy share link
-            </DropdownMenuItem>
-          )}
           {exportCsv && (
             <DropdownMenuItem onSelect={() => exportCsv()}>
               <Download className="mr-2 h-4 w-4" />
               Export CSV
             </DropdownMenuItem>
           )}
-          {(shareUrl || exportCsv) && <DropdownMenuSeparator />}
+          {exportCsv && <DropdownMenuSeparator />}
           <DropdownMenuItem
             disabled={!requestDelete && !actions}
             onSelect={() =>

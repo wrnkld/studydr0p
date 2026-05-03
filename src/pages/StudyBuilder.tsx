@@ -235,6 +235,22 @@ export default function StudyBuilder() {
                 disabled={!actions || actions.saving}
                 onClick={async () => {
                   await actions?.onSave();
+                  // Re-fetch study to get updated slug/status
+                  const { data: updated } = await supabase
+                    .from("studies")
+                    .select("id, title, description, type, status, slug, config")
+                    .eq("id", study.id)
+                    .single();
+                  if (updated) {
+                    setStudy(updated as StudyRow);
+                    const url = updated.slug
+                      ? `${window.location.origin}/s/${updated.slug}`
+                      : null;
+                    if (url) {
+                      await navigator.clipboard.writeText(url);
+                      toast.success("Link copied — share it to start collecting responses.");
+                    }
+                  }
                   setTab("preview");
                 }}
               >
