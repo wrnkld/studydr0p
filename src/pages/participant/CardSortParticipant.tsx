@@ -370,7 +370,7 @@ function CategoryZone({
       ref={setNodeRef}
       className={cn(
         "rounded-lg p-3 transition-colors min-h-[88px] flex",
-        !showSolid && "border border-dashed border-border",
+        !showSolid && "border border-dashed border-foreground/20",
         showSolid && "border border-foreground bg-card",
         isOver && "bg-muted/70",
       )}
