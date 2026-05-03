@@ -256,8 +256,8 @@ export default function StudyBuilder() {
                       : null;
                     if (url) {
                       await navigator.clipboard.writeText(url);
-                      toast.success("Link copied");
                     }
+                    toast.success(url ? "Saved and link copied" : "Saved");
                   }
                   setTab("preview");
                 }}

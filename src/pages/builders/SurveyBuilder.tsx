@@ -172,7 +172,7 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Saved");
+      // toast handled by StudyBuilder
     }
   };
 
