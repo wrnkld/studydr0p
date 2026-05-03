@@ -238,23 +238,23 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (): Promise<boolean> => {
     if (cards.length < 2) {
       toast.error("Add at least 2 cards");
-      return;
+      return false;
     }
     if (cards.some((c) => !c.label.trim())) {
       toast.error("All cards need a label");
-      return;
+      return false;
     }
     if (sortType === "closed") {
       if (categories.length < 2) {
         toast.error("Closed sort needs at least 2 categories");
-        return;
+        return false;
       }
       if (categories.some((c) => !c.label.trim())) {
         toast.error("All categories need a label");
-        return;
+        return false;
       }
     }
     const newSlug = slug ?? generateSlug();
@@ -262,8 +262,9 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      // toast handled by StudyBuilder
+      return true;
     }
+    return false;
   };
 
   const handleDelete = useCallback(async () => {
