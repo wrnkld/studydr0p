@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
 
