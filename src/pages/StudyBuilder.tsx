@@ -246,7 +246,7 @@ export default function StudyBuilder() {
             <InlinePreview
               study={study}
               onSubmitted={() => {
-                toast.success("Thanks! Your answers are mixed into the results.");
+                toast.success("Thank you");
                 setPendingResponse(true);
                 setTab("results");
               }}
