@@ -21,8 +21,25 @@ import {
   SurveyQuestionType,
   StudyStatus,
 } from "@/lib/types";
-import { Trash2, Plus } from "lucide-react";
+import { Trash2, Plus, GripVertical } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   studyId: string;
@@ -51,11 +68,15 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
   };
   const [status, setStatus] = useState<StudyStatus>(initial.status);
   const [slug, setSlug] = useState<string | null>(initial.slug);
-  // Surveys always render one question at a time — layout option removed from UI.
   const [config, setConfig] = useState<SurveyConfig>({
     questions: initial.config.questions ?? [],
     layout: "one_per_page",
   });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   const addQuestion = (type: SurveyQuestionType) => {
     setConfig((c) => ({
@@ -81,6 +102,16 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
 
   const removeQuestion = (qid: string) => {
     setConfig((c) => ({ ...c, questions: c.questions.filter((q) => q.id !== qid) }));
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    setConfig((c) => {
+      const oldIndex = c.questions.findIndex((q) => q.id === active.id);
+      const newIndex = c.questions.findIndex((q) => q.id === over.id);
+      return { ...c, questions: arrayMove(c.questions, oldIndex, newIndex) };
+    });
   };
 
   const save = async (
@@ -186,106 +217,28 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
       <section className="space-y-4">
         <h2>Questions</h2>
 
-        <ul className="space-y-3">
-          {config.questions.map((q, i) => (
-            <li key={q.id} className="rounded-md border p-4">
-              <div className="flex items-start gap-3">
-                <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
-                <div className="flex-1 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Select
-                      value={q.type}
-                      onValueChange={(v) => {
-                        const next = v as SurveyQuestionType;
-                        updateQuestion(q.id, {
-                          type: next,
-                          options:
-                            next === "multiple_choice"
-                              ? q.options ?? ["Option 1", "Option 2"]
-                              : undefined,
-                        });
-                      }}
-                    >
-                      <SelectTrigger className="w-[200px]">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="multiple_choice">Multiple choice</SelectItem>
-                        <SelectItem value="likert">Rating scale (1-5)</SelectItem>
-                        <SelectItem value="open_text">Open text</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="ml-auto"
-                      onClick={() => removeQuestion(q.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <Input
-                    placeholder="Question…"
-                    value={q.label}
-                    onChange={(e) => updateQuestion(q.id, { label: e.target.value })}
-                  />
-                  {q.type === "multiple_choice" && (
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Checkbox
-                          id={`${q.id}-multi`}
-                          checked={!!q.multi}
-                          onCheckedChange={(checked) => updateQuestion(q.id, { multi: checked === true })}
-                        />
-                        <Label htmlFor={`${q.id}-multi`} className="text-sm font-normal text-muted-foreground">
-                        Allow multiple selections
-                        </Label>
-                      </div>
-                      {(q.options ?? []).map((opt, oi) => (
-                        <div key={oi} className="flex items-center gap-2">
-                          <Input
-                            value={opt}
-                            onChange={(e) => {
-                              const opts = [...(q.options ?? [])];
-                              opts[oi] = e.target.value;
-                              updateQuestion(q.id, { options: opts });
-                            }}
-                          />
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              const opts = (q.options ?? []).filter(
-                                (_, i) => i !== oi,
-                              );
-                              updateQuestion(q.id, { options: opts });
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      ))}
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          updateQuestion(q.id, {
-                            options: [
-                              ...(q.options ?? []),
-                              `Option ${(q.options?.length ?? 0) + 1}`,
-                            ],
-                          })
-                        }
-                      >
-                        <Plus className="mr-1.5 h-3.5 w-3.5" /> Add option
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={config.questions.map((q) => q.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <ul className="space-y-3">
+              {config.questions.map((q, i) => (
+                <SortableQuestionRow
+                  key={q.id}
+                  question={q}
+                  index={i}
+                  updateQuestion={updateQuestion}
+                  removeQuestion={removeQuestion}
+                />
+              ))}
+            </ul>
+          </SortableContext>
+        </DndContext>
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={() => addQuestion("multiple_choice")}>
@@ -304,3 +257,138 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
   );
 }
 
+function SortableQuestionRow({
+  question: q,
+  index: i,
+  updateQuestion,
+  removeQuestion,
+}: {
+  question: SurveyQuestion;
+  index: number;
+  updateQuestion: (qid: string, patch: Partial<SurveyQuestion>) => void;
+  removeQuestion: (qid: string) => void;
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: q.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 10 : undefined,
+    opacity: isDragging ? 0.5 : undefined,
+  };
+
+  return (
+    <li ref={setNodeRef} style={style} className="group rounded-md border p-4 bg-background">
+      <div className="flex items-start gap-3">
+        <button
+          type="button"
+          className="mt-2 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground touch-none"
+          {...attributes}
+          {...listeners}
+          aria-label="Drag to reorder"
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+        <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+        <div className="flex-1 space-y-3">
+          <div className="flex items-center gap-2">
+            <Select
+              value={q.type}
+              onValueChange={(v) => {
+                const next = v as SurveyQuestionType;
+                updateQuestion(q.id, {
+                  type: next,
+                  options:
+                    next === "multiple_choice"
+                      ? q.options ?? ["Option 1", "Option 2"]
+                      : undefined,
+                });
+              }}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="multiple_choice">Multiple choice</SelectItem>
+                <SelectItem value="likert">Rating scale (1-5)</SelectItem>
+                <SelectItem value="open_text">Open text</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="ml-auto"
+              onClick={() => removeQuestion(q.id)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </div>
+          <Input
+            placeholder="Question…"
+            value={q.label}
+            onChange={(e) => updateQuestion(q.id, { label: e.target.value })}
+          />
+          {q.type === "multiple_choice" && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id={`${q.id}-multi`}
+                  checked={!!q.multi}
+                  onCheckedChange={(checked) => updateQuestion(q.id, { multi: checked === true })}
+                />
+                <Label htmlFor={`${q.id}-multi`} className="text-sm font-normal text-muted-foreground">
+                Allow multiple selections
+                </Label>
+              </div>
+              {(q.options ?? []).map((opt, oi) => (
+                <div key={oi} className="flex items-center gap-2">
+                  <Input
+                    value={opt}
+                    onChange={(e) => {
+                      const opts = [...(q.options ?? [])];
+                      opts[oi] = e.target.value;
+                      updateQuestion(q.id, { options: opts });
+                    }}
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      const opts = (q.options ?? []).filter(
+                        (_, idx) => idx !== oi,
+                      );
+                      updateQuestion(q.id, { options: opts });
+                    }}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  updateQuestion(q.id, {
+                    options: [
+                      ...(q.options ?? []),
+                      `Option ${(q.options?.length ?? 0) + 1}`,
+                    ],
+                  })
+                }
+              >
+                <Plus className="mr-1.5 h-3.5 w-3.5" /> Add option
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </li>
+  );
+}
