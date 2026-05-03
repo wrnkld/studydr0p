@@ -96,7 +96,7 @@ function StudyActions({
     if (!shareUrl) return;
     await navigator.clipboard.writeText(shareUrl);
     setCopied(true);
-    toast.success("Link copied — share it to start collecting responses.");
+    toast.success("Link copied");
     setTimeout(() => setCopied(false), 1500);
   };
 
