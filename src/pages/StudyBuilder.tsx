@@ -343,16 +343,18 @@ function InlinePreview({
   }, [study.id]);
 
   if (creating || !sessionId) {
-    return <p className="text-sm text-muted-foreground">Loading preview…</p>;
+    return <div className="flex items-center justify-center py-16"><p className="text-sm text-muted-foreground">Loading preview…</p></div>;
   }
 
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
     if (!cfg.questions || cfg.questions.length === 0) {
       return (
-        <p className="text-sm text-muted-foreground">
-          No questions yet — add some in the Build tab.
-        </p>
+        <div className="flex items-center justify-center py-16">
+          <p className="text-sm text-muted-foreground">
+            No questions yet — add some in the Build tab.
+          </p>
+        </div>
       );
     }
     return (
@@ -390,9 +392,11 @@ function InlinePreview({
   }
 
   return (
-    <p className="text-sm text-muted-foreground">
-      This study type can't be previewed yet.
-    </p>
+    <div className="flex items-center justify-center py-16">
+      <p className="text-sm text-muted-foreground">
+        This study type can't be previewed yet.
+      </p>
+    </div>
   );
 }
 
