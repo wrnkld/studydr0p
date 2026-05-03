@@ -201,7 +201,13 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   }, [canExport, study?.id, responses.length, cards.length]);
 
   if (loading || !study) {
-    return <div className="text-sm text-muted-foreground">Loading…</div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-16 text-center">
+        <p className="text-sm text-muted-foreground">
+          {pendingResponse ? "Loading responses…" : "Loading…"}
+        </p>
+      </div>
+    );
   }
 
   return (
