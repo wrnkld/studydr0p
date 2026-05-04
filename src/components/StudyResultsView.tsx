@@ -219,9 +219,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
             <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
               Share your study link with participants to start collecting data.
             </p>
-            {study.slug && (
-              <CopyLinkButton slug={study.slug} />
-            )}
+            {study.slug && <EmptyCopyLink slug={study.slug} />}
           </div>
         ) : responses.length === 0 && pendingResponse ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
