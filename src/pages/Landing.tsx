@@ -48,9 +48,9 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     isExample: true,
   },
   {
-    id: "restaurant",
-    href: "/examples/restaurant",
-    title: "Where's the menu item?",
+    id: "grocery",
+    href: "/examples/grocery",
+    title: "Help us stock the shelves.",
     type: "tree_test",
     responseCount: 20,
     isExample: true,

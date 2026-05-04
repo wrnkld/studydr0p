@@ -21,7 +21,7 @@ import {
 } from "@/lib/types";
 import { TreeNodeRow, TaskResult } from "@/pages/participant/TreeTestParticipant";
 
-export type ExampleStudyId = "fridge" | "gasstation" | "restaurant";
+export type ExampleStudyId = "fridge" | "gasstation" | "grocery";
 
 export interface ExampleResponseRow {
   id: string;
@@ -51,7 +51,7 @@ export interface ExampleSurvey {
 }
 
 export interface ExampleTreeTest {
-  id: "restaurant";
+  id: "grocery";
   type: "tree_test";
   title: string;
   description: string;
@@ -258,61 +258,54 @@ export const GAS_STATION_STUDY: ExampleSurvey = {
   seedResponses: GAS_SEED_RESPONSES,
 };
 
-// ---------- Tree test: Restaurant website ----------
+// ---------- Tree test: Grocery store ----------
 
-// Node IDs (stable for seed data)
-const n = (slug: string) => `rest-${slug}`;
+const g = (slug: string) => `groc-${slug}`;
 
-const RESTAURANT_NODES: TreeNodeRow[] = [
+const GROCERY_NODES: TreeNodeRow[] = [
   // Top-level
-  { id: n("food"),          parent_id: null,              label: "Our Food",           position: 0 },
-  { id: n("reservations"),  parent_id: null,              label: "Reservations",       position: 1 },
-  { id: n("about"),         parent_id: null,              label: "About",              position: 2 },
-  { id: n("contact"),       parent_id: null,              label: "Contact",            position: 3 },
-  // Our Food children
-  { id: n("breakfast"),     parent_id: n("food"),         label: "Breakfast",          position: 0 },
-  { id: n("lunch"),         parent_id: n("food"),         label: "Lunch",              position: 1 },
-  { id: n("dinner"),        parent_id: n("food"),         label: "Dinner",             position: 2 },
-  { id: n("drinks"),        parent_id: n("food"),         label: "Drinks",             position: 3 },
-  { id: n("desserts"),      parent_id: n("food"),         label: "Desserts",           position: 4 },
-  // Reservations children
-  { id: n("book"),          parent_id: n("reservations"), label: "Book a table",       position: 0 },
-  { id: n("large"),         parent_id: n("reservations"), label: "Large groups",       position: 1 },
-  { id: n("private"),       parent_id: n("reservations"), label: "Private dining",     position: 2 },
-  // About children
-  { id: n("story"),         parent_id: n("about"),        label: "Our story",          position: 0 },
-  { id: n("team"),          parent_id: n("about"),        label: "Meet the team",      position: 1 },
-  { id: n("press"),         parent_id: n("about"),        label: "Press",              position: 2 },
-  // Contact children
-  { id: n("findus"),        parent_id: n("contact"),      label: "Find us",            position: 0 },
-  { id: n("hours"),         parent_id: n("contact"),      label: "Hours",              position: 1 },
-  { id: n("catering"),      parent_id: n("contact"),      label: "Catering inquiries", position: 2 },
+  { id: g("fresh"),      parent_id: null,           label: "Fresh",              position: 0 },
+  { id: g("pantry"),     parent_id: null,           label: "Pantry",             position: 1 },
+  { id: g("frozen"),     parent_id: null,           label: "Frozen",             position: 2 },
+  { id: g("beverages"),  parent_id: null,           label: "Beverages",          position: 3 },
+  { id: g("health"),     parent_id: null,           label: "Health & Beauty",    position: 4 },
+  // Fresh children
+  { id: g("produce"),    parent_id: g("fresh"),     label: "Produce",            position: 0 },
+  { id: g("meat"),       parent_id: g("fresh"),     label: "Meat & Seafood",     position: 1 },
+  { id: g("deli"),       parent_id: g("fresh"),     label: "Deli",               position: 2 },
+  { id: g("bakery"),     parent_id: g("fresh"),     label: "Bakery",             position: 3 },
+  { id: g("dairy"),      parent_id: g("fresh"),     label: "Dairy & Eggs",       position: 4 },
+  // Pantry children
+  { id: g("canned"),     parent_id: g("pantry"),    label: "Canned & Jarred",    position: 0 },
+  { id: g("pasta"),      parent_id: g("pantry"),    label: "Pasta & Grains",     position: 1 },
+  { id: g("condiments"), parent_id: g("pantry"),    label: "Condiments & Sauces",position: 2 },
+  { id: g("snacks"),     parent_id: g("pantry"),    label: "Snacks",             position: 3 },
+  { id: g("breakfast"),  parent_id: g("pantry"),    label: "Breakfast & Cereal", position: 4 },
+  // Frozen children
+  { id: g("frozmeals"), parent_id: g("frozen"),     label: "Frozen Meals",       position: 0 },
+  { id: g("frozveg"),   parent_id: g("frozen"),     label: "Frozen Vegetables",  position: 1 },
+  { id: g("icecream"),  parent_id: g("frozen"),     label: "Ice Cream & Desserts",position: 2 },
+  { id: g("frozbfast"), parent_id: g("frozen"),     label: "Frozen Breakfast",   position: 3 },
+  // Beverages children
+  { id: g("water"),      parent_id: g("beverages"), label: "Water & Sparkling",  position: 0 },
+  { id: g("juice"),      parent_id: g("beverages"), label: "Juice & Smoothies",  position: 1 },
+  { id: g("coffee"),     parent_id: g("beverages"), label: "Coffee & Tea",       position: 2 },
+  { id: g("alcohol"),    parent_id: g("beverages"), label: "Beer Wine & Spirits",position: 3 },
+  // Health & Beauty children
+  { id: g("vitamins"),   parent_id: g("health"),    label: "Vitamins",           position: 0 },
+  { id: g("personal"),   parent_id: g("health"),    label: "Personal Care",      position: 1 },
 ];
 
-const RESTAURANT_TASKS: TreeTestTask[] = [
-  {
-    id: "t1",
-    text: "Find where you'd go to book a table for 2.",
-    correct_node_id: n("book"),
-  },
-  {
-    id: "t2",
-    text: "Find the dessert menu.",
-    correct_node_id: n("desserts"),
-  },
-  {
-    id: "t3",
-    text: "Find out what time the restaurant opens.",
-    correct_node_id: n("hours"),
-  },
+const GROCERY_TASKS: TreeTestTask[] = [
+  { id: "t1", text: "Find where you'd look for Greek yogurt",       correct_node_id: g("dairy") },
+  { id: "t2", text: "Find almond butter",                           correct_node_id: g("condiments") },
+  { id: "t3", text: "Find sparkling water",                         correct_node_id: g("water") },
+  { id: "t4", text: "Find a rotisserie chicken",                    correct_node_id: g("deli") },
 ];
 
-const RESTAURANT_CONFIG: TreeTestConfig = {
-  tasks: RESTAURANT_TASKS,
-};
+const GROCERY_CONFIG: TreeTestConfig = { tasks: GROCERY_TASKS };
 
-// 20 seeded responses — varying success, paths, wrong answers
-function makeTreeResponse(
+function makeGroceryResponse(
   i: number,
   taskResults: Array<{
     taskIdx: number;
@@ -322,172 +315,195 @@ function makeTreeResponse(
   }>,
 ): ExampleResponseRow {
   const tasks: TaskResult[] = taskResults.map((tr) => {
-    const task = RESTAURANT_TASKS[tr.taskIdx];
+    const task = GROCERY_TASKS[tr.taskIdx];
     return {
       task_id: task.id,
       task_text: task.text,
       correct_node_id: task.correct_node_id,
       selected_node_id: tr.selectedId,
-      selected_label: RESTAURANT_NODES.find((nd) => nd.id === tr.selectedId)?.label ?? "",
+      selected_label: GROCERY_NODES.find((nd) => nd.id === tr.selectedId)?.label ?? "",
       path: tr.pathIds.map((pid, j) => ({
         node_id: pid,
-        label: RESTAURANT_NODES.find((nd) => nd.id === pid)?.label ?? "",
+        label: GROCERY_NODES.find((nd) => nd.id === pid)?.label ?? "",
         at_ms: 1000 * (j + 1),
       })),
       duration_ms: tr.durationMs,
     };
   });
   return {
-    id: `rest-resp-${i}`,
-    session_id: `rest-sess-${i}`,
+    id: `groc-resp-${i}`,
+    session_id: `groc-sess-${i}`,
     data: { tasks, duration_ms: taskResults.reduce((s, t) => s + t.durationMs, 0) } as unknown as Record<string, unknown>,
     created_at: ts(i),
   };
 }
 
-// Hand-crafted response patterns:
-// Task 1 correct = book, Task 2 correct = desserts, Task 3 correct = hours
-const RESTAURANT_SEED_RESPONSES: ExampleResponseRow[] = [
+// 20 hand-crafted responses with realistic confusion
+// Task 1 (yogurt): correct=dairy, confused with produce, health/vitamins
+// Task 2 (almond butter): correct=condiments, confused with snacks, breakfast
+// Task 3 (sparkling water): correct=water, confused with juice
+// Task 4 (rotisserie chicken): correct=deli, confused with meat, frozmeals
+const GROCERY_SEED_RESPONSES: ExampleResponseRow[] = [
   // 1: All correct, direct
-  makeTreeResponse(0, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],         durationMs: 4200 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],             durationMs: 3100 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],             durationMs: 3800 },
+  makeGroceryResponse(0, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3200 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 4100 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2800 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3500 },
   ]),
-  // 2: All correct, some backtracking
-  makeTreeResponse(1, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("food"), n("reservations"), n("book")],     durationMs: 6500 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3400 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("about"), n("contact"), n("hours")],         durationMs: 5200 },
+  // 2: Yogurt wrong (produce), almond butter wrong (snacks)
+  makeGroceryResponse(1, [
+    { taskIdx: 0, selectedId: g("produce"),    pathIds: [g("fresh"), g("produce")],                        durationMs: 3800 },
+    { taskIdx: 1, selectedId: g("snacks"),     pathIds: [g("pantry"), g("snacks")],                        durationMs: 5200 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 3100 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3900 },
   ]),
-  // 3: Task 1 wrong (went to large groups), rest correct
-  makeTreeResponse(2, [
-    { taskIdx: 0, selectedId: n("large"),    pathIds: [n("reservations"), n("large")],               durationMs: 5100 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2900 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3500 },
+  // 3: All correct, backtracking on almond butter
+  makeGroceryResponse(2, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3400 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("snacks"), g("pantry"), g("condiments")], durationMs: 7200 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2900 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3300 },
   ]),
-  // 4: All correct, direct
-  makeTreeResponse(3, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3800 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2700 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3200 },
+  // 4: Yogurt wrong (health/vitamins), chicken wrong (meat)
+  makeGroceryResponse(3, [
+    { taskIdx: 0, selectedId: g("vitamins"),   pathIds: [g("health"), g("vitamins")],                      durationMs: 5500 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 4300 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 3000 },
+    { taskIdx: 3, selectedId: g("meat"),       pathIds: [g("fresh"), g("meat")],                           durationMs: 4100 },
   ]),
-  // 5: Task 3 wrong (went to findus)
-  makeTreeResponse(4, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4000 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3300 },
-    { taskIdx: 2, selectedId: n("findus"),   pathIds: [n("contact"), n("findus")],                   durationMs: 4100 },
+  // 5: All correct, direct
+  makeGroceryResponse(4, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 2900 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 3800 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2600 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3200 },
   ]),
-  // 6: Task 2 wrong (went to drinks)
-  makeTreeResponse(5, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3900 },
-    { taskIdx: 1, selectedId: n("drinks"),   pathIds: [n("food"), n("drinks")],                       durationMs: 4500 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3700 },
+  // 6: Almond butter wrong (breakfast), sparkling water wrong (juice)
+  makeGroceryResponse(5, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3100 },
+    { taskIdx: 1, selectedId: g("breakfast"),  pathIds: [g("pantry"), g("breakfast")],                     durationMs: 5800 },
+    { taskIdx: 2, selectedId: g("juice"),      pathIds: [g("beverages"), g("juice")],                      durationMs: 4500 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3600 },
   ]),
-  // 7: All correct, backtracking on task 1
-  makeTreeResponse(6, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("contact"), n("reservations"), n("book")],   durationMs: 7200 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3000 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3300 },
+  // 7: All correct, backtracking on yogurt
+  makeGroceryResponse(6, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("produce"), g("fresh"), g("dairy")],durationMs: 6100 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 4000 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2700 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3100 },
   ]),
-  // 8: Task 1 wrong (private dining), rest correct
-  makeTreeResponse(7, [
-    { taskIdx: 0, selectedId: n("private"),  pathIds: [n("reservations"), n("private")],             durationMs: 4800 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2800 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3600 },
+  // 8: Yogurt wrong (produce), almond butter wrong (snacks), chicken wrong (frozmeals)
+  makeGroceryResponse(7, [
+    { taskIdx: 0, selectedId: g("produce"),    pathIds: [g("fresh"), g("produce")],                        durationMs: 3700 },
+    { taskIdx: 1, selectedId: g("snacks"),     pathIds: [g("pantry"), g("snacks")],                        durationMs: 4600 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 3200 },
+    { taskIdx: 3, selectedId: g("frozmeals"),  pathIds: [g("frozen"), g("frozmeals")],                     durationMs: 5100 },
   ]),
-  // 9: All correct, direct
-  makeTreeResponse(8, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3500 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2600 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3100 },
+  // 9: All correct
+  makeGroceryResponse(8, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3000 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 3900 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2500 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3400 },
   ]),
-  // 10: Task 3 wrong (catering), rest correct
-  makeTreeResponse(9, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4100 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3200 },
-    { taskIdx: 2, selectedId: n("catering"), pathIds: [n("contact"), n("catering")],                 durationMs: 5500 },
+  // 10: Almond butter wrong (breakfast), chicken wrong (meat)
+  makeGroceryResponse(9, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3300 },
+    { taskIdx: 1, selectedId: g("breakfast"),  pathIds: [g("pantry"), g("breakfast")],                     durationMs: 5400 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2800 },
+    { taskIdx: 3, selectedId: g("meat"),       pathIds: [g("fresh"), g("meat")],                           durationMs: 4700 },
   ]),
-  // 11: All correct
-  makeTreeResponse(10, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3700 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2900 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3400 },
+  // 11: All correct, direct
+  makeGroceryResponse(10, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 2800 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 3700 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2400 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3000 },
   ]),
-  // 12: Task 2 wrong (lunch)
-  makeTreeResponse(11, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4300 },
-    { taskIdx: 1, selectedId: n("lunch"),    pathIds: [n("food"), n("lunch")],                       durationMs: 5000 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3600 },
+  // 12: Yogurt wrong (produce), sparkling water wrong (juice)
+  makeGroceryResponse(11, [
+    { taskIdx: 0, selectedId: g("produce"),    pathIds: [g("fresh"), g("produce")],                        durationMs: 3600 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 4200 },
+    { taskIdx: 2, selectedId: g("juice"),      pathIds: [g("beverages"), g("juice")],                      durationMs: 4800 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3500 },
   ]),
-  // 13: All correct, backtracking
-  makeTreeResponse(12, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("about"), n("reservations"), n("book")],     durationMs: 6800 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("breakfast"), n("food"), n("desserts")], durationMs: 5400 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3200 },
+  // 13: All correct, backtracking on chicken
+  makeGroceryResponse(12, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3100 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 3800 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2600 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("meat"), g("fresh"), g("deli")],    durationMs: 6800 },
   ]),
-  // 14: Task 1 wrong (large), task 3 wrong (findus)
-  makeTreeResponse(13, [
-    { taskIdx: 0, selectedId: n("large"),    pathIds: [n("reservations"), n("large")],               durationMs: 4600 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3100 },
-    { taskIdx: 2, selectedId: n("findus"),   pathIds: [n("contact"), n("findus")],                   durationMs: 4200 },
+  // 14: Almond butter wrong (snacks)
+  makeGroceryResponse(13, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3200 },
+    { taskIdx: 1, selectedId: g("snacks"),     pathIds: [g("pantry"), g("snacks")],                        durationMs: 4900 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2700 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3400 },
   ]),
-  // 15: All correct, direct
-  makeTreeResponse(14, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3600 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2500 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3000 },
+  // 15: All correct
+  makeGroceryResponse(14, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 2700 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 3600 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2300 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 2900 },
   ]),
-  // 16: All correct
-  makeTreeResponse(15, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4000 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3100 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3500 },
+  // 16: Yogurt wrong (health/personal care), chicken wrong (meat)
+  makeGroceryResponse(15, [
+    { taskIdx: 0, selectedId: g("personal"),   pathIds: [g("health"), g("personal")],                      durationMs: 6200 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 4100 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 3000 },
+    { taskIdx: 3, selectedId: g("meat"),       pathIds: [g("fresh"), g("meat")],                           durationMs: 4400 },
   ]),
-  // 17: Task 2 wrong (drinks), backtracking task 3
-  makeTreeResponse(16, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3800 },
-    { taskIdx: 1, selectedId: n("drinks"),   pathIds: [n("food"), n("drinks")],                       durationMs: 4200 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("about"), n("contact"), n("hours")],         durationMs: 5800 },
+  // 17: All correct, backtracking on almond butter
+  makeGroceryResponse(16, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3000 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("breakfast"), g("pantry"), g("condiments")], durationMs: 7500 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2500 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3200 },
   ]),
-  // 18: All correct, direct
-  makeTreeResponse(17, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3400 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2700 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3100 },
+  // 18: Almond butter wrong (breakfast), chicken wrong (frozmeals)
+  makeGroceryResponse(17, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 3400 },
+    { taskIdx: 1, selectedId: g("breakfast"),  pathIds: [g("pantry"), g("breakfast")],                     durationMs: 5100 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2900 },
+    { taskIdx: 3, selectedId: g("frozmeals"),  pathIds: [g("frozen"), g("frozmeals")],                     durationMs: 5300 },
   ]),
-  // 19: Task 3 wrong (story)
-  makeTreeResponse(18, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4200 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3000 },
-    { taskIdx: 2, selectedId: n("story"),    pathIds: [n("about"), n("story")],                       durationMs: 6100 },
+  // 19: All correct, direct
+  makeGroceryResponse(18, [
+    { taskIdx: 0, selectedId: g("dairy"),      pathIds: [g("fresh"), g("dairy")],                          durationMs: 2600 },
+    { taskIdx: 1, selectedId: g("condiments"), pathIds: [g("pantry"), g("condiments")],                    durationMs: 3500 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 2200 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 2800 },
   ]),
-  // 20: All correct
-  makeTreeResponse(19, [
-    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3900 },
-    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2800 },
-    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3300 },
+  // 20: Yogurt wrong (produce), almond butter wrong (snacks)
+  makeGroceryResponse(19, [
+    { taskIdx: 0, selectedId: g("produce"),    pathIds: [g("fresh"), g("produce")],                        durationMs: 3900 },
+    { taskIdx: 1, selectedId: g("snacks"),     pathIds: [g("pantry"), g("snacks")],                        durationMs: 5000 },
+    { taskIdx: 2, selectedId: g("water"),      pathIds: [g("beverages"), g("water")],                      durationMs: 3100 },
+    { taskIdx: 3, selectedId: g("deli"),       pathIds: [g("fresh"), g("deli")],                           durationMs: 3600 },
   ]),
 ];
 
-export const RESTAURANT_STUDY: ExampleTreeTest = {
-  id: "restaurant",
+export const GROCERY_STUDY: ExampleTreeTest = {
+  id: "grocery",
   type: "tree_test",
-  title: "Where's the menu item?",
-  description: "Navigate this restaurant website to complete each task.",
-  config: RESTAURANT_CONFIG,
-  nodes: RESTAURANT_NODES,
-  seedResponses: RESTAURANT_SEED_RESPONSES,
+  title: "Help us stock the shelves.",
+  description: "Find items in our grocery store app.",
+  config: GROCERY_CONFIG,
+  nodes: GROCERY_NODES,
+  seedResponses: GROCERY_SEED_RESPONSES,
 };
 
 // ---------- Exports ----------
 
-export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, GAS_STATION_STUDY, RESTAURANT_STUDY];
+export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, GAS_STATION_STUDY, GROCERY_STUDY];
 
 export function getExampleStudy(id: string): ExampleStudy | null {
   if (id === "fridge") return FRIDGE_STUDY;
   if (id === "gasstation") return GAS_STATION_STUDY;
-  if (id === "restaurant") return RESTAURANT_STUDY;
+  if (id === "grocery") return GROCERY_STUDY;
   return null;
 }
 
