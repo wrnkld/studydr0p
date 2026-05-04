@@ -446,6 +446,37 @@ function InlinePreview({
     );
   }
 
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
+    if (!cfg.tasks || cfg.tasks.length === 0) {
+      return (
+        <div className="space-y-6 py-6">
+          <section>
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-medium text-foreground">No tasks yet</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+                Add some in the Build tab.
+              </p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    return (
+      <TreeTestParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={onSubmitted}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6 py-6">
       <section>
