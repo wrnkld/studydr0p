@@ -1,5 +1,6 @@
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, toast } from "sonner";
+import { Check, X, AlertTriangle, Info, LoaderCircle } from "lucide-react";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
@@ -8,6 +9,13 @@ const Toaster = ({ ...props }: ToasterProps) => {
 
   return (
     <Sonner
+      icons={{
+        success: <Check className="h-4 w-4" />,
+        error: <X className="h-4 w-4" />,
+        warning: <AlertTriangle className="h-4 w-4" />,
+        info: <Info className="h-4 w-4" />,
+        loading: <LoaderCircle className="h-4 w-4 animate-spin" />,
+      }}
       style={{ fontFamily: "'Calibre', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
