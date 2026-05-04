@@ -267,7 +267,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               <TreeTestResults
                 studyId={study.id}
                 config={
-                  (study.config as TreeTestConfig) ?? { task: "", correct_node_id: "" }
+                  (study.config as TreeTestConfig) ?? { tasks: [] }
                 }
                 responses={responses}
               />
