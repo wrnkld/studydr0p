@@ -7,9 +7,11 @@ import {
   StudyStatus,
   StudyType,
   SurveyConfig,
+  TreeTestConfig,
 } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
+import TreeTestBuilder from "./builders/TreeTestBuilder";
 
 import StudyResultsView from "@/components/StudyResultsView";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -25,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
@@ -215,6 +218,19 @@ export default function StudyBuilder() {
           status: study.status,
           slug: study.slug,
           config: (study.config as CardSortConfig) ?? { sort_type: "open" },
+        }}
+      />
+    ) : study.type === "tree_test" ? (
+      <TreeTestBuilder
+        key={loadKey}
+        studyId={study.id}
+        onMetaChange={onMetaChange}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config: (study.config as TreeTestConfig) ?? { tasks: [] },
         }}
       />
     ) : (
@@ -425,6 +441,37 @@ function InlinePreview({
         sessionId={sessionId}
         startedAt={startedAt}
         preview
+        onDone={onSubmitted}
+      />
+    );
+  }
+
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
+    if (!cfg.tasks || cfg.tasks.length === 0) {
+      return (
+        <div className="space-y-6 py-6">
+          <section>
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-medium text-foreground">No tasks yet</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+                Add some in the Build tab.
+              </p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    return (
+      <TreeTestParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId={sessionId}
+        startedAt={startedAt}
         onDone={onSubmitted}
       />
     );

@@ -3,10 +3,11 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
+import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
 import { ContentPanel } from "@/components/study/primitives";
 
 function Shell({ children }: { children: React.ReactNode }) {
@@ -181,6 +182,18 @@ export default function ParticipantStudy() {
     );
   }
 
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
+    return (
+      <TreeTestParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
   return (
     <Shell>
       <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
@@ -198,6 +211,10 @@ function introCopy(study: StudyData): string {
     return sort === "open"
       ? "You'll group cards into categories you create · Anonymous"
       : "You'll sort cards into predefined categories · Anonymous";
+  }
+  if (study.type === "tree_test") {
+    const n = (study.config as TreeTestConfig)?.tasks?.length ?? 0;
+    return `${n} task${n === 1 ? "" : "s"} · Navigate a menu to find answers · Anonymous`;
   }
   return "Anonymous";
 }
