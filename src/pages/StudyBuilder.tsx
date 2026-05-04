@@ -7,6 +7,7 @@ import {
   StudyStatus,
   StudyType,
   SurveyConfig,
+  TreeTestConfig,
 } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
