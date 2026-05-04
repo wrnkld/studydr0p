@@ -47,6 +47,14 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     responseCount: 20,
     isExample: true,
   },
+  {
+    id: "restaurant",
+    href: "/examples/restaurant",
+    title: "Where's the menu item?",
+    type: "tree_test",
+    responseCount: 20,
+    isExample: true,
+  },
 ];
 
 export default function Landing() {
