@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
