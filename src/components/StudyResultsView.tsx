@@ -56,6 +56,21 @@ interface Props {
   onResponsesLoaded?: () => void;
 }
 
+function EmptyCopyLink({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(async () => {
+    await navigator.clipboard.writeText(`${window.location.origin}/s/${slug}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }, [slug]);
+  return (
+    <Button variant="outline" size="sm" className="mt-4" onClick={copy}>
+      {copied ? <Check className="h-3.5 w-3.5 mr-1.5" /> : <LinkIcon className="h-3.5 w-3.5 mr-1.5" />}
+      {copied ? "Copied" : "Copy link"}
+    </Button>
+  );
+}
+
 /**
  * Renders results stats + per-type result visualizations for a single study.
  * Used both by the standalone /studies/:id/results page and by the Results
