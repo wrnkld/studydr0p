@@ -113,7 +113,7 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <TooltipProvider>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {TYPES.map((t) => {
             const Icon = t.icon;
@@ -160,8 +160,7 @@ export default function NewStudy() {
 
             return card;
           })}
-        </div>
-      </TooltipProvider>
+      </div>
     </PageContainer>
   );
 }
