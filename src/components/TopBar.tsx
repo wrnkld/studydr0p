@@ -107,7 +107,7 @@ function StudyActions({
         <Button
           variant="outline"
           size="sm"
-          className="h-8 gap-1.5 px-3 text-sm"
+          className="h-8 gap-1.5 px-3 text-[14px]"
           onClick={copy}
         >
           {copied ? (
@@ -161,7 +161,7 @@ function SignedInActions() {
     <>
       <Button
         size="sm"
-        className="h-8 gap-1.5 px-3 text-sm"
+        className="h-8 gap-1.5 px-3 text-[14px]"
         onClick={() => navigate("/studies/new")}
       >
         <Plus className="h-3.5 w-3.5" />
