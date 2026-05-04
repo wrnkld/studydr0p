@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -20,7 +20,7 @@ import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
-import { BarChart3, Link as LinkIcon } from "lucide-react";
+import { BarChart3, Link as LinkIcon, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface StudyData {
