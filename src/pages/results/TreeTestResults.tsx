@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { TreeTestConfig, TreeTestTask } from "@/lib/types";
-import { cn } from "@/lib/utils";
+import { SectionHeader, Stat, StatGrid } from "@/components/study/primitives";
+import { ChoiceChart, BinaryDonut, type CountMap } from "@/components/survey/SurveyChart";
 
 interface ResponseRow {
   id: string;
@@ -67,12 +68,28 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
 
   const labelFor = (id: string) => nodes.find((n) => n.id === id)?.label ?? id;
 
-  // Extract per-task results from all responses
+  // For example studies where nodes aren't in DB, build labels from responses
+  const labelForAny = (id: string) => {
+    const fromNodes = nodes.find((n) => n.id === id)?.label;
+    if (fromNodes) return fromNodes;
+    // Try to find from response data
+    for (const r of rows ?? []) {
+      const d = r.data as { tasks?: TaskResult[] };
+      if (d.tasks) {
+        for (const t of d.tasks) {
+          if (t.selected_node_id === id && t.selected_label) return t.selected_label;
+          const pathMatch = t.path?.find((p) => p.node_id === id);
+          if (pathMatch) return pathMatch.label;
+        }
+      }
+    }
+    return id;
+  };
+
   const taskAnalytics = useMemo(() => {
     if (!rows || rows.length === 0) return [];
 
     return tasks.map((task) => {
-      // Collect task results from all responses
       const results: TaskResult[] = [];
       for (const r of rows) {
         const d = r.data as { tasks?: TaskResult[] };
@@ -88,7 +105,6 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
       ).length;
       const successRate = total > 0 ? Math.round((correct / total) * 100) : 0;
 
-      // Average clicks
       const avgClicks =
         total > 0
           ? Math.round(
@@ -96,32 +112,34 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
             ) / 10
           : 0;
 
-      // Directness: went straight to correct answer without backtracking
       const direct = results.filter((r) => {
         if (r.selected_node_id !== task.correct_node_id) return false;
-        // Check no node was visited twice
         const visited = r.path?.map((p) => p.node_id) ?? [];
         return new Set(visited).size === visited.length;
       }).length;
       const directness = total > 0 ? Math.round((direct / total) * 100) : 0;
 
-      // Destination distribution
+      // Destination distribution as CountMap for ChoiceChart
       const destinations = new Map<string, number>();
       for (const r of results) {
-        const key = r.selected_node_id;
-        destinations.set(key, (destinations.get(key) ?? 0) + 1);
+        const label = labelForAny(r.selected_node_id);
+        destinations.set(label, (destinations.get(label) ?? 0) + 1);
       }
-      const sortedDest = Array.from(destinations.entries())
-        .map(([nodeId, count]) => ({
-          nodeId,
-          label: labelFor(nodeId),
-          count,
-          pct: total > 0 ? Math.round((count / total) * 100) : 0,
-          isCorrect: nodeId === task.correct_node_id,
-        }))
-        .sort((a, b) => b.count - a.count);
 
-      const topWrong = sortedDest.filter((d) => !d.isCorrect).slice(0, 3);
+      // Build sorted options list (correct answer first, then by count desc)
+      const correctLabel = labelForAny(task.correct_node_id);
+      const destEntries = Array.from(destinations.entries()).sort((a, b) => b[1] - a[1]);
+      const options: string[] = [];
+      const counts: CountMap = {};
+      // Ensure correct answer is in the list
+      if (!destinations.has(correctLabel)) {
+        options.push(correctLabel);
+        counts[correctLabel] = 0;
+      }
+      for (const [label, count] of destEntries) {
+        options.push(label);
+        counts[label] = count;
+      }
 
       return {
         task,
@@ -130,8 +148,9 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
         successRate,
         avgClicks,
         directness,
-        destinations: sortedDest,
-        topWrong,
+        correctLabel,
+        options,
+        counts,
       };
     });
   }, [rows, tasks, nodes]);
@@ -144,93 +163,42 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
   return (
     <div className="space-y-8">
       {taskAnalytics.map((ta, i) => (
-        <div key={ta.task.id} className="space-y-4">
-          <div>
-            <h3 className="text-sm font-medium text-foreground">
-              Task {i + 1}: {ta.task.text}
-            </h3>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Correct answer: {labelFor(ta.task.correct_node_id)}
+        <section key={ta.task.id} className="space-y-4">
+          <SectionHeader
+            kicker={`Task ${i + 1}`}
+            title={ta.task.text}
+          />
+
+          <StatGrid cols={4}>
+            <Stat label="Responses" value={ta.total} tone="neutral" />
+            <Stat label="Success rate" value={`${ta.successRate}%`} tone={ta.successRate >= 70 ? "green" : ta.successRate >= 40 ? "amber" : "neutral"} />
+            <Stat label="Avg clicks" value={ta.avgClicks} tone="neutral" />
+            <Stat label="Directness" value={`${ta.directness}%`} tone={ta.directness >= 70 ? "green" : ta.directness >= 40 ? "amber" : "neutral"} />
+          </StatGrid>
+
+          {/* Success / Fail donut */}
+          <BinaryDonut
+            options={["Correct", "Incorrect"]}
+            counts={{ Correct: ta.correct, Incorrect: ta.total - ta.correct }}
+            total={ta.total}
+          />
+
+          {/* Destination distribution as horizontal bar chart */}
+          <div className="space-y-2">
+            <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
+              Where people ended up
+            </div>
+            <ChoiceChart
+              options={ta.options}
+              counts={ta.counts}
+              total={ta.total}
+            />
+            <p className="text-xs text-muted-foreground">
+              Correct answer: <span className="font-medium text-foreground">{ta.correctLabel}</span>
             </p>
           </div>
-
-          {/* Stats row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <StatCard label="Responses" value={String(ta.total)} />
-            <StatCard label="Success rate" value={`${ta.successRate}%`} />
-            <StatCard label="Avg clicks" value={String(ta.avgClicks)} />
-            <StatCard label="Directness" value={`${ta.directness}%`} />
-          </div>
-
-          {/* Destination distribution */}
-          <div className="rounded-lg border border-border">
-            <div className="px-4 py-3 border-b border-border">
-              <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Where people ended up
-              </span>
-            </div>
-            <div className="divide-y divide-border">
-              {ta.destinations.map((d) => (
-                <div
-                  key={d.nodeId}
-                  className={cn(
-                    "flex items-center justify-between px-4 py-2.5 text-sm",
-                    d.isCorrect && "bg-emerald-500/5",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "font-medium",
-                      d.isCorrect ? "text-emerald-600 dark:text-emerald-400" : "text-foreground",
-                    )}
-                  >
-                    {d.label}
-                    {d.isCorrect && (
-                      <span className="ml-2 text-xs text-emerald-600 dark:text-emerald-400">
-                        ✓ Correct
-                      </span>
-                    )}
-                  </span>
-                  <span className="text-muted-foreground tabular-nums">
-                    {d.count} ({d.pct}%)
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Top wrong answers */}
-          {ta.topWrong.length > 0 && (
-            <div>
-              <span className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-                Top wrong answers
-              </span>
-              <div className="mt-2 space-y-1">
-                {ta.topWrong.map((w) => (
-                  <div
-                    key={w.nodeId}
-                    className="flex items-center justify-between text-sm text-muted-foreground"
-                  >
-                    <span>{w.label}</span>
-                    <span className="tabular-nums">
-                      {w.count} ({w.pct}%)
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
+        </section>
       ))}
-    </div>
-  );
-}
-
-function StatCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-3">
-      <div className="text-xs text-muted-foreground">{label}</div>
-      <div className="mt-1 text-lg font-semibold tabular-nums text-foreground">{value}</div>
     </div>
   );
 }
