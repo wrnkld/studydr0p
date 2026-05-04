@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
@@ -20,7 +20,7 @@ import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
 import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
-import { BarChart3, Link as LinkIcon } from "lucide-react";
+import { BarChart3, Link as LinkIcon, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface StudyData {
@@ -54,6 +54,21 @@ interface Props {
   pendingResponse?: boolean;
   /** Called once responses have loaded after a pending submission. */
   onResponsesLoaded?: () => void;
+}
+
+function EmptyCopyLink({ slug }: { slug: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(async () => {
+    await navigator.clipboard.writeText(`${window.location.origin}/s/${slug}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }, [slug]);
+  return (
+    <Button variant="outline" size="sm" className="mt-4" onClick={copy}>
+      {copied ? <Check className="h-3.5 w-3.5 mr-1.5" /> : <LinkIcon className="h-3.5 w-3.5 mr-1.5" />}
+      {copied ? "Copied" : "Copy link"}
+    </Button>
+  );
 }
 
 /**
@@ -219,21 +234,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
             <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
               Share your study link with participants to start collecting data.
             </p>
-            {study.slug && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4"
-                onClick={() => {
-                  const url = `${window.location.origin}/s/${study.slug}`;
-                  navigator.clipboard.writeText(url);
-                  toast.success("Link copied");
-                }}
-              >
-                <LinkIcon className="h-3.5 w-3.5 mr-1.5" />
-                Copy share link
-              </Button>
-            )}
+            {study.slug && <EmptyCopyLink slug={study.slug} />}
           </div>
         ) : responses.length === 0 && pendingResponse ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
