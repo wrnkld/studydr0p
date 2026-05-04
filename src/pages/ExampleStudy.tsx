@@ -4,7 +4,7 @@
 // "Canned example studies MUST render the real participant + results
 // components with seeded data — never parallel implementations."
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -14,14 +14,16 @@ import {
   getExampleStudy,
   makeUserCardSortResponse,
   makeUserSurveyResponse,
+  makeUserTreeTestResponse,
 } from "@/lib/exampleStudies";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
-import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
 import SurveyParticipant from "@/pages/participant/SurveyParticipant";
+import TreeTestParticipant from "@/pages/participant/TreeTestParticipant";
 import CardSortResults from "@/pages/results/CardSortResults";
 import SurveyResults from "@/pages/results/SurveyResults";
+import TreeTestResults from "@/pages/results/TreeTestResults";
 
 export default function ExampleStudy() {
   const { id } = useParams();
@@ -62,8 +64,6 @@ export default function ExampleStudy() {
     );
   }
 
-  // Seed responses + the visitor's submission (if any). This is exactly
-  // what the real Results component expects (a list of ResponseRow).
   const allResponses = userResponse
     ? [userResponse, ...study.seedResponses]
     : study.seedResponses;
@@ -102,6 +102,25 @@ export default function ExampleStudy() {
                 }}
                 onDone={() => {}}
               />
+            ) : study.type === "tree_test" ? (
+              <TreeTestParticipant
+                study={{
+                  id: study.id,
+                  title: study.title,
+                  description: study.description,
+                  config: study.config,
+                }}
+                sessionId="example"
+                startedAt={Date.now()}
+                inMemory
+                initialNodes={study.nodes}
+                onSubmitInMemory={(data) => {
+                  setUserResponse(makeUserTreeTestResponse(data));
+                  toast.success("Thank you");
+                  setTab("results");
+                }}
+                onDone={() => {}}
+              />
             ) : (
               <SurveyParticipant
                 study={{
@@ -128,6 +147,12 @@ export default function ExampleStudy() {
               <CardSortResults
                 studyId={study.id}
                 cards={study.cards}
+                responses={allResponses}
+              />
+            ) : study.type === "tree_test" ? (
+              <TreeTestResults
+                studyId={study.id}
+                config={study.config}
                 responses={allResponses}
               />
             ) : (
