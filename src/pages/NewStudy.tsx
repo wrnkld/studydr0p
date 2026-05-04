@@ -6,7 +6,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
 
@@ -114,8 +113,7 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <TooltipProvider>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {TYPES.map((t) => {
             const Icon = t.icon;
             const card = (
@@ -159,21 +157,9 @@ export default function NewStudy() {
               </button>
             );
 
-            if (!t.enabled) {
-              return (
-                <Tooltip key={t.id}>
-                  <TooltipTrigger asChild>
-                    <span>{card}</span>
-                  </TooltipTrigger>
-                  <TooltipContent>Coming soon</TooltipContent>
-                </Tooltip>
-              );
-            }
-
             return card;
           })}
-        </div>
-      </TooltipProvider>
+      </div>
     </PageContainer>
   );
 }
