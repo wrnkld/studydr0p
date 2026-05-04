@@ -159,17 +159,6 @@ export default function NewStudy() {
               </button>
             );
 
-            if (!t.enabled) {
-              return (
-                <Tooltip key={t.id}>
-                  <TooltipTrigger asChild>
-                    <span>{card}</span>
-                  </TooltipTrigger>
-                  <TooltipContent>Coming soon</TooltipContent>
-                </Tooltip>
-              );
-            }
-
             return card;
           })}
         </div>
