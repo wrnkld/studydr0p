@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,11 +7,38 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
-import { StudyStatus, TreeTestConfig } from "@/lib/types";
-import { ArrowLeft, ChevronDown, ChevronRight, Plus, Trash2 } from "lucide-react";
+import { StudyStatus, TreeTestConfig, TreeTestTask } from "@/lib/types";
+import {
+  ChevronDown,
+  ChevronRight,
+  GripVertical,
+  Plus,
+  Trash2,
+  Check,
+} from "lucide-react";
+import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { cn } from "@/lib/utils";
 
 interface Props {
   studyId: string;
+  onMetaChange?: (meta: { title: string; description: string }) => void;
   initial: {
     title: string;
     description: string | null;
@@ -29,17 +56,142 @@ interface DraftNode {
   persisted: boolean;
 }
 
-export default function TreeTestBuilder({ studyId, initial }: Props) {
+/* ── Sortable tree row ──────────────────────────────────────── */
+function SortableNode({
+  node,
+  depth,
+  hasChildren,
+  isCollapsed,
+  onToggle,
+  onUpdate,
+  onAddChild,
+  onRemove,
+  isCorrectFor,
+  onSetCorrect,
+}: {
+  node: DraftNode;
+  depth: number;
+  hasChildren: boolean;
+  isCollapsed: boolean;
+  onToggle: () => void;
+  onUpdate: (label: string) => void;
+  onAddChild: () => void;
+  onRemove: () => void;
+  isCorrectFor: string | null; // task id this node is correct for, or null
+  onSetCorrect: (nodeId: string) => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: node.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    paddingLeft: `${depth * 24 + 4}px`,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        "flex items-center gap-1.5 py-1",
+        isDragging && "opacity-50",
+      )}
+    >
+      <button
+        type="button"
+        className="cursor-grab touch-none text-muted-foreground hover:text-foreground"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-4 w-4" />
+      </button>
+
+      {hasChildren ? (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-7 w-7 shrink-0"
+          onClick={onToggle}
+        >
+          {isCollapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronDown className="h-4 w-4" />
+          )}
+        </Button>
+      ) : (
+        <span className="inline-block w-7 shrink-0" />
+      )}
+
+      <Input
+        placeholder="Node label"
+        value={node.label}
+        onChange={(e) => onUpdate(e.target.value)}
+        className="h-9"
+      />
+
+      <Button variant="ghost" size="sm" onClick={onAddChild} title="Add child">
+        <Plus className="h-3.5 w-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon"
+        className="h-9 w-9"
+        onClick={onRemove}
+      >
+        <Trash2 className="h-4 w-4" />
+      </Button>
+    </div>
+  );
+}
+
+/* ── Main builder ────────────────────────────────────────────── */
+export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Props) {
+  const navigate = useNavigate();
   const [loadingChildren, setLoadingChildren] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [title, setTitle] = useState(initial.title);
-  const [description, setDescription] = useState(initial.description ?? "");
-  const [task, setTask] = useState(initial.config.task ?? "");
+  const [title, setTitleState] = useState(initial.title);
+  const [description, setDescriptionState] = useState(initial.description ?? "");
+  const setTitle = (v: string) => {
+    setTitleState(v);
+    onMetaChange?.({ title: v, description });
+  };
+  const setDescription = (v: string) => {
+    setDescriptionState(v);
+    onMetaChange?.({ title, description: v });
+  };
   const [status, setStatus] = useState<StudyStatus>(initial.status);
   const [slug, setSlug] = useState<string | null>(initial.slug);
+
+  // Tasks
+  const [tasks, setTasks] = useState<TreeTestTask[]>(() => {
+    // Migrate legacy single-task config
+    if (initial.config.tasks?.length) return initial.config.tasks;
+    if (initial.config.task) {
+      return [
+        {
+          id: crypto.randomUUID(),
+          text: initial.config.task,
+          correct_node_id: initial.config.correct_node_id ?? "",
+        },
+      ];
+    }
+    return [];
+  });
+
+  // Nodes
   const [nodes, setNodes] = useState<DraftNode[]>([]);
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
+
+  // Currently-selecting correct node for which task?
+  const [selectingCorrectFor, setSelectingCorrectFor] = useState<string | null>(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
 
   useEffect(() => {
     (async () => {
@@ -61,7 +213,6 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
     })();
   }, [studyId]);
 
-  // Group children by parent_id for rendering
   const childrenByParent = useMemo(() => {
     const map = new Map<string | null, DraftNode[]>();
     for (const n of nodes) {
@@ -89,12 +240,11 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
     if (parent_id) setCollapsed((c) => ({ ...c, [parent_id]: false }));
   };
 
-  const updateNode = (id: string, patch: Partial<DraftNode>) => {
-    setNodes((ns) => ns.map((n) => (n.id === id ? { ...n, ...patch } : n)));
+  const updateNode = (id: string, label: string) => {
+    setNodes((ns) => ns.map((n) => (n.id === id ? { ...n, label } : n)));
   };
 
   const removeNode = (id: string) => {
-    // collect this node + all descendants
     const toRemove = new Set<string>();
     const walk = (nid: string) => {
       toRemove.add(nid);
@@ -108,19 +258,53 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
       setDeletedIds((d) => [...d, ...persistedToDelete]);
     }
     setNodes((ns) => ns.filter((n) => !toRemove.has(n.id)));
+    // Clear any tasks referencing deleted nodes
+    setTasks((ts) =>
+      ts.map((t) => (toRemove.has(t.correct_node_id) ? { ...t, correct_node_id: "" } : t)),
+    );
   };
 
+  /* Drag-and-drop reorder within same parent */
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+    const activeNode = nodes.find((n) => n.id === active.id);
+    const overNode = nodes.find((n) => n.id === over.id);
+    if (!activeNode || !overNode || activeNode.parent_id !== overNode.parent_id) return;
+    const parentId = activeNode.parent_id;
+    const siblings = (childrenByParent.get(parentId) ?? []).map((n) => n.id);
+    const oldIndex = siblings.indexOf(active.id as string);
+    const newIndex = siblings.indexOf(over.id as string);
+    if (oldIndex === -1 || newIndex === -1) return;
+    const reordered = arrayMove(siblings, oldIndex, newIndex);
+    setNodes((ns) =>
+      ns.map((n) => {
+        if (n.parent_id !== parentId) return n;
+        const idx = reordered.indexOf(n.id);
+        return idx >= 0 ? { ...n, position: idx } : n;
+      }),
+    );
+  };
+
+  /* ── Tasks management ──────────────────────────────────────── */
+  const addTask = () => {
+    setTasks((ts) => [...ts, { id: crypto.randomUUID(), text: "", correct_node_id: "" }]);
+  };
+  const updateTask = (id: string, patch: Partial<TreeTestTask>) => {
+    setTasks((ts) => ts.map((t) => (t.id === id ? { ...t, ...patch } : t)));
+  };
+  const removeTask = (id: string) => {
+    setTasks((ts) => ts.filter((t) => t.id !== id));
+  };
+
+  /* ── Persist ───────────────────────────────────────────────── */
   const persistChildren = async () => {
     if (deletedIds.length) {
-      const { error } = await supabase
-        .from("tree_nodes")
-        .delete()
-        .in("id", deletedIds);
+      const { error } = await supabase.from("tree_nodes").delete().in("id", deletedIds);
       if (error) throw error;
       setDeletedIds([]);
     }
     if (nodes.length) {
-      // Re-number positions per sibling group
       const grouped = new Map<string | null, DraftNode[]>();
       for (const n of nodes) {
         const key = n.parent_id;
@@ -135,6 +319,7 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
         position: number;
       }[] = [];
       for (const [, siblings] of grouped) {
+        siblings.sort((a, b) => a.position - b.position);
         siblings.forEach((n, i) => {
           rows.push({
             id: n.id,
@@ -156,11 +341,18 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
   ) => {
     setSaving(true);
     try {
-      await persistChildren();
-      const config: TreeTestConfig = {
-        task: task.trim(),
-        correct_node_id: initial.config.correct_node_id ?? "",
-      };
+      const { data: existing, error: checkErr } = await supabase
+        .from("studies")
+        .select("id")
+        .eq("id", studyId)
+        .maybeSingle();
+      if (checkErr) throw new Error(checkErr.message);
+      if (!existing) {
+        toast.error("This study no longer exists. Redirecting…");
+        navigate("/");
+        return null;
+      }
+      const config: TreeTestConfig = { tasks };
       const payload = {
         title: title.trim() || "Untitled study",
         description: description.trim() || null,
@@ -168,11 +360,12 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
         status: overrides.status ?? status,
         slug: overrides.slug !== undefined ? overrides.slug : slug,
       };
-      const { error } = await supabase
+      const { error: updateErr } = await supabase
         .from("studies")
         .update(payload)
         .eq("id", studyId);
-      if (error) throw error;
+      if (updateErr) throw new Error(updateErr.message);
+      await persistChildren();
       return payload;
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : "Failed to save";
@@ -183,223 +376,238 @@ export default function TreeTestBuilder({ studyId, initial }: Props) {
     }
   };
 
-  const handleSave = async () => {
-    const ok = await save();
-    if (ok) toast.success("Saved");
-  };
-
-  const handlePublish = async () => {
-    if (!task.trim()) {
-      toast.error("Add a task prompt");
-      return;
-    }
+  const handleSave = async (): Promise<boolean> => {
     const roots = nodes.filter((n) => n.parent_id === null);
     if (roots.length === 0) {
       toast.error("Add at least one top-level node");
-      return;
+      return false;
     }
     if (nodes.some((n) => !n.label.trim())) {
       toast.error("All nodes need a label");
-      return;
+      return false;
+    }
+    if (tasks.length === 0) {
+      toast.error("Add at least one task");
+      return false;
+    }
+    if (tasks.some((t) => !t.text.trim())) {
+      toast.error("All tasks need a description");
+      return false;
+    }
+    if (tasks.some((t) => !t.correct_node_id)) {
+      toast.error("Set the correct answer for every task");
+      return false;
     }
     const newSlug = slug ?? generateSlug();
     const ok = await save({ status: "live", slug: newSlug });
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Published");
+      return true;
     }
+    return false;
   };
 
-  const handleClose = async () => {
-    const ok = await save({ status: "closed" });
-    if (ok) {
-      setStatus("closed");
-      toast.success("Study closed");
+  const handleDelete = useCallback(async () => {
+    const { error } = await supabase.from("studies").delete().eq("id", studyId);
+    if (error) {
+      toast.error(error.message);
+      throw error;
     }
-  };
+    toast.success("Study deleted");
+  }, [studyId]);
 
-  const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
+  useRegisterStudyActions({ studyId, onSave: handleSave, onDelete: handleDelete, saving });
 
   if (loadingChildren) {
-    return (
-      <div className="min-h-screen bg-background">
-
-        <div className="container py-10 text-sm text-muted-foreground">Loading…</div>
-      </div>
-    );
+    return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
   }
 
-  const renderTree = (parentId: string | null, depth: number) => {
+  const nodeLabel = (id: string) => nodes.find((n) => n.id === id)?.label || id;
+
+  /* ── Render tree recursively ────────────────────────────── */
+  const collectIds = (parentId: string | null): string[] => {
+    const list = childrenByParent.get(parentId) ?? [];
+    return list.map((n) => n.id);
+  };
+
+  const renderTree = (parentId: string | null, depth: number): React.ReactNode => {
     const list = childrenByParent.get(parentId) ?? [];
     if (list.length === 0) return null;
+    const ids = list.map((n) => n.id);
     return (
-      <ul className={depth === 0 ? "space-y-2" : "mt-2 space-y-2 border-l border-border pl-4"}>
-        {list.map((n) => {
-          const kids = childrenByParent.get(n.id) ?? [];
-          const isCollapsed = collapsed[n.id] ?? false;
-          return (
-            <li key={n.id}>
-              <div className="flex items-center gap-1.5">
-                {kids.length > 0 ? (
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="h-7 w-7 shrink-0"
-                    onClick={() => toggle(n.id)}
-                    aria-label={isCollapsed ? "Expand" : "Collapse"}
-                  >
-                    {isCollapsed ? (
-                      <ChevronRight className="h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4" />
-                    )}
-                  </Button>
-                ) : (
-                  <span className="inline-block w-7 shrink-0" />
-                )}
-                <Input
-                  placeholder="Node label"
-                  value={n.label}
-                  onChange={(e) => updateNode(n.id, { label: e.target.value })}
-                  className="h-9"
-                />
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => addNode(n.id)}
-                  title="Add child"
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-9 w-9"
-                  onClick={() => removeNode(n.id)}
-                  aria-label="Remove node"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+      <SortableContext items={ids} strategy={verticalListSortingStrategy}>
+        <div className={depth > 0 ? "border-l border-border" : ""}>
+          {list.map((n) => {
+            const kids = childrenByParent.get(n.id) ?? [];
+            const isCollapsed = collapsed[n.id] ?? false;
+            const correctFor = selectingCorrectFor
+              ? null
+              : tasks.find((t) => t.correct_node_id === n.id)?.id ?? null;
+            return (
+              <div key={n.id}>
+                <div className="flex items-center">
+                  <div className="flex-1">
+                    <SortableNode
+                      node={n}
+                      depth={depth}
+                      hasChildren={kids.length > 0}
+                      isCollapsed={isCollapsed}
+                      onToggle={() => toggle(n.id)}
+                      onUpdate={(label) => updateNode(n.id, label)}
+                      onAddChild={() => addNode(n.id)}
+                      onRemove={() => removeNode(n.id)}
+                      isCorrectFor={correctFor}
+                      onSetCorrect={() => {}}
+                    />
+                  </div>
+                  {selectingCorrectFor && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mr-2 h-7 text-xs shrink-0"
+                      onClick={() => {
+                        updateTask(selectingCorrectFor, { correct_node_id: n.id });
+                        setSelectingCorrectFor(null);
+                      }}
+                    >
+                      <Check className="h-3 w-3 mr-1" /> Set
+                    </Button>
+                  )}
+                </div>
+                {!isCollapsed && renderTree(n.id, depth + 1)}
               </div>
-              {!isCollapsed && renderTree(n.id, depth + 1)}
-            </li>
-          );
-        })}
-      </ul>
+            );
+          })}
+        </div>
+      </SortableContext>
     );
   };
 
   return (
-    <div className="min-h-screen bg-background">
-
-      <main className="container max-w-3xl py-10">
-        <Link
-          to="/"
-          className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
-        </Link>
-
-        <div className="mt-6 flex items-end justify-between gap-4">
-          <h1 className="text-2xl font-semibold tracking-tight">Edit tree test</h1>
-          <span className="text-xs text-muted-foreground">Status: {status}</span>
+    <div className="space-y-6">
+      <section className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="title">Title</Label>
+          <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
         </div>
+        <div className="space-y-2">
+          <Label htmlFor="description">Description (optional)</Label>
+          <Textarea
+            id="description"
+            rows={2}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Brief context shown to participants."
+          />
+        </div>
+      </section>
 
-        <section className="mt-8 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
-            <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      {/* Tree structure */}
+      <section>
+        <div className="flex items-end justify-between">
+          <div>
+            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+              Tree structure
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Build your navigation. Drag to reorder within a level.
+            </p>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
-            <Textarea
-              id="description"
-              rows={2}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Brief context shown to participants."
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="task">Task prompt</Label>
-            <Textarea
-              id="task"
-              rows={3}
-              value={task}
-              onChange={(e) => setTask(e.target.value)}
-              placeholder="e.g. Where would you go to update your billing address?"
-            />
-          </div>
-        </section>
-
-        <section className="mt-12">
-          <div className="flex items-end justify-between">
-            <div>
-              <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-                Tree structure
-              </h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Build your sitemap. Click + on any row to add a child.
-              </p>
-            </div>
-            <Button variant="outline" size="sm" onClick={() => addNode(null)}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" /> Add top-level
-            </Button>
-          </div>
-
-          <div className="mt-4 rounded-lg border border-border bg-card p-4">
-            {nodes.length === 0 ? (
-              <p className="py-6 text-center text-sm text-muted-foreground">
-                No nodes yet. Add a top-level node to get started.
-              </p>
-            ) : (
-              renderTree(null, 0)
-            )}
-          </div>
-        </section>
-
-        {shareUrl && status === "live" && (
-          <section className="mt-10 rounded-lg border border-border p-5">
-            <div className="text-sm font-medium">Share link</div>
-            <div className="mt-2 flex gap-2">
-              <Input readOnly value={shareUrl} onFocus={(e) => e.currentTarget.select()} />
-              <Button
-                variant="outline"
-                onClick={() => {
-                  navigator.clipboard.writeText(shareUrl);
-                  toast.success("Copied");
-                }}
-              >
-                Copy
-              </Button>
-            </div>
-          </section>
-        )}
-
-        <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button variant="outline" onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save draft"}
+          <Button variant="outline" size="sm" onClick={() => addNode(null)}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add top-level
           </Button>
-          {status !== "live" && (
-            <Button onClick={handlePublish} disabled={saving}>
-              {status === "closed" ? "Re-publish" : "Publish"}
-            </Button>
-          )}
-          {status === "live" && (
-            <Button variant="outline" onClick={handleClose} disabled={saving}>
-              Close study
-            </Button>
-          )}
-          {status === "live" && slug && (
-            <Button asChild variant="ghost">
-              <a href={`/s/${slug}`} target="_blank" rel="noreferrer">
-                Preview
-              </a>
-            </Button>
+        </div>
+
+        <div className="mt-4 rounded-lg border border-border bg-card p-4">
+          {nodes.length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              No nodes yet. Add a top-level node to get started.
+            </p>
+          ) : (
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleDragEnd}
+            >
+              {renderTree(null, 0)}
+            </DndContext>
           )}
         </div>
-      </main>
+      </section>
+
+      {/* Tasks */}
+      <section>
+        <div className="flex items-end justify-between">
+          <div>
+            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
+              Tasks
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Each task is shown to the participant one at a time.
+            </p>
+          </div>
+          <Button variant="outline" size="sm" onClick={addTask}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add task
+          </Button>
+        </div>
+
+        <div className="mt-4 space-y-4">
+          {tasks.length === 0 && (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              No tasks yet. Add a task to define what participants should find.
+            </p>
+          )}
+          {tasks.map((t, i) => (
+            <div key={t.id} className="rounded-lg border border-border bg-card p-4 space-y-3">
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-xs font-medium text-muted-foreground mt-2">
+                  Task {i + 1}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => removeTask(t.id)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+              <Textarea
+                rows={2}
+                placeholder="e.g. Find where you would go to reset your password."
+                value={t.text}
+                onChange={(e) => updateTask(t.id, { text: e.target.value })}
+              />
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Correct answer:</span>
+                {t.correct_node_id ? (
+                  <span className="text-sm font-medium text-foreground">
+                    {nodeLabel(t.correct_node_id)}
+                  </span>
+                ) : (
+                  <span className="text-sm text-muted-foreground italic">Not set</span>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="h-7 text-xs ml-auto"
+                  onClick={() =>
+                    setSelectingCorrectFor(selectingCorrectFor === t.id ? null : t.id)
+                  }
+                >
+                  {selectingCorrectFor === t.id ? "Cancel" : "Pick node"}
+                </Button>
+              </div>
+              {selectingCorrectFor === t.id && (
+                <p className="text-xs text-muted-foreground">
+                  Click "Set" next to a node in the tree above to mark it as the correct answer.
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }
