@@ -182,6 +182,18 @@ export default function ParticipantStudy() {
     );
   }
 
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
+    return (
+      <TreeTestParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
   return (
     <Shell>
       <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
