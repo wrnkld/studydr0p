@@ -219,6 +219,19 @@ export default function StudyBuilder() {
           config: (study.config as CardSortConfig) ?? { sort_type: "open" },
         }}
       />
+    ) : study.type === "tree_test" ? (
+      <TreeTestBuilder
+        key={loadKey}
+        studyId={study.id}
+        onMetaChange={onMetaChange}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config: (study.config as TreeTestConfig) ?? { tasks: [] },
+        }}
+      />
     ) : (
       <p className="text-sm text-muted-foreground">
         This study type is not supported yet.
