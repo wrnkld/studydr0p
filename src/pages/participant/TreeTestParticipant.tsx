@@ -4,7 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { TreeTestConfig, TreeTestTask } from "@/lib/types";
 import { toast } from "sonner";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { Kicker } from "@/components/study/primitives";
+
+export interface TreeNodeRow {
+  id: string;
+  parent_id: string | null;
+  label: string;
+  position: number;
+}
 
 interface Props {
   study: {
@@ -16,13 +22,12 @@ interface Props {
   sessionId: string;
   startedAt: number;
   onDone: () => void;
-}
-
-interface NodeRow {
-  id: string;
-  parent_id: string | null;
-  label: string;
-  position: number;
+  /** In-memory mode: skip DB reads/writes (used by example studies). */
+  inMemory?: boolean;
+  /** Pre-loaded nodes for in-memory mode. */
+  initialNodes?: TreeNodeRow[];
+  /** Called instead of DB write in in-memory mode. */
+  onSubmitInMemory?: (data: { tasks: TaskResult[]; duration_ms: number }) => void;
 }
 
 interface PathStep {
@@ -31,7 +36,7 @@ interface PathStep {
   at_ms: number;
 }
 
-interface TaskResult {
+export interface TaskResult {
   task_id: string;
   task_text: string;
   correct_node_id: string;
@@ -46,10 +51,12 @@ export default function TreeTestParticipant({
   sessionId,
   startedAt,
   onDone,
+  inMemory,
+  initialNodes,
+  onSubmitInMemory,
 }: Props) {
   const tasks: TreeTestTask[] = useMemo(() => {
     if (study.config.tasks?.length) return study.config.tasks;
-    // Legacy single-task
     if (study.config.task) {
       return [
         {
@@ -62,16 +69,17 @@ export default function TreeTestParticipant({
     return [];
   }, [study.config]);
 
-  const [nodes, setNodes] = useState<NodeRow[] | null>(null);
+  const [nodes, setNodes] = useState<TreeNodeRow[] | null>(initialNodes ?? null);
   const [currentTaskIndex, setCurrentTaskIndex] = useState(0);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [path, setPath] = useState<PathStep[]>([]);
   const [taskStartedAt, setTaskStartedAt] = useState(startedAt);
-  const [selectedNode, setSelectedNode] = useState<NodeRow | null>(null);
+  const [selectedNode, setSelectedNode] = useState<TreeNodeRow | null>(null);
   const [completedTasks, setCompletedTasks] = useState<TaskResult[]>([]);
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
+    if (inMemory) return; // nodes already set via initialNodes
     (async () => {
       const { data, error } = await supabase
         .from("tree_nodes")
@@ -84,10 +92,10 @@ export default function TreeTestParticipant({
       }
       setNodes(data ?? []);
     })();
-  }, [study.id]);
+  }, [study.id, inMemory]);
 
   const childrenByParent = useMemo(() => {
-    const map = new Map<string | null, NodeRow[]>();
+    const map = new Map<string | null, TreeNodeRow[]>();
     for (const n of nodes ?? []) {
       const key = n.parent_id;
       if (!map.has(key)) map.set(key, []);
@@ -99,18 +107,17 @@ export default function TreeTestParticipant({
 
   const currentTask = tasks[currentTaskIndex] ?? null;
 
-  const recordClick = (n: NodeRow) => {
+  const recordClick = (n: TreeNodeRow) => {
     setPath((p) => [
       ...p,
       { node_id: n.id, label: n.label, at_ms: Date.now() - startedAt },
     ]);
   };
 
-  const handleNodeClick = (n: NodeRow) => {
+  const handleNodeClick = (n: TreeNodeRow) => {
     const kids = childrenByParent.get(n.id) ?? [];
     recordClick(n);
     if (kids.length > 0) {
-      // Toggle expansion
       setExpanded((prev) => {
         const next = new Set(prev);
         if (next.has(n.id)) next.delete(n.id);
@@ -119,7 +126,6 @@ export default function TreeTestParticipant({
       });
       setSelectedNode(null);
     } else {
-      // Leaf node — select it
       setSelectedNode(n);
     }
   };
@@ -139,28 +145,33 @@ export default function TreeTestParticipant({
     setCompletedTasks(newCompleted);
 
     if (currentTaskIndex + 1 < tasks.length) {
-      // Next task
       setCurrentTaskIndex((i) => i + 1);
       setExpanded(new Set());
       setPath([]);
       setSelectedNode(null);
       setTaskStartedAt(Date.now());
     } else {
-      // All tasks done — submit
       submitAll(newCompleted);
     }
   };
 
   const submitAll = async (results: TaskResult[]) => {
     setSubmitting(true);
-    const data = {
+    const payload = {
       tasks: results,
       duration_ms: Date.now() - startedAt,
     };
+
+    if (inMemory) {
+      onSubmitInMemory?.(payload);
+      setSubmitting(false);
+      return;
+    }
+
     const { error: respErr } = await supabase.from("responses").insert({
       study_id: study.id,
       session_id: sessionId,
-      data: data as unknown as never,
+      data: payload as unknown as never,
     });
     if (respErr) {
       setSubmitting(false);
