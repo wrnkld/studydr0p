@@ -75,7 +75,9 @@ export default function NewStudy() {
         ? "Sort each item into the group where you think it belongs."
         : type === "survey"
           ? "A few quick questions — should only take a minute."
-          : null;
+          : type === "tree_test"
+            ? "Navigate the menu to complete each task."
+            : null;
     const { data, error } = await supabase
       .from("studies")
       .insert({
