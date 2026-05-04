@@ -90,7 +90,9 @@ export default function NewStudy() {
             ? { questions: [], layout: "single_page" }
             : type === "card_sort"
               ? { sort_type: "open" }
-              : {},
+              : type === "tree_test"
+                ? { tasks: [] }
+                : {},
       })
       .select("id")
       .single();
