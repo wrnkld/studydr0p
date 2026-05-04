@@ -220,19 +220,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               Share your study link with participants to start collecting data.
             </p>
             {study.slug && (
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4"
-                onClick={() => {
-                  const url = `${window.location.origin}/s/${study.slug}`;
-                  navigator.clipboard.writeText(url);
-                  toast.success("Link copied");
-                }}
-              >
-                <LinkIcon className="h-3.5 w-3.5 mr-1.5" />
-                Copy share link
-              </Button>
+              <CopyLinkButton slug={study.slug} />
             )}
           </div>
         ) : responses.length === 0 && pendingResponse ? (
