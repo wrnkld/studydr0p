@@ -64,8 +64,8 @@ function EmptyCopyLink({ slug }: { slug: string }) {
     setTimeout(() => setCopied(false), 1500);
   }, [slug]);
   return (
-    <Button variant="outline" size="sm" className="mt-4" onClick={copy}>
-      {copied ? <Check className="h-3.5 w-3.5 mr-1.5" /> : <LinkIcon className="h-3.5 w-3.5 mr-1.5" />}
+    <Button variant="outline" size="sm" className="mt-4 h-8 gap-1.5 px-3 text-sm" onClick={copy}>
+      {copied ? <Check className="h-3.5 w-3.5" /> : <LinkIcon className="h-3.5 w-3.5" />}
       {copied ? "Copied" : "Copy link"}
     </Button>
   );
