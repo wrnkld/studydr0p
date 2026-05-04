@@ -212,5 +212,9 @@ function introCopy(study: StudyData): string {
       ? "You'll group cards into categories you create · Anonymous"
       : "You'll sort cards into predefined categories · Anonymous";
   }
+  if (study.type === "tree_test") {
+    const n = (study.config as TreeTestConfig)?.tasks?.length ?? 0;
+    return `${n} task${n === 1 ? "" : "s"} · Navigate a menu to find answers · Anonymous`;
+  }
   return "Anonymous";
 }
