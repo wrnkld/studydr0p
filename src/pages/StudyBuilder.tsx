@@ -11,6 +11,7 @@ import {
 } from "@/lib/types";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
+import TreeTestBuilder from "./builders/TreeTestBuilder";
 
 import StudyResultsView from "@/components/StudyResultsView";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
