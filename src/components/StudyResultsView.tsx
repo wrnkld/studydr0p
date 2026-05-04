@@ -61,6 +61,7 @@ function EmptyCopyLink({ slug }: { slug: string }) {
   const copy = useCallback(async () => {
     await navigator.clipboard.writeText(`${window.location.origin}/s/${slug}`);
     setCopied(true);
+    toast.success("Link copied");
     setTimeout(() => setCopied(false), 1500);
   }, [slug]);
   return (
