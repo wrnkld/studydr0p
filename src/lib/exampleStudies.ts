@@ -1,7 +1,8 @@
 // Hardcoded example studies for the landing page.
 //
 // IMPORTANT: examples MUST feed the same components used by real studies
-// (CardSortParticipant, SurveyParticipant, CardSortResults, SurveyResults).
+// (CardSortParticipant, SurveyParticipant, TreeTestParticipant,
+// CardSortResults, SurveyResults, TreeTestResults).
 // Never build parallel demo/result UIs — see mem://index.md core rule.
 //
 // This file only exports DATA (in the real component shapes) and seed
@@ -15,9 +16,12 @@ import {
   CategoryRow,
   SurveyConfig,
   SurveyQuestion,
+  TreeTestConfig,
+  TreeTestTask,
 } from "@/lib/types";
+import { TreeNodeRow, TaskResult } from "@/pages/participant/TreeTestParticipant";
 
-export type ExampleStudyId = "fridge" | "gasstation";
+export type ExampleStudyId = "fridge" | "gasstation" | "restaurant";
 
 export interface ExampleResponseRow {
   id: string;
@@ -34,7 +38,6 @@ export interface ExampleCardSort {
   config: CardSortConfig;
   cards: CardRow[];
   categories: CategoryRow[];
-  /** Seed responses in the real ResponseRow shape. */
   seedResponses: ExampleResponseRow[];
 }
 
@@ -44,11 +47,20 @@ export interface ExampleSurvey {
   title: string;
   description: string;
   config: SurveyConfig;
-  /** Seed responses in the real ResponseRow shape (data.answers). */
   seedResponses: ExampleResponseRow[];
 }
 
-export type ExampleStudy = ExampleCardSort | ExampleSurvey;
+export interface ExampleTreeTest {
+  id: "restaurant";
+  type: "tree_test";
+  title: string;
+  description: string;
+  config: TreeTestConfig;
+  nodes: TreeNodeRow[];
+  seedResponses: ExampleResponseRow[];
+}
+
+export type ExampleStudy = ExampleCardSort | ExampleSurvey | ExampleTreeTest;
 
 // ---------- Helpers ----------
 
@@ -93,7 +105,6 @@ const cardId = (label: string) =>
 const catId = (label: string) =>
   FRIDGE_CATEGORIES.find((c) => c.label === label)!.id;
 
-// 20 hand-crafted card-sort placements (card label -> category label).
 const FRIDGE_PLACEMENTS: Record<string, string>[] = [
   { Ketchup: "Door", Mayo: "Door", "Leftover pizza": "Middle shelf", Beer: "Bottom shelf", "Oat milk": "Door", "Mystery tupperware": "Trash", "Wilting spinach": "Trash", Cheese: "Middle shelf", "Hot sauce": "Door", "Birthday cake": "Top shelf", "Baking soda": "Door", Eggs: "Top shelf" },
   { Ketchup: "Middle shelf", Mayo: "Middle shelf", "Leftover pizza": "Top shelf", Beer: "Door", "Oat milk": "Top shelf", "Mystery tupperware": "Middle shelf", "Wilting spinach": "Bottom shelf", Cheese: "Middle shelf", "Hot sauce": "Door", "Birthday cake": "Middle shelf", "Baking soda": "Top shelf", Eggs: "Door" },
@@ -117,9 +128,6 @@ const FRIDGE_PLACEMENTS: Record<string, string>[] = [
   { Ketchup: "Door", Mayo: "Door", "Leftover pizza": "Middle shelf", Beer: "Bottom shelf", "Oat milk": "Door", "Mystery tupperware": "Trash", "Wilting spinach": "Trash", Cheese: "Bottom shelf", "Hot sauce": "Door", "Birthday cake": "Top shelf", "Baking soda": "Door", Eggs: "Top shelf" },
 ];
 
-// Convert each placement into a CardSortResponseData (closed sort against
-// the seeded categories). The Results component groups by category_id, so
-// stable IDs matter.
 function placementToResponseData(
   placement: Record<string, string>,
 ): CardSortResponseData {
@@ -209,8 +217,6 @@ export const GAS_STATION_CONFIG: SurveyConfig = {
   layout: "single_page",
 };
 
-// 20 hand-crafted survey answers shaped like real responses
-// ({ answers: { qid: value } }). q3 uses string[] for multi-select.
 const GAS_ANSWER_SETS: Record<string, string | string[]>[] = [
   { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito"], q4: "Wawa", q5: "Slim Jim and a Gatorade." },
   { q1: "No",  q2: "2", q3: ["Just snacks"],         q4: "7-Eleven", q5: "Just water." },
@@ -252,16 +258,239 @@ export const GAS_STATION_STUDY: ExampleSurvey = {
   seedResponses: GAS_SEED_RESPONSES,
 };
 
-export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, GAS_STATION_STUDY];
+// ---------- Tree test: Restaurant website ----------
+
+// Node IDs (stable for seed data)
+const n = (slug: string) => `rest-${slug}`;
+
+const RESTAURANT_NODES: TreeNodeRow[] = [
+  // Top-level
+  { id: n("food"),          parent_id: null,              label: "Our Food",           position: 0 },
+  { id: n("reservations"),  parent_id: null,              label: "Reservations",       position: 1 },
+  { id: n("about"),         parent_id: null,              label: "About",              position: 2 },
+  { id: n("contact"),       parent_id: null,              label: "Contact",            position: 3 },
+  // Our Food children
+  { id: n("breakfast"),     parent_id: n("food"),         label: "Breakfast",          position: 0 },
+  { id: n("lunch"),         parent_id: n("food"),         label: "Lunch",              position: 1 },
+  { id: n("dinner"),        parent_id: n("food"),         label: "Dinner",             position: 2 },
+  { id: n("drinks"),        parent_id: n("food"),         label: "Drinks",             position: 3 },
+  { id: n("desserts"),      parent_id: n("food"),         label: "Desserts",           position: 4 },
+  // Reservations children
+  { id: n("book"),          parent_id: n("reservations"), label: "Book a table",       position: 0 },
+  { id: n("large"),         parent_id: n("reservations"), label: "Large groups",       position: 1 },
+  { id: n("private"),       parent_id: n("reservations"), label: "Private dining",     position: 2 },
+  // About children
+  { id: n("story"),         parent_id: n("about"),        label: "Our story",          position: 0 },
+  { id: n("team"),          parent_id: n("about"),        label: "Meet the team",      position: 1 },
+  { id: n("press"),         parent_id: n("about"),        label: "Press",              position: 2 },
+  // Contact children
+  { id: n("findus"),        parent_id: n("contact"),      label: "Find us",            position: 0 },
+  { id: n("hours"),         parent_id: n("contact"),      label: "Hours",              position: 1 },
+  { id: n("catering"),      parent_id: n("contact"),      label: "Catering inquiries", position: 2 },
+];
+
+const RESTAURANT_TASKS: TreeTestTask[] = [
+  {
+    id: "t1",
+    text: "Find where you'd go to book a table for 2.",
+    correct_node_id: n("book"),
+  },
+  {
+    id: "t2",
+    text: "Find the dessert menu.",
+    correct_node_id: n("desserts"),
+  },
+  {
+    id: "t3",
+    text: "Find out what time the restaurant opens.",
+    correct_node_id: n("hours"),
+  },
+];
+
+const RESTAURANT_CONFIG: TreeTestConfig = {
+  tasks: RESTAURANT_TASKS,
+};
+
+// 20 seeded responses — varying success, paths, wrong answers
+function makeTreeResponse(
+  i: number,
+  taskResults: Array<{
+    taskIdx: number;
+    selectedId: string;
+    pathIds: string[];
+    durationMs: number;
+  }>,
+): ExampleResponseRow {
+  const tasks: TaskResult[] = taskResults.map((tr) => {
+    const task = RESTAURANT_TASKS[tr.taskIdx];
+    return {
+      task_id: task.id,
+      task_text: task.text,
+      correct_node_id: task.correct_node_id,
+      selected_node_id: tr.selectedId,
+      selected_label: RESTAURANT_NODES.find((nd) => nd.id === tr.selectedId)?.label ?? "",
+      path: tr.pathIds.map((pid, j) => ({
+        node_id: pid,
+        label: RESTAURANT_NODES.find((nd) => nd.id === pid)?.label ?? "",
+        at_ms: 1000 * (j + 1),
+      })),
+      duration_ms: tr.durationMs,
+    };
+  });
+  return {
+    id: `rest-resp-${i}`,
+    session_id: `rest-sess-${i}`,
+    data: { tasks, duration_ms: taskResults.reduce((s, t) => s + t.durationMs, 0) } as unknown as Record<string, unknown>,
+    created_at: ts(i),
+  };
+}
+
+// Hand-crafted response patterns:
+// Task 1 correct = book, Task 2 correct = desserts, Task 3 correct = hours
+const RESTAURANT_SEED_RESPONSES: ExampleResponseRow[] = [
+  // 1: All correct, direct
+  makeTreeResponse(0, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],         durationMs: 4200 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],             durationMs: 3100 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],             durationMs: 3800 },
+  ]),
+  // 2: All correct, some backtracking
+  makeTreeResponse(1, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("food"), n("reservations"), n("book")],     durationMs: 6500 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3400 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("about"), n("contact"), n("hours")],         durationMs: 5200 },
+  ]),
+  // 3: Task 1 wrong (went to large groups), rest correct
+  makeTreeResponse(2, [
+    { taskIdx: 0, selectedId: n("large"),    pathIds: [n("reservations"), n("large")],               durationMs: 5100 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2900 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3500 },
+  ]),
+  // 4: All correct, direct
+  makeTreeResponse(3, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3800 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2700 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3200 },
+  ]),
+  // 5: Task 3 wrong (went to findus)
+  makeTreeResponse(4, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4000 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3300 },
+    { taskIdx: 2, selectedId: n("findus"),   pathIds: [n("contact"), n("findus")],                   durationMs: 4100 },
+  ]),
+  // 6: Task 2 wrong (went to drinks)
+  makeTreeResponse(5, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3900 },
+    { taskIdx: 1, selectedId: n("drinks"),   pathIds: [n("food"), n("drinks")],                       durationMs: 4500 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3700 },
+  ]),
+  // 7: All correct, backtracking on task 1
+  makeTreeResponse(6, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("contact"), n("reservations"), n("book")],   durationMs: 7200 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3000 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3300 },
+  ]),
+  // 8: Task 1 wrong (private dining), rest correct
+  makeTreeResponse(7, [
+    { taskIdx: 0, selectedId: n("private"),  pathIds: [n("reservations"), n("private")],             durationMs: 4800 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2800 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3600 },
+  ]),
+  // 9: All correct, direct
+  makeTreeResponse(8, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3500 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2600 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3100 },
+  ]),
+  // 10: Task 3 wrong (catering), rest correct
+  makeTreeResponse(9, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4100 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3200 },
+    { taskIdx: 2, selectedId: n("catering"), pathIds: [n("contact"), n("catering")],                 durationMs: 5500 },
+  ]),
+  // 11: All correct
+  makeTreeResponse(10, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3700 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2900 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3400 },
+  ]),
+  // 12: Task 2 wrong (lunch)
+  makeTreeResponse(11, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4300 },
+    { taskIdx: 1, selectedId: n("lunch"),    pathIds: [n("food"), n("lunch")],                       durationMs: 5000 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3600 },
+  ]),
+  // 13: All correct, backtracking
+  makeTreeResponse(12, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("about"), n("reservations"), n("book")],     durationMs: 6800 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("breakfast"), n("food"), n("desserts")], durationMs: 5400 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3200 },
+  ]),
+  // 14: Task 1 wrong (large), task 3 wrong (findus)
+  makeTreeResponse(13, [
+    { taskIdx: 0, selectedId: n("large"),    pathIds: [n("reservations"), n("large")],               durationMs: 4600 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3100 },
+    { taskIdx: 2, selectedId: n("findus"),   pathIds: [n("contact"), n("findus")],                   durationMs: 4200 },
+  ]),
+  // 15: All correct, direct
+  makeTreeResponse(14, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3600 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2500 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3000 },
+  ]),
+  // 16: All correct
+  makeTreeResponse(15, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4000 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3100 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3500 },
+  ]),
+  // 17: Task 2 wrong (drinks), backtracking task 3
+  makeTreeResponse(16, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3800 },
+    { taskIdx: 1, selectedId: n("drinks"),   pathIds: [n("food"), n("drinks")],                       durationMs: 4200 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("about"), n("contact"), n("hours")],         durationMs: 5800 },
+  ]),
+  // 18: All correct, direct
+  makeTreeResponse(17, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3400 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2700 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3100 },
+  ]),
+  // 19: Task 3 wrong (story)
+  makeTreeResponse(18, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 4200 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 3000 },
+    { taskIdx: 2, selectedId: n("story"),    pathIds: [n("about"), n("story")],                       durationMs: 6100 },
+  ]),
+  // 20: All correct
+  makeTreeResponse(19, [
+    { taskIdx: 0, selectedId: n("book"),     pathIds: [n("reservations"), n("book")],                 durationMs: 3900 },
+    { taskIdx: 1, selectedId: n("desserts"), pathIds: [n("food"), n("desserts")],                     durationMs: 2800 },
+    { taskIdx: 2, selectedId: n("hours"),    pathIds: [n("contact"), n("hours")],                     durationMs: 3300 },
+  ]),
+];
+
+export const RESTAURANT_STUDY: ExampleTreeTest = {
+  id: "restaurant",
+  type: "tree_test",
+  title: "Where's the menu item?",
+  description: "Navigate this restaurant website to complete each task.",
+  config: RESTAURANT_CONFIG,
+  nodes: RESTAURANT_NODES,
+  seedResponses: RESTAURANT_SEED_RESPONSES,
+};
+
+// ---------- Exports ----------
+
+export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, GAS_STATION_STUDY, RESTAURANT_STUDY];
 
 export function getExampleStudy(id: string): ExampleStudy | null {
   if (id === "fridge") return FRIDGE_STUDY;
   if (id === "gasstation") return GAS_STATION_STUDY;
+  if (id === "restaurant") return RESTAURANT_STUDY;
   return null;
 }
 
-// Build a synthetic ResponseRow from a freshly-submitted card sort or survey
-// so it can be appended to the seed list and shown in the real Results view.
 export function makeUserCardSortResponse(
   data: CardSortResponseData,
 ): ExampleResponseRow {
@@ -280,6 +509,17 @@ export function makeUserSurveyResponse(
     id: "user-survey",
     session_id: "user",
     data: { answers } as Record<string, unknown>,
+    created_at: new Date().toISOString(),
+  };
+}
+
+export function makeUserTreeTestResponse(
+  data: { tasks: TaskResult[]; duration_ms: number },
+): ExampleResponseRow {
+  return {
+    id: "user-tree-test",
+    session_id: "user",
+    data: data as unknown as Record<string, unknown>,
     created_at: new Date().toISOString(),
   };
 }
