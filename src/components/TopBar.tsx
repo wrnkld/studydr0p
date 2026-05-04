@@ -127,7 +127,7 @@ function StudyActions({
             title="Study actions"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <MoreHorizontal className="h-3.5 w-3.5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
@@ -179,7 +179,7 @@ function SignedInActions() {
               navigate("/");
             }}
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-3.5 w-3.5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Sign out</TooltipContent>
