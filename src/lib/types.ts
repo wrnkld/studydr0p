@@ -55,9 +55,18 @@ export interface FirstClickConfig {
   image_url: string;
 }
 
-export interface TreeTestConfig {
-  task: string;
+export interface TreeTestTask {
+  id: string;
+  text: string;
   correct_node_id: string;
+}
+
+export interface TreeTestConfig {
+  tasks: TreeTestTask[];
+  /** @deprecated single-task legacy — migrate to `tasks` */
+  task?: string;
+  /** @deprecated single-task legacy — migrate to `tasks` */
+  correct_node_id?: string;
 }
 
 export interface FiveSecondConfig {
