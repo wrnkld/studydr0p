@@ -137,7 +137,7 @@
   }
   body {
     @apply text-foreground;
-    background-color: hsl(225 12% 97.5%);
+    background-color: hsl(220 14% 98.5%);
   }
 }
 
