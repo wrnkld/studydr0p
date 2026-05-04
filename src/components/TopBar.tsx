@@ -127,13 +127,13 @@ function StudyActions({
             title="Study actions"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <MoreHorizontal className="h-3.5 w-3.5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           {exportCsv && (
             <DropdownMenuItem onSelect={() => exportCsv()}>
-              <Download className="mr-2 h-4 w-4" />
+              <Download className="mr-2 h-3.5 w-3.5" />
               Export CSV
             </DropdownMenuItem>
           )}
@@ -145,7 +145,7 @@ function StudyActions({
             }
             className="text-destructive focus:text-destructive"
           >
-            <Trash2 className="mr-2 h-4 w-4" />
+            <Trash2 className="mr-2 h-3.5 w-3.5" />
             Delete study
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -179,7 +179,7 @@ function SignedInActions() {
               navigate("/");
             }}
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-3.5 w-3.5" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Sign out</TooltipContent>
