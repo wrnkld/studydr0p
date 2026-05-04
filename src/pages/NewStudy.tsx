@@ -37,7 +37,7 @@ const TYPES: TypeMeta[] = [
     label: "First click",
     description: "Where do users click first to complete a task?",
     icon: MousePointerClick,
-    enabled: false,
+    enabled: true,
   },
   {
     id: "five_second",
