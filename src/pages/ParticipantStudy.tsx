@@ -3,10 +3,11 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { CardSortConfig, StudyType, SurveyConfig } from "@/lib/types";
+import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
 import { ContentPanel } from "@/components/study/primitives";
 
 function Shell({ children }: { children: React.ReactNode }) {
