@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { TreeTestConfig, TreeTestTask } from "@/lib/types";
 import { toast } from "sonner";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { SectionHeader } from "@/components/study/primitives";
 
 export interface TreeNodeRow {
   id: string;
@@ -259,16 +260,10 @@ export default function TreeTestParticipant({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border border-border bg-muted/30 p-5">
-        <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-          Task {currentTaskIndex + 1} of {tasks.length}
-        </div>
-        <p className="mt-2 whitespace-pre-wrap text-base">{currentTask.text}</p>
-      </div>
-
-      <p className="text-sm text-muted-foreground">
-        Click through the menu below. When you find your answer, click it to select, then confirm.
-      </p>
+      <SectionHeader
+        kicker={`Task ${currentTaskIndex + 1} of ${tasks.length}`}
+        title={currentTask.text}
+      />
 
       <div>{renderTree(null, 0)}</div>
 
