@@ -490,7 +490,7 @@ export const GROCERY_STUDY: ExampleTreeTest = {
   id: "grocery",
   type: "tree_test",
   title: "Help us stock the shelves.",
-  description: "Find items in our grocery store app.",
+  description: "Click through the menu below. When you find your answer, click it to select, then confirm.",
   config: GROCERY_CONFIG,
   nodes: GROCERY_NODES,
   seedResponses: GROCERY_SEED_RESPONSES,
