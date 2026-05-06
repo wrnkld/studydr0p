@@ -44,7 +44,7 @@ const TYPES: TypeMeta[] = [
     label: "Five-second test",
     description: "What do people remember after a quick glance?",
     icon: Timer,
-    enabled: false,
+    enabled: true,
   },
   {
     id: "tree_test",
