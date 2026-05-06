@@ -6,6 +6,7 @@ import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 import {
