@@ -6,6 +6,7 @@ import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 import {
@@ -138,13 +139,17 @@ export default function Landing() {
                 }}
                 className="group grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_6rem_6rem] items-center gap-x-3 px-5 py-3 transition-colors hover:bg-muted/40 cursor-pointer"
               >
-                <div
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
-                  aria-label={typeLabel}
-                  title={typeLabel}
-                >
-                  {Icon && <Icon className="h-4 w-4" />}
-                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
+                      aria-label={typeLabel}
+                    >
+                      {Icon && <Icon className="h-4 w-4" />}
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">{typeLabel}</TooltipContent>
+                </Tooltip>
 
                 <div className="min-w-0 text-[15px] font-medium tracking-tight text-foreground truncate font-serif">
                   {r.title}
