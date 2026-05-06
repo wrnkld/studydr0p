@@ -117,7 +117,7 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3">
           {TYPES.map((t) => {
             const Icon = t.icon;
             const card = (
