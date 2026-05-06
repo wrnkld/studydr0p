@@ -268,15 +268,11 @@ export default function TreeTestParticipant({
       <div>{renderTree(null, 0)}</div>
 
       {selectedNode && (
-        <div className="flex items-center gap-3 rounded-lg border border-border bg-card p-4">
-          <span className="text-sm">
-            Selected: <span className="font-medium text-foreground">{selectedNode.label}</span>
-          </span>
+        <div className="pt-2">
           <Button
             size="sm"
             onClick={confirmSelection}
             disabled={submitting}
-            className="ml-auto"
           >
             {currentTaskIndex + 1 < tasks.length
               ? "Confirm & next task"
