@@ -197,4 +197,5 @@ export default function ParticipantStudy() {
       </div>
     </main>
   );
+}
 
