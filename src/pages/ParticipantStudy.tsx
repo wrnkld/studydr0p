@@ -12,7 +12,7 @@ import { ContentPanel } from "@/components/study/primitives";
 function Shell({ children }: { children: React.ReactNode }) {
   return (
     <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
-      <ContentPanel size="narrow" className="space-y-4 text-center">
+      <ContentPanel size="narrow" className="space-y-4">
         {children}
       </ContentPanel>
     </main>
@@ -185,7 +185,7 @@ export default function ParticipantStudy() {
   return (
     <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
       <div className="w-full max-w-lg space-y-6">
-        <div className="space-y-2 text-center">
+        <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
           {study.description && (
             <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
