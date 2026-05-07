@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
@@ -66,90 +65,40 @@ export default function ParticipantStudy() {
     })();
   }, [slug]);
 
-  const begin = async () => {
-    if (!study) return;
-    if (isPreview) {
-      setSessionId("preview");
+  // Auto-start: create session as soon as study loads (no welcome screen)
+  useEffect(() => {
+    if (!study || started || error) return;
+    (async () => {
+      if (isPreview) {
+        setSessionId("preview");
+        setStartedAt(Date.now());
+        setStarted(true);
+        return;
+      }
+      const ua = navigator.userAgent;
+      const isMobile = /Mobi|Android|iPhone/.test(ua);
+      const { data, error: e } = await supabase
+        .from("sessions")
+        .insert({
+          study_id: study.id,
+          metadata: { device: isMobile ? "mobile" : "desktop", ua },
+        })
+        .select("id")
+        .single();
+      if (e || !data) {
+        toast.error("Could not start session");
+        return;
+      }
+      setSessionId(data.id);
       setStartedAt(Date.now());
       setStarted(true);
-      return;
-    }
-    const ua = navigator.userAgent;
-    const isMobile = /Mobi|Android|iPhone/.test(ua);
-    const { data, error: e } = await supabase
-      .from("sessions")
-      .insert({
-        study_id: study.id,
-        metadata: { device: isMobile ? "mobile" : "desktop", ua },
-      })
-      .select("id")
-      .single();
-    if (e || !data) {
-      toast.error("Could not start session");
-      return;
-    }
-    setSessionId(data.id);
-    setStartedAt(Date.now());
-    setStarted(true);
-  };
+    })();
+  }, [study, started, error]);
 
-  if (loading) {
+  if (loading || (!started && study)) {
     return (
       <Shell>
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </Shell>
-    );
-  }
-
-  if (error === "not_found") {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
-        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
-      </Shell>
-    );
-  }
-
-  if (error === "closed") {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
-        <p className="text-muted-foreground">
-          Thanks for your interest — the researcher is no longer collecting responses.
-        </p>
-      </Shell>
-    );
-  }
-
-  if (!study) return null;
-
-  if (done) {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
-        <p className="text-muted-foreground">
-          {isPreview
-            ? "Preview complete — nothing was saved."
-            : "Your response has been recorded."}
-        </p>
-      </Shell>
-    );
-  }
-
-  if (!started) {
-    const intro = introCopy(study);
-    return (
-      <Shell>
-        <h1 className="text-3xl font-semibold tracking-tight font-serif">{study.title}</h1>
-        {study.description && (
-          <p className="whitespace-pre-wrap text-base text-foreground/80 leading-relaxed">
-            {study.description}
-          </p>
-        )}
-        <p className="text-xs uppercase tracking-widest text-muted-foreground">{intro}</p>
-        <div className="pt-4">
-          <Button size="lg" onClick={begin}>Start</Button>
-        </div>
       </Shell>
     );
   }
@@ -201,20 +150,3 @@ export default function ParticipantStudy() {
   );
 }
 
-function introCopy(study: StudyData): string {
-  if (study.type === "survey") {
-    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
-    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
-  }
-  if (study.type === "card_sort") {
-    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
-    return sort === "open"
-      ? "You'll group cards into categories you create · Anonymous"
-      : "You'll sort cards into predefined categories · Anonymous";
-  }
-  if (study.type === "tree_test") {
-    const n = (study.config as TreeTestConfig)?.tasks?.length ?? 0;
-    return `${n} task${n === 1 ? "" : "s"} · Navigate a menu to find answers · Anonymous`;
-  }
-  return "Anonymous";
-}
