@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
@@ -151,20 +150,3 @@ export default function ParticipantStudy() {
   );
 }
 
-function introCopy(study: StudyData): string {
-  if (study.type === "survey") {
-    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
-    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
-  }
-  if (study.type === "card_sort") {
-    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
-    return sort === "open"
-      ? "You'll group cards into categories you create · Anonymous"
-      : "You'll sort cards into predefined categories · Anonymous";
-  }
-  if (study.type === "tree_test") {
-    const n = (study.config as TreeTestConfig)?.tasks?.length ?? 0;
-    return `${n} task${n === 1 ? "" : "s"} · Navigate a menu to find answers · Anonymous`;
-  }
-  return "Anonymous";
-}
