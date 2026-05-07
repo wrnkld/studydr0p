@@ -66,6 +66,36 @@ export default function ParticipantStudy() {
     })();
   }, [slug]);
 
+  // Auto-start: create session as soon as study loads (no welcome screen)
+  useEffect(() => {
+    if (!study || started || error) return;
+    (async () => {
+      if (isPreview) {
+        setSessionId("preview");
+        setStartedAt(Date.now());
+        setStarted(true);
+        return;
+      }
+      const ua = navigator.userAgent;
+      const isMobile = /Mobi|Android|iPhone/.test(ua);
+      const { data, error: e } = await supabase
+        .from("sessions")
+        .insert({
+          study_id: study.id,
+          metadata: { device: isMobile ? "mobile" : "desktop", ua },
+        })
+        .select("id")
+        .single();
+      if (e || !data) {
+        toast.error("Could not start session");
+        return;
+      }
+      setSessionId(data.id);
+      setStartedAt(Date.now());
+      setStarted(true);
+    })();
+  }, [study, started, error]);
+
   const begin = async () => {
     if (!study) return;
     if (isPreview) {
