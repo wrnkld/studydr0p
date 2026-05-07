@@ -12,8 +12,8 @@ import { ContentPanel } from "@/components/study/primitives";
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="container py-8">
-      <ContentPanel size="default" className="space-y-3">
+    <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+      <ContentPanel size="narrow" className="space-y-4 text-center">
         {children}
       </ContentPanel>
     </main>
