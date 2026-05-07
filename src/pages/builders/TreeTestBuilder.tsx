@@ -437,7 +437,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
     const ids = list.map((n) => n.id);
     return (
       <SortableContext items={ids} strategy={verticalListSortingStrategy}>
-        <div className={depth > 0 ? "border-l border-border" : ""}>
+        <div className={depth > 0 ? "ml-3 border-l border-border" : ""}>
           {list.map((n) => {
             const kids = childrenByParent.get(n.id) ?? [];
             const isCollapsed = collapsed[n.id] ?? false;
