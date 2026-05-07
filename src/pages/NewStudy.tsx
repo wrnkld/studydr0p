@@ -37,21 +37,21 @@ const TYPES: TypeMeta[] = [
     label: "First click",
     description: "Where do users click first to complete a task?",
     icon: MousePointerClick,
-    enabled: true,
+    enabled: false,
   },
   {
     id: "five_second",
     label: "Five-second test",
     description: "What do people remember after a quick glance?",
     icon: Timer,
-    enabled: true,
+    enabled: false,
   },
   {
     id: "tree_test",
     label: "Tree test",
     description: "Test how findable items are in a navigation structure.",
     icon: Network,
-    enabled: false,
+    enabled: true,
   },
 ];
 
