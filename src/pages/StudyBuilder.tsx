@@ -413,18 +413,28 @@ function InlinePreview({
       );
     }
     return (
-      <SurveyParticipant
-        study={{
-          id: study.id,
-          title: study.title,
-          description: study.description,
-          config: cfg,
-        }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        preview
-        onDone={onSubmitted}
-      />
+      <div className="space-y-6">
+        <div className="space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
+          {study.description && (
+            <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
+              {study.description}
+            </p>
+          )}
+        </div>
+        <SurveyParticipant
+          study={{
+            id: study.id,
+            title: study.title,
+            description: study.description,
+            config: cfg,
+          }}
+          sessionId={sessionId}
+          startedAt={startedAt}
+          preview
+          onDone={onSubmitted}
+        />
+      </div>
     );
   }
 
