@@ -98,10 +98,7 @@ export default function SurveyParticipant({
       <ol className="space-y-8">
         {questions.map((q, i) => (
           <li key={q.id} className="space-y-4">
-            <SectionHeader
-              kicker={`Question ${i + 1}`}
-              title={q.label || q.id}
-            />
+            <p className="text-sm font-medium">{q.label || q.id}</p>
             <QuestionInput
               q={q}
               value={answers[q.id]}
