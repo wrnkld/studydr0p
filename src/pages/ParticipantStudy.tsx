@@ -140,15 +140,15 @@ export default function ParticipantStudy() {
     const intro = introCopy(study);
     return (
       <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight font-serif">{study.title}</h1>
         {study.description && (
-          <p className="whitespace-pre-wrap text-muted-foreground">
+          <p className="whitespace-pre-wrap text-base text-foreground/80 leading-relaxed">
             {study.description}
           </p>
         )}
-        <p className="text-sm text-muted-foreground">{intro}</p>
-        <div className="pt-2">
-          <Button onClick={begin}>Start</Button>
+        <p className="text-xs uppercase tracking-widest text-muted-foreground">{intro}</p>
+        <div className="pt-4">
+          <Button size="lg" onClick={begin}>Start</Button>
         </div>
       </Shell>
     );
