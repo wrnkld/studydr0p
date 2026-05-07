@@ -96,90 +96,10 @@ export default function ParticipantStudy() {
     })();
   }, [study, started, error]);
 
-  const begin = async () => {
-    if (!study) return;
-    if (isPreview) {
-      setSessionId("preview");
-      setStartedAt(Date.now());
-      setStarted(true);
-      return;
-    }
-    const ua = navigator.userAgent;
-    const isMobile = /Mobi|Android|iPhone/.test(ua);
-    const { data, error: e } = await supabase
-      .from("sessions")
-      .insert({
-        study_id: study.id,
-        metadata: { device: isMobile ? "mobile" : "desktop", ua },
-      })
-      .select("id")
-      .single();
-    if (e || !data) {
-      toast.error("Could not start session");
-      return;
-    }
-    setSessionId(data.id);
-    setStartedAt(Date.now());
-    setStarted(true);
-  };
-
-  if (loading) {
+  if (loading || (!started && study)) {
     return (
       <Shell>
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </Shell>
-    );
-  }
-
-  if (error === "not_found") {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
-        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
-      </Shell>
-    );
-  }
-
-  if (error === "closed") {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
-        <p className="text-muted-foreground">
-          Thanks for your interest — the researcher is no longer collecting responses.
-        </p>
-      </Shell>
-    );
-  }
-
-  if (!study) return null;
-
-  if (done) {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
-        <p className="text-muted-foreground">
-          {isPreview
-            ? "Preview complete — nothing was saved."
-            : "Your response has been recorded."}
-        </p>
-      </Shell>
-    );
-  }
-
-  if (!started) {
-    const intro = introCopy(study);
-    return (
-      <Shell>
-        <h1 className="text-3xl font-semibold tracking-tight font-serif">{study.title}</h1>
-        {study.description && (
-          <p className="whitespace-pre-wrap text-base text-foreground/80 leading-relaxed">
-            {study.description}
-          </p>
-        )}
-        <p className="text-xs uppercase tracking-widest text-muted-foreground">{intro}</p>
-        <div className="pt-4">
-          <Button size="lg" onClick={begin}>Start</Button>
-        </div>
       </Shell>
     );
   }
