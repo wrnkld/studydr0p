@@ -344,79 +344,44 @@ export default function StudyBuilder() {
   );
 }
 
-function StatusBadge({ status }: { status: StudyStatus }) {
-  if (status === "live") {
-    return <Badge variant="outline">Live</Badge>;
-  }
-  if (status === "draft") {
-    return (
-      <Badge variant="outline" className="text-muted-foreground">
-        Draft
-      </Badge>
-    );
-  }
-  return (
-    <Badge variant="outline" className="text-muted-foreground">
-      Closed
-    </Badge>
-  );
-}
-
-function ParticipantHeader({ study }: { study: StudyRow }) {
-  return (
-    <div className="space-y-2">
-      <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
-      {study.description && (
-        <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
-          {study.description}
-        </p>
-      )}
-    </div>
-  );
-}
-
 function InlinePreview({
   study,
+  ensurePreviewLink,
   onSubmitted,
 }: {
   study: StudyRow;
+  ensurePreviewLink: (study: StudyRow) => Promise<StudyRow>;
   onSubmitted: () => void;
 }) {
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [startedAt, setStartedAt] = useState<number>(0);
+  const [previewStudy, setPreviewStudy] = useState<StudyRow | null>(null);
   const [creating, setCreating] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       setCreating(true);
-      const ua = navigator.userAgent;
-      const isMobile = /Mobi|Android|iPhone/.test(ua);
-      const { data, error } = await supabase
-        .from("sessions")
-        .insert({
-          study_id: study.id,
-          metadata: { device: isMobile ? "mobile" : "desktop", ua, source: "builder_preview" },
-        })
-        .select("id")
-        .single();
       if (cancelled) return;
-      if (error || !data) {
-        toast.error(error?.message ?? "Could not start preview session");
-        setCreating(false);
-        return;
-      }
-      setSessionId(data.id);
-      setStartedAt(Date.now());
+      const next = await ensurePreviewLink(study);
+      if (!cancelled) setPreviewStudy(next);
       setCreating(false);
     })();
     return () => {
       cancelled = true;
     };
-    // Re-create a fresh session each time the study id changes.
-  }, [study.id]);
+  }, [study, ensurePreviewLink]);
 
-  if (creating || !sessionId) {
+  useEffect(() => {
+    const receive = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type !== "studydrop:preview-submitted") return;
+      if (event.data.studyId !== study.id) return;
+      onSubmitted();
+    };
+    window.addEventListener("message", receive);
+    return () => window.removeEventListener("message", receive);
+  }, [onSubmitted, study.id]);
+
+  if (creating || !previewStudy?.slug) {
     return (
       <div className="space-y-6 py-6">
         <section>
@@ -428,106 +393,13 @@ function InlinePreview({
     );
   }
 
-  if (study.type === "survey") {
-    const cfg = (study.config as SurveyConfig) ?? { questions: [] };
-    if (!cfg.questions || cfg.questions.length === 0) {
-      return (
-        <div className="space-y-6 py-6">
-          <section>
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-lg font-medium text-foreground">No questions yet</p>
-              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
-                Add some in the Build tab.
-              </p>
-            </div>
-          </section>
-        </div>
-      );
-    }
-    return (
-      <div className="space-y-6">
-        <ParticipantHeader study={study} />
-        <SurveyParticipant
-          study={{
-            id: study.id,
-            title: study.title,
-            description: study.description,
-            config: cfg,
-          }}
-          sessionId={sessionId}
-          startedAt={startedAt}
-          preview
-          onDone={onSubmitted}
-        />
-      </div>
-    );
-  }
-
-  if (study.type === "card_sort") {
-    const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
-    return (
-      <div className="space-y-6">
-        <ParticipantHeader study={study} />
-        <CardSortParticipant
-          study={{
-            id: study.id,
-            title: study.title,
-            description: study.description,
-            config: cfg,
-          }}
-          sessionId={sessionId}
-          startedAt={startedAt}
-          preview
-          onDone={onSubmitted}
-        />
-      </div>
-    );
-  }
-
-  if (study.type === "tree_test") {
-    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
-    if (!cfg.tasks || cfg.tasks.length === 0) {
-      return (
-        <div className="space-y-6 py-6">
-          <section>
-            <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-lg font-medium text-foreground">No tasks yet</p>
-              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
-                Add some in the Build tab.
-              </p>
-            </div>
-          </section>
-        </div>
-      );
-    }
-    return (
-      <div className="space-y-6">
-        <ParticipantHeader study={study} />
-        <TreeTestParticipant
-          study={{
-            id: study.id,
-            title: study.title,
-            description: study.description,
-            config: cfg,
-          }}
-          sessionId={sessionId}
-          startedAt={startedAt}
-          onDone={onSubmitted}
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6 py-6">
-      <section>
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <p className="text-sm text-muted-foreground">
-            This study type can't be previewed yet.
-          </p>
-        </div>
-      </section>
-    </div>
+    <iframe
+      key={previewStudy.slug}
+      title="Study preview"
+      src={`/s/${previewStudy.slug}?preview=1`}
+      className="h-[760px] w-full border-0 bg-background"
+    />
   );
 }
 
