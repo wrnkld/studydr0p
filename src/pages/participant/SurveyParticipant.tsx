@@ -113,15 +113,7 @@ export default function SurveyParticipant({
     </div>
   );
 
-  if (preview || inMemory) return content;
-
-  return (
-    <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg space-y-6">
-        {content}
-      </div>
-    </main>
-  );
+  return content;
 }
 
 function QuestionInput({

@@ -103,11 +103,48 @@ export default function ParticipantStudy() {
     );
   }
 
+  if (error === "not_found") {
+    return (
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
+        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
+      </Shell>
+    );
+  }
+
+  if (error === "closed") {
+    return (
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
+        <p className="text-muted-foreground">
+          Thanks for your interest — the researcher is no longer collecting responses.
+        </p>
+      </Shell>
+    );
+  }
+
+  if (!study) return null;
+
+  if (done) {
+    return (
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
+        <p className="text-muted-foreground">
+          {isPreview
+            ? "Preview complete — nothing was saved."
+            : "Your response has been recorded."}
+        </p>
+      </Shell>
+    );
+  }
+
   if (!sessionId) return null;
+
+  let studyContent: React.ReactNode = null;
 
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
-    return (
+    studyContent = (
       <SurveyParticipant
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
@@ -116,11 +153,9 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
-  }
-
-  if (study.type === "card_sort") {
+  } else if (study.type === "card_sort") {
     const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
-    return (
+    studyContent = (
       <CardSortParticipant
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
@@ -129,11 +164,9 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
-  }
-
-  if (study.type === "tree_test") {
+  } else if (study.type === "tree_test") {
     const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
-    return (
+    studyContent = (
       <TreeTestParticipant
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
@@ -141,12 +174,28 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
+  } else {
+    return (
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
+      </Shell>
+    );
   }
 
   return (
-    <Shell>
-      <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
-    </Shell>
+    <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+      <div className="w-full max-w-lg space-y-6">
+        <div className="space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
+          {study.description && (
+            <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
+              {study.description}
+            </p>
+          )}
+        </div>
+        {studyContent}
+      </div>
+    </main>
   );
 }
 
