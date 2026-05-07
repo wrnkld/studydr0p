@@ -441,18 +441,28 @@ function InlinePreview({
   if (study.type === "card_sort") {
     const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
     return (
-      <CardSortParticipant
-        study={{
-          id: study.id,
-          title: study.title,
-          description: study.description,
-          config: cfg,
-        }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        preview
-        onDone={onSubmitted}
-      />
+      <div className="space-y-6">
+        <div className="space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
+          {study.description && (
+            <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
+              {study.description}
+            </p>
+          )}
+        </div>
+        <CardSortParticipant
+          study={{
+            id: study.id,
+            title: study.title,
+            description: study.description,
+            config: cfg,
+          }}
+          sessionId={sessionId}
+          startedAt={startedAt}
+          preview
+          onDone={onSubmitted}
+        />
+      </div>
     );
   }
 
@@ -473,17 +483,27 @@ function InlinePreview({
       );
     }
     return (
-      <TreeTestParticipant
-        study={{
-          id: study.id,
-          title: study.title,
-          description: study.description,
-          config: cfg,
-        }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        onDone={onSubmitted}
-      />
+      <div className="space-y-6">
+        <div className="space-y-2 text-center">
+          <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
+          {study.description && (
+            <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
+              {study.description}
+            </p>
+          )}
+        </div>
+        <TreeTestParticipant
+          study={{
+            id: study.id,
+            title: study.title,
+            description: study.description,
+            config: cfg,
+          }}
+          sessionId={sessionId}
+          startedAt={startedAt}
+          onDone={onSubmitted}
+        />
+      </div>
     );
   }
 
