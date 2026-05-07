@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -29,7 +29,6 @@ import {
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface StudyRow {
@@ -110,12 +109,12 @@ export default function StudyBuilder() {
     [study?.slug],
   );
 
-  const ensurePreviewLink = async (current: StudyRow) => {
-    if (current.status === "live" && current.slug) return current;
+  const ensurePreviewLink = useCallback(async (current: StudyRow) => {
+    if (current.slug) return current;
     const nextSlug = current.slug ?? generateSlug();
     const { data, error } = await supabase
       .from("studies")
-      .update({ status: "live", slug: nextSlug })
+      .update({ slug: nextSlug })
       .eq("id", current.id)
       .select("id, title, description, type, status, slug, config")
       .single();
@@ -128,7 +127,7 @@ export default function StudyBuilder() {
     setLiveTitle(updated.title);
     setLiveDescription(updated.description ?? "");
     return updated;
-  };
+  }, []);
 
   const handleDelete = async () => {
     setDeleting(true);
