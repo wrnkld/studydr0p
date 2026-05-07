@@ -33,6 +33,13 @@ const TYPES: TypeMeta[] = [
     enabled: true,
   },
   {
+    id: "tree_test",
+    label: "Tree test",
+    description: "Test how findable items are in a navigation structure.",
+    icon: Network,
+    enabled: true,
+  },
+  {
     id: "first_click",
     label: "First click",
     description: "Where do users click first to complete a task?",
@@ -45,13 +52,6 @@ const TYPES: TypeMeta[] = [
     description: "What do people remember after a quick glance?",
     icon: Timer,
     enabled: false,
-  },
-  {
-    id: "tree_test",
-    label: "Tree test",
-    description: "Test how findable items are in a navigation structure.",
-    icon: Network,
-    enabled: true,
   },
 ];
 
