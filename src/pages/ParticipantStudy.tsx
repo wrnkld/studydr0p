@@ -69,19 +69,17 @@ export default function ParticipantStudy() {
   useEffect(() => {
     if (!study || started || error) return;
     (async () => {
-      if (isPreview) {
-        setSessionId("preview");
-        setStartedAt(Date.now());
-        setStarted(true);
-        return;
-      }
       const ua = navigator.userAgent;
       const isMobile = /Mobi|Android|iPhone/.test(ua);
       const { data, error: e } = await supabase
         .from("sessions")
         .insert({
           study_id: study.id,
-          metadata: { device: isMobile ? "mobile" : "desktop", ua },
+          metadata: {
+            device: isMobile ? "mobile" : "desktop",
+            ua,
+            ...(isPreview ? { source: "builder_preview" } : {}),
+          },
         })
         .select("id")
         .single();
@@ -93,7 +91,15 @@ export default function ParticipantStudy() {
       setStartedAt(Date.now());
       setStarted(true);
     })();
-  }, [study, started, error]);
+  }, [study, started, error, isPreview]);
+
+  useEffect(() => {
+    if (!done || !isPreview || !study) return;
+    window.parent?.postMessage(
+      { type: "studydrop:preview-submitted", studyId: study.id },
+      window.location.origin,
+    );
+  }, [done, isPreview, study]);
 
   if (loading || (!started && study)) {
     return (
@@ -131,7 +137,7 @@ export default function ParticipantStudy() {
         <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
         <p className="text-muted-foreground">
           {isPreview
-            ? "Preview complete — nothing was saved."
+            ? "Preview complete."
             : "Your response has been recorded."}
         </p>
       </Shell>
