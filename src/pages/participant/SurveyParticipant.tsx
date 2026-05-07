@@ -119,11 +119,10 @@ export default function SurveyParticipant({
   if (preview || inMemory) return content;
 
   return (
-    <main className="container py-8 space-y-6">
-      <div className="space-y-3">
-        <h1>{study.title}</h1>
+    <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+      <div className="w-full max-w-lg space-y-6">
+        {content}
       </div>
-      {content}
     </main>
   );
 }
