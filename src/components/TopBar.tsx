@@ -76,24 +76,9 @@ function Brand() {
   );
 }
 
-function StatusPill({ status }: { status?: string }) {
-  if (!status) return null;
-  if (status === "live") {
-    return <Badge variant="outline">Live</Badge>;
-  }
-  const label = status === "closed" ? "Closed" : "Draft";
-  return (
-    <Badge variant="outline" className="text-muted-foreground">
-      {label}
-    </Badge>
-  );
-}
-
 function StudyActions({
-  status,
   shareUrl,
 }: {
-  status?: string;
   shareUrl: string | null;
 }) {
   const { actions, requestDelete, exportCsv } = useStudyToolbar();
@@ -109,8 +94,7 @@ function StudyActions({
 
   return (
     <>
-      <StatusPill status={status} />
-      {status === "live" && shareUrl && (
+      {shareUrl && (
         <Button
           variant="outline"
           size="sm"
