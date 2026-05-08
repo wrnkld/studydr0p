@@ -28,11 +28,10 @@ import {
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 import TreeTestParticipant from "./participant/TreeTestParticipant";
-import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { PageContainer } from "@/components/study/primitives";
 import { ParticipantShell } from "@/components/study/ParticipantShell";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface StudyRow {
@@ -247,19 +246,11 @@ export default function StudyBuilder() {
         onValueChange={(v) => setTab(v as TabKey)}
       >
         {tabsNode}
-        {/*
-          IMPORTANT: do NOT render a PageHeader on the Preview tab.
-          The Preview tab uses ParticipantShell, which renders its own title
-          and description — exactly like the public participant link. One UI.
-        */}
-        {activeTab !== "preview" && (
-          <PageHeader
-            title={liveTitle.trim() || "Untitled study"}
-            description={liveDescription.trim() || undefined}
-          />
-        )}
-
-        <div className="mt-6">
+        <ParticipantShell
+          title={liveTitle.trim() || "Untitled study"}
+          description={liveDescription.trim() || undefined}
+        >
+          <div className="mt-6">
           <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
             <div className="flex justify-start pt-2">
@@ -291,19 +282,14 @@ export default function StudyBuilder() {
             </div>
           </TabsContent>
           <TabsContent value="preview" className="mt-0">
-            <ParticipantShell
-              title={liveTitle.trim() || "Untitled study"}
-              description={liveDescription.trim() || undefined}
-            >
-              <InlinePreview
-                study={{ ...study, title: liveTitle, description: liveDescription }}
-                onSubmitted={() => {
-                  toast.success("Thank you");
-                  setPendingResponse(true);
-                  setTab("results");
-                }}
-              />
-            </ParticipantShell>
+            <InlinePreview
+              study={{ ...study, title: liveTitle, description: liveDescription }}
+              onSubmitted={() => {
+                toast.success("Thank you");
+                setPendingResponse(true);
+                setTab("results");
+              }}
+            />
           </TabsContent>
           <TabsContent
             value="results"
@@ -312,7 +298,8 @@ export default function StudyBuilder() {
           >
             <StudyResultsView studyId={study.id} pendingResponse={pendingResponse} onResponsesLoaded={() => setPendingResponse(false)} />
           </TabsContent>
-        </div>
+          </div>
+        </ParticipantShell>
       </Tabs>
 
       <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
