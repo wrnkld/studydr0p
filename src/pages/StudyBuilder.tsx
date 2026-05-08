@@ -112,26 +112,6 @@ export default function StudyBuilder() {
     [study?.slug],
   );
 
-  const ensurePreviewLink = useCallback(async (current: StudyRow) => {
-    if (current.slug) return current;
-    const nextSlug = current.slug ?? generateSlug();
-    const { data, error } = await supabase
-      .from("studies")
-      .update({ slug: nextSlug })
-      .eq("id", current.id)
-      .select("id, title, description, type, status, slug, config")
-      .single();
-    if (error || !data) {
-      toast.error(error?.message ?? "Could not create preview link");
-      return current;
-    }
-    const updated = data as StudyRow;
-    setStudy(updated);
-    setLiveTitle(updated.title);
-    setLiveDescription(updated.description ?? "");
-    return updated;
-  }, []);
-
   const handleDelete = async () => {
     setDeleting(true);
     try {
@@ -309,7 +289,6 @@ export default function StudyBuilder() {
           <TabsContent value="preview" className="mt-0">
             <InlinePreview
               study={study}
-              ensurePreviewLink={ensurePreviewLink}
               onSubmitted={() => {
                 toast.success("Thank you");
                 setPendingResponse(true);
