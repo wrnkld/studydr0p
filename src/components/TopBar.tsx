@@ -120,9 +120,9 @@ function StudyActions({
           onClick={copy}
         >
           {copied ? (
-            <Check size={16} {...ICON_PROPS} />
+            <Check className="h-3.5 w-3.5" />
           ) : (
-            <LinkIcon size={16} {...ICON_PROPS} />
+            <LinkIcon className="h-3.5 w-3.5" />
           )}
           {copied ? "Copied" : "Copy link"}
         </Button>
@@ -136,13 +136,13 @@ function StudyActions({
             title="Study actions"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <DotsThree size={20} {...ICON_PROPS} />
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           {exportCsv && (
             <DropdownMenuItem onSelect={() => exportCsv()}>
-              <DownloadSimple size={16} {...ICON_PROPS} className="mr-2 duotone-icon" />
+              <Download className="mr-2 h-4 w-4" />
               Export CSV
             </DropdownMenuItem>
           )}
@@ -154,7 +154,7 @@ function StudyActions({
             }
             className="text-destructive focus:text-destructive"
           >
-            <Trash size={16} {...ICON_PROPS} className="mr-2 duotone-icon" />
+            <Trash2 className="mr-2 h-4 w-4" />
             Delete study
           </DropdownMenuItem>
         </DropdownMenuContent>
