@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import {
   CardSortConfig,
+  FirstClickConfig,
   StudyStatus,
   StudyType,
   SurveyConfig,
@@ -12,6 +13,7 @@ import {
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
+import FirstClickBuilder from "./builders/FirstClickBuilder";
 
 import StudyResultsView from "@/components/StudyResultsView";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
