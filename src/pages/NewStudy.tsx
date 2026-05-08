@@ -33,7 +33,7 @@ const TYPES: TypeMeta[] = [
     description: "Ask multiple-choice and rating questions.",
     icon: ListChecks,
     enabled: true,
-    color: "#4A6741",
+    color: "#2D4A3E",
   },
   {
     id: "tree_test",
@@ -41,7 +41,7 @@ const TYPES: TypeMeta[] = [
     description: "Test how findable items are in a navigation structure.",
     icon: Network,
     enabled: true,
-    color: "#3D5A7A",
+    color: "#1C3A5C",
   },
   {
     id: "first_click",
@@ -49,7 +49,7 @@ const TYPES: TypeMeta[] = [
     description: "Where do users click first to complete a task?",
     icon: MousePointerClick,
     enabled: false,
-    color: "#C4A020",
+    color: "#4A4A4A",
   },
   {
     id: "five_second",
@@ -57,7 +57,7 @@ const TYPES: TypeMeta[] = [
     description: "What do people remember after a quick glance?",
     icon: Timer,
     enabled: false,
-    color: "#6B5B45",
+    color: "#3D2E2E",
   },
 ];
 

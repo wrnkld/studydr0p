@@ -57,7 +57,7 @@
 @layer base {
   :root {
     /* Warm muted palette */
-    --background: 39 35% 92%;            /* #F2EDE4 */
+    --background: 0 0% 100%;             /* white page; tan reserved for accents */
     --foreground: 36 10% 10%;            /* #1C1A17 */
 
     --card: 0 0% 100%;                   /* pure white panels */
