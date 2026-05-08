@@ -1,7 +1,7 @@
 import {
   LayoutGrid,
   ListChecks,
-  GitBranch,
+  Network,
   MousePointerClick,
   Timer,
   type LucideIcon,
