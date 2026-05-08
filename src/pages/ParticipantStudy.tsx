@@ -103,9 +103,9 @@ export default function ParticipantStudy() {
 
   if (loading || (!started && study)) {
     return (
-      <Shell>
+      <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </Shell>
+      </main>
     );
   }
 
