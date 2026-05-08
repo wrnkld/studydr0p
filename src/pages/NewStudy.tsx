@@ -13,7 +13,6 @@ type TypeMeta = {
   id: StudyType;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
   enabled: boolean;
 };
 
@@ -22,35 +21,30 @@ const TYPES: TypeMeta[] = [
     id: "card_sort",
     label: "Card sort",
     description: "See how people group and label your content.",
-    icon: LayoutGrid,
     enabled: true,
   },
   {
     id: "survey",
     label: "Survey",
     description: "Ask multiple-choice and rating questions.",
-    icon: ListChecks,
     enabled: true,
   },
   {
     id: "tree_test",
     label: "Tree test",
     description: "Test how findable items are in a navigation structure.",
-    icon: Network,
     enabled: true,
   },
   {
     id: "first_click",
     label: "First click",
     description: "Where do users click first to complete a task?",
-    icon: MousePointerClick,
     enabled: true,
   },
   {
     id: "five_second",
     label: "Five-second test",
     description: "What do people remember after a quick glance?",
-    icon: Timer,
     enabled: false,
   },
 ];
