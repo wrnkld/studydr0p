@@ -13,6 +13,7 @@ import {
   ExampleResponseRow,
   getExampleStudy,
   makeUserCardSortResponse,
+  makeUserFirstClickResponse,
   makeUserSurveyResponse,
   makeUserTreeTestResponse,
 } from "@/lib/exampleStudies";
@@ -21,9 +22,11 @@ import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
 import SurveyParticipant from "@/pages/participant/SurveyParticipant";
 import TreeTestParticipant from "@/pages/participant/TreeTestParticipant";
+import FirstClickParticipant from "@/pages/participant/FirstClickParticipant";
 import CardSortResults from "@/pages/results/CardSortResults";
 import SurveyResults from "@/pages/results/SurveyResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
+import FirstClickResults from "@/pages/results/FirstClickResults";
 
 export default function ExampleStudy() {
   const { id } = useParams();
