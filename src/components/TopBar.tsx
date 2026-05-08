@@ -24,8 +24,6 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
 /**
  * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
@@ -52,7 +50,7 @@ export default function TopBar() {
         </div>
         <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
           {onStudyPage ? (
-            <StudyActions status={meta?.status} shareUrl={meta?.shareUrl ?? null} />
+            <StudyActions shareUrl={meta?.shareUrl ?? null} />
           ) : session ? (
             <SignedInActions />
           ) : (
@@ -78,24 +76,9 @@ function Brand() {
   );
 }
 
-function StatusPill({ status }: { status?: string }) {
-  if (!status) return null;
-  if (status === "live") {
-    return <Badge variant="outline">Live</Badge>;
-  }
-  const label = status === "closed" ? "Closed" : "Draft";
-  return (
-    <Badge variant="outline" className="text-muted-foreground">
-      {label}
-    </Badge>
-  );
-}
-
 function StudyActions({
-  status,
   shareUrl,
 }: {
-  status?: string;
   shareUrl: string | null;
 }) {
   const { actions, requestDelete, exportCsv } = useStudyToolbar();
@@ -111,8 +94,7 @@ function StudyActions({
 
   return (
     <>
-      <StatusPill status={status} />
-      {status === "live" && shareUrl && (
+      {shareUrl && (
         <Button
           variant="outline"
           size="sm"

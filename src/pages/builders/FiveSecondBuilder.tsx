@@ -107,11 +107,6 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
   };
 
   const handleSave = async () => {
-    const ok = await save();
-    if (ok) toast.success("Saved");
-  };
-
-  const handlePublish = async () => {
     if (!config.image_url) {
       toast.error("Upload an image first");
       return;
@@ -129,15 +124,7 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Published");
-    }
-  };
-
-  const handleClose = async () => {
-    const ok = await save({ status: "closed" });
-    if (ok) {
-      setStatus("closed");
-      toast.success("Study closed");
+      toast.success("Saved");
     }
   };
 
@@ -154,9 +141,8 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
           <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
         </Link>
 
-        <div className="mt-6 flex items-end justify-between gap-4">
+        <div className="mt-6">
           <h1 className="text-2xl font-semibold tracking-tight">Edit five-second test</h1>
-          <span className="text-xs text-muted-foreground">Status: {status}</span>
         </div>
 
         <section className="mt-8 space-y-4">
@@ -278,7 +264,7 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
           )}
         </section>
 
-        {shareUrl && status === "live" && (
+        {shareUrl && (
           <section className="mt-10 rounded-lg border border-border p-5">
             <div className="text-sm font-medium">Share link</div>
             <div className="mt-2 flex gap-2">
@@ -297,20 +283,10 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
         )}
 
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button variant="outline" onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save draft"}
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
           </Button>
-          {status !== "live" && (
-            <Button onClick={handlePublish} disabled={saving}>
-              {status === "closed" ? "Re-publish" : "Publish"}
-            </Button>
-          )}
-          {status === "live" && (
-            <Button variant="outline" onClick={handleClose} disabled={saving}>
-              Close study
-            </Button>
-          )}
-          {status === "live" && slug && (
+          {slug && (
             <Button asChild variant="ghost">
               <a href={`/s/${slug}`} target="_blank" rel="noreferrer">
                 Preview
