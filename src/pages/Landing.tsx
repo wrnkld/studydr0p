@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
-import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
+import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
@@ -131,7 +131,6 @@ export default function Landing() {
       {(
         <section className="rounded-lg border border-border/70 bg-card divide-y divide-border/60 shadow-[0_1px_2px_rgba(20,20,15,0.04)] overflow-hidden">
           {rows.map((r) => {
-            const Icon = STUDY_TYPE_ICONS[r.type];
             const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
             return (
               <div
@@ -150,10 +149,10 @@ export default function Landing() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground"
+                      className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background"
                       aria-label={typeLabel}
                     >
-                      {Icon && <Icon className="h-4 w-4" />}
+                      <StudyTypeIcon type={r.type} size={24} />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent side="left">{typeLabel}</TooltipContent>

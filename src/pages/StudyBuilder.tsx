@@ -7,9 +7,11 @@ import {
   FirstClickConfig,
   StudyStatus,
   StudyType,
+  STUDY_TYPE_META,
   SurveyConfig,
   TreeTestConfig,
 } from "@/lib/types";
+import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
@@ -273,6 +275,10 @@ export default function StudyBuilder() {
         >
           <div className="mt-6">
           <TabsContent value="build" className="mt-0 space-y-6">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <StudyTypeIcon type={study.type} size={24} />
+              <span>{STUDY_TYPE_META[study.type]?.label ?? study.type}</span>
+            </div>
             {builder}
             <div className="flex justify-start pt-2">
               <Button

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { LayoutGrid, ListChecks, MousePointerClick, Timer, Network } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
+import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
@@ -13,7 +13,6 @@ type TypeMeta = {
   id: StudyType;
   label: string;
   description: string;
-  icon: React.ComponentType<{ className?: string }>;
   enabled: boolean;
 };
 
@@ -22,35 +21,30 @@ const TYPES: TypeMeta[] = [
     id: "card_sort",
     label: "Card sort",
     description: "See how people group and label your content.",
-    icon: LayoutGrid,
     enabled: true,
   },
   {
     id: "survey",
     label: "Survey",
     description: "Ask multiple-choice and rating questions.",
-    icon: ListChecks,
     enabled: true,
   },
   {
     id: "tree_test",
     label: "Tree test",
     description: "Test how findable items are in a navigation structure.",
-    icon: Network,
     enabled: true,
   },
   {
     id: "first_click",
     label: "First click",
     description: "Where do users click first to complete a task?",
-    icon: MousePointerClick,
     enabled: true,
   },
   {
     id: "five_second",
     label: "Five-second test",
     description: "What do people remember after a quick glance?",
-    icon: Timer,
     enabled: false,
   },
 ];
@@ -123,7 +117,6 @@ export default function NewStudy() {
 
       <div className="grid grid-cols-1 gap-3">
           {TYPES.map((t) => {
-            const Icon = t.icon;
             const card = (
               <button
                 key={t.id}
@@ -143,8 +136,8 @@ export default function NewStudy() {
                 )}
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
-                    <Icon className="h-4 w-4" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background">
+                    <StudyTypeIcon type={t.id} size={24} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
