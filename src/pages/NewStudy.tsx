@@ -44,7 +44,7 @@ const TYPES: TypeMeta[] = [
     label: "First click",
     description: "Where do users click first to complete a task?",
     icon: MousePointerClick,
-    enabled: false,
+    enabled: true,
   },
   {
     id: "five_second",
@@ -77,7 +77,9 @@ export default function NewStudy() {
           ? "A few quick questions — should only take a minute."
           : type === "tree_test"
             ? "Navigate the menu to complete each task."
-            : null;
+            : type === "first_click"
+              ? "Take a look at the screen and click where you'd go first."
+              : null;
     const { data, error } = await supabase
       .from("studies")
       .insert({
@@ -92,7 +94,9 @@ export default function NewStudy() {
               ? { sort_type: "open" }
               : type === "tree_test"
                 ? { tasks: [] }
-                : {},
+                : type === "first_click"
+                  ? { task: "", image_url: "", correct_zone: null }
+                  : {},
       })
       .select("id")
       .single();

@@ -13,6 +13,7 @@ import {
   ExampleResponseRow,
   getExampleStudy,
   makeUserCardSortResponse,
+  makeUserFirstClickResponse,
   makeUserSurveyResponse,
   makeUserTreeTestResponse,
 } from "@/lib/exampleStudies";
@@ -21,9 +22,11 @@ import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
 import SurveyParticipant from "@/pages/participant/SurveyParticipant";
 import TreeTestParticipant from "@/pages/participant/TreeTestParticipant";
+import FirstClickParticipant from "@/pages/participant/FirstClickParticipant";
 import CardSortResults from "@/pages/results/CardSortResults";
 import SurveyResults from "@/pages/results/SurveyResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
+import FirstClickResults from "@/pages/results/FirstClickResults";
 
 export default function ExampleStudy() {
   const { id } = useParams();
@@ -121,6 +124,24 @@ export default function ExampleStudy() {
                 }}
                 onDone={() => {}}
               />
+            ) : study.type === "first_click" ? (
+              <FirstClickParticipant
+                study={{
+                  id: study.id,
+                  title: study.title,
+                  description: study.description,
+                  config: study.config,
+                }}
+                sessionId="example"
+                startedAt={Date.now()}
+                inMemory
+                onSubmitInMemory={(data) => {
+                  setUserResponse(makeUserFirstClickResponse(data));
+                  toast.success("Thank you");
+                  setTab("results");
+                }}
+                onDone={() => {}}
+              />
             ) : (
               <SurveyParticipant
                 study={{
@@ -152,6 +173,11 @@ export default function ExampleStudy() {
             ) : study.type === "tree_test" ? (
               <TreeTestResults
                 studyId={study.id}
+                config={study.config}
+                responses={allResponses}
+              />
+            ) : study.type === "first_click" ? (
+              <FirstClickResults
                 config={study.config}
                 responses={allResponses}
               />

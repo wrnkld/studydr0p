@@ -50,9 +50,18 @@ export interface CardSortResponseData {
   unsorted_card_ids: string[];
 }
 
+export interface FirstClickZone {
+  /** All values are percentages of the image (0-100). */
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
 export interface FirstClickConfig {
   task: string;
   image_url: string;
+  correct_zone?: FirstClickZone | null;
 }
 
 export interface TreeTestTask {
