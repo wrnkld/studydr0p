@@ -15,6 +15,7 @@ type TypeMeta = {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   enabled: boolean;
+  color: string;
 };
 
 const TYPES: TypeMeta[] = [
@@ -24,6 +25,7 @@ const TYPES: TypeMeta[] = [
     description: "See how people group and label your content.",
     icon: LayoutGrid,
     enabled: true,
+    color: "#D95F3B",
   },
   {
     id: "survey",
@@ -31,6 +33,7 @@ const TYPES: TypeMeta[] = [
     description: "Ask multiple-choice and rating questions.",
     icon: ListChecks,
     enabled: true,
+    color: "#4A6741",
   },
   {
     id: "tree_test",
@@ -38,6 +41,7 @@ const TYPES: TypeMeta[] = [
     description: "Test how findable items are in a navigation structure.",
     icon: Network,
     enabled: true,
+    color: "#3D5A7A",
   },
   {
     id: "first_click",
@@ -45,6 +49,7 @@ const TYPES: TypeMeta[] = [
     description: "Where do users click first to complete a task?",
     icon: MousePointerClick,
     enabled: false,
+    color: "#C4A020",
   },
   {
     id: "five_second",
@@ -52,6 +57,7 @@ const TYPES: TypeMeta[] = [
     description: "What do people remember after a quick glance?",
     icon: Timer,
     enabled: false,
+    color: "#6B5B45",
   },
 ];
 
@@ -117,52 +123,47 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <div className="grid grid-cols-1 gap-3">
-          {TYPES.map((t) => {
-            const Icon = t.icon;
-            const card = (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => {
-                  if (!t.enabled || creating) return;
-                  setPendingType(t.id);
-                  void create(t.id);
-                }}
-                disabled={!t.enabled || creating}
-                className={cn(
-                  "group relative text-left rounded-lg border border-border/70 bg-card p-5 transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                  t.enabled
-                    ? "hover:bg-muted/40 cursor-pointer"
-                    : "opacity-50 cursor-not-allowed",
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
-                    <Icon className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[15px] font-medium tracking-tight">
-                        {t.label}
-                      </span>
-                      {!t.enabled && (
-                        <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
-                          Soon
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                      {t.description}
-                    </p>
-                  </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {TYPES.map((t) => {
+          const Icon = t.icon;
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => {
+                if (!t.enabled || creating) return;
+                setPendingType(t.id);
+                void create(t.id);
+              }}
+              disabled={!t.enabled || creating}
+              style={{ backgroundColor: t.color }}
+              className={cn(
+                "group relative text-left rounded-lg p-6 min-h-[180px] flex flex-col justify-between text-white overflow-hidden transition-all",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                t.enabled
+                  ? "cursor-pointer hover:brightness-90"
+                  : "cursor-not-allowed saturate-50 opacity-80",
+              )}
+            >
+              <Icon className="h-6 w-6 text-white/80" />
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl font-bold tracking-tight text-white">
+                    {t.label}
+                  </span>
+                  {!t.enabled && (
+                    <span className="text-[10px] uppercase tracking-[0.12em] rounded-full bg-white/20 px-2 py-0.5 text-white">
+                      Soon
+                    </span>
+                  )}
                 </div>
-              </button>
-            );
-
-            return card;
-          })}
+                <p className="mt-2 text-sm text-white/80 leading-relaxed">
+                  {t.description}
+                </p>
+              </div>
+            </button>
+          );
+        })}
       </div>
     </PageContainer>
   );
