@@ -24,11 +24,13 @@ export function ParticipantShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn("mx-auto w-full max-w-lg space-y-6 py-2", className)}>
+    <div className={cn("mx-auto w-full max-w-5xl space-y-6", className)}>
       <header className="space-y-2">
-        <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
+        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">
+          {title}
+        </h1>
         {description ? (
-          <p className="whitespace-pre-wrap text-muted-foreground leading-relaxed">
+          <p className="whitespace-pre-wrap text-[15px] text-muted-foreground leading-relaxed">
             {description}
           </p>
         ) : null}
