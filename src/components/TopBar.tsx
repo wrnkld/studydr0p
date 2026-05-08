@@ -121,9 +121,9 @@ function StudyActions({
           onClick={copy}
         >
           {copied ? (
-            <Check className="h-3.5 w-3.5" />
+            <Check size={16} {...ICON_PROPS} />
           ) : (
-            <LinkIcon className="h-3.5 w-3.5" />
+            <LinkIcon size={16} {...ICON_PROPS} />
           )}
           {copied ? "Copied" : "Copy link"}
         </Button>
@@ -137,13 +137,13 @@ function StudyActions({
             title="Study actions"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <MoreHorizontal className="h-4 w-4" />
+            <DotsThree size={20} {...ICON_PROPS} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           {exportCsv && (
             <DropdownMenuItem onSelect={() => exportCsv()}>
-              <Download className="mr-2 h-4 w-4" />
+              <DownloadSimple size={16} {...ICON_PROPS} className="mr-2 duotone-icon" />
               Export CSV
             </DropdownMenuItem>
           )}
@@ -155,7 +155,7 @@ function StudyActions({
             }
             className="text-destructive focus:text-destructive"
           >
-            <Trash2 className="mr-2 h-4 w-4" />
+            <Trash size={16} {...ICON_PROPS} className="mr-2 duotone-icon" />
             Delete study
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -174,7 +174,7 @@ function SignedInActions() {
         className="h-8 gap-1.5 px-3 text-sm"
         onClick={() => navigate("/studies/new")}
       >
-        <Plus className="h-3.5 w-3.5" />
+        <Plus size={16} {...ICON_PROPS} />
         New study
       </Button>
       <Tooltip>
@@ -189,7 +189,7 @@ function SignedInActions() {
               navigate("/");
             }}
           >
-            <LogOut className="h-4 w-4" />
+            <SignOut size={18} {...ICON_PROPS} />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Sign out</TooltipContent>
