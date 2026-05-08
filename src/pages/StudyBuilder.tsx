@@ -263,12 +263,14 @@ export default function StudyBuilder() {
         onValueChange={(v) => setTab(v as TabKey)}
       >
         {tabsNode}
-        <PageHeader
-          title={liveTitle.trim() || "Untitled study"}
-          description={liveDescription.trim() || undefined}
-        />
+        {activeTab !== "preview" && (
+          <PageHeader
+            title={liveTitle.trim() || "Untitled study"}
+            description={liveDescription.trim() || undefined}
+          />
+        )}
 
-        <div className="mt-6">
+        <div className={activeTab === "preview" ? "mt-0" : "mt-6"}>
           <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
             <div className="flex justify-start pt-2">
