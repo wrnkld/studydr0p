@@ -264,7 +264,7 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
           )}
         </section>
 
-        {shareUrl && status === "live" && (
+        {shareUrl && (
           <section className="mt-10 rounded-lg border border-border p-5">
             <div className="text-sm font-medium">Share link</div>
             <div className="mt-2 flex gap-2">
@@ -283,20 +283,10 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
         )}
 
         <div className="mt-10 flex flex-wrap gap-2 border-t border-border pt-6">
-          <Button variant="outline" onClick={handleSave} disabled={saving}>
-            {saving ? "Saving…" : "Save draft"}
+          <Button onClick={handleSave} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
           </Button>
-          {status !== "live" && (
-            <Button onClick={handlePublish} disabled={saving}>
-              {status === "closed" ? "Re-publish" : "Publish"}
-            </Button>
-          )}
-          {status === "live" && (
-            <Button variant="outline" onClick={handleClose} disabled={saving}>
-              Close study
-            </Button>
-          )}
-          {status === "live" && slug && (
+          {slug && (
             <Button asChild variant="ghost">
               <a href={`/s/${slug}`} target="_blank" rel="noreferrer">
                 Preview
