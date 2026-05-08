@@ -15,6 +15,7 @@ type TypeMeta = {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   enabled: boolean;
+  color: string;
 };
 
 const TYPES: TypeMeta[] = [
@@ -24,6 +25,7 @@ const TYPES: TypeMeta[] = [
     description: "See how people group and label your content.",
     icon: LayoutGrid,
     enabled: true,
+    color: "#D95F3B",
   },
   {
     id: "survey",
@@ -31,6 +33,7 @@ const TYPES: TypeMeta[] = [
     description: "Ask multiple-choice and rating questions.",
     icon: ListChecks,
     enabled: true,
+    color: "#4A6741",
   },
   {
     id: "tree_test",
@@ -38,6 +41,7 @@ const TYPES: TypeMeta[] = [
     description: "Test how findable items are in a navigation structure.",
     icon: Network,
     enabled: true,
+    color: "#3D5A7A",
   },
   {
     id: "first_click",
@@ -45,6 +49,7 @@ const TYPES: TypeMeta[] = [
     description: "Where do users click first to complete a task?",
     icon: MousePointerClick,
     enabled: false,
+    color: "#C4A020",
   },
   {
     id: "five_second",
@@ -52,6 +57,7 @@ const TYPES: TypeMeta[] = [
     description: "What do people remember after a quick glance?",
     icon: Timer,
     enabled: false,
+    color: "#6B5B45",
   },
 ];
 
