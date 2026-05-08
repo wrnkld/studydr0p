@@ -141,9 +141,8 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
           <ArrowLeft className="mr-1.5 h-4 w-4" /> Back to Studies
         </Link>
 
-        <div className="mt-6 flex items-end justify-between gap-4">
+        <div className="mt-6">
           <h1 className="text-2xl font-semibold tracking-tight">Edit five-second test</h1>
-          <span className="text-xs text-muted-foreground">Status: {status}</span>
         </div>
 
         <section className="mt-8 space-y-4">
