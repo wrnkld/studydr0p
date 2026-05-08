@@ -478,6 +478,42 @@ function InlinePreview({
     );
   }
 
+  if (study.type === "first_click") {
+    const cfg = (study.config as FirstClickConfig) ?? {
+      task: "",
+      image_url: "",
+      correct_zone: null,
+    };
+    if (!cfg.image_url) {
+      return (
+        <div className="space-y-6 py-6">
+          <section>
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-medium text-foreground">No image yet</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+                Upload one in the Build tab.
+              </p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    return (
+      <FirstClickParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        preview
+        onDone={onSubmitted}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6 py-6">
       <section>
