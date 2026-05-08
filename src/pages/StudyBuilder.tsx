@@ -323,24 +323,6 @@ export default function StudyBuilder() {
   );
 }
 
-function StatusBadge({ status }: { status: StudyStatus }) {
-  if (status === "live") {
-    return <Badge variant="outline">Live</Badge>;
-  }
-  if (status === "draft") {
-    return (
-      <Badge variant="outline" className="text-muted-foreground">
-        Draft
-      </Badge>
-    );
-  }
-  return (
-    <Badge variant="outline" className="text-muted-foreground">
-      Closed
-    </Badge>
-  );
-}
-
 function InlinePreview({
   study,
   onSubmitted,
