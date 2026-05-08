@@ -56,6 +56,14 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     responseCount: 20,
     isExample: true,
   },
+  {
+    id: "orderitagain",
+    href: "/examples/orderitagain",
+    title: "Order it again.",
+    type: "first_click",
+    responseCount: 20,
+    isExample: true,
+  },
 ];
 
 export default function Landing() {
