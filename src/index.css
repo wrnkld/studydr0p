@@ -166,3 +166,9 @@
   fill: #D95F3B;
   opacity: 0.3;
 }
+
+/* Generic duotone icon styling — orange secondary at 30% opacity. */
+.duotone-icon > path:first-child {
+  fill: #D95F3B;
+  opacity: 0.3;
+}
