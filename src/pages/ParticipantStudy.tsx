@@ -2,23 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
 import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 import TreeTestParticipant from "./participant/TreeTestParticipant";
-import { ContentPanel } from "@/components/study/primitives";
-
-function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="container py-8">
-      <ContentPanel size="default" className="space-y-3">
-        {children}
-      </ContentPanel>
-    </main>
-  );
-}
+import { ParticipantShell } from "@/components/study/ParticipantShell";
 
 interface StudyData {
   id: string;
@@ -36,13 +25,12 @@ export default function ParticipantStudy() {
   const [study, setStudy] = useState<StudyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<"not_found" | "closed" | null>(null);
-  const [started, setStarted] = useState(false);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [startedAt, setStartedAt] = useState<number>(0);
+  const [done, setDone] = useState(false);
   useDocumentTitle(study?.title ?? "Study");
 
-  const [done, setDone] = useState(false);
-
+  // Load the study.
   useEffect(() => {
     if (!slug) return;
     (async () => {
@@ -64,60 +52,73 @@ export default function ParticipantStudy() {
       setStudy(data as StudyData);
       setLoading(false);
     })();
-  }, [slug]);
+  }, [slug, isPreview]);
 
-  const begin = async () => {
-    if (!study) return;
-    if (isPreview) {
-      setSessionId("preview");
+  // Auto-start the session as soon as the study is loaded — no welcome screen.
+  // The participant link drops people directly into the study, just like the
+  // Preview tab in the builder. One UI for both.
+  useEffect(() => {
+    if (!study || sessionId) return;
+    let cancelled = false;
+    (async () => {
+      if (isPreview) {
+        if (cancelled) return;
+        setSessionId("preview");
+        setStartedAt(Date.now());
+        return;
+      }
+      const ua = navigator.userAgent;
+      const isMobile = /Mobi|Android|iPhone/.test(ua);
+      const { data, error: e } = await supabase
+        .from("sessions")
+        .insert({
+          study_id: study.id,
+          metadata: { device: isMobile ? "mobile" : "desktop", ua },
+        })
+        .select("id")
+        .single();
+      if (cancelled) return;
+      if (e || !data) {
+        toast.error("Could not start session");
+        return;
+      }
+      setSessionId(data.id);
       setStartedAt(Date.now());
-      setStarted(true);
-      return;
-    }
-    const ua = navigator.userAgent;
-    const isMobile = /Mobi|Android|iPhone/.test(ua);
-    const { data, error: e } = await supabase
-      .from("sessions")
-      .insert({
-        study_id: study.id,
-        metadata: { device: isMobile ? "mobile" : "desktop", ua },
-      })
-      .select("id")
-      .single();
-    if (e || !data) {
-      toast.error("Could not start session");
-      return;
-    }
-    setSessionId(data.id);
-    setStartedAt(Date.now());
-    setStarted(true);
-  };
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [study, sessionId, isPreview]);
 
   if (loading) {
     return (
-      <Shell>
-        <p className="text-sm text-muted-foreground">Loading…</p>
-      </Shell>
+      <main className="container py-8">
+        <ParticipantShell title="Loading…">
+          <p className="text-sm text-muted-foreground">One moment.</p>
+        </ParticipantShell>
+      </main>
     );
   }
 
   if (error === "not_found") {
     return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
-        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
-      </Shell>
+      <main className="container py-8">
+        <ParticipantShell title="Study not found">
+          <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
+        </ParticipantShell>
+      </main>
     );
   }
 
   if (error === "closed") {
     return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
-        <p className="text-muted-foreground">
-          Thanks for your interest — the researcher is no longer collecting responses.
-        </p>
-      </Shell>
+      <main className="container py-8">
+        <ParticipantShell title="This study is closed">
+          <p className="text-muted-foreground">
+            Thanks for your interest — the researcher is no longer collecting responses.
+          </p>
+        </ParticipantShell>
+      </main>
     );
   }
 
@@ -125,40 +126,24 @@ export default function ParticipantStudy() {
 
   if (done) {
     return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
-        <p className="text-muted-foreground">
-          {isPreview
-            ? "Preview complete — nothing was saved."
-            : "Your response has been recorded."}
-        </p>
-      </Shell>
-    );
-  }
-
-  if (!started) {
-    const intro = introCopy(study);
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
-        {study.description && (
-          <p className="whitespace-pre-wrap text-muted-foreground">
-            {study.description}
+      <main className="container py-8">
+        <ParticipantShell title="Thank you">
+          <p className="text-muted-foreground">
+            {isPreview
+              ? "Preview complete — nothing was saved."
+              : "Your response has been recorded."}
           </p>
-        )}
-        <p className="text-sm text-muted-foreground">{intro}</p>
-        <div className="pt-2">
-          <Button onClick={begin}>Start</Button>
-        </div>
-      </Shell>
+        </ParticipantShell>
+      </main>
     );
   }
 
   if (!sessionId) return null;
 
+  let body: React.ReactNode = null;
   if (study.type === "survey") {
     const cfg = (study.config as SurveyConfig) ?? { questions: [] };
-    return (
+    body = (
       <SurveyParticipant
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
@@ -167,11 +152,9 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
-  }
-
-  if (study.type === "card_sort") {
+  } else if (study.type === "card_sort") {
     const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
-    return (
+    body = (
       <CardSortParticipant
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
@@ -180,11 +163,9 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
-  }
-
-  if (study.type === "tree_test") {
+  } else if (study.type === "tree_test") {
     const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
-    return (
+    body = (
       <TreeTestParticipant
         study={{ ...study, config: cfg }}
         sessionId={sessionId}
@@ -192,29 +173,15 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
+  } else {
+    body = <p className="text-sm text-muted-foreground">Unsupported study type.</p>;
   }
 
   return (
-    <Shell>
-      <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
-    </Shell>
+    <main className="container py-8">
+      <ParticipantShell title={study.title} description={study.description}>
+        {body}
+      </ParticipantShell>
+    </main>
   );
-}
-
-function introCopy(study: StudyData): string {
-  if (study.type === "survey") {
-    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
-    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
-  }
-  if (study.type === "card_sort") {
-    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
-    return sort === "open"
-      ? "You'll group cards into categories you create · Anonymous"
-      : "You'll sort cards into predefined categories · Anonymous";
-  }
-  if (study.type === "tree_test") {
-    const n = (study.config as TreeTestConfig)?.tasks?.length ?? 0;
-    return `${n} task${n === 1 ? "" : "s"} · Navigate a menu to find answers · Anonymous`;
-  }
-  return "Anonymous";
 }
