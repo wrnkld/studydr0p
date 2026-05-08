@@ -2,15 +2,14 @@ import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
 import {
   Check,
-  DownloadSimple,
   Link as LinkIcon,
-  SignOut,
-  DotsThree,
+  LogOut,
+  MoreHorizontal,
   Plus,
-  Trash,
-} from "@phosphor-icons/react";
+  Trash2,
+  Download,
+} from "lucide-react";
 
-const ICON_PROPS = { weight: "duotone" as const, color: "#1C1A17", className: "duotone-icon" };
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -121,9 +120,9 @@ function StudyActions({
           onClick={copy}
         >
           {copied ? (
-            <Check size={16} {...ICON_PROPS} />
+            <Check className="h-3.5 w-3.5" />
           ) : (
-            <LinkIcon size={16} {...ICON_PROPS} />
+            <LinkIcon className="h-3.5 w-3.5" />
           )}
           {copied ? "Copied" : "Copy link"}
         </Button>
@@ -137,13 +136,13 @@ function StudyActions({
             title="Study actions"
             className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <DotsThree size={20} {...ICON_PROPS} />
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
           {exportCsv && (
             <DropdownMenuItem onSelect={() => exportCsv()}>
-              <DownloadSimple size={16} {...ICON_PROPS} className="mr-2 duotone-icon" />
+              <Download className="mr-2 h-4 w-4" />
               Export CSV
             </DropdownMenuItem>
           )}
@@ -155,7 +154,7 @@ function StudyActions({
             }
             className="text-destructive focus:text-destructive"
           >
-            <Trash size={16} {...ICON_PROPS} className="mr-2 duotone-icon" />
+            <Trash2 className="mr-2 h-4 w-4" />
             Delete study
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -174,7 +173,7 @@ function SignedInActions() {
         className="h-8 gap-1.5 px-3 text-sm"
         onClick={() => navigate("/studies/new")}
       >
-        <Plus size={16} {...ICON_PROPS} />
+        <Plus className="h-3.5 w-3.5" />
         New study
       </Button>
       <Tooltip>
@@ -189,7 +188,7 @@ function SignedInActions() {
               navigate("/");
             }}
           >
-            <SignOut size={18} {...ICON_PROPS} />
+            <LogOut className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Sign out</TooltipContent>
