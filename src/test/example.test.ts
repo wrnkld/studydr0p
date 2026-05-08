@@ -8,12 +8,15 @@ describe("example", () => {
 });
 
 describe("participant preview contract", () => {
-  it("renders the real share route instead of a parallel participant implementation", () => {
+  it("uses the same participant experience component for preview and share links", () => {
     const builderSource = readFileSync("src/pages/StudyBuilder.tsx", "utf8");
+    const participantSource = readFileSync("src/pages/ParticipantStudy.tsx", "utf8");
 
-    expect(builderSource).toContain("<iframe");
-    expect(builderSource).toContain('src={`/s/${previewStudy.slug}?preview=1`}');
+    expect(builderSource).toContain("<ParticipantExperience");
+    expect(participantSource).toContain("<ParticipantExperience");
     expect(builderSource).toContain('activeTab !== "preview" &&');
+    expect(builderSource).not.toContain("<iframe");
+    expect(builderSource).not.toContain("/s/${previewStudy.slug}?preview=1");
     expect(builderSource).not.toContain('from "./participant/SurveyParticipant"');
     expect(builderSource).not.toContain('from "./participant/CardSortParticipant"');
     expect(builderSource).not.toContain('from "./participant/TreeTestParticipant"');
