@@ -30,6 +30,7 @@ import {
 import SurveyParticipant from "./participant/SurveyParticipant";
 import CardSortParticipant from "./participant/CardSortParticipant";
 import TreeTestParticipant from "./participant/TreeTestParticipant";
+import FirstClickParticipant from "./participant/FirstClickParticipant";
 import { PageContainer } from "@/components/study/primitives";
 import { ParticipantShell } from "@/components/study/ParticipantShell";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
