@@ -2,15 +2,14 @@ import { FormEvent, useState } from "react";
 import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
 import {
   Check,
-  DownloadSimple,
   Link as LinkIcon,
-  SignOut,
-  DotsThree,
+  LogOut,
+  MoreHorizontal,
   Plus,
-  Trash,
-} from "@phosphor-icons/react";
+  Trash2,
+  Download,
+} from "lucide-react";
 
-const ICON_PROPS = { weight: "duotone" as const, color: "#1C1A17", className: "duotone-icon" };
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
