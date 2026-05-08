@@ -159,16 +159,3 @@
   }
 }
 
-/* Phosphor duotone study-type icons:
-   primary path inherits `color` (#1C1A17), secondary (background) path is
-   the orange accent at 30% opacity. */
-.study-type-icon > path:first-child {
-  fill: #D95F3B;
-  opacity: 0.3;
-}
-
-/* Generic duotone icon styling — orange secondary at 30% opacity. */
-.duotone-icon > path:first-child {
-  fill: #D95F3B;
-  opacity: 0.3;
-}
