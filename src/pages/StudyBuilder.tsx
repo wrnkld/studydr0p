@@ -12,10 +12,6 @@ import {
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
-import {
-  ParticipantExperience,
-  ParticipantViewport,
-} from "./participant/ParticipantExperience";
 
 import StudyResultsView from "@/components/StudyResultsView";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -29,9 +25,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import SurveyParticipant from "./participant/SurveyParticipant";
+import CardSortParticipant from "./participant/CardSortParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface StudyRow {
@@ -246,14 +246,12 @@ export default function StudyBuilder() {
         onValueChange={(v) => setTab(v as TabKey)}
       >
         {tabsNode}
-        {activeTab !== "preview" && (
-          <PageHeader
-            title={liveTitle.trim() || "Untitled study"}
-            description={liveDescription.trim() || undefined}
-          />
-        )}
+        <PageHeader
+          title={liveTitle.trim() || "Untitled study"}
+          description={liveDescription.trim() || undefined}
+        />
 
-        <div className={activeTab === "preview" ? "mt-0" : "mt-6"}>
+        <div className="mt-6">
           <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
             <div className="flex justify-start pt-2">
@@ -327,6 +325,24 @@ export default function StudyBuilder() {
   );
 }
 
+function StatusBadge({ status }: { status: StudyStatus }) {
+  if (status === "live") {
+    return <Badge variant="outline">Live</Badge>;
+  }
+  if (status === "draft") {
+    return (
+      <Badge variant="outline" className="text-muted-foreground">
+        Draft
+      </Badge>
+    );
+  }
+  return (
+    <Badge variant="outline" className="text-muted-foreground">
+      Closed
+    </Badge>
+  );
+}
+
 function InlinePreview({
   study,
   onSubmitted,
@@ -335,13 +351,13 @@ function InlinePreview({
   onSubmitted: () => void;
 }) {
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [startedAt, setStartedAt] = useState(0);
+  const [startedAt, setStartedAt] = useState<number>(0);
+  const [creating, setCreating] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    setSessionId(null);
-    setStartedAt(0);
     (async () => {
+      setCreating(true);
       const ua = navigator.userAgent;
       const isMobile = /Mobi|Android|iPhone/.test(ua);
       const { data, error } = await supabase
@@ -354,33 +370,123 @@ function InlinePreview({
         .single();
       if (cancelled) return;
       if (error || !data) {
-        toast.error(error?.message ?? "Could not start preview");
+        toast.error(error?.message ?? "Could not start preview session");
+        setCreating(false);
         return;
       }
       setSessionId(data.id);
       setStartedAt(Date.now());
+      setCreating(false);
     })();
     return () => {
       cancelled = true;
     };
+    // Re-create a fresh session each time the study id changes.
   }, [study.id]);
 
-  if (!sessionId) {
+  if (creating || !sessionId) {
     return (
-      <ParticipantViewport>
-        <p className="text-sm text-muted-foreground">Loading preview…</p>
-      </ParticipantViewport>
+      <div className="space-y-6 py-6">
+        <section>
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <p className="text-sm text-muted-foreground">Loading preview…</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (study.type === "survey") {
+    const cfg = (study.config as SurveyConfig) ?? { questions: [] };
+    if (!cfg.questions || cfg.questions.length === 0) {
+      return (
+        <div className="space-y-6 py-6">
+          <section>
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-medium text-foreground">No questions yet</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+                Add some in the Build tab.
+              </p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    return (
+      <SurveyParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        preview
+        onDone={onSubmitted}
+      />
+    );
+  }
+
+  if (study.type === "card_sort") {
+    const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
+    return (
+      <CardSortParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        preview
+        onDone={onSubmitted}
+      />
+    );
+  }
+
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
+    if (!cfg.tasks || cfg.tasks.length === 0) {
+      return (
+        <div className="space-y-6 py-6">
+          <section>
+            <div className="flex flex-col items-center justify-center py-16 text-center">
+              <p className="text-lg font-medium text-foreground">No tasks yet</p>
+              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+                Add some in the Build tab.
+              </p>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    return (
+      <TreeTestParticipant
+        study={{
+          id: study.id,
+          title: study.title,
+          description: study.description,
+          config: cfg,
+        }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={onSubmitted}
+      />
     );
   }
 
   return (
-    <ParticipantExperience
-      study={study}
-      sessionId={sessionId}
-      startedAt={startedAt}
-      preview
-      onDone={onSubmitted}
-    />
+    <div className="space-y-6 py-6">
+      <section>
+        <div className="flex flex-col items-center justify-center py-16 text-center">
+          <p className="text-sm text-muted-foreground">
+            This study type can't be previewed yet.
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }
 

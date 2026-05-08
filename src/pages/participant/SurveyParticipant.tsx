@@ -98,7 +98,10 @@ export default function SurveyParticipant({
       <ol className="space-y-8">
         {questions.map((q, i) => (
           <li key={q.id} className="space-y-4">
-            <p className="text-sm font-medium">{q.label || q.id}</p>
+            <SectionHeader
+              kicker={`Question ${i + 1}`}
+              title={q.label || q.id}
+            />
             <QuestionInput
               q={q}
               value={answers[q.id]}
@@ -113,7 +116,16 @@ export default function SurveyParticipant({
     </div>
   );
 
-  return content;
+  if (preview || inMemory) return content;
+
+  return (
+    <main className="container py-8 space-y-6">
+      <div className="space-y-3">
+        <h1>{study.title}</h1>
+      </div>
+      {content}
+    </main>
+  );
 }
 
 function QuestionInput({

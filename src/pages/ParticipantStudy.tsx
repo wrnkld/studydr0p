@@ -2,13 +2,23 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
-import { StudyType } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
 import { toast } from "sonner";
-import {
-  ParticipantExperience,
-  ParticipantMessage,
-  ParticipantViewport,
-} from "./participant/ParticipantExperience";
+import SurveyParticipant from "./participant/SurveyParticipant";
+import CardSortParticipant from "./participant/CardSortParticipant";
+import TreeTestParticipant from "./participant/TreeTestParticipant";
+import { ContentPanel } from "@/components/study/primitives";
+
+function Shell({ children }: { children: React.ReactNode }) {
+  return (
+    <main className="container py-8">
+      <ContentPanel size="default" className="space-y-3">
+        {children}
+      </ContentPanel>
+    </main>
+  );
+}
 
 interface StudyData {
   id: string;
@@ -56,65 +66,58 @@ export default function ParticipantStudy() {
     })();
   }, [slug]);
 
-  // Auto-start: create session as soon as study loads (no welcome screen)
-  useEffect(() => {
-    if (!study || started || error) return;
-    (async () => {
-      const ua = navigator.userAgent;
-      const isMobile = /Mobi|Android|iPhone/.test(ua);
-      const { data, error: e } = await supabase
-        .from("sessions")
-        .insert({
-          study_id: study.id,
-          metadata: {
-            device: isMobile ? "mobile" : "desktop",
-            ua,
-            ...(isPreview ? { source: "builder_preview" } : {}),
-          },
-        })
-        .select("id")
-        .single();
-      if (e || !data) {
-        toast.error("Could not start session");
-        return;
-      }
-      setSessionId(data.id);
+  const begin = async () => {
+    if (!study) return;
+    if (isPreview) {
+      setSessionId("preview");
       setStartedAt(Date.now());
       setStarted(true);
-    })();
-  }, [study, started, error, isPreview]);
+      return;
+    }
+    const ua = navigator.userAgent;
+    const isMobile = /Mobi|Android|iPhone/.test(ua);
+    const { data, error: e } = await supabase
+      .from("sessions")
+      .insert({
+        study_id: study.id,
+        metadata: { device: isMobile ? "mobile" : "desktop", ua },
+      })
+      .select("id")
+      .single();
+    if (e || !data) {
+      toast.error("Could not start session");
+      return;
+    }
+    setSessionId(data.id);
+    setStartedAt(Date.now());
+    setStarted(true);
+  };
 
-  useEffect(() => {
-    if (!done || !isPreview || !study) return;
-    window.parent?.postMessage(
-      { type: "studydrop:preview-submitted", studyId: study.id },
-      window.location.origin,
-    );
-  }, [done, isPreview, study]);
-
-  if (loading || (!started && study)) {
+  if (loading) {
     return (
-      <ParticipantViewport>
+      <Shell>
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </ParticipantViewport>
+      </Shell>
     );
   }
 
   if (error === "not_found") {
     return (
-      <ParticipantMessage title="Study not found">
-        <p>This link doesn't lead anywhere.</p>
-      </ParticipantMessage>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
+        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
+      </Shell>
     );
   }
 
   if (error === "closed") {
     return (
-      <ParticipantMessage title="This study is closed">
-        <p>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
+        <p className="text-muted-foreground">
           Thanks for your interest — the researcher is no longer collecting responses.
         </p>
-      </ParticipantMessage>
+      </Shell>
     );
   }
 
@@ -122,26 +125,96 @@ export default function ParticipantStudy() {
 
   if (done) {
     return (
-      <ParticipantMessage title="Thank you">
-        <p>
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
+        <p className="text-muted-foreground">
           {isPreview
-            ? "Preview complete."
+            ? "Preview complete — nothing was saved."
             : "Your response has been recorded."}
         </p>
-      </ParticipantMessage>
+      </Shell>
+    );
+  }
+
+  if (!started) {
+    const intro = introCopy(study);
+    return (
+      <Shell>
+        <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
+        {study.description && (
+          <p className="whitespace-pre-wrap text-muted-foreground">
+            {study.description}
+          </p>
+        )}
+        <p className="text-sm text-muted-foreground">{intro}</p>
+        <div className="pt-2">
+          <Button onClick={begin}>Start</Button>
+        </div>
+      </Shell>
     );
   }
 
   if (!sessionId) return null;
 
+  if (study.type === "survey") {
+    const cfg = (study.config as SurveyConfig) ?? { questions: [] };
+    return (
+      <SurveyParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        preview={isPreview}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
+  if (study.type === "card_sort") {
+    const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
+    return (
+      <CardSortParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        preview={isPreview}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
+  if (study.type === "tree_test") {
+    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
+    return (
+      <TreeTestParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        onDone={() => setDone(true)}
+      />
+    );
+  }
+
   return (
-    <ParticipantExperience
-      study={study}
-      sessionId={sessionId}
-      startedAt={startedAt}
-      preview={isPreview}
-      onDone={() => setDone(true)}
-    />
+    <Shell>
+      <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
+    </Shell>
   );
 }
 
+function introCopy(study: StudyData): string {
+  if (study.type === "survey") {
+    const n = (study.config as SurveyConfig)?.questions?.length ?? 0;
+    return `${n} question${n === 1 ? "" : "s"} · Anonymous`;
+  }
+  if (study.type === "card_sort") {
+    const sort = (study.config as CardSortConfig)?.sort_type ?? "open";
+    return sort === "open"
+      ? "You'll group cards into categories you create · Anonymous"
+      : "You'll sort cards into predefined categories · Anonymous";
+  }
+  if (study.type === "tree_test") {
+    const n = (study.config as TreeTestConfig)?.tasks?.length ?? 0;
+    return `${n} task${n === 1 ? "" : "s"} · Navigate a menu to find answers · Anonymous`;
+  }
+  return "Anonymous";
+}
