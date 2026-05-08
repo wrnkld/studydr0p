@@ -124,6 +124,24 @@ export default function ExampleStudy() {
                 }}
                 onDone={() => {}}
               />
+            ) : study.type === "first_click" ? (
+              <FirstClickParticipant
+                study={{
+                  id: study.id,
+                  title: study.title,
+                  description: study.description,
+                  config: study.config,
+                }}
+                sessionId="example"
+                startedAt={Date.now()}
+                inMemory
+                onSubmitInMemory={(data) => {
+                  setUserResponse(makeUserFirstClickResponse(data));
+                  toast.success("Thank you");
+                  setTab("results");
+                }}
+                onDone={() => {}}
+              />
             ) : (
               <SurveyParticipant
                 study={{
@@ -155,6 +173,11 @@ export default function ExampleStudy() {
             ) : study.type === "tree_test" ? (
               <TreeTestResults
                 studyId={study.id}
+                config={study.config}
+                responses={allResponses}
+              />
+            ) : study.type === "first_click" ? (
+              <FirstClickResults
                 config={study.config}
                 responses={allResponses}
               />
