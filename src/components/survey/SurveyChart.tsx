@@ -120,10 +120,12 @@ export function ChoiceChart({
           axisLine={false}
           interval={0}
           width={yAxisWidth}
+          tickFormatter={truncate}
         />
         <ChartTooltip
           content={
             <ChartTooltipContent
+              labelFormatter={(label) => String(label)}
               formatter={(value) => {
                 const n = Number(value);
                 const pct = total > 0 ? Math.round((n / total) * 100) : 0;
