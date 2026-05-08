@@ -173,7 +173,7 @@ function SignedInActions() {
         className="h-8 gap-1.5 px-3 text-sm"
         onClick={() => navigate("/studies/new")}
       >
-        <Plus size={16} {...ICON_PROPS} />
+        <Plus className="h-3.5 w-3.5" />
         New study
       </Button>
       <Tooltip>
@@ -188,7 +188,7 @@ function SignedInActions() {
               navigate("/");
             }}
           >
-            <SignOut size={18} {...ICON_PROPS} />
+            <LogOut className="h-4 w-4" />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Sign out</TooltipContent>
