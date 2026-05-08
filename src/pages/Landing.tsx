@@ -82,7 +82,7 @@ export default function Landing() {
     (async () => {
       const { data } = await supabase
         .from("studies")
-        .select("id, title, type, status, responses(count)")
+        .select("id, title, type, responses(count)")
         .eq("researcher_id", user.id)
         .order("created_at", { ascending: false });
 
@@ -95,7 +95,6 @@ export default function Landing() {
             type: s.type as StudyType,
             responseCount: s.responses?.[0]?.count ?? 0,
             isExample: false,
-            status: s.status as "draft" | "live" | "closed" | undefined,
           })),
         );
       }
