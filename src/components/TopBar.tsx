@@ -4,7 +4,6 @@ import {
   Check,
   Link as LinkIcon,
   LogOut,
-  MoreHorizontal,
   Plus,
   Trash2,
   Download,
@@ -14,13 +13,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
