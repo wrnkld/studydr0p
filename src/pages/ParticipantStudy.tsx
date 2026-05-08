@@ -2,22 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
-import { CardSortConfig, StudyType, SurveyConfig, TreeTestConfig } from "@/lib/types";
+import { StudyType } from "@/lib/types";
 import { toast } from "sonner";
-import SurveyParticipant from "./participant/SurveyParticipant";
-import CardSortParticipant from "./participant/CardSortParticipant";
-import TreeTestParticipant from "./participant/TreeTestParticipant";
-import { ContentPanel } from "@/components/study/primitives";
-
-function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
-      <ContentPanel size="narrow" className="space-y-4">
-        {children}
-      </ContentPanel>
-    </main>
-  );
-}
+import {
+  ParticipantExperience,
+  ParticipantMessage,
+  ParticipantViewport,
+} from "./participant/ParticipantExperience";
 
 interface StudyData {
   id: string;
@@ -103,29 +94,27 @@ export default function ParticipantStudy() {
 
   if (loading || (!started && study)) {
     return (
-      <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+      <ParticipantViewport>
         <p className="text-sm text-muted-foreground">Loading…</p>
-      </main>
+      </ParticipantViewport>
     );
   }
 
   if (error === "not_found") {
     return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Study not found</h1>
-        <p className="text-muted-foreground">This link doesn't lead anywhere.</p>
-      </Shell>
+      <ParticipantMessage title="Study not found">
+        <p>This link doesn't lead anywhere.</p>
+      </ParticipantMessage>
     );
   }
 
   if (error === "closed") {
     return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">This study is closed</h1>
-        <p className="text-muted-foreground">
+      <ParticipantMessage title="This study is closed">
+        <p>
           Thanks for your interest — the researcher is no longer collecting responses.
         </p>
-      </Shell>
+      </ParticipantMessage>
     );
   }
 
@@ -133,75 +122,26 @@ export default function ParticipantStudy() {
 
   if (done) {
     return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Thank you</h1>
-        <p className="text-muted-foreground">
+      <ParticipantMessage title="Thank you">
+        <p>
           {isPreview
             ? "Preview complete."
             : "Your response has been recorded."}
         </p>
-      </Shell>
+      </ParticipantMessage>
     );
   }
 
   if (!sessionId) return null;
 
-  let studyContent: React.ReactNode = null;
-
-  if (study.type === "survey") {
-    const cfg = (study.config as SurveyConfig) ?? { questions: [] };
-    studyContent = (
-      <SurveyParticipant
-        study={{ ...study, config: cfg }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        preview={isPreview}
-        onDone={() => setDone(true)}
-      />
-    );
-  } else if (study.type === "card_sort") {
-    const cfg = (study.config as CardSortConfig) ?? { sort_type: "open" };
-    studyContent = (
-      <CardSortParticipant
-        study={{ ...study, config: cfg }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        preview={isPreview}
-        onDone={() => setDone(true)}
-      />
-    );
-  } else if (study.type === "tree_test") {
-    const cfg = (study.config as TreeTestConfig) ?? { tasks: [] };
-    studyContent = (
-      <TreeTestParticipant
-        study={{ ...study, config: cfg }}
-        sessionId={sessionId}
-        startedAt={startedAt}
-        onDone={() => setDone(true)}
-      />
-    );
-  } else {
-    return (
-      <Shell>
-        <h1 className="text-2xl font-semibold tracking-tight">Unsupported study</h1>
-      </Shell>
-    );
-  }
-
   return (
-    <main className="flex min-h-[80vh] items-center justify-center px-4 py-12">
-      <div className="w-full max-w-lg space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-2xl font-semibold tracking-tight">{study.title}</h1>
-          {study.description && (
-            <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
-              {study.description}
-            </p>
-          )}
-        </div>
-        {studyContent}
-      </div>
-    </main>
+    <ParticipantExperience
+      study={study}
+      sessionId={sessionId}
+      startedAt={startedAt}
+      preview={isPreview}
+      onDone={() => setDone(true)}
+    />
   );
 }
 

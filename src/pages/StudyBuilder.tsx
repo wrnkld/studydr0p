@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -9,10 +9,13 @@ import {
   SurveyConfig,
   TreeTestConfig,
 } from "@/lib/types";
-import { generateSlug } from "@/lib/slug";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
+import {
+  ParticipantExperience,
+  ParticipantViewport,
+} from "./participant/ParticipantExperience";
 
 import StudyResultsView from "@/components/StudyResultsView";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
