@@ -174,9 +174,9 @@ Frame.displayName = "Frame";
 export type StatTone = "indigo" | "green" | "amber" | "neutral";
 
 const TONE_BORDER: Record<StatTone, string> = {
-  indigo: "#4F75FF",
-  green: "#16a34a",
-  amber: "#d97706",
+  indigo: "hsl(var(--chart-4))",
+  green: "hsl(var(--chart-2))",
+  amber: "hsl(var(--chart-3))",
   neutral: "hsl(var(--border))",
 };
 
