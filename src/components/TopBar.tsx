@@ -24,8 +24,6 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 
 /**
  * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
