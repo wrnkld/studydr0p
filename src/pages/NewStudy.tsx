@@ -117,7 +117,6 @@ export default function NewStudy() {
 
       <div className="grid grid-cols-1 gap-3">
           {TYPES.map((t) => {
-            const Icon = t.icon;
             const card = (
               <button
                 key={t.id}
@@ -137,8 +136,8 @@ export default function NewStudy() {
                 )}
               >
                 <div className="flex items-start gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background text-muted-foreground">
-                    <Icon className="h-4 w-4" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background">
+                    <StudyTypeIcon type={t.id} size={24} />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
