@@ -236,6 +236,24 @@ export default function StudyBuilder() {
           config: (study.config as TreeTestConfig) ?? { tasks: [] },
         }}
       />
+    ) : study.type === "first_click" ? (
+      <FirstClickBuilder
+        key={loadKey}
+        studyId={study.id}
+        onMetaChange={onMetaChange}
+        initial={{
+          title: study.title,
+          description: study.description,
+          status: study.status,
+          slug: study.slug,
+          config:
+            (study.config as FirstClickConfig) ?? {
+              task: "",
+              image_url: "",
+              correct_zone: null,
+            },
+        }}
+      />
     ) : (
       <p className="text-sm text-muted-foreground">
         This study type is not supported yet.
