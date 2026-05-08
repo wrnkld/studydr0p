@@ -50,7 +50,7 @@ export default function TopBar() {
         </div>
         <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
           {onStudyPage ? (
-            <StudyActions status={meta?.status} shareUrl={meta?.shareUrl ?? null} />
+            <StudyActions shareUrl={meta?.shareUrl ?? null} />
           ) : session ? (
             <SignedInActions />
           ) : (
