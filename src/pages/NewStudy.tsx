@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { LayoutGrid, ListChecks, MousePointerClick, Timer, Network } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { StudyType } from "@/lib/types";
+import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PageContainer, PageHeader, ContentPanel, BackButton } from "@/components/study/primitives";
