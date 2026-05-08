@@ -28,7 +28,6 @@ interface CombinedRow {
   type: StudyType;
   responseCount: number;
   isExample: boolean;
-  status?: "draft" | "live" | "closed";
 }
 
 const EXAMPLE_ROWS: CombinedRow[] = [
