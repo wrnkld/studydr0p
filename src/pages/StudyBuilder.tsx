@@ -246,10 +246,17 @@ export default function StudyBuilder() {
         onValueChange={(v) => setTab(v as TabKey)}
       >
         {tabsNode}
-        <PageHeader
-          title={liveTitle.trim() || "Untitled study"}
-          description={liveDescription.trim() || undefined}
-        />
+        {/*
+          IMPORTANT: do NOT render a PageHeader on the Preview tab.
+          The Preview tab uses ParticipantShell, which renders its own title
+          and description — exactly like the public participant link. One UI.
+        */}
+        {activeTab !== "preview" && (
+          <PageHeader
+            title={liveTitle.trim() || "Untitled study"}
+            description={liveDescription.trim() || undefined}
+          />
+        )}
 
         <div className="mt-6">
           <TabsContent value="build" className="mt-0 space-y-6">
@@ -259,9 +266,7 @@ export default function StudyBuilder() {
                 disabled={!actions || actions.saving}
                 onClick={async () => {
                   const result = await actions?.onSave();
-                  // If onSave returns false, validation failed — stay on Build tab
                   if (result === false) return;
-                  // Re-fetch study to get updated slug/status
                   const { data: updated } = await supabase
                     .from("studies")
                     .select("id, title, description, type, status, slug, config")
@@ -285,14 +290,19 @@ export default function StudyBuilder() {
             </div>
           </TabsContent>
           <TabsContent value="preview" className="mt-0">
-            <InlinePreview
-              study={study}
-              onSubmitted={() => {
-                toast.success("Thank you");
-                setPendingResponse(true);
-                setTab("results");
-              }}
-            />
+            <ParticipantShell
+              title={liveTitle.trim() || "Untitled study"}
+              description={liveDescription.trim() || undefined}
+            >
+              <InlinePreview
+                study={{ ...study, title: liveTitle, description: liveDescription }}
+                onSubmitted={() => {
+                  toast.success("Thank you");
+                  setPendingResponse(true);
+                  setTab("results");
+                }}
+              />
+            </ParticipantShell>
           </TabsContent>
           <TabsContent
             value="results"
