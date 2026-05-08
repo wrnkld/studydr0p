@@ -226,13 +226,25 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
         </div>
       </section>
 
+      {task.trim() && (
+        <div className="rounded-lg border border-border bg-muted/30 p-5">
+          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Your task
+          </div>
+          <p className="mt-2 whitespace-pre-wrap text-base">{task}</p>
+          <p className="mt-3 text-xs text-muted-foreground">
+            This is exactly how participants will see the task.
+          </p>
+        </div>
+      )}
+
       <section className="space-y-2">
         <Label>Image</Label>
         {imageUrl ? (
           <div className="space-y-3">
             <div
               ref={imgWrapRef}
-              className="relative overflow-hidden rounded-lg border border-border bg-muted select-none touch-none"
+              className="relative overflow-hidden rounded-lg border border-border bg-card select-none touch-none"
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
               onPointerUp={onPointerUp}
