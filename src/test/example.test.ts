@@ -13,6 +13,7 @@ describe("participant preview contract", () => {
 
     expect(builderSource).toContain("<iframe");
     expect(builderSource).toContain('src={`/s/${previewStudy.slug}?preview=1`}');
+    expect(builderSource).toContain('activeTab !== "preview" &&');
     expect(builderSource).not.toContain('from "./participant/SurveyParticipant"');
     expect(builderSource).not.toContain('from "./participant/CardSortParticipant"');
     expect(builderSource).not.toContain('from "./participant/TreeTestParticipant"');

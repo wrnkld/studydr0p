@@ -263,12 +263,14 @@ export default function StudyBuilder() {
         onValueChange={(v) => setTab(v as TabKey)}
       >
         {tabsNode}
-        <PageHeader
-          title={liveTitle.trim() || "Untitled study"}
-          description={liveDescription.trim() || undefined}
-        />
+        {activeTab !== "preview" && (
+          <PageHeader
+            title={liveTitle.trim() || "Untitled study"}
+            description={liveDescription.trim() || undefined}
+          />
+        )}
 
-        <div className="mt-6">
+        <div className={activeTab === "preview" ? "mt-0" : "mt-6"}>
           <TabsContent value="build" className="mt-0 space-y-6">
             {builder}
             <div className="flex justify-start pt-2">
@@ -382,12 +384,8 @@ function InlinePreview({
 
   if (creating || !previewStudy?.slug) {
     return (
-      <div className="space-y-6 py-6">
-        <section>
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <p className="text-sm text-muted-foreground">Loading preview…</p>
-          </div>
-        </section>
+      <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+        <p className="text-sm text-muted-foreground">Loading preview…</p>
       </div>
     );
   }
