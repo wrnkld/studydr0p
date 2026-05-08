@@ -107,11 +107,6 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
   };
 
   const handleSave = async () => {
-    const ok = await save();
-    if (ok) toast.success("Saved");
-  };
-
-  const handlePublish = async () => {
     if (!config.image_url) {
       toast.error("Upload an image first");
       return;
@@ -129,15 +124,7 @@ export default function FiveSecondBuilder({ studyId, initial }: Props) {
     if (ok) {
       setStatus("live");
       setSlug(newSlug);
-      toast.success("Published");
-    }
-  };
-
-  const handleClose = async () => {
-    const ok = await save({ status: "closed" });
-    if (ok) {
-      setStatus("closed");
-      toast.success("Study closed");
+      toast.success("Saved");
     }
   };
 
