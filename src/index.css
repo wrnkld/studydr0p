@@ -60,10 +60,10 @@
     --background: 39 35% 92%;            /* #F2EDE4 */
     --foreground: 36 10% 10%;            /* #1C1A17 */
 
-    --card: 39 35% 95%;                  /* slightly lighter than bg */
+    --card: 0 0% 100%;                   /* pure white panels */
     --card-foreground: 36 10% 10%;
 
-    --popover: 39 35% 95%;
+    --popover: 0 0% 100%;
     --popover-foreground: 36 10% 10%;
 
     --primary: 14 68% 54%;               /* #D95F3B accent */
