@@ -4,7 +4,6 @@ import {
   Check,
   Link as LinkIcon,
   LogOut,
-  MoreHorizontal,
   Plus,
   Trash2,
   Download,
@@ -14,13 +13,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
@@ -92,55 +84,64 @@ function StudyActions({
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const iconBtn =
+    "h-8 w-8 text-muted-foreground hover:text-foreground";
+
   return (
     <>
       {shareUrl && (
-        <Button
-          variant="outline"
-          size="sm"
-          className="h-8 gap-1.5 px-3 text-sm"
-          onClick={copy}
-        >
-          {copied ? (
-            <Check className="h-3.5 w-3.5" />
-          ) : (
-            <LinkIcon className="h-3.5 w-3.5" />
-          )}
-          {copied ? "Copied" : "Copy link"}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label={copied ? "Link copied" : "Copy link"}
+              className={iconBtn}
+              onClick={copy}
+            >
+              {copied ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <LinkIcon className="h-4 w-4" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{copied ? "Copied" : "Copy link"}</TooltipContent>
+        </Tooltip>
       )}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
+      {exportCsv && (
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Export CSV"
+              className={iconBtn}
+              onClick={() => exportCsv()}
+            >
+              <Download className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Export CSV</TooltipContent>
+        </Tooltip>
+      )}
+      <Tooltip>
+        <TooltipTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
-            aria-label="Study actions"
-            title="Study actions"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-          >
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          {exportCsv && (
-            <DropdownMenuItem onSelect={() => exportCsv()}>
-              <Download className="mr-2 h-4 w-4" />
-              Export CSV
-            </DropdownMenuItem>
-          )}
-          
-          <DropdownMenuItem
+            aria-label="Delete study"
             disabled={!requestDelete && !actions}
-            onSelect={() =>
+            className="h-8 w-8 text-muted-foreground hover:text-destructive"
+            onClick={() =>
               requestDelete ? requestDelete() : actions?.onDelete()
             }
-            className="text-destructive focus:text-destructive"
           >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete study
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>Delete study</TooltipContent>
+      </Tooltip>
     </>
   );
 }
