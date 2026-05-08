@@ -14,14 +14,16 @@ import {
   CardSortConfig,
   CardSortResponseData,
   CategoryRow,
+  FirstClickConfig,
   SurveyConfig,
   SurveyQuestion,
   TreeTestConfig,
   TreeTestTask,
 } from "@/lib/types";
 import { TreeNodeRow, TaskResult } from "@/pages/participant/TreeTestParticipant";
+import orderItAgainImage from "@/assets/firstclick-order-it-again.jpg";
 
-export type ExampleStudyId = "fridge" | "gasstation" | "grocery";
+export type ExampleStudyId = "fridge" | "gasstation" | "grocery" | "orderitagain";
 
 export interface ExampleResponseRow {
   id: string;
