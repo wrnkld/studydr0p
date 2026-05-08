@@ -511,15 +511,105 @@ export const GROCERY_STUDY: ExampleTreeTest = {
   seedResponses: GROCERY_SEED_RESPONSES,
 };
 
+// ---------- First-click: Order it again ----------
+
+const ORDER_ZONE = { x: 62, y: 42, w: 32, h: 7 }; // Reorder button
+
+// 20 hand-picked clicks: 12 on the Reorder button, 5 on the pizza thumbnail,
+// 3 scattered. Coordinates are percentages of the mockup image.
+const ORDER_CLICKS: Array<{ x: number; y: number; t: number }> = [
+  // Reorder button cluster (correct) — 12
+  { x: 78.0, y: 45.4, t: 1800 },
+  { x: 76.5, y: 45.8, t: 2100 },
+  { x: 80.2, y: 46.1, t: 1500 },
+  { x: 75.0, y: 44.9, t: 2400 },
+  { x: 81.8, y: 45.2, t: 1700 },
+  { x: 77.4, y: 46.4, t: 2900 },
+  { x: 79.1, y: 44.5, t: 1300 },
+  { x: 74.6, y: 46.0, t: 3100 },
+  { x: 82.4, y: 45.7, t: 1900 },
+  { x: 78.8, y: 47.0, t: 2200 },
+  { x: 76.0, y: 44.2, t: 2600 },
+  { x: 80.7, y: 46.7, t: 2000 },
+  // Pizza thumbnail cluster (incorrect) — 5
+  { x: 18.5, y: 41.2, t: 3400 },
+  { x: 21.0, y: 43.6, t: 4100 },
+  { x: 16.8, y: 39.5, t: 3700 },
+  { x: 19.6, y: 44.8, t: 3200 },
+  { x: 22.4, y: 40.3, t: 4500 },
+  // Scattered (incorrect) — 3
+  { x: 53.0, y: 22.5, t: 5800 }, // search bar
+  { x: 50.0, y: 84.6, t: 6400 }, // recommended row
+  { x: 14.0, y: 95.2, t: 4900 }, // bottom nav home
+];
+
+function inOrderZone(x: number, y: number) {
+  return (
+    x >= ORDER_ZONE.x &&
+    x <= ORDER_ZONE.x + ORDER_ZONE.w &&
+    y >= ORDER_ZONE.y &&
+    y <= ORDER_ZONE.y + ORDER_ZONE.h
+  );
+}
+
+const ORDER_SEED_RESPONSES: ExampleResponseRow[] = ORDER_CLICKS.map((c, i) => ({
+  id: `order-resp-${i}`,
+  session_id: `order-sess-${i}`,
+  data: {
+    task: "Where would you tap to reorder your last meal?",
+    image_url: orderItAgainImage,
+    x_pct: c.x,
+    y_pct: c.y,
+    time_to_click_ms: c.t,
+    in_zone: inOrderZone(c.x, c.y),
+    clicked_at: ts(i),
+  } as Record<string, unknown>,
+  created_at: ts(i),
+}));
+
+export const ORDER_IT_AGAIN_STUDY: ExampleFirstClick = {
+  id: "orderitagain",
+  type: "first_click",
+  title: "Order it again.",
+  description:
+    "Take a quick look at the home screen and click where you'd go first.",
+  config: {
+    task: "Where would you tap to reorder your last meal?",
+    image_url: orderItAgainImage,
+    correct_zone: ORDER_ZONE,
+  },
+  seedResponses: ORDER_SEED_RESPONSES,
+};
+
 // ---------- Exports ----------
 
-export const EXAMPLE_STUDIES: ExampleStudy[] = [FRIDGE_STUDY, GAS_STATION_STUDY, GROCERY_STUDY];
+export const EXAMPLE_STUDIES: ExampleStudy[] = [
+  FRIDGE_STUDY,
+  GAS_STATION_STUDY,
+  GROCERY_STUDY,
+  ORDER_IT_AGAIN_STUDY,
+];
 
 export function getExampleStudy(id: string): ExampleStudy | null {
   if (id === "fridge") return FRIDGE_STUDY;
   if (id === "gasstation") return GAS_STATION_STUDY;
   if (id === "grocery") return GROCERY_STUDY;
+  if (id === "orderitagain") return ORDER_IT_AGAIN_STUDY;
   return null;
+}
+
+export function makeUserFirstClickResponse(data: {
+  x_pct: number;
+  y_pct: number;
+  time_to_click_ms: number;
+  in_zone: boolean;
+}): ExampleResponseRow {
+  return {
+    id: "user-first-click",
+    session_id: "user",
+    data: data as unknown as Record<string, unknown>,
+    created_at: new Date().toISOString(),
+  };
 }
 
 export function makeUserCardSortResponse(
