@@ -116,16 +116,10 @@ export default function SurveyParticipant({
     </div>
   );
 
-  if (preview || inMemory) return content;
-
-  return (
-    <main className="container py-8 space-y-6">
-      <div className="space-y-3">
-        <h1>{study.title}</h1>
-      </div>
-      {content}
-    </main>
-  );
+  // Always return just the content. The ParticipantShell (used in both the
+  // builder Preview tab and the public participant link) is responsible for
+  // the title, description, and outer width.
+  return content;
 }
 
 function QuestionInput({
