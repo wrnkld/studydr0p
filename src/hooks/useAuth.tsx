@@ -39,14 +39,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s);
       setLoading(false);
 
-      // After the SDK processes the hash, clean it from the URL
+      // After processing a magic-link / OAuth callback, force a full-page
+      // navigation so the session persists even in embedded browser panes
+      // (e.g. Arc's Little Arc, link-preview webviews).
       if (event === "SIGNED_IN" && inCallback) {
-        const url = new URL(window.location.href);
-        url.hash = "";
-        url.searchParams.delete("code");
-        url.searchParams.delete("token_hash");
-        url.searchParams.delete("type");
-        window.history.replaceState({}, document.title, url.pathname + url.search);
+        // The Supabase SDK already wrote the session to localStorage.
+        // Do a hard redirect to the canonical origin so the main browser
+        // context picks it up cleanly.
+        const canonical = "https://studydr0p.lovable.app";
+        const target = window.location.origin === canonical
+          ? "/"
+          : canonical + "/";
+        window.location.replace(target);
+        return;
       }
     });
 
