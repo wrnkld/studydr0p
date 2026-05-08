@@ -62,7 +62,6 @@ export function ChoiceChart({
   total: number;
 }) {
   const isMobile = useIsMobile();
-  const yAxisWidth = isMobile ? 96 : 140;
   // Always show all configured options, including zero-count ones, in given order.
   const data = options.map((label) => ({ label, value: counts[label] ?? 0 }));
   // Append any extras (answers that aren't in `options`).
@@ -78,11 +77,26 @@ export function ChoiceChart({
   // Domain top: prefer total when it makes sense; otherwise use max.
   const domainMax = Math.max(total, max, 1);
 
+  // Adaptive sizing so labels don't overlap and stay single-line.
+  // - Y-axis width grows with longest label (capped) so there's room without
+  //   stealing too much from the bars.
+  // - Chart height grows with number of bars so each row gets ~28-32px.
+  const longest = data.reduce((m, d) => Math.max(m, d.label.length), 0);
+  const yAxisWidth = Math.min(
+    isMobile ? 140 : 200,
+    Math.max(isMobile ? 80 : 110, longest * (isMobile ? 6 : 7) + 12),
+  );
+  const charBudget = Math.max(8, Math.floor((yAxisWidth - 12) / (isMobile ? 6 : 7)));
+  const truncate = (s: string) =>
+    s.length > charBudget ? s.slice(0, charBudget - 1).trimEnd() + "…" : s;
+  const rowH = isMobile ? 30 : 32;
+  const chartHeight = Math.max(CHART_HEIGHT, data.length * rowH + 32);
+
   return (
     <ChartContainer
       config={barConfig}
       className="aspect-auto w-full"
-      style={{ height: CHART_HEIGHT }}
+      style={{ height: chartHeight }}
     >
       <BarChart data={data} layout="vertical" margin={CHART_MARGIN}>
         <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
