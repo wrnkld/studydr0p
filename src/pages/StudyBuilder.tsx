@@ -329,55 +329,57 @@ export default function StudyBuilder() {
 
 function InlinePreview({
   study,
-  ensurePreviewLink,
   onSubmitted,
 }: {
   study: StudyRow;
-  ensurePreviewLink: (study: StudyRow) => Promise<StudyRow>;
   onSubmitted: () => void;
 }) {
-  const [previewStudy, setPreviewStudy] = useState<StudyRow | null>(null);
-  const [creating, setCreating] = useState(true);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [startedAt, setStartedAt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
+    setSessionId(null);
+    setStartedAt(0);
     (async () => {
-      setCreating(true);
+      const ua = navigator.userAgent;
+      const isMobile = /Mobi|Android|iPhone/.test(ua);
+      const { data, error } = await supabase
+        .from("sessions")
+        .insert({
+          study_id: study.id,
+          metadata: { device: isMobile ? "mobile" : "desktop", ua, source: "builder_preview" },
+        })
+        .select("id")
+        .single();
       if (cancelled) return;
-      const next = await ensurePreviewLink(study);
-      if (!cancelled) setPreviewStudy(next);
-      setCreating(false);
+      if (error || !data) {
+        toast.error(error?.message ?? "Could not start preview");
+        return;
+      }
+      setSessionId(data.id);
+      setStartedAt(Date.now());
     })();
     return () => {
       cancelled = true;
     };
-  }, [study, ensurePreviewLink]);
+  }, [study.id]);
 
-  useEffect(() => {
-    const receive = (event: MessageEvent) => {
-      if (event.origin !== window.location.origin) return;
-      if (event.data?.type !== "studydrop:preview-submitted") return;
-      if (event.data.studyId !== study.id) return;
-      onSubmitted();
-    };
-    window.addEventListener("message", receive);
-    return () => window.removeEventListener("message", receive);
-  }, [onSubmitted, study.id]);
-
-  if (creating || !previewStudy?.slug) {
+  if (!sessionId) {
     return (
-      <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+      <ParticipantViewport>
         <p className="text-sm text-muted-foreground">Loading preview…</p>
-      </div>
+      </ParticipantViewport>
     );
   }
 
   return (
-    <iframe
-      key={previewStudy.slug}
-      title="Study preview"
-      src={`/s/${previewStudy.slug}?preview=1`}
-      className="h-[760px] w-full border-0 bg-background"
+    <ParticipantExperience
+      study={study}
+      sessionId={sessionId}
+      startedAt={startedAt}
+      preview
+      onDone={onSubmitted}
     />
   );
 }
