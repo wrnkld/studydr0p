@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // The Supabase SDK already wrote the session to localStorage.
         // Do a hard redirect to the canonical origin so the main browser
         // context picks it up cleanly.
-        const canonical = "https://studydr0p.lovable.app";
+        const canonical = "https://studydrop.app";
         const target = window.location.origin === canonical
           ? "/"
           : canonical + "/";
