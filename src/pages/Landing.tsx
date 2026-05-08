@@ -163,12 +163,6 @@ export default function Landing() {
                 <div className="hidden sm:flex">
                   {r.isExample ? (
                     <Badge variant="secondary">Example</Badge>
-                  ) : r.status === "live" ? (
-                    <Badge variant="outline">Live</Badge>
-                  ) : r.status === "draft" ? (
-                    <Badge variant="outline">Draft</Badge>
-                  ) : r.status === "closed" ? (
-                    <Badge variant="secondary">Closed</Badge>
                   ) : null}
                 </div>
 
