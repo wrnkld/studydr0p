@@ -62,7 +62,20 @@ export interface ExampleTreeTest {
   seedResponses: ExampleResponseRow[];
 }
 
-export type ExampleStudy = ExampleCardSort | ExampleSurvey | ExampleTreeTest;
+export interface ExampleFirstClick {
+  id: "orderitagain";
+  type: "first_click";
+  title: string;
+  description: string;
+  config: FirstClickConfig;
+  seedResponses: ExampleResponseRow[];
+}
+
+export type ExampleStudy =
+  | ExampleCardSort
+  | ExampleSurvey
+  | ExampleTreeTest
+  | ExampleFirstClick;
 
 // ---------- Helpers ----------
 
