@@ -504,108 +504,88 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
       </section>
 
       {/* Tree structure */}
-      <section>
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-              Tree structure
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Build your navigation. Drag to reorder within a level.
-            </p>
-          </div>
-          <Button variant="outline" size="sm" onClick={() => addNode(null)}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add top-level
-          </Button>
-        </div>
+      <section className="space-y-4">
+        <h2>Tree structure</h2>
 
-        <div className="mt-4 rounded-lg border border-border bg-card p-4">
-          {nodes.length === 0 ? (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              No nodes yet. Add a top-level node to get started.
-            </p>
-          ) : (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              {renderTree(null, 0)}
-            </DndContext>
-          )}
+        {nodes.length > 0 && (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            {renderTree(null, 0)}
+          </DndContext>
+        )}
+
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => addNode(null)}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add top-level node
+          </Button>
         </div>
       </section>
 
       {/* Tasks */}
-      <section>
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-              Tasks
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Each task is shown to the participant one at a time.
-            </p>
-          </div>
+      <section className="space-y-4">
+        <h2>Tasks</h2>
+
+        <ul className="space-y-3">
+          {tasks.map((t, i) => (
+            <li key={t.id} className="group rounded-md border p-4 bg-background">
+              <div className="flex items-start gap-3">
+                <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Task</span>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="ml-auto"
+                      onClick={() => removeTask(t.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <Textarea
+                    rows={2}
+                    placeholder="e.g. Find where you would go to reset your password."
+                    value={t.text}
+                    onChange={(e) => updateTask(t.id, { text: e.target.value })}
+                  />
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">Correct answer:</span>
+                    {t.correct_node_id ? (
+                      <span className="text-sm font-medium text-foreground">
+                        {nodeLabel(t.correct_node_id)}
+                      </span>
+                    ) : (
+                      <span className="text-sm text-muted-foreground italic">Not set</span>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-7 text-xs ml-auto"
+                      onClick={() =>
+                        setSelectingCorrectFor(selectingCorrectFor === t.id ? null : t.id)
+                      }
+                    >
+                      {selectingCorrectFor === t.id ? "Cancel" : "Pick node"}
+                    </Button>
+                  </div>
+                  {selectingCorrectFor === t.id && (
+                    <p className="text-xs text-muted-foreground">
+                      Click "Set" next to a node in the tree above to mark it as the correct answer.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={addTask}>
             <Plus className="mr-1.5 h-3.5 w-3.5" /> Add task
           </Button>
-        </div>
-
-        <div className="mt-4 space-y-4">
-          {tasks.length === 0 && (
-            <p className="py-6 text-center text-sm text-muted-foreground">
-              No tasks yet. Add a task to define what participants should find.
-            </p>
-          )}
-          {tasks.map((t, i) => (
-            <div key={t.id} className="rounded-lg border border-border bg-card p-4 space-y-3">
-              <div className="flex items-start justify-between gap-2">
-                <span className="text-xs font-medium text-muted-foreground mt-2">
-                  Task {i + 1}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => removeTask(t.id)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-              <Textarea
-                rows={2}
-                placeholder="e.g. Find where you would go to reset your password."
-                value={t.text}
-                onChange={(e) => updateTask(t.id, { text: e.target.value })}
-              />
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Correct answer:</span>
-                {t.correct_node_id ? (
-                  <span className="text-sm font-medium text-foreground">
-                    {nodeLabel(t.correct_node_id)}
-                  </span>
-                ) : (
-                  <span className="text-sm text-muted-foreground italic">Not set</span>
-                )}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-xs ml-auto"
-                  onClick={() =>
-                    setSelectingCorrectFor(selectingCorrectFor === t.id ? null : t.id)
-                  }
-                >
-                  {selectingCorrectFor === t.id ? "Cancel" : "Pick node"}
-                </Button>
-              </div>
-              {selectingCorrectFor === t.id && (
-                <p className="text-xs text-muted-foreground">
-                  Click "Set" next to a node in the tree above to mark it as the correct answer.
-                </p>
-              )}
-            </div>
-          ))}
         </div>
       </section>
     </div>
