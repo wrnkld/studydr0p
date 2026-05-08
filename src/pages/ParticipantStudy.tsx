@@ -174,6 +174,21 @@ export default function ParticipantStudy() {
         onDone={() => setDone(true)}
       />
     );
+  } else if (study.type === "first_click") {
+    const cfg = (study.config as FirstClickConfig) ?? {
+      task: "",
+      image_url: "",
+      correct_zone: null,
+    };
+    body = (
+      <FirstClickParticipant
+        study={{ ...study, config: cfg }}
+        sessionId={sessionId}
+        startedAt={startedAt}
+        preview={isPreview}
+        onDone={() => setDone(true)}
+      />
+    );
   } else {
     body = <p className="text-sm text-muted-foreground">Unsupported study type.</p>;
   }
