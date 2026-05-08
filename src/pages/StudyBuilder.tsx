@@ -384,12 +384,8 @@ function InlinePreview({
 
   if (creating || !previewStudy?.slug) {
     return (
-      <div className="space-y-6 py-6">
-        <section>
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <p className="text-sm text-muted-foreground">Loading preview…</p>
-          </div>
-        </section>
+      <div className="flex min-h-[80vh] items-center justify-center px-4 py-12">
+        <p className="text-sm text-muted-foreground">Loading preview…</p>
       </div>
     );
   }
