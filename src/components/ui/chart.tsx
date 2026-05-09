@@ -95,18 +95,25 @@ ${colorConfig
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
 function getTooltipIndicatorColor(
-  item: RechartsPrimitive.TooltipPayload<unknown, string>,
+  item: unknown,
   itemConfig?: ChartConfig[string],
   color?: string,
 ) {
-  const payload = item.payload && typeof item.payload === "object" ? (item.payload as Record<string, unknown>) : undefined;
-  const dataKey = item.dataKey != null ? String(item.dataKey) : undefined;
+  const tooltipItem = item as {
+    color?: string;
+    dataKey?: string | number;
+    fill?: string;
+    payload?: unknown;
+    stroke?: string;
+  };
+  const payload = tooltipItem.payload && typeof tooltipItem.payload === "object" ? (tooltipItem.payload as Record<string, unknown>) : undefined;
+  const dataKey = tooltipItem.dataKey != null ? String(tooltipItem.dataKey) : undefined;
 
   return (
     color ||
-    (item as unknown as { fill?: string }).fill ||
-    (item as unknown as { stroke?: string }).stroke ||
-    item.color ||
+    tooltipItem.fill ||
+    tooltipItem.stroke ||
+    tooltipItem.color ||
     (dataKey && typeof payload?.[`${dataKey}Fill`] === "string" ? payload[`${dataKey}Fill`] as string : undefined) ||
     (dataKey && typeof payload?.[`${dataKey}Color`] === "string" ? payload[`${dataKey}Color`] as string : undefined) ||
     (typeof payload?.fill === "string" ? payload.fill : undefined) ||
