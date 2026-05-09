@@ -74,13 +74,13 @@ export function StudyPageHeader<T extends string>({
   return (
     <div
       className={cn(
-        "mx-auto w-full max-w-5xl border-b border-border",
+        "sticky top-16 z-30 w-full border-b border-border bg-card",
         className,
       )}
     >
-      <div className="flex items-center justify-between gap-3">
-        {/* Tabs — left */}
-        <div className="flex min-w-0 items-center gap-1">
+      <div className="container max-w-5xl flex h-16 items-center justify-between gap-3">
+        {/* Tabs — left, flush */}
+        <div className="-ml-3 flex min-w-0 items-center gap-1">
           {tabs.map((t) => {
             const active = t.value === activeTab;
             return (
@@ -89,7 +89,7 @@ export function StudyPageHeader<T extends string>({
                 type="button"
                 onClick={() => onTabChange(t.value)}
                 className={cn(
-                  "relative h-11 px-3 text-sm font-medium transition-colors",
+                  "relative h-16 px-3 text-sm font-medium transition-colors",
                   active
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground",

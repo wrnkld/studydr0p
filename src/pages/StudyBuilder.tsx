@@ -241,21 +241,22 @@ export default function StudyBuilder() {
     );
 
   return (
+    <>
+    <StudyPageHeader
+      type={study.type}
+      backTo="/"
+      tabs={[
+        { value: "build", label: "Build" },
+        { value: "preview", label: "Preview" },
+        { value: "results", label: "Responses" },
+      ]}
+      activeTab={activeTab}
+      onTabChange={(v) => setTab(v as TabKey)}
+      shareUrl={shareUrl}
+      onExport={exportCsv ?? undefined}
+      onDelete={() => setConfirmDelete(true)}
+    />
     <PageContainer width="wide" space="md">
-      <StudyPageHeader
-        type={study.type}
-        backTo="/"
-        tabs={[
-          { value: "build", label: "Build" },
-          { value: "preview", label: "Preview" },
-          { value: "results", label: "Responses" },
-        ]}
-        activeTab={activeTab}
-        onTabChange={(v) => setTab(v as TabKey)}
-        shareUrl={shareUrl}
-        onExport={exportCsv ?? undefined}
-        onDelete={() => setConfirmDelete(true)}
-      />
       <Tabs
         value={activeTab}
         onValueChange={(v) => setTab(v as TabKey)}
@@ -334,6 +335,7 @@ export default function StudyBuilder() {
         </AlertDialogContent>
       </AlertDialog>
     </PageContainer>
+    </>
   );
 }
 
