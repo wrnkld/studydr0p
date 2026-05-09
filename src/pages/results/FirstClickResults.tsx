@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import h337 from "heatmap.js";
 import { FirstClickConfig } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
@@ -24,8 +23,7 @@ export default function FirstClickResults({
   responses: ResponseRow[];
 }) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const heatmapContainerRef = useRef<HTMLDivElement>(null);
-  const heatmapInstanceRef = useRef<ReturnType<typeof h337.create> | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [view, setView] = useState<"heatmap" | "dots">("heatmap");
@@ -80,30 +78,35 @@ export default function FirstClickResults({
     return () => ro.disconnect();
   }, [imgLoaded]);
 
-  // Initialize / update heatmap when in heatmap view
+  // Render a simple radial-gradient heatmap onto a canvas.
   useEffect(() => {
-    if (view !== "heatmap" || !size || !heatmapContainerRef.current) return;
+    if (view !== "heatmap" || !size || !canvasRef.current) return;
+    const canvas = canvasRef.current;
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.max(1, Math.round(size.w));
+    const h = Math.max(1, Math.round(size.h));
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
 
-    if (!heatmapInstanceRef.current) {
-      heatmapInstanceRef.current = h337.create({
-        container: heatmapContainerRef.current,
-        radius: Math.max(20, Math.round(size.w * 0.06)),
-        maxOpacity: 0.7,
-        minOpacity: 0,
-        blur: 0.85,
-      });
-    }
-
-    const data = points.map((p) => ({
-      x: Math.round((p.xPct / 100) * size.w),
-      y: Math.round((p.yPct / 100) * size.h),
-      value: 1,
-    }));
-
-    heatmapInstanceRef.current.setData({
-      max: Math.max(2, Math.ceil(points.length / 4)),
-      min: 0,
-      data,
+    const radius = Math.max(24, Math.round(w * 0.08));
+    ctx.globalCompositeOperation = "source-over";
+    points.forEach((p) => {
+      const x = (p.xPct / 100) * w;
+      const y = (p.yPct / 100) * h;
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      grad.addColorStop(0, "rgba(239, 68, 68, 0.55)");
+      grad.addColorStop(0.5, "rgba(245, 158, 11, 0.28)");
+      grad.addColorStop(1, "rgba(59, 130, 246, 0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
     });
   }, [view, size, points]);
 
@@ -201,8 +204,8 @@ export default function FirstClickResults({
 
         {/* Heatmap overlay */}
         {view === "heatmap" && (
-          <div
-            ref={heatmapContainerRef}
+          <canvas
+            ref={canvasRef}
             className="pointer-events-none absolute inset-0"
           />
         )}
