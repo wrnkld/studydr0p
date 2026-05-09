@@ -15,7 +15,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { CHART_PALETTE } from "@/components/survey/SurveyChart";
-import { SectionHeader, Kicker } from "@/components/study/primitives";
+import { Kicker } from "@/components/study/primitives";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponseRow {
