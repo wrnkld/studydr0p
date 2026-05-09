@@ -38,6 +38,7 @@ import { ParticipantShell } from "@/components/study/ParticipantShell";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { StudyPageHeader } from "@/components/study/StudyPageHeader";
 
 interface StudyRow {
   id: string;
@@ -58,7 +59,7 @@ export default function StudyBuilder() {
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
   const [loadKey, setLoadKey] = useState(0);
-  const { actions, setRequestDelete } = useStudyToolbar();
+  const { actions, setRequestDelete, exportCsv } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [pendingResponse, setPendingResponse] = useState(false);
