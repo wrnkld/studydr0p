@@ -561,7 +561,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                       value={t.correct_node_id || ""}
                       onValueChange={(v) => updateTask(t.id, { correct_node_id: v })}
                     >
-                      <SelectTrigger className="ml-auto h-9 max-w-xs">
+                      <SelectTrigger className="h-9 max-w-xs">
                         <SelectValue placeholder="Select a node…" />
                       </SelectTrigger>
                       <SelectContent>
