@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { TreeTestConfig, TreeTestTask } from "@/lib/types";
-import { SectionHeader, Stat, StatGrid } from "@/components/study/primitives";
+import { ResultLabel, SectionHeader, Stat, StatGrid } from "@/components/study/primitives";
 import { ChoiceChart, BinaryDonut, type CountMap } from "@/components/survey/SurveyChart";
 
 interface ResponseRow {
@@ -185,9 +185,7 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
 
           {/* Destination distribution as horizontal bar chart */}
           <div className="space-y-2">
-            <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
-              Where people ended up
-            </div>
+            <ResultLabel>Where people ended up</ResultLabel>
             <ChoiceChart
               options={ta.options}
               counts={ta.counts}

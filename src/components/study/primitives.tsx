@@ -103,12 +103,32 @@ export function SectionHeader({
 }) {
   return (
     <div className={cn("border-b border-border/70 pb-3", className)}>
-      {kicker ? (
-        <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
-          {kicker}
-        </div>
-      ) : null}
+      {kicker ? <ResultLabel>{kicker}</ResultLabel> : null}
       <h3 className="mt-1.5 text-[17px] font-medium tracking-tight">{title}</h3>
+    </div>
+  );
+}
+
+/**
+ * One canonical result/section label style. Use for section kickers, stat
+ * labels, chart labels, table group labels — anything like QUESTION 1,
+ * RESPONSES, MATRIX, WHERE PEOPLE ENDED UP.
+ */
+export function ResultLabel({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground/80",
+        className,
+      )}
+    >
+      {children}
     </div>
   );
 }
@@ -124,16 +144,7 @@ export function Kicker({
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
-    <div
-      className={cn(
-        "text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <ResultLabel className={className}>{children}</ResultLabel>;
 }
 
 // ---------- Frame ----------
@@ -174,9 +185,9 @@ Frame.displayName = "Frame";
 export type StatTone = "indigo" | "green" | "amber" | "neutral";
 
 const TONE_BORDER: Record<StatTone, string> = {
-  indigo: "hsl(var(--accent-ink))",
-  green: "#16a34a",
-  amber: "#d97706",
+  indigo: "hsl(var(--border))",
+  green: "hsl(var(--border))",
+  amber: "hsl(var(--border))",
   neutral: "hsl(var(--border))",
 };
 
@@ -196,9 +207,7 @@ export function Stat({
       className={cn("relative pl-5 py-2", className)}
       style={{ borderLeft: `3px solid ${TONE_BORDER[tone]}` }}
     >
-      <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
-        {label}
-      </div>
+      <ResultLabel>{label}</ResultLabel>
       <div
         className="mt-1 text-foreground"
         style={{
