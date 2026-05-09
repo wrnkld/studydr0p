@@ -150,9 +150,9 @@ export default function Landing() {
         type="button"
         onClick={() => navigate(r.href)}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full flex-col overflow-hidden rounded-[6px] text-left text-white transition-[transform,filter] duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         style={{
-          borderTop: `6px solid ${bg}`,
+          backgroundColor: bg,
           height: "240px",
           padding: "28px",
         }}
@@ -163,28 +163,29 @@ export default function Landing() {
           e.currentTarget.style.transform = "";
         }}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <span style={{ color: bg, display: "inline-flex" }}>
-              <StudyTypeIcon type={r.type} size={28} />
-            </span>
-            {r.isExample && (
-              <span
-                className="font-mono uppercase text-muted-foreground"
-                style={{
-                  fontSize: "9px",
-                  letterSpacing: "0.14em",
-                  padding: "3px 7px",
-                  border: "1px solid hsl(var(--border))",
-                  borderRadius: "2px",
-                  lineHeight: 1,
-                }}
-              >
-                Example
-              </span>
-            )}
-          </div>
-          <div className="text-right text-muted-foreground">
+        {r.isExample && (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute font-serif uppercase select-none"
+            style={{
+              top: "-18px",
+              right: "-28px",
+              fontSize: "96px",
+              fontWeight: 900,
+              letterSpacing: "0.02em",
+              lineHeight: 1,
+              color: "transparent",
+              WebkitTextStroke: "1.5px rgba(255,255,255,0.45)",
+              transform: "rotate(-8deg)",
+            }}
+          >
+            Example
+          </span>
+        )}
+
+        <div className="relative flex items-start justify-between gap-4">
+          <StudyTypeIcon type={r.type} size={28} className="!text-white" />
+          <div className="text-right text-white" style={{ opacity: 0.85 }}>
             <div
               className="font-mono uppercase"
               style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}
@@ -200,10 +201,10 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="mt-auto">
+        <div className="relative mt-auto">
           <div className="flex items-end justify-between gap-4">
             <div
-              className="font-serif text-foreground"
+              className="font-serif text-white"
               style={{
                 fontSize: "24px",
                 fontWeight: 700,
@@ -214,8 +215,8 @@ export default function Landing() {
               {r.title}
             </div>
             <div
-              className="shrink-0 whitespace-nowrap font-mono tabular-nums text-muted-foreground"
-              style={{ fontSize: "11px", letterSpacing: "0.02em" }}
+              className="shrink-0 whitespace-nowrap font-mono tabular-nums text-white"
+              style={{ fontSize: "11px", opacity: 0.75, letterSpacing: "0.02em" }}
             >
               {r.responseCount} responses
             </div>
