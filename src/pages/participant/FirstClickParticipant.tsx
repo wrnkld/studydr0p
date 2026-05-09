@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { FirstClickConfig } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { SectionHeader } from "@/components/study/primitives";
 import { toast } from "sonner";
 
 interface Props {
