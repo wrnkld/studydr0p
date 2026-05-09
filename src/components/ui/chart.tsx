@@ -108,17 +108,18 @@ function getTooltipIndicatorColor(
   };
   const payload = tooltipItem.payload && typeof tooltipItem.payload === "object" ? (tooltipItem.payload as Record<string, unknown>) : undefined;
   const dataKey = tooltipItem.dataKey != null ? String(tooltipItem.dataKey) : undefined;
+  const stroke = tooltipItem.stroke && tooltipItem.stroke !== "none" ? tooltipItem.stroke : undefined;
+  const fill = tooltipItem.fill && tooltipItem.fill !== "none" ? tooltipItem.fill : undefined;
 
   return (
     color ||
-    tooltipItem.fill ||
-    tooltipItem.stroke ||
+    fill ||
+    stroke ||
     tooltipItem.color ||
     (dataKey && typeof payload?.[`${dataKey}Fill`] === "string" ? payload[`${dataKey}Fill`] as string : undefined) ||
     (dataKey && typeof payload?.[`${dataKey}Color`] === "string" ? payload[`${dataKey}Color`] as string : undefined) ||
     (typeof payload?.fill === "string" ? payload.fill : undefined) ||
     itemConfig?.color ||
-    (dataKey ? `var(--color-${CSS.escape(dataKey)})` : undefined) ||
     "hsl(var(--chart-1))"
   );
 }
