@@ -142,105 +142,77 @@ export default function Landing() {
           {EXAMPLE_ROWS.map((r, i) => {
             const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
             const bg = EXAMPLE_COLORS[r.type];
-            // Per-card editorial variation
-            const variants = [
-              {
-                // 0: title bottom-left, count top-right
-                titlePos: "bottom" as const,
-                countCorner: "top-right" as const,
-                rotate: "0deg",
-                padding: "24px 28px",
-                titleSize: "40px",
-              },
-              {
-                // 1: title top-left, count bottom-right, slight rotation
-                titlePos: "top" as const,
-                countCorner: "bottom-right" as const,
-                rotate: "-2deg",
-                padding: "32px 24px 28px",
-                titleSize: "36px",
-              },
-              {
-                // 2: title bottom-left, count top-right, generous breathing
-                titlePos: "bottom" as const,
-                countCorner: "top-right" as const,
-                rotate: "0deg",
-                padding: "20px 32px 32px",
-                titleSize: "38px",
-              },
-              {
-                // 3: title top-left, count bottom-right
-                titlePos: "top" as const,
-                countCorner: "bottom-right" as const,
-                rotate: "0deg",
-                padding: "28px 24px 24px 32px",
-                titleSize: "32px",
-              },
-            ];
-            const v = variants[i % variants.length];
-            const countNode = (
-              <div
-                className="font-serif tabular-nums text-white leading-none select-none pointer-events-none"
-                style={{
-                  fontSize: "48px",
-                  fontWeight: 700,
-                  opacity: 0.2,
-                  letterSpacing: "-0.03em",
-                }}
-                aria-hidden
-              >
-                {r.responseCount}
-              </div>
-            );
-            const titleNode = (
-              <div
-                className="font-serif text-white"
-                style={{
-                  fontSize: v.titleSize,
-                  fontWeight: 700,
-                  lineHeight: 1.02,
-                  letterSpacing: "-0.02em",
-                  maxWidth: "92%",
-                }}
-              >
-                {r.title}
-              </div>
-            );
-            const iconNode = (
-              <StudyTypeIcon type={r.type} size={40} className="!text-white" />
-            );
+            // Alternating slight rotations for the "physical artifact" feel
+            const rotations = ["-1.2deg", "1.4deg", "1deg", "-1.6deg"];
+            const rotate = rotations[i % rotations.length];
             return (
               <button
                 key={`ex-${r.id}`}
                 type="button"
                 onClick={() => navigate(r.href)}
-                aria-label={`${typeLabel}: ${r.title} — ${r.responseCount} responses`}
-                className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-transform duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={`${typeLabel}: ${r.title}`}
+                className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-transform duration-200 hover:[transform:rotate(0deg)_translateY(-2px)] hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 style={{
                   backgroundColor: bg,
-                  height: "260px",
-                  padding: v.padding,
-                  transform: `rotate(${v.rotate})`,
+                  height: "240px",
+                  padding: "28px",
+                  transform: `rotate(${rotate})`,
                   boxShadow:
                     "0 1px 0 rgba(0,0,0,0.04), 0 12px 24px -12px rgba(20,20,15,0.25), 0 24px 48px -24px rgba(20,20,15,0.18)",
                 }}
               >
-                {/* Top row */}
-                <div className="flex items-start justify-between gap-4 w-full">
-                  {v.titlePos === "top" ? titleNode : iconNode}
-                  {v.countCorner === "top-right" ? countNode : <span />}
+                {/* Top row: ticket-style meta */}
+                <div className="flex items-start justify-between gap-4">
+                  <StudyTypeIcon type={r.type} size={28} className="!text-white" />
+                  <div
+                    className="text-right text-white"
+                    style={{ opacity: 0.85 }}
+                  >
+                    <div
+                      className="font-mono uppercase"
+                      style={{
+                        fontSize: "9px",
+                        letterSpacing: "0.12em",
+                        opacity: 0.75,
+                      }}
+                    >
+                      Type
+                    </div>
+                    <div
+                      className="font-mono"
+                      style={{ fontSize: "12px", letterSpacing: "0.02em" }}
+                    >
+                      {typeLabel}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Spacer */}
-                <div className="flex-1" />
-
-                {/* Bottom row */}
-                <div className="flex items-end justify-between gap-4 w-full">
-                  {v.titlePos === "bottom" ? titleNode : iconNode}
-                  {v.countCorner === "bottom-right" ? countNode : <span />}
+                {/* Bottom: title + responses with hairline divider */}
+                <div className="mt-auto">
+                  <div
+                    className="mb-3 h-px w-full bg-white"
+                    style={{ opacity: 0.25 }}
+                  />
+                  <div className="flex items-end justify-between gap-4">
+                    <div
+                      className="font-serif text-white"
+                      style={{
+                        fontSize: "24px",
+                        fontWeight: 700,
+                        lineHeight: 1.1,
+                        letterSpacing: "-0.01em",
+                      }}
+                    >
+                      {r.title}
+                    </div>
+                    <div
+                      className="shrink-0 whitespace-nowrap font-mono tabular-nums text-white"
+                      style={{ fontSize: "11px", opacity: 0.75, letterSpacing: "0.02em" }}
+                    >
+                      {String(r.responseCount).padStart(3, "0")} responses
+                    </div>
+                  </div>
                 </div>
-
-                <span className="sr-only">{r.responseCount} responses</span>
               </button>
             );
           })}
