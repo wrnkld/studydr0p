@@ -83,6 +83,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
       const entry: Record<string, string | number> = { name: card.label };
       categories.forEach((c) => {
         entry[c] = counts[c] ?? 0;
+        entry[`${c}Fill`] = PALETTE[categories.indexOf(c) % PALETTE.length];
       });
       return entry;
     });
