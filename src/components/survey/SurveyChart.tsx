@@ -41,8 +41,19 @@ const CHART_HEIGHT = 240;
 // Tight margins so the plotted area uses the full container width.
 const CHART_MARGIN = { top: 8, right: 8, bottom: 0, left: 0 };
 
-// Donut palette for binary: yes-ish answers get chart-1, the other gets chart-6.
-const BINARY_COLORS = ["hsl(var(--chart-1))", "hsl(var(--chart-6))"];
+// Shared ordered chart palette — every chart across all results pages should
+// pull colors from this list in this order so visualizations feel related.
+export const CHART_PALETTE = [
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-5))",
+  "hsl(var(--chart-6))",
+];
+
+// Donut palette for binary: first two slots of the shared palette.
+const BINARY_COLORS = [CHART_PALETTE[0], CHART_PALETTE[1]];
 
 const barConfig = {
   value: { label: "Responses", color: "hsl(var(--chart-1))" },

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FirstClickConfig } from "@/lib/types";
-import { Button } from "@/components/ui/button";
+import { Stat, StatGrid } from "@/components/study/primitives";
+import { cn } from "@/lib/utils";
 
 interface ResponseRow {
   id: string;
@@ -134,30 +135,18 @@ export default function FirstClickResults({
   })();
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-baseline gap-x-6 gap-y-2 text-sm">
-        <div>
-          <span className="text-2xl font-semibold tracking-tight">
-            {points.length}
-          </span>
-          <span className="ml-1.5 text-muted-foreground">
-            {points.length === 1 ? "response" : "responses"}
-          </span>
-        </div>
+    <div className="space-y-6">
+      <StatGrid cols={zone ? 3 : 2}>
+        <Stat label="Responses" value={points.length} tone="indigo" />
         {zone && (
-          <div>
-            <span className="text-2xl font-semibold tracking-tight text-emerald-600">
-              {successRate}%
-            </span>
-            <span className="ml-1.5 text-muted-foreground">success rate</span>
-          </div>
+          <Stat label="Success rate" value={`${successRate}%`} tone="green" />
         )}
-        {avgTime !== null && (
-          <div className="text-muted-foreground">
-            Avg time to click: {avgTime}s
-          </div>
-        )}
-      </div>
+        <Stat
+          label="Avg time to click"
+          value={avgTime !== null ? `${avgTime}s` : "—"}
+          tone="amber"
+        />
+      </StatGrid>
 
       <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1">
         {(["heatmap", "dots"] as const).map((v) => (
@@ -165,12 +154,12 @@ export default function FirstClickResults({
             key={v}
             type="button"
             onClick={() => setView(v)}
-            className={
-              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all " +
-              (view === v
+            className={cn(
+              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
+              view === v
                 ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground")
-            }
+                : "text-muted-foreground hover:text-foreground",
+            )}
           >
             {v === "heatmap" ? "Heatmap" : "Click dots"}
           </button>

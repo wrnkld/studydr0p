@@ -14,6 +14,8 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { CHART_PALETTE } from "@/components/survey/SurveyChart";
+import { SectionHeader, Kicker } from "@/components/study/primitives";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponseRow {
@@ -29,13 +31,7 @@ interface Props {
   responses?: ResponseRow[];
 }
 
-const PALETTE = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-];
+const PALETTE = CHART_PALETTE;
 
 const AXIS_COLOR = "hsl(var(--chart-axis))";
 const GRID_COLOR = "hsl(var(--chart-grid))";
@@ -118,7 +114,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     <div className="space-y-8">
       {/* ---------- Stacked bar chart ---------- */}
       <section className="space-y-3">
-        <h3 className="text-base font-medium">Category distribution</h3>
+        <Kicker>By card</Kicker>
 
         {/* Legend */}
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
@@ -197,7 +193,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
       {/* ---------- Matrix table ---------- */}
       <section className="space-y-3">
-        <h3 className="text-base font-medium">Matrix</h3>
+        <Kicker>Matrix</Kicker>
         <div className="overflow-x-auto rounded-lg border">
           <table className="w-full border-collapse text-xs">
             <thead>
