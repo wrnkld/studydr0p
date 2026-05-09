@@ -128,7 +128,7 @@ export function StudyPageHeader<T extends string>({
                   )}
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent side="bottom">
                 {copied ? "Copied" : "Copy link"}
               </TooltipContent>
             </Tooltip>
