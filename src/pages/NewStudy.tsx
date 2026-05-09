@@ -124,7 +124,7 @@ export default function NewStudy() {
         {TYPES.map((t, i) => {
           const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
           const color = TYPE_COLORS[t.id];
-          const tint = `${color}33`;
+          const tint = `${color}66`; // 40% alpha
           return (
             <button
               key={t.id}
