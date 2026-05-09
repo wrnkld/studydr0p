@@ -178,11 +178,11 @@ export default function Landing() {
           </div>
           <div className="text-right text-muted-foreground">
             <div
-              className="font-mono uppercase"
-              style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}
-            >
-              Type
-            </div>
+                  className="font-mono uppercase"
+                  style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}
+                >
+                  {r.isExample ? "EXAMPLE" : "TYPE"}
+                </div>
             <div
               className="font-mono"
               style={{ fontSize: "12px", letterSpacing: "0.02em" }}
