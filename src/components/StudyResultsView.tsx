@@ -270,19 +270,6 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                 responses={responses}
               />
             )}
-            {study.type === "five_second" && (
-              <FiveSecondResults
-                studyId={study.id}
-                config={
-                  (study.config as FiveSecondConfig) ?? {
-                    image_url: "",
-                    duration_ms: 5000,
-                    follow_up: [],
-                  }
-                }
-                responses={responses}
-              />
-            )}
           </>
         )}
       </section>
