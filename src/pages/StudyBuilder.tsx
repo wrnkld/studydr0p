@@ -158,27 +158,7 @@ export default function StudyBuilder() {
     return () => setMeta(null);
   }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
-  const tabsNode = study ? (
-    <>
-      <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 mb-4">
-        {(["build", "preview", "results"] as TabKey[]).map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
-              activeTab === t
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {{ build: "Build", preview: "Preview", results: "Responses" }[t]}
-          </button>
-        ))}
-      </div>
-    </>
-  ) : null;
+  // Tabs are rendered inside the local StudyPageHeader (see below).
 
   const onMetaChange = (meta: { title: string; description: string }) => {
     setLiveTitle(meta.title);
