@@ -94,6 +94,35 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip;
 
+function getTooltipIndicatorColor(
+  item: unknown,
+  itemConfig?: ChartConfig[string],
+  color?: string,
+) {
+  const tooltipItem = item as {
+    color?: string;
+    dataKey?: string | number;
+    fill?: string;
+    payload?: unknown;
+    stroke?: string;
+  };
+  const payload = tooltipItem.payload && typeof tooltipItem.payload === "object" ? (tooltipItem.payload as Record<string, unknown>) : undefined;
+  const dataKey = tooltipItem.dataKey != null ? String(tooltipItem.dataKey) : undefined;
+
+  return (
+    color ||
+    tooltipItem.fill ||
+    tooltipItem.stroke ||
+    tooltipItem.color ||
+    (dataKey && typeof payload?.[`${dataKey}Fill`] === "string" ? payload[`${dataKey}Fill`] as string : undefined) ||
+    (dataKey && typeof payload?.[`${dataKey}Color`] === "string" ? payload[`${dataKey}Color`] as string : undefined) ||
+    (typeof payload?.fill === "string" ? payload.fill : undefined) ||
+    itemConfig?.color ||
+    (dataKey ? `var(--color-${CSS.escape(dataKey)})` : undefined) ||
+    "hsl(var(--chart-1))"
+  );
+}
+
 const ChartTooltipContent = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<typeof RechartsPrimitive.Tooltip> &
@@ -168,14 +197,7 @@ const ChartTooltipContent = React.forwardRef<
           {payload.map((item, index) => {
             const key = `${nameKey || item.name || item.dataKey || "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            const indicatorColor =
-              color ||
-              item.payload?.fill ||
-              item.color ||
-              (item as any).fill ||
-              (item as any).stroke ||
-              (itemConfig as any)?.color ||
-              "hsl(var(--chart-1))";
+            const indicatorColor = getTooltipIndicatorColor(item, itemConfig, color);
 
             if (formatter && item?.value !== undefined && item.name) {
               const formatted = formatter(item.value, item.name, item, index, item.payload);
