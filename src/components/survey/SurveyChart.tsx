@@ -23,7 +23,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
-import { ResultLabel, Stat } from "@/components/study/primitives";
+import { Stat } from "@/components/study/primitives";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Map a value to a chart-1 (blue) shade — higher value = darker.
@@ -285,8 +285,19 @@ export function ScaleChart({
   return (
     <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
       <div className="shrink-0 sm:w-32">
-        <Stat label="Average" value={avg.toFixed(1)} tone="neutral" className="py-0" />
-        <ResultLabel className="mt-1 pl-5 text-muted-foreground/60">/ {max}</ResultLabel>
+        <Stat
+          label="Average"
+          value={
+            <>
+              {avg.toFixed(1)}
+              <span className="ml-1 text-[18px] font-normal text-muted-foreground">
+                / {max}
+              </span>
+            </>
+          }
+          tone="neutral"
+          className="py-0"
+        />
       </div>
       <ChartContainer
         config={barConfig}
