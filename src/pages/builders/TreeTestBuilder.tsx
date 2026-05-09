@@ -549,31 +549,30 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                     value={t.text}
                     onChange={(e) => updateTask(t.id, { text: e.target.value })}
                   />
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Correct answer:</span>
-                    {t.correct_node_id ? (
-                      <span className="text-sm font-medium text-foreground">
-                        {nodeLabel(t.correct_node_id)}
-                      </span>
-                    ) : (
-                      <span className="text-sm text-muted-foreground italic">Not set</span>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-7 text-xs ml-auto"
-                      onClick={() =>
-                        setSelectingCorrectFor(selectingCorrectFor === t.id ? null : t.id)
-                      }
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-muted-foreground shrink-0">Correct answer</span>
+                    <Select
+                      value={t.correct_node_id || ""}
+                      onValueChange={(v) => updateTask(t.id, { correct_node_id: v })}
                     >
-                      {selectingCorrectFor === t.id ? "Cancel" : "Pick node"}
-                    </Button>
+                      <SelectTrigger className="ml-auto h-9 max-w-xs">
+                        <SelectValue placeholder="Select a node…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {flatNodes.length === 0 ? (
+                          <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                            Add nodes to the tree first.
+                          </div>
+                        ) : (
+                          flatNodes.map((n) => (
+                            <SelectItem key={n.id} value={n.id}>
+                              <span style={{ paddingLeft: `${n.depth * 12}px` }}>{n.path}</span>
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  {selectingCorrectFor === t.id && (
-                    <p className="text-xs text-muted-foreground">
-                      Click "Set" next to a node in the tree above to mark it as the correct answer.
-                    </p>
-                  )}
                 </div>
               </div>
             </li>
