@@ -142,23 +142,29 @@ export default function Landing() {
           {EXAMPLE_ROWS.map((r, i) => {
             const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
             const bg = EXAMPLE_COLORS[r.type];
-            // Alternating slight rotations for the "physical artifact" feel
-            const rotations = ["-1.2deg", "1.4deg", "1deg", "-1.6deg"];
-            const rotate = rotations[i % rotations.length];
+            // Slight rotation applied on hover for a "physical artifact" feel
+            const hoverRotations = ["-1.2deg", "1.4deg", "1deg", "-1.6deg"];
+            const hoverRotate = hoverRotations[i % hoverRotations.length];
             return (
               <button
                 key={`ex-${r.id}`}
                 type="button"
                 onClick={() => navigate(r.href)}
                 aria-label={`${typeLabel}: ${r.title}`}
-                className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-transform duration-200 hover:[transform:rotate(0deg)_translateY(-2px)] hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-transform duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 style={{
                   backgroundColor: bg,
                   height: "240px",
                   padding: "28px",
-                  transform: `rotate(${rotate})`,
+                  ["--hover-rotate" as any]: hoverRotate,
                   boxShadow:
                     "0 1px 0 rgba(0,0,0,0.04), 0 12px 24px -12px rgba(20,20,15,0.25), 0 24px 48px -24px rgba(20,20,15,0.18)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = `rotate(${hoverRotate}) translateY(-2px)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "";
                 }}
               >
                 {/* Top row: ticket-style meta */}
