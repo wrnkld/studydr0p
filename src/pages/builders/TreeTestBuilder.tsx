@@ -454,9 +454,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
           {list.map((n) => {
             const kids = childrenByParent.get(n.id) ?? [];
             const isCollapsed = collapsed[n.id] ?? false;
-            const correctFor = selectingCorrectFor
-              ? null
-              : tasks.find((t) => t.correct_node_id === n.id)?.id ?? null;
+            const correctFor = tasks.find((t) => t.correct_node_id === n.id)?.id ?? null;
             return (
               <div key={n.id}>
                 <div className="flex items-center">
@@ -474,19 +472,6 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                       onSetCorrect={() => {}}
                     />
                   </div>
-                  {selectingCorrectFor && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mr-2 h-7 text-xs shrink-0"
-                      onClick={() => {
-                        updateTask(selectingCorrectFor, { correct_node_id: n.id });
-                        setSelectingCorrectFor(null);
-                      }}
-                    >
-                      <Check className="h-3 w-3 mr-1" /> Set
-                    </Button>
-                  )}
                 </div>
                 {!isCollapsed && renderTree(n.id, depth + 1)}
               </div>
