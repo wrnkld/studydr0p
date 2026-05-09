@@ -204,8 +204,8 @@ export default function FirstClickResults({
 
         {/* Heatmap overlay */}
         {view === "heatmap" && (
-          <div
-            ref={heatmapContainerRef}
+          <canvas
+            ref={canvasRef}
             className="pointer-events-none absolute inset-0"
           />
         )}
