@@ -6,6 +6,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { generateSlug } from "@/lib/slug";
 import { StudyStatus, TreeTestConfig, TreeTestTask } from "@/lib/types";
 import {
@@ -185,8 +192,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
 
-  // Currently-selecting correct node for which task?
-  const [selectingCorrectFor, setSelectingCorrectFor] = useState<string | null>(null);
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -425,6 +431,19 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
   const nodeLabel = (id: string) => nodes.find((n) => n.id === id)?.label || id;
 
+  // Flatten the tree into a list with hierarchical paths for the dropdown.
+  const flatNodes: { id: string; path: string; depth: number }[] = [];
+  const walkFlat = (parentId: string | null, depth: number, prefix: string[]) => {
+    const list = childrenByParent.get(parentId) ?? [];
+    for (const n of list) {
+      const label = n.label.trim() || "(untitled)";
+      const path = [...prefix, label].join(" / ");
+      flatNodes.push({ id: n.id, path, depth });
+      walkFlat(n.id, depth + 1, [...prefix, label]);
+    }
+  };
+  walkFlat(null, 0, []);
+
   /* ── Render tree recursively ────────────────────────────── */
   const collectIds = (parentId: string | null): string[] => {
     const list = childrenByParent.get(parentId) ?? [];
@@ -441,9 +460,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
           {list.map((n) => {
             const kids = childrenByParent.get(n.id) ?? [];
             const isCollapsed = collapsed[n.id] ?? false;
-            const correctFor = selectingCorrectFor
-              ? null
-              : tasks.find((t) => t.correct_node_id === n.id)?.id ?? null;
+            const correctFor = tasks.find((t) => t.correct_node_id === n.id)?.id ?? null;
             return (
               <div key={n.id}>
                 <div className="flex items-center">
@@ -461,19 +478,6 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                       onSetCorrect={() => {}}
                     />
                   </div>
-                  {selectingCorrectFor && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mr-2 h-7 text-xs shrink-0"
-                      onClick={() => {
-                        updateTask(selectingCorrectFor, { correct_node_id: n.id });
-                        setSelectingCorrectFor(null);
-                      }}
-                    >
-                      <Check className="h-3 w-3 mr-1" /> Set
-                    </Button>
-                  )}
                 </div>
                 {!isCollapsed && renderTree(n.id, depth + 1)}
               </div>
@@ -551,31 +555,30 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                     value={t.text}
                     onChange={(e) => updateTask(t.id, { text: e.target.value })}
                   />
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Correct answer:</span>
-                    {t.correct_node_id ? (
-                      <span className="text-sm font-medium text-foreground">
-                        {nodeLabel(t.correct_node_id)}
-                      </span>
-                    ) : (
-                      <span className="text-sm text-muted-foreground italic">Not set</span>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-7 text-xs ml-auto"
-                      onClick={() =>
-                        setSelectingCorrectFor(selectingCorrectFor === t.id ? null : t.id)
-                      }
+                  <div className="flex items-center gap-3">
+                    <span className="text-sm text-muted-foreground shrink-0">Correct answer</span>
+                    <Select
+                      value={t.correct_node_id || ""}
+                      onValueChange={(v) => updateTask(t.id, { correct_node_id: v })}
                     >
-                      {selectingCorrectFor === t.id ? "Cancel" : "Pick node"}
-                    </Button>
+                      <SelectTrigger className="ml-auto h-9 max-w-xs">
+                        <SelectValue placeholder="Select a node…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {flatNodes.length === 0 ? (
+                          <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                            Add nodes to the tree first.
+                          </div>
+                        ) : (
+                          flatNodes.map((n) => (
+                            <SelectItem key={n.id} value={n.id}>
+                              <span style={{ paddingLeft: `${n.depth * 12}px` }}>{n.path}</span>
+                            </SelectItem>
+                          ))
+                        )}
+                      </SelectContent>
+                    </Select>
                   </div>
-                  {selectingCorrectFor === t.id && (
-                    <p className="text-xs text-muted-foreground">
-                      Click "Set" next to a node in the tree above to mark it as the correct answer.
-                    </p>
-                  )}
                 </div>
               </div>
             </li>
