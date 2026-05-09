@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
 import { FirstClickConfig, FirstClickZone, StudyStatus } from "@/lib/types";
 import { ImageIcon, Upload } from "lucide-react";
+import { SectionHeader } from "@/components/study/primitives";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
