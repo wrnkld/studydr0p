@@ -146,7 +146,7 @@ export function StudyPageHeader<T extends string>({
                   <Download className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Export CSV</TooltipContent>
+              <TooltipContent side="bottom">Export CSV</TooltipContent>
             </Tooltip>
           )}
           {onDelete && (
@@ -162,7 +162,7 @@ export function StudyPageHeader<T extends string>({
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Delete study</TooltipContent>
+              <TooltipContent side="bottom">Delete study</TooltipContent>
             </Tooltip>
           )}
         </div>
