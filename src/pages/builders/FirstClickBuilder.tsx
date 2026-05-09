@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { generateSlug } from "@/lib/slug";
 import { FirstClickConfig, FirstClickZone, StudyStatus } from "@/lib/types";
 import { ImageIcon, Upload } from "lucide-react";
+import { SectionHeader } from "@/components/study/primitives";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 
 interface Props {
@@ -227,15 +228,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
       </section>
 
       {task.trim() && (
-        <div className="rounded-lg border border-border bg-muted/30 p-5">
-          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            Your task
-          </div>
-          <p className="mt-2 whitespace-pre-wrap text-base">{task}</p>
-          <p className="mt-3 text-xs text-muted-foreground">
-            This is exactly how participants will see the task.
-          </p>
-        </div>
+        <SectionHeader kicker="Task preview" title={task} />
       )}
 
       <section className="space-y-2">
