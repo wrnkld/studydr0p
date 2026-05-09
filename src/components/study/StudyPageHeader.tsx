@@ -111,9 +111,6 @@ export function StudyPageHeader<T extends string>({
 
         {/* Actions — right */}
         <div className="flex shrink-0 items-center gap-1">
-          <span className="mr-2 hidden text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium sm:inline">
-            {TYPE_LABEL[type]}
-          </span>
           {shareUrl && (
             <Tooltip>
               <TooltipTrigger asChild>
