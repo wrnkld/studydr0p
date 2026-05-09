@@ -555,8 +555,8 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                     value={t.text}
                     onChange={(e) => updateTask(t.id, { text: e.target.value })}
                   />
-                  <div className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground shrink-0">Correct answer</span>
+                  <div className="space-y-1.5">
+                    <Label className="text-sm text-muted-foreground">Correct answer</Label>
                     <Select
                       value={t.correct_node_id || ""}
                       onValueChange={(v) => updateTask(t.id, { correct_node_id: v })}
