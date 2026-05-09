@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import h337 from "heatmap.js";
 import { FirstClickConfig } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 
