@@ -87,14 +87,14 @@
     --radius: 0.5rem;
 
     /* Muted, warm research-artifact palette — matches landing example cards. */
-    --chart-1: 237 33% 66%;  /* indigo  #8B8FC4 */
-    --chart-2: 125 18% 61%;  /* sage    #8AAD8E */
-    --chart-3: 333 27% 70%;  /* rose    #C4A0B4 */
-    --chart-4: 208 16% 56%;  /* slate   #7B8FA0 */
-    --chart-5: 40 32% 64%;   /* ochre   #C4B088 */
-    --chart-6: 13 33% 64%;   /* clay    #C49080 */
-    --chart-7: 173 19% 60%;  /* teal    #8AB5B0 */
-    --chart-8: 268 20% 66%;  /* mauve   #A797BF */
+    --chart-1: 232 24% 63%;  /* indigo  #8A90B8 */
+    --chart-2: 78 18% 57%;   /* sage    #9AA67E */
+    --chart-3: 15 35% 57%;   /* terra   #B87D6A */
+    --chart-4: 196 28% 42%;  /* teal    #4E7A8A */
+    --chart-5: 35 36% 64%;   /* ochre   #C4A882 */
+    --chart-6: 302 13% 48%;  /* mauve   #8B6B8A */
+    --chart-7: 180 13% 48%;  /* slate   #6B8A8A */
+    --chart-8: 23 30% 51%;   /* clay    #A87A5E */
     --chart-axis: 215.4 16.3% 46.9%;
     --chart-grid: 214.3 31.8% 91.4%;
 
