@@ -335,6 +335,7 @@ export default function StudyBuilder() {
         </AlertDialogContent>
       </AlertDialog>
     </PageContainer>
+    </>
   );
 }
 
