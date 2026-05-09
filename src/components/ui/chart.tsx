@@ -80,7 +80,7 @@ ${prefix} [data-chart=${id}] {
 ${colorConfig
   .map(([key, itemConfig]) => {
     const color = itemConfig.theme?.[theme as keyof typeof itemConfig.theme] || itemConfig.color;
-    return color ? `  --color-${key}: ${color};` : null;
+    return color ? `  --color-${CSS.escape(key)}: ${color};` : null;
   })
   .join("\n")}
 }
@@ -108,17 +108,19 @@ function getTooltipIndicatorColor(
   };
   const payload = tooltipItem.payload && typeof tooltipItem.payload === "object" ? (tooltipItem.payload as Record<string, unknown>) : undefined;
   const dataKey = tooltipItem.dataKey != null ? String(tooltipItem.dataKey) : undefined;
+  const stroke = tooltipItem.stroke && tooltipItem.stroke !== "none" ? tooltipItem.stroke : undefined;
+  const fill = tooltipItem.fill && tooltipItem.fill !== "none" ? tooltipItem.fill : undefined;
+  const itemColor = tooltipItem.color && tooltipItem.color !== "none" ? tooltipItem.color : undefined;
 
   return (
     color ||
-    tooltipItem.fill ||
-    tooltipItem.stroke ||
-    tooltipItem.color ||
+    itemConfig?.color ||
+    fill ||
+    stroke ||
     (dataKey && typeof payload?.[`${dataKey}Fill`] === "string" ? payload[`${dataKey}Fill`] as string : undefined) ||
     (dataKey && typeof payload?.[`${dataKey}Color`] === "string" ? payload[`${dataKey}Color`] as string : undefined) ||
     (typeof payload?.fill === "string" ? payload.fill : undefined) ||
-    itemConfig?.color ||
-    (dataKey ? `var(--color-${CSS.escape(dataKey)})` : undefined) ||
+    itemColor ||
     "hsl(var(--chart-1))"
   );
 }
