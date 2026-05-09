@@ -118,23 +118,23 @@ export default function Landing() {
 
   // Type-mapped colors for the canned examples.
   const EXAMPLE_COLORS: Record<StudyType, string> = {
-    card_sort: "#8B8FC4",
-    survey: "#8AAD8E",
-    tree_test: "#C4A0B4",
-    first_click: "#7B8FA0",
-    five_second: "#7B8FA0",
+    card_sort: "#8A90B8",
+    survey: "#9AA67E",
+    tree_test: "#B87D6A",
+    first_click: "#4E7A8A",
+    five_second: "#C4A882",
   };
 
   // Full palette — user-created studies cycle through this in creation order.
   const PALETTE = [
-    "#8B8FC4", // indigo
-    "#8AAD8E", // sage
-    "#C4A0B4", // dusty rose
-    "#7B8FA0", // slate
-    "#C4B088", // ochre
-    "#C49080", // clay
-    "#8AB5B0", // teal
-    "#A797BF", // mauve
+    "#8A90B8", // indigo
+    "#9AA67E", // sage
+    "#B87D6A", // terra
+    "#4E7A8A", // teal
+    "#C4A882", // ochre
+    "#8B6B8A", // mauve
+    "#6B8A8A", // slate
+    "#A87A5E", // clay
   ];
 
   const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];
