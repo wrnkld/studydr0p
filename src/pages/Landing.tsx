@@ -120,11 +120,11 @@ export default function Landing() {
   const totalResponses = rows.reduce((sum, r) => sum + (r.responseCount || 0), 0);
 
   const EXAMPLE_COLORS: Record<StudyType, string> = {
-    card_sort: "#6B7FD4",
-    survey: "#7BAE8E",
-    tree_test: "#9B8EC4",
-    first_click: "#5B8FA8",
-    five_second: "#5B8FA8",
+    card_sort: "#8B8FC4",
+    survey: "#8AAD8E",
+    tree_test: "#C4A0B4",
+    first_click: "#7B8FA0",
+    five_second: "#7B8FA0",
   };
 
   return (
