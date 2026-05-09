@@ -145,7 +145,7 @@ export default function FirstClickParticipant({
         )}
       </div>
 
-      {click ? (
+      {click && (
         <div className="flex items-center gap-3">
           <Button onClick={confirm} disabled={submitting}>
             {submitting ? "Submitting…" : "Confirm click"}
@@ -158,10 +158,6 @@ export default function FirstClickParticipant({
             Click somewhere else
           </Button>
         </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">
-          Click the spot in the image where you'd go first.
-        </p>
       )}
     </div>
   );
