@@ -220,12 +220,6 @@ export default function FirstClickResults({
           </div>
         )}
       </div>
-
-      {zone && (
-        <p className="text-sm text-muted-foreground">
-          {successRate}% clicked in the target area.
-        </p>
-      )}
     </div>
   );
 }
