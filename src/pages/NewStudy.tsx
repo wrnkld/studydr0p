@@ -41,12 +41,6 @@ const TYPES: TypeMeta[] = [
     description: "Where do users click first to complete a task?",
     enabled: true,
   },
-  {
-    id: "five_second",
-    label: "Five-second test",
-    description: "What do people remember after a quick glance?",
-    enabled: false,
-  },
 ];
 
 function isStudyType(value: string): value is StudyType {

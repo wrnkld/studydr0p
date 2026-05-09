@@ -122,7 +122,6 @@ export default function Landing() {
     survey: "#9AA67E",
     tree_test: "#B87D6A",
     first_click: "#4E7A8A",
-    five_second: "#C4A882",
   };
 
   // Full palette — user-created studies cycle through this in creation order.
@@ -143,7 +142,7 @@ export default function Landing() {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const bg = r.isExample
       ? EXAMPLE_COLORS[r.type]
-      : PALETTE[i % PALETTE.length];
+      : PALETTE[(i + 4) % PALETTE.length];
     const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
     return (
       <button

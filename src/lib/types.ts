@@ -4,8 +4,7 @@ export type StudyType =
   | "card_sort"
   | "survey"
   | "first_click"
-  | "tree_test"
-  | "five_second";
+  | "tree_test";
 
 export type StudyStatus = "draft" | "live" | "closed";
 
@@ -78,12 +77,6 @@ export interface TreeTestConfig {
   correct_node_id?: string;
 }
 
-export interface FiveSecondConfig {
-  image_url: string;
-  duration_ms: number;
-  follow_up: SurveyQuestion[];
-}
-
 export const STUDY_TYPE_META: Record<
   StudyType,
   { label: string; description: string }
@@ -103,9 +96,5 @@ export const STUDY_TYPE_META: Record<
   tree_test: {
     label: "Tree test",
     description: "Validate information architecture without UI.",
-  },
-  five_second: {
-    label: "Five-second test",
-    description: "Measure first impressions of a design.",
   },
 };

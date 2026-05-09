@@ -21,7 +21,7 @@ const TYPE_LABEL: Record<StudyType, string> = {
   survey: "Survey",
   first_click: "First click",
   tree_test: "Tree test",
-  five_second: "Five-second test",
+  
 };
 
 export interface StudyPageTab<T extends string = string> {
