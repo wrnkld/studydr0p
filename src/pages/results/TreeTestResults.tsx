@@ -170,10 +170,10 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
           />
 
           <StatGrid cols={4}>
-            <Stat label="Responses" value={ta.total} tone="neutral" />
-            <Stat label="Success rate" value={`${ta.successRate}%`} tone={ta.successRate >= 70 ? "green" : ta.successRate >= 40 ? "amber" : "neutral"} />
-            <Stat label="Avg clicks" value={ta.avgClicks} tone="neutral" />
-            <Stat label="Directness" value={`${ta.directness}%`} tone={ta.directness >= 70 ? "green" : ta.directness >= 40 ? "amber" : "neutral"} />
+            <Stat label="Responses" value={ta.total} tone="indigo" />
+            <Stat label="Success rate" value={`${ta.successRate}%`} tone="green" />
+            <Stat label="Avg clicks" value={ta.avgClicks} tone="amber" />
+            <Stat label="Directness" value={`${ta.directness}%`} tone="neutral" />
           </StatGrid>
 
           {/* Success / Fail donut */}
