@@ -102,7 +102,7 @@ export function StudyPageHeader<T extends string>({
                     "absolute inset-x-2 -bottom-px h-[2px] rounded-full transition-opacity",
                     active ? "opacity-100" : "opacity-0",
                   )}
-                  style={{ background: "hsl(var(--accent-ink))" }}
+                  style={{ background: "hsl(var(--foreground))" }}
                 />
               </button>
             );
