@@ -78,17 +78,20 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
     const categories = Array.from(catSet);
 
+    const colorByCategory = Object.fromEntries(
+      categories.map((c, i) => [c, PALETTE[i % PALETTE.length]]),
+    );
+
     const chartData = cards.map((card) => {
       const counts = byCard[card.id] ?? {};
       const entry: Record<string, string | number> = { name: card.label };
       categories.forEach((c) => {
         entry[c] = counts[c] ?? 0;
-        entry[`${c}Fill`] = PALETTE[categories.indexOf(c) % PALETTE.length];
       });
       return entry;
     });
 
-    return { categories, chartData, byCard };
+    return { categories, chartData, byCard, colorByCategory };
   }, [rows, cards]);
 
   if (loading) return <div className="text-sm text-muted-foreground">Loading…</div>;
@@ -99,7 +102,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return <div className="text-sm text-muted-foreground">No sorted cards yet.</div>;
   }
 
-  const colorFor = (cat: string) => PALETTE[categories.indexOf(cat) % PALETTE.length];
+  const colorFor = (cat: string) => colorByCategory[cat] ?? PALETTE[0];
 
   // Build ChartConfig for ChartContainer
   const chartConfig: ChartConfig = {};
