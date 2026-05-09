@@ -164,7 +164,24 @@ export default function Landing() {
         }}
       >
         <div className="flex items-start justify-between gap-4">
-          <StudyTypeIcon type={r.type} size={28} className="!text-white" />
+          <div className="flex items-center gap-3">
+            <StudyTypeIcon type={r.type} size={28} className="!text-white" />
+            {r.isExample && (
+              <span
+                className="font-mono uppercase text-white"
+                style={{
+                  fontSize: "9px",
+                  letterSpacing: "0.14em",
+                  padding: "3px 7px",
+                  border: "1px solid rgba(255,255,255,0.55)",
+                  borderRadius: "2px",
+                  lineHeight: 1,
+                }}
+              >
+                Example
+              </span>
+            )}
+          </div>
           <div className="text-right text-white" style={{ opacity: 0.85 }}>
             <div
               className="font-mono uppercase"
