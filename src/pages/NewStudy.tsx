@@ -135,9 +135,9 @@ export default function NewStudy() {
               }}
               disabled={!t.enabled || creating}
               aria-label={t.label}
-              className="group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="group relative flex w-full flex-col overflow-hidden rounded-[6px] text-left text-white transition-[transform,filter] duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
               style={{
-                borderTop: `6px solid ${color}`,
+                backgroundColor: color,
                 height: "240px",
                 padding: "28px",
               }}
@@ -149,11 +149,9 @@ export default function NewStudy() {
                 e.currentTarget.style.transform = "";
               }}
             >
-              <div className="flex items-start justify-between gap-4">
-                <span style={{ color, display: "inline-flex" }}>
-                  <StudyTypeIcon type={t.id} size={28} />
-                </span>
-                <div className="text-right text-muted-foreground">
+              <div className="relative flex items-start justify-between gap-4">
+                <StudyTypeIcon type={t.id} size={28} className="!text-white" />
+                <div className="text-right text-white" style={{ opacity: 0.85 }}>
                   <div
                     className="font-mono uppercase"
                     style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}
@@ -169,9 +167,9 @@ export default function NewStudy() {
                 </div>
               </div>
 
-              <div className="mt-auto">
+              <div className="relative mt-auto">
                 <div
-                  className="font-serif text-foreground"
+                  className="font-serif text-white"
                   style={{
                     fontSize: "24px",
                     fontWeight: 700,
@@ -182,8 +180,8 @@ export default function NewStudy() {
                   {t.label}
                 </div>
                 <div
-                  className="mt-2 text-muted-foreground"
-                  style={{ fontSize: "13px", lineHeight: 1.35 }}
+                  className="mt-2 text-white"
+                  style={{ fontSize: "13px", opacity: 0.85, lineHeight: 1.35 }}
                 >
                   {t.description}
                 </div>
