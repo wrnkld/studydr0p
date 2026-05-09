@@ -122,7 +122,6 @@ export default function Landing() {
     survey: "#9AA67E",
     tree_test: "#B87D6A",
     first_click: "#4E7A8A",
-    five_second: "#C4A882",
   };
 
   // Full palette — user-created studies cycle through this in creation order.
