@@ -425,6 +425,19 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
   const nodeLabel = (id: string) => nodes.find((n) => n.id === id)?.label || id;
 
+  // Flatten the tree into a list with hierarchical paths for the dropdown.
+  const flatNodes: { id: string; path: string; depth: number }[] = [];
+  const walkFlat = (parentId: string | null, depth: number, prefix: string[]) => {
+    const list = childrenByParent.get(parentId) ?? [];
+    for (const n of list) {
+      const label = n.label.trim() || "(untitled)";
+      const path = [...prefix, label].join(" / ");
+      flatNodes.push({ id: n.id, path, depth });
+      walkFlat(n.id, depth + 1, [...prefix, label]);
+    }
+  };
+  walkFlat(null, 0, []);
+
   /* ── Render tree recursively ────────────────────────────── */
   const collectIds = (parentId: string | null): string[] => {
     const list = childrenByParent.get(parentId) ?? [];
