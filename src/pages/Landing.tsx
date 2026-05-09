@@ -189,10 +189,6 @@ export default function Landing() {
 
                 {/* Bottom: title + responses with hairline divider */}
                 <div className="mt-auto">
-                  <div
-                    className="mb-3 h-px w-full bg-white"
-                    style={{ opacity: 0.25 }}
-                  />
                   <div className="flex items-end justify-between gap-4">
                     <div
                       className="font-serif text-white"
@@ -209,7 +205,7 @@ export default function Landing() {
                       className="shrink-0 whitespace-nowrap font-mono tabular-nums text-white"
                       style={{ fontSize: "11px", opacity: 0.75, letterSpacing: "0.02em" }}
                     >
-                      {String(r.responseCount).padStart(3, "0")} responses
+                      {r.responseCount} responses
                     </div>
                   </div>
                 </div>
