@@ -243,12 +243,25 @@ export default function StudyBuilder() {
     );
 
   return (
-    <PageContainer width="wide">
+    <PageContainer width="wide" space="md">
+      <StudyPageHeader
+        type={study.type}
+        backTo="/"
+        tabs={[
+          { value: "build", label: "Build" },
+          { value: "preview", label: "Preview" },
+          { value: "results", label: "Responses" },
+        ]}
+        activeTab={activeTab}
+        onTabChange={(v) => setTab(v as TabKey)}
+        shareUrl={shareUrl}
+        onExport={exportCsv ?? undefined}
+        onDelete={() => setConfirmDelete(true)}
+      />
       <Tabs
         value={activeTab}
         onValueChange={(v) => setTab(v as TabKey)}
       >
-        {tabsNode}
         <ParticipantShell
           title={liveTitle.trim() || "Untitled study"}
           description={liveDescription.trim() || undefined}
