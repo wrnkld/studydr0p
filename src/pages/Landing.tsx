@@ -165,7 +165,9 @@ export default function Landing() {
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3">
-            <StudyTypeIcon type={r.type} size={28} style={{ color: bg }} />
+            <span style={{ color: bg, display: "inline-flex" }}>
+              <StudyTypeIcon type={r.type} size={28} />
+            </span>
             {r.isExample && (
               <span
                 className="font-mono uppercase text-muted-foreground"
