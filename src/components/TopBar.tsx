@@ -1,13 +1,6 @@
 import { FormEvent, useState } from "react";
-import { Link, useLocation, useNavigate, useMatch } from "react-router-dom";
-import {
-  Check,
-  Link as LinkIcon,
-  LogOut,
-  Plus,
-  Trash2,
-  Download,
-} from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LogOut, Plus } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,24 +8,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { toast } from "sonner";
-import { useStudyToolbar } from "@/components/StudyToolbarContext";
 
 /**
  * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
- * contextual actions on the right. No breadcrumb, no back arrow (back
- * navigation lives inside each page's content panel for consistency).
+ * global account actions on the right (new study + sign out). Per-study
+ * actions (copy / export / delete) live in the local StudyPageHeader at
+ * the top of the study detail page, not here.
  */
 export default function TopBar() {
   const { session } = useAuth();
   const location = useLocation();
-  const studyMatch = useMatch("/studies/:id");
-  const newStudyMatch = useMatch("/studies/new");
-  const { meta } = useStudyToolbar();
 
   if (location.pathname.startsWith("/s/")) return null;
-
-  const onNewStudyPage = !!newStudyMatch && !!session;
-  const onStudyPage = !!studyMatch && !onNewStudyPage && !!session;
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-card">
@@ -41,13 +28,7 @@ export default function TopBar() {
           <Brand />
         </div>
         <div className="flex min-w-0 flex-1 items-center justify-end gap-2">
-          {onStudyPage ? (
-            <StudyActions shareUrl={meta?.shareUrl ?? null} />
-          ) : session ? (
-            <SignedInActions />
-          ) : (
-            <SignInForm />
-          )}
+          {session ? <SignedInActions /> : <SignInForm />}
         </div>
       </div>
     </header>
