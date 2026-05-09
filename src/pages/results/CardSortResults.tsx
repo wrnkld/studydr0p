@@ -31,13 +31,7 @@ interface Props {
   responses?: ResponseRow[];
 }
 
-const PALETTE = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-];
+const PALETTE = CHART_PALETTE;
 
 const AXIS_COLOR = "hsl(var(--chart-axis))";
 const GRID_COLOR = "hsl(var(--chart-grid))";
