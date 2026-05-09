@@ -193,7 +193,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
       {/* ---------- Matrix table ---------- */}
       <section className="space-y-3">
-        <h3 className="text-base font-medium">Matrix</h3>
+        <Kicker>Matrix</Kicker>
         <div className="overflow-x-auto rounded-lg border">
           <table className="w-full border-collapse text-xs">
             <thead>
