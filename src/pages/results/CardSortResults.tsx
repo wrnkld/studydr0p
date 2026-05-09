@@ -114,7 +114,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     <div className="space-y-8">
       {/* ---------- Stacked bar chart ---------- */}
       <section className="space-y-3">
-        <h3 className="text-base font-medium">Category distribution</h3>
+        <Kicker>By card</Kicker>
 
         {/* Legend */}
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
