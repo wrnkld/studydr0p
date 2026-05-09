@@ -33,6 +33,6 @@ export function StudyTypeIcon({
   return createElement(Icon, {
     size,
     strokeWidth,
-    className: cn("text-muted-foreground", className),
+    className: cn(className),
   });
 }
