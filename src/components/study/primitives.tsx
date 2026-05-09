@@ -185,9 +185,9 @@ Frame.displayName = "Frame";
 export type StatTone = "indigo" | "green" | "amber" | "neutral";
 
 const TONE_BORDER: Record<StatTone, string> = {
-  indigo: "hsl(var(--accent-ink))",
-  green: "#16a34a",
-  amber: "#d97706",
+  indigo: "hsl(var(--border))",
+  green: "hsl(var(--border))",
+  amber: "hsl(var(--border))",
   neutral: "hsl(var(--border))",
 };
 
@@ -207,9 +207,7 @@ export function Stat({
       className={cn("relative pl-5 py-2", className)}
       style={{ borderLeft: `3px solid ${TONE_BORDER[tone]}` }}
     >
-      <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
-        {label}
-      </div>
+      <ResultLabel>{label}</ResultLabel>
       <div
         className="mt-1 text-foreground"
         style={{
