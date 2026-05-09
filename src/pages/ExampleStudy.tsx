@@ -55,12 +55,21 @@ export default function ExampleStudy() {
     : study.seedResponses;
 
   return (
-    <PageContainer width="wide">
+    <PageContainer width="wide" space="md">
+      <StudyPageHeader
+        type={study.type}
+        backTo="/"
+        tabs={[
+          { value: "preview", label: "Preview" },
+          { value: "results", label: "Responses" },
+        ]}
+        activeTab={tab}
+        onTabChange={(v) => setTab(v)}
+      />
       <Tabs
         value={tab}
         onValueChange={(v) => setTab(v as "preview" | "results")}
       >
-        {tabsNode}
         <PageHeader
           title={study.title}
           description={study.description}
