@@ -185,6 +185,7 @@ export default function ExampleStudy() {
         </div>
       </Tabs>
     </PageContainer>
+    </>
   );
 }
 
