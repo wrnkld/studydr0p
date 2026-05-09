@@ -144,7 +144,7 @@ export default function Landing() {
       ? EXAMPLE_COLORS[r.type]
       : PALETTE[(i + 4) % PALETTE.length];
     const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
-    const tint = `${bg}66`; // 40% alpha
+    const tint = `${bg}33`; // 20% alpha
     return (
       <button
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
