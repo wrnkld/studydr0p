@@ -151,20 +151,21 @@ export default function Landing() {
                 type="button"
                 onClick={() => navigate(r.href)}
                 aria-label={`${typeLabel}: ${r.title}`}
-                className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-transform duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-[transform,box-shadow,filter] duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 style={{
                   backgroundColor: bg,
                   height: "240px",
                   padding: "28px",
-                  ["--hover-rotate" as any]: hoverRotate,
-                  boxShadow:
-                    "0 1px 0 rgba(0,0,0,0.04), 0 12px 24px -12px rgba(20,20,15,0.25), 0 24px 48px -24px rgba(20,20,15,0.18)",
+                  boxShadow: "none",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = `rotate(${hoverRotate}) translateY(-2px)`;
+                  e.currentTarget.style.boxShadow =
+                    "0 1px 0 rgba(0,0,0,0.04), 0 12px 24px -12px rgba(20,20,15,0.25), 0 24px 48px -24px rgba(20,20,15,0.18)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "";
+                  e.currentTarget.style.boxShadow = "none";
                 }}
               >
                 {/* Top row: ticket-style meta */}
