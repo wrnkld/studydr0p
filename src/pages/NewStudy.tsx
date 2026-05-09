@@ -105,56 +105,90 @@ export default function NewStudy() {
     void create(requestedType);
   }, [searchParams, user, creating]);
 
+  const TYPE_COLORS: Record<StudyType, string> = {
+    card_sort: "#8A90B8",
+    survey: "#9AA67E",
+    tree_test: "#B87D6A",
+    first_click: "#4E7A8A",
+  };
+  const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg"];
+
   return (
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <div className="grid grid-cols-1 gap-3">
-          {TYPES.map((t) => {
-            const card = (
-              <button
-                key={t.id}
-                type="button"
-                onClick={() => {
-                  if (!t.enabled || creating) return;
-                  setPendingType(t.id);
-                  void create(t.id);
-                }}
-                disabled={!t.enabled || creating}
-                className={cn(
-                  "group relative text-left rounded-lg border border-border/70 bg-card p-5 transition-colors",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                  t.enabled
-                    ? "hover:bg-muted/40 cursor-pointer"
-                    : "opacity-50 cursor-not-allowed",
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border/70 bg-background">
-                    <StudyTypeIcon type={t.id} size={24} />
+      <section
+        className="grid grid-cols-1 sm:grid-cols-2"
+        style={{ gap: "20px", paddingTop: "12px", paddingBottom: "12px" }}
+      >
+        {TYPES.map((t, i) => {
+          const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
+          return (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => {
+                if (!t.enabled || creating) return;
+                setPendingType(t.id);
+                void create(t.id);
+              }}
+              disabled={!t.enabled || creating}
+              aria-label={t.label}
+              className="group relative flex w-full flex-col rounded-[6px] text-left text-white transition-[transform,filter] duration-200 hover:[filter:brightness(0.94)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: TYPE_COLORS[t.id],
+                height: "240px",
+                padding: "28px",
+              }}
+              onMouseEnter={(e) => {
+                if (!t.enabled || creating) return;
+                e.currentTarget.style.transform = `rotate(${hoverRotate}) translateY(-2px)`;
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "";
+              }}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <StudyTypeIcon type={t.id} size={28} className="!text-white" />
+                <div className="text-right text-white" style={{ opacity: 0.85 }}>
+                  <div
+                    className="font-mono uppercase"
+                    style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}
+                  >
+                    Type
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[15px] font-medium tracking-tight">
-                        {t.label}
-                      </span>
-                      {!t.enabled && (
-                        <span className="text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
-                          Soon
-                        </span>
-                      )}
-                    </div>
-                    <p className="mt-1 text-sm text-muted-foreground leading-relaxed">
-                      {t.description}
-                    </p>
+                  <div
+                    className="font-mono"
+                    style={{ fontSize: "12px", letterSpacing: "0.02em" }}
+                  >
+                    {t.label}
                   </div>
                 </div>
-              </button>
-            );
+              </div>
 
-            return card;
-          })}
-      </div>
+              <div className="mt-auto">
+                <div
+                  className="font-serif text-white"
+                  style={{
+                    fontSize: "24px",
+                    fontWeight: 700,
+                    lineHeight: 1.1,
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  {t.label}
+                </div>
+                <div
+                  className="mt-2 text-white"
+                  style={{ fontSize: "13px", opacity: 0.85, lineHeight: 1.35 }}
+                >
+                  {t.description}
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </section>
     </PageContainer>
   );
 }
