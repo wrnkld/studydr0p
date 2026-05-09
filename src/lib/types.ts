@@ -4,8 +4,7 @@ export type StudyType =
   | "card_sort"
   | "survey"
   | "first_click"
-  | "tree_test"
-  | "five_second";
+  | "tree_test";
 
 export type StudyStatus = "draft" | "live" | "closed";
 
