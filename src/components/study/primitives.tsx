@@ -174,7 +174,7 @@ Frame.displayName = "Frame";
 export type StatTone = "indigo" | "green" | "amber" | "neutral";
 
 const TONE_BORDER: Record<StatTone, string> = {
-  indigo: "#4F75FF",
+  indigo: "hsl(var(--accent-ink))",
   green: "#16a34a",
   amber: "#d97706",
   neutral: "hsl(var(--border))",
@@ -202,10 +202,10 @@ export function Stat({
       <div
         className="mt-1 text-foreground"
         style={{
-          fontSize: "48px",
+          fontSize: "56px",
           fontWeight: 700,
           lineHeight: 1,
-          letterSpacing: "-0.03em",
+          letterSpacing: "-0.035em",
           fontVariantNumeric: "tabular-nums",
         }}
       >

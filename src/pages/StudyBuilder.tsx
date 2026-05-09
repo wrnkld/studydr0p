@@ -7,11 +7,9 @@ import {
   FirstClickConfig,
   StudyStatus,
   StudyType,
-  STUDY_TYPE_META,
   SurveyConfig,
   TreeTestConfig,
 } from "@/lib/types";
-import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
@@ -37,7 +35,7 @@ import { PageContainer } from "@/components/study/primitives";
 import { ParticipantShell } from "@/components/study/ParticipantShell";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { StudyPageHeader } from "@/components/study/StudyPageHeader";
 
 interface StudyRow {
   id: string;
@@ -58,7 +56,7 @@ export default function StudyBuilder() {
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
   const [loadKey, setLoadKey] = useState(0);
-  const { actions, setRequestDelete } = useStudyToolbar();
+  const { actions, setRequestDelete, exportCsv } = useStudyToolbar();
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [pendingResponse, setPendingResponse] = useState(false);
@@ -158,27 +156,7 @@ export default function StudyBuilder() {
     return () => setMeta(null);
   }, [study?.id, study?.status, liveTitle, shareUrl, setMeta]);
 
-  const tabsNode = study ? (
-    <>
-      <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 mb-4">
-        {(["build", "preview", "results"] as TabKey[]).map((t) => (
-          <button
-            key={t}
-            type="button"
-            onClick={() => setTab(t)}
-            className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
-              activeTab === t
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            {{ build: "Build", preview: "Preview", results: "Responses" }[t]}
-          </button>
-        ))}
-      </div>
-    </>
-  ) : null;
+  // Tabs are rendered inside the local StudyPageHeader (see below).
 
   const onMetaChange = (meta: { title: string; description: string }) => {
     setLiveTitle(meta.title);
@@ -263,12 +241,25 @@ export default function StudyBuilder() {
     );
 
   return (
-    <PageContainer width="wide">
+    <PageContainer width="wide" space="md">
+      <StudyPageHeader
+        type={study.type}
+        backTo="/"
+        tabs={[
+          { value: "build", label: "Build" },
+          { value: "preview", label: "Preview" },
+          { value: "results", label: "Responses" },
+        ]}
+        activeTab={activeTab}
+        onTabChange={(v) => setTab(v as TabKey)}
+        shareUrl={shareUrl}
+        onExport={exportCsv ?? undefined}
+        onDelete={() => setConfirmDelete(true)}
+      />
       <Tabs
         value={activeTab}
         onValueChange={(v) => setTab(v as TabKey)}
       >
-        {tabsNode}
         <ParticipantShell
           title={liveTitle.trim() || "Untitled study"}
           description={liveDescription.trim() || undefined}

@@ -18,6 +18,7 @@ import {
   makeUserTreeTestResponse,
 } from "@/lib/exampleStudies";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { StudyPageHeader } from "@/components/study/StudyPageHeader";
 import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
 import SurveyParticipant from "@/pages/participant/SurveyParticipant";
@@ -36,25 +37,7 @@ export default function ExampleStudy() {
     null,
   );
 
-  const tabsNode = study ? (
-    <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 mb-4">
-      {(["preview", "results"] as const).map((t) => (
-        <button
-          key={t}
-          type="button"
-          onClick={() => setTab(t)}
-          className={cn(
-            "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
-            tab === t
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground",
-          )}
-        >
-          {{ preview: "Preview", results: "Responses" }[t]}
-        </button>
-      ))}
-    </div>
-  ) : null;
+  // Tabs are rendered inside the local StudyPageHeader (see below).
 
   if (!study) {
     return (
@@ -72,12 +55,21 @@ export default function ExampleStudy() {
     : study.seedResponses;
 
   return (
-    <PageContainer width="wide">
+    <PageContainer width="wide" space="md">
+      <StudyPageHeader
+        type={study.type}
+        backTo="/"
+        tabs={[
+          { value: "preview", label: "Preview" },
+          { value: "results", label: "Responses" },
+        ]}
+        activeTab={tab}
+        onTabChange={(v) => setTab(v)}
+      />
       <Tabs
         value={tab}
         onValueChange={(v) => setTab(v as "preview" | "results")}
       >
-        {tabsNode}
         <PageHeader
           title={study.title}
           description={study.description}

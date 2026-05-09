@@ -95,6 +95,10 @@
     --chart-axis: 215.4 16.3% 46.9%;
     --chart-grid: 214.3 31.8% 91.4%;
 
+    /* Single accent color used sparingly — active tab underline,
+       links, primary stat tone. Ink blue. */
+    --accent-ink: 224 76% 48%;
+
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -125,6 +129,7 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+    --accent-ink: 217 91% 60%;
   }
 }
 
