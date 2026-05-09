@@ -142,7 +142,7 @@ export default function Landing() {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const bg = r.isExample
       ? EXAMPLE_COLORS[r.type]
-      : PALETTE[i % PALETTE.length];
+      : PALETTE[(i + 4) % PALETTE.length];
     const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
     return (
       <button
