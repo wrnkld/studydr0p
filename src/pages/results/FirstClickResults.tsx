@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FirstClickConfig } from "@/lib/types";
-import { Button } from "@/components/ui/button";
+import { Stat, StatGrid } from "@/components/study/primitives";
+import { cn } from "@/lib/utils";
 
 interface ResponseRow {
   id: string;
