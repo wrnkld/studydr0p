@@ -59,7 +59,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     })();
   }, [studyId, responses]);
 
-  const { categories, chartData, byCard } = useMemo(() => {
+  const { categories, chartData, byCard, colorByCategory } = useMemo(() => {
     const list = rows ?? [];
     const catSet = new Set<string>();
     const byCard: Record<string, Record<string, number>> = {};
