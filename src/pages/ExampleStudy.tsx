@@ -18,6 +18,7 @@ import {
   makeUserTreeTestResponse,
 } from "@/lib/exampleStudies";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { ParticipantShell } from "@/components/study/ParticipantShell";
 import { StudyPageHeader } from "@/components/study/StudyPageHeader";
 import { cn } from "@/lib/utils";
 import CardSortParticipant from "@/pages/participant/CardSortParticipant";
@@ -71,12 +72,8 @@ export default function ExampleStudy() {
         value={tab}
         onValueChange={(v) => setTab(v as "preview" | "results")}
       >
-        <PageHeader
-          title={study.title}
-          description={study.description}
-        />
-
-        <div className="mt-6 space-y-6">
+        <ParticipantShell title={study.title} description={study.description}>
+        <div className="space-y-6">
           <TabsContent value="preview" className="mt-0">
             {study.type === "card_sort" ? (
               <CardSortParticipant
@@ -183,6 +180,7 @@ export default function ExampleStudy() {
             )}
           </TabsContent>
         </div>
+        </ParticipantShell>
       </Tabs>
     </PageContainer>
     </>
