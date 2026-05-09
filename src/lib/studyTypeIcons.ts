@@ -21,16 +21,19 @@ export const STUDY_TYPE_ICONS: Record<StudyType, LucideIcon> = {
 export function StudyTypeIcon({
   type,
   size = 24,
+  strokeWidth = 1,
   className,
 }: {
   type: StudyType;
   size?: number;
+  strokeWidth?: number;
   className?: string;
 }) {
   const Icon = STUDY_TYPE_ICONS[type];
   if (!Icon) return null;
   return createElement(Icon, {
     size,
+    strokeWidth,
     className: cn("text-muted-foreground", className),
   });
 }
