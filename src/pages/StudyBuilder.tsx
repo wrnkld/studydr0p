@@ -7,11 +7,9 @@ import {
   FirstClickConfig,
   StudyStatus,
   StudyType,
-  STUDY_TYPE_META,
   SurveyConfig,
   TreeTestConfig,
 } from "@/lib/types";
-import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import SurveyBuilder from "./builders/SurveyBuilder";
 import CardSortBuilder from "./builders/CardSortBuilder";
 import TreeTestBuilder from "./builders/TreeTestBuilder";
