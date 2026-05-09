@@ -192,8 +192,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>({});
   const [deletedIds, setDeletedIds] = useState<string[]>([]);
 
-  // Currently-selecting correct node for which task?
-  const [selectingCorrectFor, setSelectingCorrectFor] = useState<string | null>(null);
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
