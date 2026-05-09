@@ -7,7 +7,6 @@ import {
   CardSortResponseData,
   CategoryRow,
   FirstClickConfig,
-  FiveSecondConfig,
   StudyStatus,
   StudyType,
   SurveyConfig,
@@ -18,7 +17,6 @@ import FirstClickResults from "@/pages/results/FirstClickResults";
 import SurveyResults from "@/pages/results/SurveyResults";
 import CardSortResults from "@/pages/results/CardSortResults";
 import TreeTestResults from "@/pages/results/TreeTestResults";
-import FiveSecondResults from "@/pages/results/FiveSecondResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { BarChart3, Link as LinkIcon, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
