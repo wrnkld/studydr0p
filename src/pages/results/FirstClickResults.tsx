@@ -142,7 +142,7 @@ export default function FirstClickResults({
           <Stat label="Success rate" value={`${successRate}%`} tone="green" />
         )}
         <Stat
-          label="Avg time to click"
+          label="Average time"
           value={avgTime !== null ? `${avgTime}s` : "—"}
           tone="amber"
         />
@@ -161,7 +161,7 @@ export default function FirstClickResults({
                 : "text-muted-foreground hover:text-foreground",
             )}
           >
-            {v === "heatmap" ? "Heatmap" : "Click dots"}
+            {v === "heatmap" ? "Heatmap" : "Clicks"}
           </button>
         ))}
       </div>
