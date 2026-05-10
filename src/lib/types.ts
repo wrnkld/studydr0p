@@ -90,7 +90,7 @@ export const STUDY_TYPE_META: Record<
     description: "Open or closed sorting to discover mental models.",
   },
   first_click: {
-    label: "First-click test",
+    label: "First click",
     description: "Where do users click first to complete a task?",
   },
   tree_test: {
