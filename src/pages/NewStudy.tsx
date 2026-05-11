@@ -106,7 +106,7 @@ export default function NewStudy() {
   }, [searchParams, user, creating]);
 
   const TYPE_COLORS: Record<StudyType, string> = {
-    card_sort: "#8A90B8",
+    card_sort: "#777BBB",
     survey: "#9AA67E",
     tree_test: "#B87D6A",
     first_click: "#4E7A8A",
