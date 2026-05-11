@@ -149,33 +149,17 @@ export default function NewStudy() {
                 e.currentTarget.style.transform = "";
               }}
             >
-              <div className="flex items-start justify-between gap-4">
-                <div
-                  className="flex items-center justify-center shrink-0"
-                  style={{
-                    width: "48px",
-                    height: "48px",
-                    borderRadius: "9999px",
-                    backgroundColor: tint,
-                    color,
-                  }}
-                >
-                  <StudyTypeIcon type={t.id} size={24} />
-                </div>
-                <div className="text-right text-muted-foreground">
-                  <div
-                    className="font-mono uppercase"
-                    style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}
-                  >
-                    Type
-                  </div>
-                  <div
-                    className="font-mono"
-                    style={{ fontSize: "12px", letterSpacing: "0.02em" }}
-                  >
-                    {t.label}
-                  </div>
-                </div>
+              <div
+                className="flex items-center justify-center shrink-0"
+                style={{
+                  width: "48px",
+                  height: "48px",
+                  borderRadius: "9999px",
+                  backgroundColor: tint,
+                  color,
+                }}
+              >
+                <StudyTypeIcon type={t.id} size={24} />
               </div>
 
               <div className="mt-auto">
