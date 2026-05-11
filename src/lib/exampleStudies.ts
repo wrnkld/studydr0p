@@ -515,32 +515,35 @@ export const GROCERY_STUDY: ExampleTreeTest = {
 
 const ORDER_ZONE = { x: 17, y: 10, w: 79, h: 33 }; // "Try it again" row
 
-// 20 hand-picked clicks: 12 on the "Try it again" row, 5 on the
-// "Try something new" row, 3 scattered. Coords are % of the mockup image.
+// Most clicks land on the first card under "Try it again" (leftmost grey rect).
+// A few stragglers on bottom-left Orders, the search field, and the account icon.
 const ORDER_CLICKS: Array<{ x: number; y: number; t: number }> = [
-  // "Try it again" cards (correct) — 12
-  { x: 24.0, y: 24.5, t: 1800 },
-  { x: 47.2, y: 26.1, t: 2100 },
-  { x: 73.5, y: 25.4, t: 1500 },
-  { x: 22.4, y: 32.0, t: 2400 },
-  { x: 49.0, y: 30.7, t: 1700 },
-  { x: 75.8, y: 28.3, t: 2900 },
-  { x: 26.1, y: 14.5, t: 1300 }, // "Try it again" header
-  { x: 45.6, y: 35.2, t: 3100 },
-  { x: 71.0, y: 33.6, t: 1900 },
-  { x: 28.4, y: 27.7, t: 2200 },
-  { x: 50.5, y: 24.0, t: 2600 },
-  { x: 78.2, y: 30.0, t: 2000 },
-  // "Try something new" cards (incorrect) — 5
-  { x: 24.0, y: 60.4, t: 3400 },
-  { x: 48.7, y: 62.1, t: 4100 },
-  { x: 74.5, y: 59.6, t: 3700 },
-  { x: 27.0, y: 64.8, t: 3200 },
-  { x: 51.4, y: 58.3, t: 4500 },
-  // Scattered (incorrect) — 3
-  { x: 53.0, y: 4.5, t: 5800 },  // search bar
-  { x: 7.5, y: 16.0, t: 6400 },  // sidebar Burgers
-  { x: 7.0, y: 91.5, t: 4900 },  // bottom nav Orders
+  // First "Try it again" card (correct) — 13 tightly clustered
+  { x: 21.5, y: 27.8, t: 1500 },
+  { x: 23.4, y: 29.1, t: 1800 },
+  { x: 22.0, y: 31.4, t: 1700 },
+  { x: 24.6, y: 26.5, t: 2100 },
+  { x: 20.8, y: 30.2, t: 1400 },
+  { x: 25.1, y: 32.0, t: 2000 },
+  { x: 22.7, y: 28.5, t: 1900 },
+  { x: 23.9, y: 33.1, t: 2300 },
+  { x: 21.0, y: 26.0, t: 1600 },
+  { x: 26.0, y: 29.7, t: 2500 },
+  { x: 22.3, y: 34.2, t: 2200 },
+  { x: 24.2, y: 31.0, t: 1750 },
+  { x: 20.4, y: 28.9, t: 2700 },
+  // Bottom-left "Orders" nav (incorrect) — 4
+  { x: 6.5, y: 91.0, t: 4900 },
+  { x: 8.2, y: 92.4, t: 5300 },
+  { x: 7.1, y: 90.2, t: 4400 },
+  { x: 9.0, y: 91.8, t: 5800 },
+  // Search field (incorrect) — 3
+  { x: 48.0, y: 4.6, t: 6100 },
+  { x: 55.7, y: 5.2, t: 5500 },
+  { x: 42.3, y: 4.1, t: 6700 },
+  // Account icon top-right (incorrect) — 2
+  { x: 93.5, y: 4.8, t: 7200 },
+  { x: 94.8, y: 5.6, t: 6800 },
 ];
 
 
