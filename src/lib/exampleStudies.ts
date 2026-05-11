@@ -21,7 +21,7 @@ import {
   TreeTestTask,
 } from "@/lib/types";
 import { TreeNodeRow, TaskResult } from "@/pages/participant/TreeTestParticipant";
-import orderItAgainImage from "@/assets/firstclick-order-it-again.jpg";
+import orderItAgainImage from "@/assets/firstclick-order-it-again.png";
 
 export type ExampleStudyId = "fridge" | "gasstation" | "grocery" | "orderitagain";
 
@@ -513,35 +513,36 @@ export const GROCERY_STUDY: ExampleTreeTest = {
 
 // ---------- First-click: Order it again ----------
 
-const ORDER_ZONE = { x: 62, y: 42, w: 32, h: 7 }; // Reorder button
+const ORDER_ZONE = { x: 17, y: 10, w: 79, h: 33 }; // "Try it again" row
 
-// 20 hand-picked clicks: 12 on the Reorder button, 5 on the pizza thumbnail,
-// 3 scattered. Coordinates are percentages of the mockup image.
+// 20 hand-picked clicks: 12 on the "Try it again" row, 5 on the
+// "Try something new" row, 3 scattered. Coords are % of the mockup image.
 const ORDER_CLICKS: Array<{ x: number; y: number; t: number }> = [
-  // Reorder button cluster (correct) — 12
-  { x: 78.0, y: 45.4, t: 1800 },
-  { x: 76.5, y: 45.8, t: 2100 },
-  { x: 80.2, y: 46.1, t: 1500 },
-  { x: 75.0, y: 44.9, t: 2400 },
-  { x: 81.8, y: 45.2, t: 1700 },
-  { x: 77.4, y: 46.4, t: 2900 },
-  { x: 79.1, y: 44.5, t: 1300 },
-  { x: 74.6, y: 46.0, t: 3100 },
-  { x: 82.4, y: 45.7, t: 1900 },
-  { x: 78.8, y: 47.0, t: 2200 },
-  { x: 76.0, y: 44.2, t: 2600 },
-  { x: 80.7, y: 46.7, t: 2000 },
-  // Pizza thumbnail cluster (incorrect) — 5
-  { x: 18.5, y: 41.2, t: 3400 },
-  { x: 21.0, y: 43.6, t: 4100 },
-  { x: 16.8, y: 39.5, t: 3700 },
-  { x: 19.6, y: 44.8, t: 3200 },
-  { x: 22.4, y: 40.3, t: 4500 },
+  // "Try it again" cards (correct) — 12
+  { x: 24.0, y: 24.5, t: 1800 },
+  { x: 47.2, y: 26.1, t: 2100 },
+  { x: 73.5, y: 25.4, t: 1500 },
+  { x: 22.4, y: 32.0, t: 2400 },
+  { x: 49.0, y: 30.7, t: 1700 },
+  { x: 75.8, y: 28.3, t: 2900 },
+  { x: 26.1, y: 14.5, t: 1300 }, // "Try it again" header
+  { x: 45.6, y: 35.2, t: 3100 },
+  { x: 71.0, y: 33.6, t: 1900 },
+  { x: 28.4, y: 27.7, t: 2200 },
+  { x: 50.5, y: 24.0, t: 2600 },
+  { x: 78.2, y: 30.0, t: 2000 },
+  // "Try something new" cards (incorrect) — 5
+  { x: 24.0, y: 60.4, t: 3400 },
+  { x: 48.7, y: 62.1, t: 4100 },
+  { x: 74.5, y: 59.6, t: 3700 },
+  { x: 27.0, y: 64.8, t: 3200 },
+  { x: 51.4, y: 58.3, t: 4500 },
   // Scattered (incorrect) — 3
-  { x: 53.0, y: 22.5, t: 5800 }, // search bar
-  { x: 50.0, y: 84.6, t: 6400 }, // recommended row
-  { x: 14.0, y: 95.2, t: 4900 }, // bottom nav home
+  { x: 53.0, y: 4.5, t: 5800 },  // search bar
+  { x: 7.5, y: 16.0, t: 6400 },  // sidebar Burgers
+  { x: 7.0, y: 91.5, t: 4900 },  // bottom nav Orders
 ];
+
 
 function inOrderZone(x: number, y: number) {
   return (
