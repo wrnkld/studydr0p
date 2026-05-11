@@ -21,7 +21,7 @@ import {
   TreeTestTask,
 } from "@/lib/types";
 import { TreeNodeRow, TaskResult } from "@/pages/participant/TreeTestParticipant";
-import orderItAgainImage from "@/assets/firstclick-order-it-again.jpg";
+import orderItAgainImage from "@/assets/firstclick-order-it-again.png";
 
 export type ExampleStudyId = "fridge" | "gasstation" | "grocery" | "orderitagain";
 
