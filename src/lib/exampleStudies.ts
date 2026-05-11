@@ -513,7 +513,7 @@ export const GROCERY_STUDY: ExampleTreeTest = {
 
 // ---------- First-click: Order it again ----------
 
-const ORDER_ZONE = { x: 17, y: 10, w: 79, h: 33 }; // "Try it again" row
+const ORDER_ZONE = { x: 18, y: 24, w: 12, h: 13 }; // first "Try it again" card only
 
 // Most clicks land on the first card under "Try it again" (leftmost grey rect).
 // A few stragglers on bottom-left Orders, the search field, and the account icon.
