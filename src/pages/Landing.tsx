@@ -118,7 +118,7 @@ export default function Landing() {
 
   // Type-mapped colors for the canned examples.
   const EXAMPLE_COLORS: Record<StudyType, string> = {
-    card_sort: "#8A90B8",
+    card_sort: "#777BBB",
     survey: "#9AA67E",
     tree_test: "#B87D6A",
     first_click: "#4E7A8A",
@@ -126,7 +126,7 @@ export default function Landing() {
 
   // Full palette — user-created studies cycle through this in creation order.
   const PALETTE = [
-    "#8A90B8", // indigo
+    "#777BBB", // indigo (matches primary)
     "#9AA67E", // sage
     "#B87D6A", // terra
     "#4E7A8A", // teal
