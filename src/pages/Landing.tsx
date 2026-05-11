@@ -126,7 +126,7 @@ export default function Landing() {
 
   // Full palette — user-created studies cycle through this in creation order.
   const PALETTE = [
-    "#8A90B8", // indigo
+    "#777BBB", // indigo (matches primary)
     "#9AA67E", // sage
     "#B87D6A", // terra
     "#4E7A8A", // teal
