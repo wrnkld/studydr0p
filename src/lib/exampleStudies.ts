@@ -518,7 +518,7 @@ const ORDER_ZONE = { x: 18, y: 24, w: 12, h: 13 }; // first "Try it again" card 
 // Most clicks land on the first card under "Try it again" (leftmost grey rect).
 // A few stragglers on bottom-left Orders, the search field, and the account icon.
 const ORDER_CLICKS: Array<{ x: number; y: number; t: number }> = [
-  // First "Try it again" card (correct) — 13 tightly clustered
+  // First "Try it again" card (correct) — 11 tightly clustered
   { x: 21.5, y: 27.8, t: 1500 },
   { x: 23.4, y: 29.1, t: 1800 },
   { x: 22.0, y: 31.4, t: 1700 },
@@ -530,8 +530,6 @@ const ORDER_CLICKS: Array<{ x: number; y: number; t: number }> = [
   { x: 21.0, y: 26.0, t: 1600 },
   { x: 26.0, y: 29.7, t: 2500 },
   { x: 22.3, y: 34.2, t: 2200 },
-  { x: 24.2, y: 31.0, t: 1750 },
-  { x: 20.4, y: 28.9, t: 2700 },
   // Bottom-left "Orders" nav (incorrect) — 4
   { x: 6.5, y: 91.0, t: 4900 },
   { x: 8.2, y: 92.4, t: 5300 },
