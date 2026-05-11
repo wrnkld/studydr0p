@@ -513,7 +513,7 @@ export const GROCERY_STUDY: ExampleTreeTest = {
 
 // ---------- First-click: Order it again ----------
 
-const ORDER_ZONE = { x: 62, y: 42, w: 32, h: 7 }; // Reorder button
+const ORDER_ZONE = { x: 17, y: 10, w: 79, h: 33 }; // "Try it again" row
 
 // 20 hand-picked clicks: 12 on the Reorder button, 5 on the pizza thumbnail,
 // 3 scattered. Coordinates are percentages of the mockup image.
