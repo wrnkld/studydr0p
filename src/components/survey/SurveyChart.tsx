@@ -24,7 +24,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Stat } from "@/components/study/primitives";
-import { useIsMobile } from "@/hooks/use-mobile";
+
 
 // Map a value to a chart-1 (blue) shade — higher value = darker.
 // Uses HSL alpha to lighten so we don't need extra tokens.
@@ -75,7 +75,6 @@ export function ChoiceChart({
   counts: CountMap;
   total: number;
 }) {
-  const isMobile = useIsMobile();
   // Always show all configured options, including zero-count ones, in given order.
   const data = options.map((label) => ({ label, value: counts[label] ?? 0 }));
   // Append any extras (answers that aren't in `options`).
@@ -88,80 +87,34 @@ export function ChoiceChart({
   }
 
   const max = Math.max(...data.map((d) => d.value), 1);
-  // Domain top: prefer total when it makes sense; otherwise use max.
   const domainMax = Math.max(total, max, 1);
 
-  // Adaptive sizing so labels don't overlap and stay single-line.
-  // - Y-axis width grows with longest label (capped) so there's room without
-  //   stealing too much from the bars.
-  // - Chart height grows with number of bars so each row gets ~28-32px.
-  const longest = data.reduce((m, d) => Math.max(m, d.label.length), 0);
-  const yAxisWidth = Math.min(
-    isMobile ? 140 : 200,
-    Math.max(isMobile ? 80 : 110, longest * (isMobile ? 6 : 7) + 12),
-  );
-  const charBudget = Math.max(8, Math.floor((yAxisWidth - 12) / (isMobile ? 6 : 7)));
-  const truncate = (s: string) =>
-    s.length > charBudget ? s.slice(0, charBudget - 1).trimEnd() + "…" : s;
-  const rowH = isMobile ? 30 : 32;
-  const chartHeight = Math.max(CHART_HEIGHT, data.length * rowH + 32);
-
   return (
-    <ChartContainer
-      config={barConfig}
-      className="aspect-auto w-full"
-      style={{ height: chartHeight }}
-    >
-      <BarChart data={data} layout="vertical" margin={CHART_MARGIN}>
-        <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
-        <XAxis
-          type="number"
-          domain={[0, domainMax]}
-          stroke={AXIS_COLOR}
-          fontSize={12}
-          fontFamily={AXIS_FONT}
-          tickLine={false}
-          axisLine={false}
-          allowDecimals={false}
-        />
-        <YAxis
-          type="category"
-          dataKey="label"
-          stroke={AXIS_COLOR}
-          fontSize={12}
-          fontFamily={AXIS_FONT}
-          tickLine={false}
-          axisLine={false}
-          interval={0}
-          width={yAxisWidth}
-          tickFormatter={truncate}
-        />
-        <ChartTooltip
-          content={
-            <ChartTooltipContent
-              labelFormatter={(label) => String(label)}
-              formatter={(value) => {
-                const n = Number(value);
-                const pct = total > 0 ? Math.round((n / total) * 100) : 0;
-                return (
-                  <div className="flex w-full justify-between gap-4">
-                    <span>Responses</span>
-                     <span className="font-medium tabular-nums">
-                       {n} · {pct}%
-                     </span>
-                  </div>
-                );
-              }}
-            />
-          }
-        />
-        <Bar dataKey="value" fill="var(--color-value)" isAnimationActive={false}>
-          {data.map((d, i) => (
-            <Cell key={i} fill={shadeFor(d.value, max)} />
-          ))}
-        </Bar>
-      </BarChart>
-    </ChartContainer>
+    <ul className="w-full space-y-3">
+      {data.map((d) => {
+        const widthPct = (d.value / domainMax) * 100;
+        const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
+        return (
+          <li key={d.label} className="space-y-1">
+            <div className="flex items-baseline justify-between gap-3 text-sm">
+              <span className="truncate font-medium">{d.label}</span>
+              <span className="shrink-0 tabular-nums text-muted-foreground">
+                {d.value} · {pct}%
+              </span>
+            </div>
+            <div className="h-3 w-full overflow-hidden rounded-sm bg-[hsl(var(--chart-grid))]">
+              <div
+                className="h-full rounded-sm transition-[width]"
+                style={{
+                  width: `${widthPct}%`,
+                  backgroundColor: shadeFor(d.value, max),
+                }}
+              />
+            </div>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

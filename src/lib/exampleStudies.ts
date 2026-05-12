@@ -179,7 +179,7 @@ export const FRIDGE_STUDY: ExampleCardSort = {
   id: "fridge",
   type: "card_sort",
   title: "Where does it go in the fridge?",
-  description: "Sort each item into the part of the fridge it belongs in.",
+  description: "Put each item in the fridge.",
   config: { sort_type: "closed" },
   cards: FRIDGE_CARDS,
   categories: FRIDGE_CATEGORIES,
@@ -233,26 +233,26 @@ export const GAS_STATION_CONFIG: SurveyConfig = {
 };
 
 const GAS_ANSWER_SETS: Record<string, string | string[]>[] = [
-  { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito"], q4: "Wawa", q5: "Slim Jim and a Gatorade." },
-  { q1: "No",  q2: "2", q3: ["Just snacks"],         q4: "7-Eleven", q5: "Just water." },
-  { q1: "Yes", q2: "3", q3: ["Beef jerky", "Donut"], q4: "Buc-ee's", q5: "Coffee and a donut." },
-  { q1: "Yes", q2: "5", q3: ["Hot dog", "Pizza slice"], q4: "Sheetz", q5: "Hot pretzel, no question." },
-  { q1: "No",  q2: "3", q3: ["Just snacks", "Beef jerky"], q4: "Casey's", q5: "Sour Patch Kids." },
-  { q1: "Yes", q2: "4", q3: ["Taquito"], q4: "7-Eleven", q5: "Whatever's hot and rolling." },
-  { q1: "No",  q2: "1", q3: ["Just snacks"], q4: "They're all the same", q5: "I avoid them entirely." },
-  { q1: "Yes", q2: "4", q3: ["Hot dog", "Pizza slice", "Donut"], q4: "Wawa", q5: "Sandwich, fresh, with chips." },
-  { q1: "Yes", q2: "5", q3: ["Hot dog"], q4: "Buc-ee's", q5: "Brisket sandwich, ideally." },
-  { q1: "No",  q2: "2", q3: ["Donut"], q4: "Sheetz", q5: "Glazed donut and orange juice." },
-  { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito", "Donut"], q4: "Wawa", q5: "Hoagie." },
-  { q1: "Yes", q2: "5", q3: ["Beef jerky", "Hot dog"], q4: "Casey's", q5: "Casey's pizza is unbeatable." },
-  { q1: "No",  q2: "2", q3: ["Just snacks"], q4: "7-Eleven", q5: "A bag of chips." },
-  { q1: "Yes", q2: "3", q3: ["Taquito", "Beef jerky"], q4: "Buc-ee's", q5: "Beaver Nuggets." },
-  { q1: "Yes", q2: "4", q3: ["Hot dog"], q4: "Sheetz", q5: "MTO sandwich at 2am." },
-  { q1: "Yes", q2: "3", q3: ["Donut", "Taquito"], q4: "7-Eleven", q5: "Tornado and a Slurpee." },
-  { q1: "No",  q2: "2", q3: ["Just snacks"], q4: "Wawa", q5: "Trail mix." },
-  { q1: "Yes", q2: "4", q3: ["Hot dog", "Beef jerky"], q4: "Casey's", q5: "Pepperoni slice." },
-  { q1: "Yes", q2: "3", q3: ["Pizza slice"], q4: "Sheetz", q5: "Two slices and a slushie." },
-  { q1: "Yes", q2: "5", q3: ["Hot dog", "Donut"], q4: "Wawa", q5: "Sizzli for breakfast." },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito"], q4: "Wawa", q5: "Slim Jim and a Gatorade" },
+  { q1: "No",  q2: "2", q3: ["Just snacks"],         q4: "7-Eleven", q5: "Just water" },
+  { q1: "Yes", q2: "3", q3: ["Beef jerky", "Donut"], q4: "Buc-ee's", q5: "Coffee and a donut" },
+  { q1: "Yes", q2: "5", q3: ["Hot dog", "Pizza slice"], q4: "Sheetz", q5: "Hot pretzel, no question" },
+  { q1: "No",  q2: "3", q3: ["Just snacks", "Beef jerky"], q4: "Casey's", q5: "Sour Patch Kids" },
+  { q1: "Yes", q2: "4", q3: ["Taquito"], q4: "7-Eleven", q5: "Whatever's hot and rolling" },
+  { q1: "No",  q2: "1", q3: ["Just snacks"], q4: "They're all the same", q5: "I avoid them entirely" },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Pizza slice", "Donut"], q4: "Wawa", q5: "Sandwich, fresh, with chips" },
+  { q1: "Yes", q2: "5", q3: ["Hot dog"], q4: "Buc-ee's", q5: "Brisket sandwich, ideally" },
+  { q1: "No",  q2: "2", q3: ["Donut"], q4: "Sheetz", q5: "Glazed donut and orange juice" },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Taquito", "Donut"], q4: "Wawa", q5: "Hoagie" },
+  { q1: "Yes", q2: "5", q3: ["Beef jerky", "Hot dog"], q4: "Casey's", q5: "Casey's pizza is unbeatable" },
+  { q1: "No",  q2: "2", q3: ["Just snacks"], q4: "7-Eleven", q5: "A bag of chips" },
+  { q1: "Yes", q2: "3", q3: ["Taquito", "Beef jerky"], q4: "Buc-ee's", q5: "Beaver Nuggets" },
+  { q1: "Yes", q2: "4", q3: ["Hot dog"], q4: "Sheetz", q5: "MTO sandwich at 2am" },
+  { q1: "Yes", q2: "3", q3: ["Donut", "Taquito"], q4: "7-Eleven", q5: "Tornado and a Slurpee" },
+  { q1: "No",  q2: "2", q3: ["Just snacks"], q4: "Wawa", q5: "Trail mix" },
+  { q1: "Yes", q2: "4", q3: ["Hot dog", "Beef jerky"], q4: "Casey's", q5: "Pepperoni slice" },
+  { q1: "Yes", q2: "3", q3: ["Pizza slice"], q4: "Sheetz", q5: "Two slices and a slushie" },
+  { q1: "Yes", q2: "5", q3: ["Hot dog", "Donut"], q4: "Wawa", q5: "Sizzli for breakfast" },
 ];
 
 const GAS_SEED_RESPONSES: ExampleResponseRow[] = GAS_ANSWER_SETS.map(
@@ -513,7 +513,7 @@ export const GROCERY_STUDY: ExampleTreeTest = {
 
 // ---------- First-click: Order it again ----------
 
-const ORDER_ZONE = { x: 18, y: 24, w: 12, h: 13 }; // first "Try it again" card only
+const ORDER_ZONE = { x: 17, y: 16, w: 26, h: 20 }; // full first "Try it again" card
 
 // Most clicks land on the first card under "Try it again" (leftmost grey rect).
 // A few stragglers on bottom-left Orders, the search field, and the account icon.
@@ -558,7 +558,7 @@ const ORDER_SEED_RESPONSES: ExampleResponseRow[] = ORDER_CLICKS.map((c, i) => ({
   id: `order-resp-${i}`,
   session_id: `order-sess-${i}`,
   data: {
-    task: "Where would you tap to reorder your last meal?",
+    task: "Where would you click to reorder your last meal?",
     image_url: orderItAgainImage,
     x_pct: c.x,
     y_pct: c.y,
@@ -576,7 +576,7 @@ export const ORDER_IT_AGAIN_STUDY: ExampleFirstClick = {
   description:
     "Take a quick look at the home screen and click where you'd go first.",
   config: {
-    task: "Where would you tap to reorder your last meal?",
+    task: "Where would you click to reorder your last meal?",
     image_url: orderItAgainImage,
     correct_zone: ORDER_ZONE,
   },
