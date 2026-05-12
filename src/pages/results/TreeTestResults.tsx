@@ -128,17 +128,19 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
 
       // Build sorted options list (correct answer first, then by count desc)
       const correctLabel = labelForAny(task.correct_node_id);
+      const correctDisplayLabel = `${correctLabel} (correct answer)`;
       const destEntries = Array.from(destinations.entries()).sort((a, b) => b[1] - a[1]);
       const options: string[] = [];
       const counts: CountMap = {};
       // Ensure correct answer is in the list
       if (!destinations.has(correctLabel)) {
-        options.push(correctLabel);
-        counts[correctLabel] = 0;
+        options.push(correctDisplayLabel);
+        counts[correctDisplayLabel] = 0;
       }
       for (const [label, count] of destEntries) {
-        options.push(label);
-        counts[label] = count;
+        const display = label === correctLabel ? correctDisplayLabel : label;
+        options.push(display);
+        counts[display] = count;
       }
 
       return {
@@ -191,9 +193,6 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
               counts={ta.counts}
               total={ta.total}
             />
-            <p className="text-xs text-muted-foreground">
-              Correct answer: <span className="font-medium text-foreground">{ta.correctLabel}</span>
-            </p>
           </div>
         </section>
       ))}
