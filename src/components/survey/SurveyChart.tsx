@@ -24,7 +24,7 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Stat } from "@/components/study/primitives";
-import { useIsMobile } from "@/hooks/use-mobile";
+
 
 // Map a value to a chart-1 (blue) shade — higher value = darker.
 // Uses HSL alpha to lighten so we don't need extra tokens.
