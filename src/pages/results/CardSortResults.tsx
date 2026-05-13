@@ -1,22 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-} from "@/components/ui/chart";
 import { CHART_PALETTE } from "@/components/survey/SurveyChart";
 import { Kicker } from "@/components/study/primitives";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 interface ResponseRow {
   id: string;
@@ -33,14 +19,9 @@ interface Props {
 
 const PALETTE = CHART_PALETTE;
 
-const AXIS_COLOR = "hsl(var(--chart-axis))";
-const GRID_COLOR = "hsl(var(--chart-grid))";
-const AXIS_FONT = "'Calibre', ui-sans-serif, system-ui, sans-serif";
-
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (responses) {
@@ -59,7 +40,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     })();
   }, [studyId, responses]);
 
-  const { categories, chartData, byCard, colorByCategory } = useMemo(() => {
+  const { categories, chartData, byCard, colorByCategory, maxCardTotal } = useMemo(() => {
     const list = rows ?? [];
     const catSet = new Set<string>();
     const byCard: Record<string, Record<string, number>> = {};
@@ -91,7 +72,14 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
       return entry;
     });
 
-    return { categories, chartData, byCard, colorByCategory };
+    const maxCardTotal = Math.max(
+      ...chartData.map((entry) =>
+        categories.reduce((sum, cat) => sum + ((entry[cat] as number) ?? 0), 0)
+      ),
+      1
+    );
+
+    return { categories, chartData, byCard, colorByCategory, maxCardTotal };
   }, [rows, cards]);
 
   if (loading) return <div className="text-sm text-muted-foreground">Loading…</div>;
@@ -103,16 +91,6 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
   }
 
   const colorFor = (cat: string) => colorByCategory[cat] ?? PALETTE[0];
-
-  // Build ChartConfig for ChartContainer
-  const chartConfig: ChartConfig = {};
-  categories.forEach((cat) => {
-    chartConfig[cat] = { label: cat, color: colorFor(cat) };
-  });
-
-  const yAxisWidth = isMobile ? 72 : 120;
-  const rowHeight = 28;
-  const chartHeight = Math.max(180, chartData.length * rowHeight + 48);
 
   return (
     <div className="space-y-8">
@@ -134,65 +112,49 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
           ))}
         </div>
 
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto w-full"
-          style={{ height: chartHeight }}
-        >
-          <BarChart
-            data={chartData}
-            layout="vertical"
-            barSize={14}
-            margin={{ top: 4, right: 8, bottom: 0, left: 0 }}
-          >
-            <CartesianGrid horizontal={false} stroke={GRID_COLOR} />
-            <XAxis
-              type="number"
-              stroke={AXIS_COLOR}
-              fontSize={12}
-              fontFamily={AXIS_FONT}
-              tickLine={false}
-              axisLine={false}
-              allowDecimals={false}
-            />
-            <YAxis
-              type="category"
-              dataKey="name"
-              width={yAxisWidth}
-              stroke={AXIS_COLOR}
-              fontSize={12}
-              fontFamily={AXIS_FONT}
-              tickLine={false}
-              axisLine={false}
-              interval={0}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  formatter={(value, name) => {
-                    if (value === 0) return null;
-                    return (
-                      <div className="flex w-full justify-between gap-4">
-                        <span>{String(name)}</span>
-                        <span className="font-medium tabular-nums">{value}</span>
-                      </div>
-                    );
-                  }}
-                />
-              }
-            />
-            {categories.map((cat) => (
-              <Bar
-                key={cat}
-                dataKey={cat}
-                stackId="stack"
-                fill={`var(--color-${CSS.escape(cat)})`}
-                style={{ fill: colorFor(cat) }}
-                isAnimationActive={false}
-              />
-            ))}
-          </BarChart>
-        </ChartContainer>
+        <ul className="w-full space-y-3">
+          {chartData.map((entry) => {
+            const cardTotal = categories.reduce(
+              (sum, cat) => sum + ((entry[cat] as number) ?? 0),
+              0
+            );
+            const barWidth = maxCardTotal > 0 ? (cardTotal / maxCardTotal) * 100 : 0;
+
+            return (
+              <li key={entry.name} className="space-y-1">
+                <div className="flex items-baseline justify-between gap-3 text-sm">
+                  <span className="truncate font-medium">{entry.name}</span>
+                  <span className="shrink-0 tabular-nums text-muted-foreground">
+                    {cardTotal} {cardTotal === 1 ? "response" : "responses"}
+                  </span>
+                </div>
+                <div className="h-3 w-full overflow-hidden rounded-sm bg-[hsl(var(--chart-grid))]">
+                  <div
+                    className="flex h-full rounded-sm"
+                    style={{ width: `${barWidth}%` }}
+                  >
+                    {categories.map((cat) => {
+                      const count = (entry[cat] as number) ?? 0;
+                      if (count === 0) return null;
+                      const segWidth = cardTotal > 0 ? (count / cardTotal) * 100 : 0;
+                      return (
+                        <div
+                          key={cat}
+                          className="h-full"
+                          style={{
+                            width: `${segWidth}%`,
+                            backgroundColor: colorFor(cat),
+                          }}
+                          title={`${cat}: ${count}`}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </section>
 
       {/* ---------- Matrix table ---------- */}
