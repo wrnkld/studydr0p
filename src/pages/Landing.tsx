@@ -225,7 +225,7 @@ export default function Landing() {
         actions={
           <div
             aria-label="$20 once, forever"
-            className="relative z-10 flex items-center justify-center rounded-full border-2 border-foreground text-foreground select-none shrink-0"
+            className="relative z-10 flex items-center justify-center rounded-full border-2 border-foreground text-foreground select-none shrink-0 self-start -mt-2 -mr-1 sm:mt-0 sm:mr-0"
             style={{
               width: "112px",
               height: "112px",
