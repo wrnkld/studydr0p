@@ -223,19 +223,30 @@ export default function Landing() {
         title="UX research, without the friction."
         description="Run and share unmoderated UX studies with a single link."
         actions={
-          <div className="flex flex-col items-end leading-tight">
-            <span
-              className="font-serif font-bold text-foreground"
-              style={{ fontSize: "22px", letterSpacing: "-0.02em" }}
-            >
-              $20
-            </span>
-            <span
-              className="font-mono uppercase text-muted-foreground"
-              style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-            >
-              One-time · yours forever
-            </span>
+          <div
+            aria-label="$20 once, forever"
+            className="relative z-10 flex items-center justify-center rounded-full border-2 border-foreground text-foreground select-none shrink-0 self-start -mt-2 -mr-1 sm:mt-0 sm:mr-0"
+            style={{
+              width: "112px",
+              height: "112px",
+              transform: "rotate(-8deg)",
+              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.08)",
+            }}
+          >
+            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+              <span
+                className="font-serif font-bold"
+                style={{ fontSize: "32px", letterSpacing: "-0.03em", lineHeight: 1 }}
+              >
+                $20
+              </span>
+              <span
+                className="font-mono uppercase"
+                style={{ fontSize: "9px", letterSpacing: "0.14em" }}
+              >
+                Once, forever
+              </span>
+            </div>
           </div>
         }
       />
