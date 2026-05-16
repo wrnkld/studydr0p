@@ -245,37 +245,73 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
             <p className="text-sm text-muted-foreground">Loading responses…</p>
           </div>
         ) : (
-          <>
-            {study.type === "survey" && (
-              <SurveyResults
-                studyId={study.id}
-                config={(study.config as SurveyConfig) ?? { questions: [] }}
-                responses={responses}
-              />
+          <div className="relative">
+            <div
+              className={
+                locked
+                  ? "pointer-events-none select-none blur-md transition-[filter]"
+                  : ""
+              }
+              aria-hidden={locked || undefined}
+            >
+              {study.type === "survey" && (
+                <SurveyResults
+                  studyId={study.id}
+                  config={(study.config as SurveyConfig) ?? { questions: [] }}
+                  responses={responses}
+                />
+              )}
+              {study.type === "card_sort" && (
+                <CardSortResults
+                  studyId={study.id}
+                  cards={cards}
+                  responses={responses}
+                />
+              )}
+              {study.type === "first_click" && (
+                <FirstClickResults
+                  config={(study.config as FirstClickConfig) ?? { task: "", image_url: "" }}
+                  responses={responses}
+                />
+              )}
+              {study.type === "tree_test" && (
+                <TreeTestResults
+                  studyId={study.id}
+                  config={
+                    (study.config as TreeTestConfig) ?? { tasks: [] }
+                  }
+                  responses={responses}
+                />
+              )}
+            </div>
+
+            {locked && (
+              <div className="absolute inset-0 flex items-start justify-center px-4 pt-16 sm:pt-24">
+                <div className="max-w-sm rounded-lg border border-border bg-card/95 p-6 text-center shadow-lg backdrop-blur-sm">
+                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                    <Lock className="h-4 w-4 text-foreground" />
+                  </div>
+                  <h3 className="font-serif text-xl font-bold tracking-tight text-foreground">
+                    Unlock your results
+                  </h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    You have {responses.length} response{responses.length === 1 ? "" : "s"} waiting.
+                    Pay once, keep StudyDrop forever.
+                  </p>
+                  <Button
+                    size="sm"
+                    className="mt-4"
+                    onClick={() => toast.info("Checkout coming soon — Stripe hookup pending.")}
+                  >
+                    Unlock for $20
+                  </Button>
+                  <p className="mt-2 text-[11px] text-muted-foreground">
+                    One-time payment · unlimited studies & responses
+                  </p>
+                </div>
+              </div>
             )}
-            {study.type === "card_sort" && (
-              <CardSortResults
-                studyId={study.id}
-                cards={cards}
-                responses={responses}
-              />
-            )}
-            {study.type === "first_click" && (
-              <FirstClickResults
-                config={(study.config as FirstClickConfig) ?? { task: "", image_url: "" }}
-                responses={responses}
-              />
-            )}
-            {study.type === "tree_test" && (
-              <TreeTestResults
-                studyId={study.id}
-                config={
-                  (study.config as TreeTestConfig) ?? { tasks: [] }
-                }
-                responses={responses}
-              />
-            )}
-          </>
+          </div>
         )}
       </section>
     </div>
