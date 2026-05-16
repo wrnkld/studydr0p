@@ -225,12 +225,12 @@ export default function Landing() {
         actions={
           <div
             aria-label="$20 once, forever"
-            className="relative z-10 flex items-center justify-center rounded-full border-2 border-foreground text-foreground select-none shrink-0 self-start -mt-2 -mr-1 sm:mt-0 sm:mr-0"
+            className="relative z-10 flex items-center justify-center rounded-full border border-border text-foreground select-none shrink-0 self-start -mt-2 -mr-1 sm:mt-0 sm:mr-0 bg-card"
             style={{
               width: "112px",
               height: "112px",
-              transform: "rotate(-8deg)",
-              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.08)",
+              transform: "rotate(8deg)",
+              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
             }}
           >
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
@@ -241,10 +241,10 @@ export default function Landing() {
                 $20
               </span>
               <span
-                className="font-mono uppercase"
+                className="font-mono uppercase text-muted-foreground"
                 style={{ fontSize: "9px", letterSpacing: "0.14em" }}
               >
-                Once, forever
+                Forever
               </span>
             </div>
           </div>
