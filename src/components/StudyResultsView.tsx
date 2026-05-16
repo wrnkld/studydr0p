@@ -199,8 +199,12 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
     URL.revokeObjectURL(url);
   };
 
+  const { isPaid, loading: paidLoading } = usePaid();
+  const locked = !paidLoading && !isPaid && responses.length > 0;
+
   const canExport =
     !!study &&
+    !locked &&
     (study.type === "survey" || study.type === "card_sort") &&
     responses.length > 0;
 
