@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
-import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { PageContainer } from "@/components/study/primitives";
 
 import {
   AlertDialog,
@@ -219,37 +219,41 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <PageHeader
-        title="UX research, without the friction."
-        description="Run and share unmoderated UX studies with a single link."
-        actions={
-          <div
-            aria-label="$20 once, forever"
-            className="relative z-10 flex items-center justify-center rounded-full border border-border text-foreground select-none shrink-0 self-start -mt-2 -mr-1 sm:mt-0 sm:mr-0 bg-card"
-            style={{
-              width: "112px",
-              height: "112px",
-              transform: "rotate(8deg)",
-              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
-            }}
-          >
-            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
-              <span
-                className="font-serif font-bold"
-                style={{ fontSize: "32px", letterSpacing: "-0.03em", lineHeight: 1 }}
-              >
-                $20
-              </span>
-              <span
-                className="font-mono uppercase text-muted-foreground"
-                style={{ fontSize: "9px", letterSpacing: "0.14em" }}
-              >
-                Forever
-              </span>
-            </div>
+      <header className="flex flex-row items-center justify-between gap-4">
+        <div className="min-w-0 space-y-2">
+          <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">
+            UX research, without the friction.
+          </h1>
+          <p className="text-[15px] text-muted-foreground leading-relaxed">
+            Run and share unmoderated UX studies with a single link.
+          </p>
+        </div>
+        <div
+          aria-label="$20 once, forever"
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card"
+          style={{
+            width: "112px",
+            height: "112px",
+            transform: "rotate(8deg)",
+            boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+          }}
+        >
+          <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+            <span
+              className="font-serif font-bold"
+              style={{ fontSize: "32px", letterSpacing: "-0.03em", lineHeight: 1 }}
+            >
+              $20
+            </span>
+            <span
+              className="font-mono uppercase text-muted-foreground"
+              style={{ fontSize: "9px", letterSpacing: "0.14em" }}
+            >
+              Forever
+            </span>
           </div>
-        }
-      />
+        </div>
+      </header>
 
       <section
         className="grid grid-cols-1 sm:grid-cols-2"
