@@ -11,7 +11,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// Detect a Supabase auth callback in the URL (hash for implicit flow, query for PKCE/magic link)
+// Detect a Supabase auth callback in the URL (hash for implicit flow, query for PKCE)
 function hasAuthCallback(): boolean {
   if (typeof window === "undefined") return false;
   const hash = window.location.hash || "";
@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSession(s);
       setLoading(false);
 
-      // After processing a magic-link / OAuth callback, force a full-page
+      // After processing an OAuth callback, force a full-page
       // navigation so the session persists even in embedded browser panes
       // (e.g. Arc's Little Arc, link-preview webviews).
       if (event === "SIGNED_IN" && inCallback) {
