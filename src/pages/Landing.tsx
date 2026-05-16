@@ -222,6 +222,22 @@ export default function Landing() {
       <PageHeader
         title="UX research, without the friction."
         description="Run and share unmoderated UX studies with a single link."
+        actions={
+          <div className="flex flex-col items-end leading-tight">
+            <span
+              className="font-serif font-bold text-foreground"
+              style={{ fontSize: "22px", letterSpacing: "-0.02em" }}
+            >
+              $20
+            </span>
+            <span
+              className="font-mono uppercase text-muted-foreground"
+              style={{ fontSize: "10px", letterSpacing: "0.12em" }}
+            >
+              One-time · yours forever
+            </span>
+          </div>
+        }
       />
 
       <section
