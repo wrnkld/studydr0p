@@ -1,13 +1,11 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { LogOut, Plus } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { toast } from "sonner";
+import AuthDialog from "@/components/AuthDialog";
 
 /**
  * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
