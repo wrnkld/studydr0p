@@ -153,10 +153,10 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
             <div className="flex items-center justify-between">
               <Label htmlFor="auth-password">Password</Label>
               {mode === "signin" && (
-                <button
+              <button
                   type="button"
                   onClick={handleForgot}
-                  className="text-xs text-muted-foreground hover:text-foreground"
+                  className="text-sm text-muted-foreground hover:text-foreground"
                 >
                   Forgot?
                 </button>
@@ -181,7 +181,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
           </Button>
         </form>
 
-        <p className="text-center text-xs text-muted-foreground">
+        <p className="text-center text-sm text-muted-foreground">
           {mode === "signin" ? (
             <>
               New here?{" "}
