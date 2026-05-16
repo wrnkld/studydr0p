@@ -230,7 +230,7 @@ export default function Landing() {
         </div>
         <div
           aria-label="$20 once, forever"
-          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card"
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 hover:rotate-0"
           style={{
             width: "112px",
             height: "112px",
