@@ -230,12 +230,18 @@ export default function Landing() {
         </div>
         <div
           aria-label="$20 once, forever"
-          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 hover:rotate-0"
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200"
           style={{
             width: "112px",
             height: "112px",
             transform: "rotate(8deg)",
             boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "rotate(0deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "rotate(8deg)";
           }}
         >
           <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
