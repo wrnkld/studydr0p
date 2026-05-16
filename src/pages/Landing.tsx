@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { Button } from "@/components/ui/button";
-import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { PageContainer } from "@/components/study/primitives";
 
 import {
   AlertDialog,
