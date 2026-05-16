@@ -303,7 +303,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                     className="mt-4"
                     onClick={() => toast.info("Checkout coming soon — Stripe hookup pending.")}
                   >
-                    Unlock for $20
+                    Unlock for $75
                   </Button>
                   <p className="mt-2 text-[11px] text-muted-foreground">
                     One-time payment · unlimited studies & responses
