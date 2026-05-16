@@ -35,6 +35,7 @@ const App = () => (
               <Route path="/" element={<Landing />} />
               <Route path="/examples/:id" element={<ExampleStudy />} />
               <Route path="/s/:slug" element={<ParticipantStudy />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
 
               <Route path="/studies" element={<Navigate to="/" replace />} />
               <Route
