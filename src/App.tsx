@@ -17,6 +17,7 @@ import ExampleStudy from "./pages/ExampleStudy";
 import NewStudy from "./pages/NewStudy";
 import StudyBuilder from "./pages/StudyBuilder";
 import ParticipantStudy from "./pages/ParticipantStudy";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
