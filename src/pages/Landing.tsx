@@ -229,7 +229,7 @@ export default function Landing() {
           </p>
         </div>
         <div
-          aria-label="$75 once, forever"
+          aria-label="$75 once, lifetime"
           className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200"
           style={{
             width: "112px",
@@ -255,7 +255,7 @@ export default function Landing() {
               className="font-mono uppercase text-muted-foreground"
               style={{ fontSize: "9px", letterSpacing: "0.14em" }}
             >
-              Forever
+              Lifetime
             </span>
           </div>
         </div>
