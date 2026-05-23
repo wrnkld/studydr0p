@@ -66,7 +66,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
         toast.error(error.message);
         return;
       }
-      toast.success("Check your inbox to confirm your email.");
+      toast.success("Account created");
       onOpenChange(false);
       reset();
       return;
