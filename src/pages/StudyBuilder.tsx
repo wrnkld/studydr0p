@@ -284,10 +284,29 @@ export default function StudyBuilder() {
                     const url = updated.slug
                       ? `${window.location.origin}/s/${updated.slug}`
                       : null;
+                    let copied = false;
                     if (url) {
-                      await navigator.clipboard.writeText(url);
+                      try {
+                        await navigator.clipboard.writeText(url);
+                        copied = true;
+                      } catch {
+                        try {
+                          const ta = document.createElement("textarea");
+                          ta.value = url;
+                          ta.style.position = "fixed";
+                          ta.style.opacity = "0";
+                          document.body.appendChild(ta);
+                          ta.select();
+                          copied = document.execCommand("copy");
+                          document.body.removeChild(ta);
+                        } catch {
+                          copied = false;
+                        }
+                      }
                     }
-                    toast.success(url ? "Saved and link copied" : "Saved");
+                    toast.success(
+                      copied ? "Study saved · link copied" : "Study saved",
+                    );
                   }
                   setTab("preview");
                 }}
