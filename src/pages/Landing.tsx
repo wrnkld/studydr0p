@@ -5,19 +5,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
-import { Trash2 } from "lucide-react";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
 
 interface CombinedRow {
   id: string;
@@ -82,8 +69,6 @@ export default function Landing() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
-  const [toDelete, setToDelete] = useState<CombinedRow | null>(null);
-  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (!user) {
@@ -112,20 +97,6 @@ export default function Landing() {
       }
     })();
   }, [user]);
-
-  const handleDelete = async () => {
-    if (!toDelete) return;
-    setDeleting(true);
-    const { error } = await supabase.from("studies").delete().eq("id", toDelete.id);
-    setDeleting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setUserRows((prev) => prev.filter((r) => r.id !== toDelete.id));
-    setToDelete(null);
-    toast.success("Study deleted");
-  };
 
   // --- Signed-out: chunky cards (marketing/onboarding) ---
   const renderCard = (r: CombinedRow, i: number) => {
@@ -239,23 +210,6 @@ export default function Landing() {
         <td className="py-3 px-4 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
         </td>
-        <td className="py-3 pl-4 pr-4 text-right w-[1%] whitespace-nowrap">
-          {!r.isExample ? (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setToDelete(r);
-              }}
-              aria-label={`Delete ${r.title}`}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-secondary hover:text-foreground transition"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
-          ) : (
-            <span className="inline-block h-7 w-7" aria-hidden />
-          )}
-        </td>
       </tr>
     );
   };
@@ -319,7 +273,7 @@ export default function Landing() {
                 <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
-                <th className="py-2.5 pl-4 pr-4 w-[1%]" />
+                
               </tr>
             </thead>
             <tbody>{rows.map(renderTableRow)}</tbody>
@@ -334,23 +288,6 @@ export default function Landing() {
         </section>
       )}
 
-      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete this study?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This permanently removes "{toDelete?.title}" and all of its
-              responses. This action can't be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} disabled={deleting}>
-              {deleting ? "Deleting…" : "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </PageContainer>
   );
 }
