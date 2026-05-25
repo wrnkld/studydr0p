@@ -69,50 +69,6 @@ export default function Landing() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
-  const [toDelete, setToDelete] = useState<CombinedRow | null>(null);
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    if (!user) {
-      setUserRows([]);
-      return;
-    }
-    (async () => {
-      const { data } = await supabase
-        .from("studies")
-        .select("id, title, type, created_at, responses(count)")
-        .eq("researcher_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (data) {
-        setUserRows(
-          (data as any[]).map((s) => ({
-            id: s.id,
-            href: `/studies/${s.id}`,
-            title: s.title || "Untitled",
-            type: s.type as StudyType,
-            responseCount: s.responses?.[0]?.count ?? 0,
-            isExample: false,
-            createdAt: s.created_at,
-          })),
-        );
-      }
-    })();
-  }, [user]);
-
-  const handleDelete = async () => {
-    if (!toDelete) return;
-    setDeleting(true);
-    const { error } = await supabase.from("studies").delete().eq("id", toDelete.id);
-    setDeleting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    setUserRows((prev) => prev.filter((r) => r.id !== toDelete.id));
-    setToDelete(null);
-    toast.success("Study deleted");
-  };
 
   // --- Signed-out: chunky cards (marketing/onboarding) ---
   const renderCard = (r: CombinedRow, i: number) => {
