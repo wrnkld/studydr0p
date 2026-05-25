@@ -70,6 +70,34 @@ export default function Landing() {
   const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
 
+  useEffect(() => {
+    if (!user) {
+      setUserRows([]);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("studies")
+        .select("id, title, type, created_at, responses(count)")
+        .eq("researcher_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (data) {
+        setUserRows(
+          (data as any[]).map((s) => ({
+            id: s.id,
+            href: `/studies/${s.id}`,
+            title: s.title || "Untitled",
+            type: s.type as StudyType,
+            responseCount: s.responses?.[0]?.count ?? 0,
+            isExample: false,
+            createdAt: s.created_at,
+          })),
+        );
+      }
+    })();
+  }, [user]);
+
   // --- Signed-out: chunky cards (marketing/onboarding) ---
   const renderCard = (r: CombinedRow, i: number) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
