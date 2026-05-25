@@ -202,7 +202,7 @@ export default function Landing() {
         onClick={() => navigate(r.href)}
         className="group cursor-pointer border-b border-border/60 hover:bg-muted/40 transition-colors"
       >
-        <td className="py-3 pr-4 pl-2">
+        <td className="py-3 pr-4 pl-4">
           <div className="flex items-center gap-3 min-w-0">
             <div
               className="flex items-center justify-center shrink-0"
@@ -239,7 +239,7 @@ export default function Landing() {
         <td className="py-3 px-4 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
         </td>
-        <td className="py-3 pl-4 pr-2 text-right w-[1%] whitespace-nowrap">
+        <td className="py-3 pl-4 pr-4 text-right w-[1%] whitespace-nowrap">
           {!r.isExample ? (
             <button
               type="button"
@@ -307,7 +307,7 @@ export default function Landing() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="py-2.5 pr-4 pl-2 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                <th className="py-2.5 pr-4 pl-4 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Study
                 </th>
                 <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
@@ -319,7 +319,7 @@ export default function Landing() {
                 <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
-                <th className="py-2.5 pl-4 pr-2 w-[1%]" />
+                <th className="py-2.5 pl-4 pr-4 w-[1%]" />
               </tr>
             </thead>
             <tbody>{rows.map(renderTableRow)}</tbody>
