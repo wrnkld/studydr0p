@@ -216,7 +216,7 @@ export default function Landing() {
             >
               <StudyTypeIcon type={r.type} size={16} />
             </div>
-            <span className="font-serif text-[16px] tracking-tight truncate text-foreground">
+            <span className="font-serif font-semibold text-[16px] tracking-tight truncate text-foreground">
               {r.title}
             </span>
           </div>
