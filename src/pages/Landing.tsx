@@ -216,23 +216,25 @@ export default function Landing() {
             >
               <StudyTypeIcon type={r.type} size={16} />
             </div>
-            <div className="min-w-0 flex items-center gap-2">
-              <span className="font-serif text-[16px] font-semibold tracking-tight truncate text-foreground">
-                {r.title}
-              </span>
-              {r.isExample && (
-                <span
-                  className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
-                  style={{ fontSize: "9px", letterSpacing: "0.12em" }}
-                >
-                  Example
-                </span>
-              )}
-            </div>
+            <span className="font-serif text-[16px] tracking-tight truncate text-foreground">
+              {r.title}
+            </span>
           </div>
         </td>
         <td className="py-3 px-4 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
           {typeLabel}
+        </td>
+        <td className="py-3 px-4">
+          {r.isExample ? (
+            <span
+              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
+              style={{ fontSize: "9px", letterSpacing: "0.12em" }}
+            >
+              Example
+            </span>
+          ) : (
+            <span className="inline-block" style={{ width: "54px" }} aria-hidden />
+          )}
         </td>
         <td className="py-3 px-4 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
@@ -313,6 +315,9 @@ export default function Landing() {
                 <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Type
                 </th>
+                <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                  &nbsp;
+                </th>
                 <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
@@ -336,7 +341,7 @@ export default function Landing() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete this study?</AlertDialogTitle>
             <AlertDialogDescription>
-              This permanently removes “{toDelete?.title}” and all of its
+              This permanently removes "{toDelete?.title}" and all of its
               responses. This action can't be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
