@@ -273,7 +273,7 @@ export default function Landing() {
                 <th className="py-2.5 px-4 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
-                <th className="py-2.5 pl-4 pr-4 w-[1%]" />
+                
               </tr>
             </thead>
             <tbody>{rows.map(renderTableRow)}</tbody>
@@ -288,23 +288,6 @@ export default function Landing() {
         </section>
       )}
 
-      <AlertDialog open={!!toDelete} onOpenChange={(o) => !o && setToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete this study?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This permanently removes "{toDelete?.title}" and all of its
-              responses. This action can't be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} disabled={deleting}>
-              {deleting ? "Deleting…" : "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </PageContainer>
   );
 }
