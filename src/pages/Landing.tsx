@@ -267,12 +267,10 @@ export default function Landing() {
       <header className="flex flex-row items-center justify-between gap-4">
         <div className="min-w-0 space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">
-            {user ? "Your studies." : "UX research, without the friction."}
+            UX research, without the friction.
           </h1>
           <p className="text-[15px] text-muted-foreground leading-relaxed">
-            {user
-              ? "Pick up where you left off, or poke around an example."
-              : "Run and share unmoderated UX studies with a single link."}
+            Run and share unmoderated UX studies with a single link.
           </p>
         </div>
         {!user && (
