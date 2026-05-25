@@ -5,19 +5,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
-import { Trash2 } from "lucide-react";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { toast } from "sonner";
 
 interface CombinedRow {
   id: string;
