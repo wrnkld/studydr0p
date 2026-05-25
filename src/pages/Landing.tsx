@@ -210,23 +210,6 @@ export default function Landing() {
         <td className="py-3 px-4 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
         </td>
-        <td className="py-3 pl-4 pr-4 text-right w-[1%] whitespace-nowrap">
-          {!r.isExample ? (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setToDelete(r);
-              }}
-              aria-label={`Delete ${r.title}`}
-              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground opacity-0 group-hover:opacity-100 hover:bg-secondary hover:text-foreground transition"
-            >
-              <Trash2 className="h-3.5 w-3.5" />
-            </button>
-          ) : (
-            <span className="inline-block h-7 w-7" aria-hidden />
-          )}
-        </td>
       </tr>
     );
   };
