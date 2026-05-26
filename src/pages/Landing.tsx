@@ -229,23 +229,32 @@ export default function Landing() {
             Run and share unmoderated UX studies with a single link.
           </p>
         </div>
-        {!user && (
-          <div
-            aria-label="$75 once, lifetime"
-            className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200"
-            style={{
-              width: "112px",
-              height: "112px",
-              transform: "rotate(8deg)",
-              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "rotate(0deg)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "rotate(8deg)";
-            }}
-          >
+        <div
+          aria-label={isPaid ? "Paid — lifetime access" : "$75 once, lifetime"}
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200"
+          style={{
+            width: "112px",
+            height: "112px",
+            transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
+            boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "rotate(0deg)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = isPaid ? "rotate(-6deg)" : "rotate(8deg)";
+          }}
+        >
+          {isPaid ? (
+            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+              <span className="font-serif font-bold" style={{ fontSize: "26px", letterSpacing: "-0.02em", lineHeight: 1 }}>
+                PAID
+              </span>
+              <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>
+                Lifetime
+              </span>
+            </div>
+          ) : (
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
               <span className="font-serif font-bold" style={{ fontSize: "32px", letterSpacing: "-0.03em", lineHeight: 1 }}>
                 $75
@@ -254,8 +263,8 @@ export default function Landing() {
                 Lifetime
               </span>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </header>
 
       {user ? (
