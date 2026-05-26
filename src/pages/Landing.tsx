@@ -68,6 +68,7 @@ const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2
 
 export default function Landing() {
   const { user } = useAuth();
+  const { isPaid } = usePaid();
   const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
 
