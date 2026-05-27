@@ -103,7 +103,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
         if (!o) reset();
       }}
     >
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent className="w-full max-w-md">
         <DialogHeader>
           <DialogTitle className="font-serif text-2xl">
             {title ?? (mode === "signin" ? "Welcome back" : "Create your account")}
