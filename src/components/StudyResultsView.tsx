@@ -292,11 +292,10 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                     <Lock className="h-4 w-4 text-foreground" />
                   </div>
                   <h3 className="font-serif text-xl font-bold tracking-tight text-foreground">
-                    Unlock your results
+                    Unlock results
                   </h3>
                   <p className="mt-1.5 text-sm text-muted-foreground">
                     You have {responses.length} response{responses.length === 1 ? "" : "s"} waiting.
-                    Pay once, keep StudyDrop forever.
                   </p>
                   <Button
                     size="sm"
@@ -305,9 +304,6 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                   >
                     Unlock for $75
                   </Button>
-                  <p className="mt-2 text-[11px] text-muted-foreground">
-                    One-time payment · unlimited studies & responses
-                  </p>
                 </div>
               </div>
             )}
