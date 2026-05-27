@@ -175,7 +175,7 @@ export default function Landing() {
         onClick={() => navigate(r.href)}
         className="group cursor-pointer border-b border-border/60 hover:bg-muted/40 transition-colors"
       >
-        <td className="py-3 px-8">
+        <td className="py-3 px-4 sm:px-8">
           <div className="flex items-center gap-3 min-w-0">
             <div
               className="flex items-center justify-center shrink-0"
@@ -194,11 +194,27 @@ export default function Landing() {
             </span>
           </div>
         </td>
-        <td className="py-3 px-8 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
+        <td className="hidden sm:table-cell py-3 px-8 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
           {typeLabel}
         </td>
-        <td className="py-3 px-8">
+        <td className="hidden sm:table-cell py-3 px-8">
           {r.isExample ? (
+            <span
+              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
+              style={{ fontSize: "9px", letterSpacing: "0.12em" }}
+            >
+              Example
+            </span>
+          ) : (
+            <span className="inline-block" style={{ width: "54px" }} aria-hidden />
+          )}
+        </td>
+        <td className="hidden sm:table-cell py-3 px-8 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
+          {r.responseCount}
+        </td>
+      </tr>
+    );
+  };
             <span
               className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
               style={{ fontSize: "9px", letterSpacing: "0.12em" }}
