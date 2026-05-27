@@ -215,22 +215,6 @@ export default function Landing() {
       </tr>
     );
   };
-            <span
-              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
-              style={{ fontSize: "9px", letterSpacing: "0.12em" }}
-            >
-              Example
-            </span>
-          ) : (
-            <span className="inline-block" style={{ width: "54px" }} aria-hidden />
-          )}
-        </td>
-        <td className="py-3 px-8 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
-          {r.responseCount}
-        </td>
-      </tr>
-    );
-  };
 
   const rows = [...userRows, ...EXAMPLE_ROWS];
 
