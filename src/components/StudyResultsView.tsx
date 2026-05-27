@@ -287,7 +287,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
 
             {locked && (
               <div className="absolute inset-0 flex items-start justify-center px-4 pt-16 sm:pt-24">
-                <div className="max-w-sm rounded-lg border border-border bg-card/95 p-6 text-center shadow-lg backdrop-blur-sm">
+                <div className="w-full max-w-md rounded-lg border border-border bg-card/95 p-6 text-center shadow-lg backdrop-blur-sm">
                   <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
                     <Lock className="h-4 w-4 text-foreground" />
                   </div>
