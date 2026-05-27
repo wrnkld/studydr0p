@@ -75,6 +75,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
       toast.error(error.message);
       return;
     }
+    toast.success("Welcome back");
     onOpenChange(false);
     reset();
   };
