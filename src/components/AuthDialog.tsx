@@ -40,7 +40,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
     setSubmitting(true);
 
     if (mode === "signup") {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { emailRedirectTo: `${window.location.origin}/` },
@@ -50,6 +50,19 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
         toast.error(error.message);
         return;
       }
+      // Fire-and-forget welcome email
+      const userId = data.user?.id ?? email;
+      const name = email.split("@")[0];
+      supabase.functions
+        .invoke("send-transactional-email", {
+          body: {
+            templateName: "welcome",
+            recipientEmail: email,
+            idempotencyKey: `welcome-${userId}`,
+            templateData: { name },
+          },
+        })
+        .catch(() => {});
       toast.success("Account created");
       onOpenChange(false);
       reset();
