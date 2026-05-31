@@ -50,53 +50,60 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
     if (submitting) return;
     setSubmitting(true);
 
-    if (mode === "signup") {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/` },
-      });
-      setSubmitting(false);
+    try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/` },
+        });
+        if (error) {
+          toast.error(error.message.includes("already") ? "That email already has an account. Sign in instead." : error.message);
+          return;
+        }
+        if (!data.session) {
+          toast.error("That email already has an account. Sign in instead.");
+          setMode("signin");
+          return;
+        }
+        if (data.user) {
+          await ensureResearcher(data.user.id, data.user.email ?? email);
+        }
+        // Fire-and-forget welcome email
+        const userId = data.user?.id ?? email;
+        const name = email.split("@")[0];
+        supabase.functions
+          .invoke("send-transactional-email", {
+            body: {
+              templateName: "welcome",
+              recipientEmail: email,
+              idempotencyKey: `welcome-${userId}`,
+              templateData: { name },
+            },
+          })
+          .catch(() => {});
+        toast.success("Welcome to StudyDrop");
+        onOpenChange(false);
+        reset();
+        navigate("/");
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
-        toast.error(error.message.includes("already") ? "That email already has an account. Sign in instead." : error.message);
+        toast.error(error.message);
         return;
       }
       if (data.user) {
         await ensureResearcher(data.user.id, data.user.email ?? email);
       }
-      // Fire-and-forget welcome email
-      const userId = data.user?.id ?? email;
-      const name = email.split("@")[0];
-      supabase.functions
-        .invoke("send-transactional-email", {
-          body: {
-            templateName: "welcome",
-            recipientEmail: email,
-            idempotencyKey: `welcome-${userId}`,
-            templateData: { name },
-          },
-        })
-        .catch(() => {});
-      toast.success("Welcome to StudyDrop");
+      toast.success("Welcome back");
       onOpenChange(false);
       reset();
       navigate("/");
-      return;
+    } finally {
+      setSubmitting(false);
     }
-
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    if (data.user) {
-      await ensureResearcher(data.user.id, data.user.email ?? email);
-    }
-    toast.success("Welcome back");
-    onOpenChange(false);
-    reset();
-    navigate("/");
   };
 
   const handleForgot = async () => {
@@ -155,18 +162,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
             />
           </div>
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="auth-password">Password</Label>
-              {mode === "signin" && (
-              <button
-                  type="button"
-                  onClick={handleForgot}
-                  className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                  Forgot?
-                </button>
-              )}
-            </div>
+            <Label htmlFor="auth-password">Password</Label>
             <Input
               id="auth-password"
               type="password"
