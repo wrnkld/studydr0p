@@ -1,4 +1,6 @@
 import { FormEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   Dialog,
@@ -10,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 
 type Mode = "signin" | "signup";
@@ -27,6 +30,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const reset = () => {
     setEmail("");
@@ -34,50 +38,72 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
     setSubmitting(false);
   };
 
+  const ensureResearcher = async (userId: string, userEmail: string) => {
+    await supabase
+      .from("researchers")
+      .upsert({ id: userId, email: userEmail }, { onConflict: "id" });
+  };
+
 
   const handleEmailSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
     setSubmitting(true);
 
-    if (mode === "signup") {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: { emailRedirectTo: `${window.location.origin}/` },
-      });
-      setSubmitting(false);
+    try {
+      if (mode === "signup") {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { emailRedirectTo: `${window.location.origin}/` },
+        });
+        if (error) {
+          toast.error(error.message.includes("already") ? "That email already has an account. Sign in instead." : error.message);
+          return;
+        }
+        if (!data.session) {
+          toast.error("That email already has an account. Sign in instead.");
+          setMode("signin");
+          return;
+        }
+        if (data.user) {
+          await ensureResearcher(data.user.id, data.user.email ?? email);
+        }
+        // Fire-and-forget welcome email
+        const userId = data.user?.id ?? email;
+        const name = email.split("@")[0];
+        supabase.functions
+          .invoke("send-transactional-email", {
+            body: {
+              templateName: "welcome",
+              recipientEmail: email,
+              idempotencyKey: `welcome-${userId}`,
+              templateData: { name },
+            },
+          })
+          .catch(() => {});
+        toast.success("Welcome to StudyDrop");
+        onOpenChange(false);
+        reset();
+        navigate("/");
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) {
         toast.error(error.message);
         return;
       }
-      // Fire-and-forget welcome email
-      const userId = data.user?.id ?? email;
-      const name = email.split("@")[0];
-      supabase.functions
-        .invoke("send-transactional-email", {
-          body: {
-            templateName: "welcome",
-            recipientEmail: email,
-            idempotencyKey: `welcome-${userId}`,
-            templateData: { name },
-          },
-        })
-        .catch(() => {});
-      toast.success("Account created");
+      if (data.user) {
+        await ensureResearcher(data.user.id, data.user.email ?? email);
+      }
+      toast.success("Welcome back");
       onOpenChange(false);
       reset();
-      return;
+      navigate("/");
+    } finally {
+      setSubmitting(false);
     }
-
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setSubmitting(false);
-    if (error) {
-      toast.error(error.message);
-      return;
-    }
-    toast.success("Welcome back");
-    onOpenChange(false);
-    reset();
   };
 
   const handleForgot = async () => {
@@ -116,6 +142,13 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
 
 
 
+        <Tabs value={mode} onValueChange={(value) => setMode(value as Mode)} className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger value="signin" className="flex-1">Sign in</TabsTrigger>
+            <TabsTrigger value="signup" className="flex-1">Sign up</TabsTrigger>
+          </TabsList>
+        </Tabs>
+
         <form onSubmit={handleEmailSubmit} className="space-y-3">
           <div className="space-y-1.5">
             <Label htmlFor="auth-email">Email</Label>
@@ -129,18 +162,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
             />
           </div>
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="auth-password">Password</Label>
-              {mode === "signin" && (
-              <button
-                  type="button"
-                  onClick={handleForgot}
-                  className="text-sm text-muted-foreground hover:text-foreground"
-                >
-                  Forgot?
-                </button>
-              )}
-            </div>
+            <Label htmlFor="auth-password">Password</Label>
             <Input
               id="auth-password"
               type="password"
@@ -151,40 +173,23 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting
-              ? "…"
-              : mode === "signin"
-                ? "Sign in"
-                : "Create account"}
+          <Button type="submit" className="h-10 w-full" disabled={submitting}>
+            {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+            {mode === "signin" ? "Sign in" : "Sign up"}
           </Button>
         </form>
 
-        <p className="text-center text-sm text-muted-foreground">
-          {mode === "signin" ? (
-            <>
-              New here?{" "}
-              <button
-                type="button"
-                onClick={() => setMode("signup")}
-                className="font-medium text-foreground hover:underline"
-              >
-                Create an account
-              </button>
-            </>
-          ) : (
-            <>
-              Already have an account?{" "}
-              <button
-                type="button"
-                onClick={() => setMode("signin")}
-                className="font-medium text-foreground hover:underline"
-              >
-                Sign in
-              </button>
-            </>
-          )}
-        </p>
+        {mode === "signin" && (
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={handleForgot}
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Forgot password?
+            </button>
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
