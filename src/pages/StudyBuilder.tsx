@@ -36,6 +36,7 @@ import { ParticipantShell } from "@/components/study/ParticipantShell";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { Button } from "@/components/ui/button";
 import { StudyPageHeader } from "@/components/study/StudyPageHeader";
+import { useAuth } from "@/hooks/useAuth";
 
 interface StudyRow {
   id: string;
@@ -52,6 +53,7 @@ type TabKey = "build" | "preview" | "results";
 export default function StudyBuilder() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [loading, setLoading] = useState(true);
   const [study, setStudy] = useState<StudyRow | null>(null);
@@ -73,12 +75,17 @@ export default function StudyBuilder() {
   };
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || authLoading) return;
+    if (!user) {
+      navigate("/");
+      return;
+    }
     (async () => {
       const { data, error } = await supabase
         .from("studies")
         .select("id, title, description, type, status, slug, config")
         .eq("id", id)
+        .eq("researcher_id", user.id)
         .single();
       if (error || !data) {
         toast.error("Study not found");
@@ -89,20 +96,21 @@ export default function StudyBuilder() {
       setLoadKey((k) => k + 1);
       setLoading(false);
     })();
-  }, [id, navigate]);
+  }, [id, navigate, user, authLoading]);
 
   // Re-load study when switching INTO the preview tab so it reflects edits.
   useEffect(() => {
-    if (!id || activeTab !== "preview") return;
+    if (!id || !user || activeTab !== "preview") return;
     (async () => {
       const { data } = await supabase
         .from("studies")
         .select("id, title, description, type, status, slug, config")
         .eq("id", id)
+        .eq("researcher_id", user.id)
         .single();
       if (data) setStudy(data as StudyRow);
     })();
-  }, [id, activeTab]);
+  }, [id, user, activeTab]);
 
   // Route TopBar's Delete button through the confirm dialog.
   useEffect(() => {
@@ -121,7 +129,7 @@ export default function StudyBuilder() {
       if (actions?.onDelete) {
         await actions.onDelete();
       } else if (id) {
-        const { error } = await supabase.from("studies").delete().eq("id", id);
+        const { error } = await supabase.from("studies").delete().eq("id", id).eq("researcher_id", user?.id ?? "");
         if (error) {
           toast.error(error.message);
           return;
