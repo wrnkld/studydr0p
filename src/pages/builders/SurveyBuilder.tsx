@@ -390,6 +390,65 @@ function SortableQuestionRow({
               </Button>
             </div>
           )}
+          {q.type === "likert" && (
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <Label className="text-xs font-normal text-muted-foreground">Scale type</Label>
+                <Select
+                  value={q.scale_preset ?? "agreement"}
+                  onValueChange={(v) => {
+                    const preset = v as LikertPreset;
+                    if (preset === "custom") {
+                      const current = LIKERT_PRESETS[(q.scale_preset ?? "agreement") as Exclude<LikertPreset, "custom">];
+                      updateQuestion(q.id, {
+                        scale_preset: "custom",
+                        scale_left: q.scale_left ?? current?.left ?? "",
+                        scale_right: q.scale_right ?? current?.right ?? "",
+                      });
+                    } else {
+                      updateQuestion(q.id, {
+                        scale_preset: preset,
+                        scale_left: undefined,
+                        scale_right: undefined,
+                      });
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-[240px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(LIKERT_PRESETS).map(([key, p]) => (
+                      <SelectItem key={key} value={key}>
+                        {p.label} ({p.left} → {p.right})
+                      </SelectItem>
+                    ))}
+                    <SelectItem value="custom">Custom…</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {q.scale_preset === "custom" && (
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="space-y-1">
+                    <Label className="text-xs font-normal text-muted-foreground">Left label</Label>
+                    <Input
+                      value={q.scale_left ?? ""}
+                      onChange={(e) => updateQuestion(q.id, { scale_left: e.target.value })}
+                      placeholder="e.g. Not at all"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs font-normal text-muted-foreground">Right label</Label>
+                    <Input
+                      value={q.scale_right ?? ""}
+                      onChange={(e) => updateQuestion(q.id, { scale_right: e.target.value })}
+                      placeholder="e.g. Extremely"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </li>
