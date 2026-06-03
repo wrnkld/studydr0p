@@ -68,7 +68,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
     const path = `${studyId}/${crypto.randomUUID()}.${ext}`;
     const { error } = await supabase.storage
       .from("study-assets")
-      .upload(path, file, { upsert: true, contentType: file.type });
+      .upload(path, file, { contentType: file.type });
     if (error) {
       setUploading(false);
       toast.error(error.message);
