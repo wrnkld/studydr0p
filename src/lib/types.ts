@@ -11,12 +11,43 @@ export type StudyStatus = "draft" | "live" | "closed";
 // Survey config
 export type SurveyQuestionType = "multiple_choice" | "likert" | "open_text";
 
+export type LikertPreset =
+  | "agreement"
+  | "satisfaction"
+  | "likelihood"
+  | "difficulty"
+  | "frequency"
+  | "custom";
+
 export interface SurveyQuestion {
   id: string;
   type: SurveyQuestionType;
   label: string;
   options?: string[]; // for multiple_choice
   multi?: boolean; // for multiple_choice: allow selecting multiple options
+  // for likert: endpoint labels for the 1–5 scale
+  scale_preset?: LikertPreset;
+  scale_left?: string;
+  scale_right?: string;
+}
+
+export const LIKERT_PRESETS: Record<Exclude<LikertPreset, "custom">, { label: string; left: string; right: string }> = {
+  agreement: { label: "Agreement", left: "Strongly disagree", right: "Strongly agree" },
+  satisfaction: { label: "Satisfaction", left: "Very unsatisfied", right: "Very satisfied" },
+  likelihood: { label: "Likelihood", left: "Very unlikely", right: "Very likely" },
+  difficulty: { label: "Difficulty", left: "Very difficult", right: "Very easy" },
+  frequency: { label: "Frequency", left: "Never", right: "Always" },
+};
+
+export function getLikertLabels(q: SurveyQuestion): { left: string; right: string } {
+  const preset = q.scale_preset ?? "agreement";
+  if (preset === "custom") {
+    return {
+      left: q.scale_left ?? "",
+      right: q.scale_right ?? "",
+    };
+  }
+  return LIKERT_PRESETS[preset];
 }
 
 export interface SurveyConfig {
