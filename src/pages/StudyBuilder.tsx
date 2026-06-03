@@ -353,7 +353,7 @@ export default function StudyBuilder() {
               action can't be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter className="justify-start">
+          <AlertDialogFooter className="justify-start sm:justify-start">
             <AlertDialogAction onClick={handleDelete} disabled={deleting}>
               {deleting ? "Deleting…" : "Delete"}
             </AlertDialogAction>
