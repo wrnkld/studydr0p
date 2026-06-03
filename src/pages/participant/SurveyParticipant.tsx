@@ -141,6 +141,7 @@ function QuestionInput({
     );
   }
   if (q.type === "likert") {
+    const { left, right } = getLikertLabels(q);
     return (
       <div className="space-y-3">
       <div className="inline-flex flex-col">
@@ -157,10 +158,12 @@ function QuestionInput({
               </Button>
             ))}
           </div>
-          <div className="flex justify-between text-xs text-muted-foreground mt-1.5">
-            <span>Strongly disagree</span>
-            <span>Strongly agree</span>
-          </div>
+          {(left || right) && (
+            <div className="flex justify-between gap-4 text-xs text-muted-foreground mt-1.5">
+              <span>{left}</span>
+              <span>{right}</span>
+            </div>
+          )}
         </div>
       </div>
     );
