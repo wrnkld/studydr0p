@@ -20,6 +20,8 @@ import {
   SurveyQuestion,
   SurveyQuestionType,
   StudyStatus,
+  LikertPreset,
+  LIKERT_PRESETS,
 } from "@/lib/types";
 import { Trash2, Plus, GripVertical } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
