@@ -6,6 +6,9 @@ import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
+import AuthDialog from "@/components/AuthDialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 
 interface CombinedRow {
   id: string;
@@ -70,6 +73,14 @@ export default function Landing() {
   const { user } = useAuth();
   const { isPaid } = usePaid();
   const navigate = useNavigate();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+
+  const handleBadgeClick = () => {
+    if (isPaid) return;
+    if (!user) setAuthOpen(true);
+    else setCheckoutOpen(true);
+  };
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
 
@@ -232,14 +243,18 @@ export default function Landing() {
             Run and share unmoderated UX studies with a single link.
           </p>
         </div>
-        <div
-          aria-label={isPaid ? "Paid — lifetime access" : "$75 once, lifetime"}
-          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200"
+        <button
+          type="button"
+          onClick={handleBadgeClick}
+          disabled={isPaid}
+          aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
           style={{
             width: "112px",
             height: "112px",
             transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
             boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+            cursor: isPaid ? "default" : "pointer",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "rotate(0deg)";
@@ -267,7 +282,7 @@ export default function Landing() {
               </span>
             </div>
           )}
-        </div>
+        </button>
       </header>
 
       {user ? (
@@ -304,6 +319,31 @@ export default function Landing() {
           {EXAMPLE_ROWS.map((r, i) => renderCard(r, i))}
         </section>
       )}
+
+      <AuthDialog
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        title="Sign in to unlock"
+        description="Create an account or sign in, then complete your $75 lifetime unlock."
+      />
+
+      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
+        <DialogContent className="max-w-3xl p-0 sm:p-0 max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="px-6 pt-6">
+            <DialogTitle>StudyDrop — $75, yours forever</DialogTitle>
+          </DialogHeader>
+          <div className="px-6 pb-6">
+            {checkoutOpen && user && (
+              <StripeEmbeddedCheckout
+                priceId="pro_lifetime"
+                customerEmail={user.email ?? undefined}
+                userId={user.id}
+                returnUrl={`${window.location.origin}/?checkout=success`}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
     </PageContainer>
   );
