@@ -271,7 +271,9 @@ export default function Landing() {
       </header>
 
       {user ? (
+        loadedUserRows ? (
         <section className="rounded-[6px] border border-border bg-card overflow-hidden">
+
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
