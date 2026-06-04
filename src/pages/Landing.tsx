@@ -71,10 +71,12 @@ export default function Landing() {
   const { isPaid } = usePaid();
   const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
+  const [loadedUserRows, setLoadedUserRows] = useState(false);
 
   useEffect(() => {
     if (!user) {
       setUserRows([]);
+      setLoadedUserRows(false);
       return;
     }
     (async () => {
@@ -97,6 +99,7 @@ export default function Landing() {
           })),
         );
       }
+      setLoadedUserRows(true);
     })();
   }, [user]);
 
