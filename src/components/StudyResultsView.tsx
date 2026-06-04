@@ -207,6 +207,17 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const locked = !paidLoading && !isPaid && responses.length > 0;
 
+  // Show a success toast when returning from Stripe checkout
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") {
+      toast.success("You're on Pro — thanks! Unlimited studies and responses are unlocked.");
+      params.delete("checkout");
+      const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, []);
+
   const canExport =
     !!study &&
     !locked &&
