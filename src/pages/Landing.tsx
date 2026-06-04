@@ -71,10 +71,12 @@ export default function Landing() {
   const { isPaid } = usePaid();
   const navigate = useNavigate();
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
+  const [loadedUserRows, setLoadedUserRows] = useState(false);
 
   useEffect(() => {
     if (!user) {
       setUserRows([]);
+      setLoadedUserRows(false);
       return;
     }
     (async () => {
@@ -97,6 +99,7 @@ export default function Landing() {
           })),
         );
       }
+      setLoadedUserRows(true);
     })();
   }, [user]);
 
@@ -216,7 +219,9 @@ export default function Landing() {
     );
   };
 
-  const rows = [...userRows, ...EXAMPLE_ROWS];
+  const rows = loadedUserRows
+    ? (userRows.length > 0 ? userRows : EXAMPLE_ROWS)
+    : [];
 
   return (
     <PageContainer width="wide" space="lg">
