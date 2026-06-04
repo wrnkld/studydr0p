@@ -219,9 +219,7 @@ export default function Landing() {
     );
   };
 
-  const rows = loadedUserRows
-    ? (userRows.length > 0 ? userRows : EXAMPLE_ROWS)
-    : [];
+  const rows = [...userRows, ...EXAMPLE_ROWS];
 
   return (
     <PageContainer width="wide" space="lg">
@@ -273,7 +271,9 @@ export default function Landing() {
       </header>
 
       {user ? (
+        loadedUserRows ? (
         <section className="rounded-[6px] border border-border bg-card overflow-hidden">
+
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
@@ -295,6 +295,7 @@ export default function Landing() {
             <tbody>{rows.map(renderTableRow)}</tbody>
           </table>
         </section>
+        ) : null
       ) : (
         <section
           className="grid grid-cols-1 sm:grid-cols-2"
