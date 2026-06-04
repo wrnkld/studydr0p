@@ -20,7 +20,10 @@ import TreeTestResults from "@/pages/results/TreeTestResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { BarChart3, Link as LinkIcon, Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { usePaid } from "@/hooks/usePaid";
+import { useAuth } from "@/hooks/useAuth";
+import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 
 interface StudyData {
   id: string;
@@ -200,7 +203,20 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   };
 
   const { isPaid, loading: paidLoading } = usePaid();
+  const { user } = useAuth();
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
   const locked = !paidLoading && !isPaid && responses.length > 0;
+
+  // Show a success toast when returning from Stripe checkout
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") {
+      toast.success("You're on Pro — thanks! Unlimited studies and responses are unlocked.");
+      params.delete("checkout");
+      const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+      window.history.replaceState({}, "", newUrl);
+    }
+  }, []);
 
   const canExport =
     !!study &&
@@ -300,7 +316,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                   <Button
                     size="sm"
                     className="mt-4"
-                    onClick={() => toast.info("Checkout coming soon — Stripe hookup pending.")}
+                    onClick={() => setCheckoutOpen(true)}
                   >
                     Unlock for $75
                   </Button>
@@ -310,6 +326,24 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
           </div>
         )}
       </section>
+
+      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
+        <DialogContent className="max-w-3xl p-0 sm:p-0 max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="px-6 pt-6">
+            <DialogTitle>Unlock StudyDrop Pro — $75, yours forever</DialogTitle>
+          </DialogHeader>
+          <div className="px-6 pb-6">
+            {checkoutOpen && (
+              <StripeEmbeddedCheckout
+                priceId="pro_lifetime"
+                customerEmail={user?.email ?? undefined}
+                userId={user?.id}
+                returnUrl={`${window.location.origin}/studies/${study.id}?tab=results&checkout=success`}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
