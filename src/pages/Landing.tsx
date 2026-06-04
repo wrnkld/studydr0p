@@ -73,6 +73,14 @@ export default function Landing() {
   const { user } = useAuth();
   const { isPaid } = usePaid();
   const navigate = useNavigate();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+
+  const handleBadgeClick = () => {
+    if (isPaid) return;
+    if (!user) setAuthOpen(true);
+    else setCheckoutOpen(true);
+  };
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
 
