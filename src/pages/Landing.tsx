@@ -243,14 +243,18 @@ export default function Landing() {
             Run and share unmoderated UX studies with a single link.
           </p>
         </div>
-        <div
-          aria-label={isPaid ? "Paid — lifetime access" : "$75 once, lifetime"}
-          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200"
+        <button
+          type="button"
+          onClick={handleBadgeClick}
+          disabled={isPaid}
+          aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
           style={{
             width: "112px",
             height: "112px",
             transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
             boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+            cursor: isPaid ? "default" : "pointer",
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "rotate(0deg)";
@@ -278,7 +282,7 @@ export default function Landing() {
               </span>
             </div>
           )}
-        </div>
+        </button>
       </header>
 
       {user ? (
