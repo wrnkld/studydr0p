@@ -13,3 +13,7 @@ project_id = "yysboopndpgeurffyxfk"
     verify_jwt = false
   [functions.handle-email-suppression]
     verify_jwt = false
+  [functions.create-checkout]
+    verify_jwt = false
+  [functions.payments-webhook]
+    verify_jwt = false
