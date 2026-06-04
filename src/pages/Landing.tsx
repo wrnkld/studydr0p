@@ -320,6 +320,31 @@ export default function Landing() {
         </section>
       )}
 
+      <AuthDialog
+        open={authOpen}
+        onOpenChange={setAuthOpen}
+        title="Sign in to unlock"
+        description="Create an account or sign in, then complete your $75 lifetime unlock."
+      />
+
+      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
+        <DialogContent className="max-w-3xl p-0 sm:p-0 max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="px-6 pt-6">
+            <DialogTitle>StudyDrop — $75, yours forever</DialogTitle>
+          </DialogHeader>
+          <div className="px-6 pb-6">
+            {checkoutOpen && user && (
+              <StripeEmbeddedCheckout
+                priceId="pro_lifetime"
+                customerEmail={user.email ?? undefined}
+                userId={user.id}
+                returnUrl={`${window.location.origin}/?checkout=success`}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </PageContainer>
   );
 }
