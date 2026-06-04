@@ -219,7 +219,9 @@ export default function Landing() {
     );
   };
 
-  const rows = [...userRows, ...EXAMPLE_ROWS];
+  const rows = loadedUserRows
+    ? (userRows.length > 0 ? userRows : EXAMPLE_ROWS)
+    : [];
 
   return (
     <PageContainer width="wide" space="lg">
