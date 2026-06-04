@@ -295,6 +295,7 @@ export default function Landing() {
             <tbody>{rows.map(renderTableRow)}</tbody>
           </table>
         </section>
+        ) : null
       ) : (
         <section
           className="grid grid-cols-1 sm:grid-cols-2"
