@@ -20,6 +20,7 @@ import StudyBuilder from "./pages/StudyBuilder";
 import ParticipantStudy from "./pages/ParticipantStudy";
 import ResetPassword from "./pages/ResetPassword";
 import Unsubscribe from "./pages/Unsubscribe";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,7 @@ const App = () => (
               <Route path="/s/:slug" element={<ParticipantStudy />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/unsubscribe" element={<Unsubscribe />} />
+              <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
 
               <Route path="/studies" element={<Navigate to="/" replace />} />
               <Route

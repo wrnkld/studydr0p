@@ -7,8 +7,6 @@ import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
 
 interface CombinedRow {
   id: string;
@@ -74,12 +72,11 @@ export default function Landing() {
   const { isPaid } = usePaid();
   const navigate = useNavigate();
   const [authOpen, setAuthOpen] = useState(false);
-  const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const handleBadgeClick = () => {
     if (isPaid) return;
     if (!user) setAuthOpen(true);
-    else setCheckoutOpen(true);
+    else navigate("/checkout?return=/");
   };
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
@@ -326,24 +323,6 @@ export default function Landing() {
         title="Sign in to unlock"
         description="Create an account or sign in, then complete your $75 lifetime unlock."
       />
-
-      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
-        <DialogContent className="max-w-3xl p-0 sm:p-0 max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="px-6 pt-6">
-            <DialogTitle>StudyDrop</DialogTitle>
-          </DialogHeader>
-          <div className="px-6 pb-6">
-            {checkoutOpen && user && (
-              <StripeEmbeddedCheckout
-                priceId="pro_lifetime"
-                customerEmail={user.email ?? undefined}
-                userId={user.id}
-                returnUrl={`${window.location.origin}/?checkout=success`}
-              />
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
 
     </PageContainer>
   );
