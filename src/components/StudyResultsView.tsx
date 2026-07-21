@@ -20,10 +20,9 @@ import TreeTestResults from "@/pages/results/TreeTestResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { BarChart3, Link as LinkIcon, Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { usePaid } from "@/hooks/usePaid";
 import { useAuth } from "@/hooks/useAuth";
-import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
+import { useNavigate } from "react-router-dom";
 
 interface StudyData {
   id: string;
