@@ -87,8 +87,8 @@ Deno.serve(async (req) => {
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: stripePrice.id, quantity: 1 }],
       mode: "payment",
-      ui_mode: "embedded_page",
-      return_url: returnUrl,
+      success_url: returnUrl,
+      cancel_url: returnUrl.split("?")[0],
       ...(customerId && { customer: customerId }),
       payment_intent_data: { description: product.name },
       managed_payments: { enabled: true },
@@ -97,7 +97,7 @@ Deno.serve(async (req) => {
       }),
     });
 
-    return new Response(JSON.stringify({ clientSecret: session.client_secret }), {
+    return new Response(JSON.stringify({ url: session.url }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

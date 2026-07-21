@@ -1,40 +1,58 @@
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { StripeEmbeddedCheckout } from "@/components/StripeEmbeddedCheckout";
+import { supabase } from "@/integrations/supabase/client";
+import { getStripeEnvironment } from "@/lib/stripe";
 import { PageContainer } from "@/components/study/primitives";
-import { Lock, ShieldCheck } from "lucide-react";
+import { Loader2, ShieldCheck } from "lucide-react";
 
 export default function Checkout() {
   const { user } = useAuth();
   const [params] = useSearchParams();
+  const [error, setError] = useState<string | null>(null);
+  const started = useRef(false);
+
   const returnTo = params.get("return") || "/";
   const returnUrl = `${window.location.origin}${returnTo}${returnTo.includes("?") ? "&" : "?"}checkout=success`;
 
-  return (
-    <div className="min-h-screen bg-muted">
-      <PageContainer>
-        <div className="mx-auto flex w-full max-w-xl flex-col gap-6 py-8 sm:py-12">
-          <div className="flex flex-col items-center gap-2 text-center">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Lock className="h-5 w-5" />
-            </div>
-            <h1 className="text-xl font-semibold tracking-tight">StudyDrop</h1>
-            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <ShieldCheck className="h-4 w-4" />
-              Secure checkout powered by Stripe
-            </p>
-          </div>
+  useEffect(() => {
+    if (!user || started.current) return;
+    started.current = true;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("create-checkout", {
+          body: {
+            priceId: "pro_lifetime",
+            customerEmail: user.email ?? undefined,
+            userId: user.id,
+            returnUrl,
+            environment: getStripeEnvironment(),
+          },
+        });
+        if (error || !data?.url) throw new Error(error?.message || "Failed to start checkout");
+        window.location.href = data.url as string;
+      } catch (e) {
+        setError((e as Error).message);
+      }
+    })();
+  }, [user, returnUrl]);
 
-          <div className="overflow-hidden rounded-2xl border bg-background shadow-sm">
-            {user && (
-              <StripeEmbeddedCheckout
-                priceId="pro_lifetime"
-                customerEmail={user.email ?? undefined}
-                userId={user.id}
-                returnUrl={returnUrl}
-              />
-            )}
-          </div>
+  return (
+    <div className="min-h-screen bg-background">
+      <PageContainer>
+        <div className="mx-auto flex min-h-[60vh] w-full max-w-md flex-col items-center justify-center gap-3 py-16 text-center">
+          {error ? (
+            <p className="text-sm text-destructive">{error}</p>
+          ) : (
+            <>
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">Redirecting to secure checkout…</p>
+              <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+                <ShieldCheck className="h-3.5 w-3.5" />
+                Powered by Stripe
+              </p>
+            </>
+          )}
         </div>
       </PageContainer>
     </div>
