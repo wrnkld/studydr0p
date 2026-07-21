@@ -330,7 +330,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
       <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
         <DialogContent className="max-w-3xl p-0 sm:p-0 max-h-[90vh] overflow-y-auto">
           <DialogHeader className="px-6 pt-6">
-            <DialogTitle>Unlock StudyDrop Pro — $75, yours forever</DialogTitle>
+            <DialogTitle>StudyDrop</DialogTitle>
           </DialogHeader>
           <div className="px-6 pb-6">
             {checkoutOpen && (
