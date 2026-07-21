@@ -355,6 +355,17 @@ export default function Landing() {
         </section>
       )}
 
+      {!user && (
+        <footer className="border-t border-border pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div className="font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.14em" }}>
+            One payment · No subscription · Payments by Stripe
+          </div>
+          <div className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
+            © {new Date().getFullYear()} StudyDrop
+          </div>
+        </footer>
+      )}
+
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}
