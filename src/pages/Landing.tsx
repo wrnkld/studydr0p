@@ -229,86 +229,80 @@ export default function Landing() {
 
   const rows = [...userRows, ...EXAMPLE_ROWS];
 
-  return (
-    <PageContainer width="wide" space="lg">
-      <header
-        className="relative overflow-hidden rounded-[10px] border border-border bg-card"
-        style={{
-          backgroundImage: [
-            // hairline grid
-            "linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px)",
-            "linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px)",
-            // warm aurora wash (terra → ochre → sage → indigo)
-            "radial-gradient(60% 90% at 12% 20%, hsl(15 55% 70% / 0.42), transparent 60%)",
-            "radial-gradient(55% 80% at 85% 15%, hsl(35 65% 75% / 0.45), transparent 65%)",
-            "radial-gradient(70% 90% at 70% 100%, hsl(78 35% 72% / 0.35), transparent 60%)",
-            "radial-gradient(50% 70% at 20% 110%, hsl(237 45% 72% / 0.28), transparent 65%)",
-          ].join(", "),
-          backgroundSize: "56px 56px, 56px 56px, auto, auto, auto, auto",
-          backgroundPosition: "0 0, 0 0, 0 0, 0 0, 0 0, 0 0",
-        }}
-      >
-        {/* corner crosshairs to make the grid feel intentional */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <div className="absolute left-0 top-0 h-px w-full bg-border/70" />
-          <div className="absolute left-0 bottom-0 h-px w-full bg-border/70" />
-          <div className="absolute left-0 top-0 h-full w-px bg-border/70" />
-          <div className="absolute right-0 top-0 h-full w-px bg-border/70" />
-        </div>
+  const gridBg = {
+    backgroundImage: [
+      "linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px)",
+      "linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px)",
+    ].join(", "),
+    backgroundSize: "56px 56px, 56px 56px",
+    backgroundPosition: "0 0, 0 0",
+  } as const;
 
-        <div className="relative flex flex-row items-center justify-between gap-4" style={{ padding: "40px 32px" }}>
-          <div className="min-w-0 space-y-2">
+  return (
+    <div
+      className="relative"
+      style={!user ? gridBg : undefined}
+    >
+      {/* warm aurora wash — sits behind the hero area only */}
+      {!user && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0"
+          style={{
+            height: "520px",
+            backgroundImage: [
+              "radial-gradient(60% 90% at 12% 20%, hsl(15 55% 70% / 0.42), transparent 60%)",
+              "radial-gradient(55% 80% at 85% 15%, hsl(35 65% 75% / 0.45), transparent 65%)",
+              "radial-gradient(70% 90% at 70% 100%, hsl(78 35% 72% / 0.35), transparent 60%)",
+              "radial-gradient(50% 70% at 20% 110%, hsl(237 45% 72% / 0.28), transparent 65%)",
+            ].join(", "),
+          }}
+        />
+      )}
+
+      <PageContainer width="wide" space="lg" className="relative">
+      <header className="flex flex-row items-center justify-between gap-4" style={{ paddingTop: "24px", paddingBottom: "24px" }}>
+        <div className="min-w-0 space-y-2">
+          {!user && (
             <div className="font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.16em", marginBottom: "10px" }}>
               StudyDrop · Unmoderated UX research
             </div>
-            <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-[1.05] font-serif">
-              UX research,<br />without the friction.
-            </h1>
-            <p className="text-[15px] text-muted-foreground leading-relaxed max-w-md" style={{ paddingTop: "6px" }}>
-              Run and share unmoderated UX studies with a single link.
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleBadgeClick}
-            disabled={isPaid}
-            aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
-            className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card/90 backdrop-blur-sm transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
-            style={{
-              width: "112px",
-              height: "112px",
-              transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
-              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
-              cursor: isPaid ? "default" : "pointer",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "rotate(0deg)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = isPaid ? "rotate(-6deg)" : "rotate(8deg)";
-            }}
-          >
-            {isPaid ? (
-              <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
-                <span className="font-serif font-bold" style={{ fontSize: "26px", letterSpacing: "-0.02em", lineHeight: 1 }}>
-                  PAID
-                </span>
-                <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>
-                  Lifetime
-                </span>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
-                <span className="font-serif font-bold" style={{ fontSize: "32px", letterSpacing: "-0.03em", lineHeight: 1 }}>
-                  $75
-                </span>
-                <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>
-                  Lifetime
-                </span>
-              </div>
-            )}
-          </button>
+          )}
+          <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight leading-[1.05] font-serif">
+            UX research,<br />without the friction.
+          </h1>
+          <p className="text-[15px] text-muted-foreground leading-relaxed max-w-md" style={{ paddingTop: "6px" }}>
+            Run and share unmoderated UX studies with a single link.
+          </p>
         </div>
+        <button
+          type="button"
+          onClick={handleBadgeClick}
+          disabled={isPaid}
+          aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
+          style={{
+            width: "112px",
+            height: "112px",
+            transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
+            boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+            cursor: isPaid ? "default" : "pointer",
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = "rotate(0deg)"; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = isPaid ? "rotate(-6deg)" : "rotate(8deg)"; }}
+        >
+          {isPaid ? (
+            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+              <span className="font-serif font-bold" style={{ fontSize: "26px", letterSpacing: "-0.02em", lineHeight: 1 }}>PAID</span>
+              <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>Lifetime</span>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+              <span className="font-serif font-bold" style={{ fontSize: "32px", letterSpacing: "-0.03em", lineHeight: 1 }}>$75</span>
+              <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>Lifetime</span>
+            </div>
+          )}
+        </button>
       </header>
 
       {!user && (
@@ -323,15 +317,9 @@ export default function Landing() {
               { n: "03", h: "See what happened", b: "Clean, aggregated results the moment responses roll in." },
             ].map((s) => (
               <li key={s.n} className="min-w-0">
-                <div className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.08em", marginBottom: "6px" }}>
-                  {s.n}
-                </div>
-                <div className="font-serif text-foreground" style={{ fontSize: "18px", fontWeight: 600, letterSpacing: "-0.01em", marginBottom: "4px" }}>
-                  {s.h}
-                </div>
-                <div className="text-muted-foreground" style={{ fontSize: "14px", lineHeight: 1.5 }}>
-                  {s.b}
-                </div>
+                <div className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.08em", marginBottom: "6px" }}>{s.n}</div>
+                <div className="font-serif text-foreground" style={{ fontSize: "18px", fontWeight: 600, letterSpacing: "-0.01em", marginBottom: "4px" }}>{s.h}</div>
+                <div className="text-muted-foreground" style={{ fontSize: "14px", lineHeight: 1.5 }}>{s.b}</div>
               </li>
             ))}
           </ol>
@@ -352,23 +340,13 @@ export default function Landing() {
       {user ? (
         loadedUserRows ? (
         <section className="rounded-[6px] border border-border bg-card overflow-hidden">
-
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="py-2.5 px-4 sm:px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Study
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Type
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  &nbsp;
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Responses
-                </th>
-                
+                <th className="py-2.5 px-4 sm:px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>Study</th>
+                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>Type</th>
+                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>&nbsp;</th>
+                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>Responses</th>
               </tr>
             </thead>
             <tbody>{rows.map(renderTableRow)}</tbody>
@@ -376,10 +354,7 @@ export default function Landing() {
         </section>
         ) : null
       ) : (
-        <section
-          className="grid grid-cols-1 sm:grid-cols-2"
-          style={{ gap: "20px", paddingTop: "12px", paddingBottom: "12px" }}
-        >
+        <section className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: "20px", paddingTop: "12px", paddingBottom: "12px" }}>
           {EXAMPLE_ROWS.map((r, i) => renderCard(r, i))}
         </section>
       )}
@@ -401,7 +376,7 @@ export default function Landing() {
         title="Sign in to unlock"
         description="Create an account or sign in, then complete your $75 lifetime unlock."
       />
-
-    </PageContainer>
+      </PageContainer>
+    </div>
   );
 }
