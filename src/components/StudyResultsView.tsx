@@ -326,23 +326,6 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
         )}
       </section>
 
-      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
-        <DialogContent className="max-w-3xl p-0 sm:p-0 max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="px-6 pt-6">
-            <DialogTitle>StudyDrop</DialogTitle>
-          </DialogHeader>
-          <div className="px-6 pb-6">
-            {checkoutOpen && (
-              <StripeEmbeddedCheckout
-                priceId="pro_lifetime"
-                customerEmail={user?.email ?? undefined}
-                userId={user?.id}
-                returnUrl={`${window.location.origin}/studies/${study.id}?tab=results&checkout=success`}
-              />
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
