@@ -259,68 +259,63 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <p className="text-sm text-muted-foreground">Loading responses…</p>
           </div>
-        ) : (
-          <div className="relative">
-            <div
-              className={
-                locked
-                  ? "pointer-events-none select-none blur-md transition-[filter]"
-                  : ""
-              }
-              aria-hidden={locked || undefined}
-            >
-              {study.type === "survey" && (
-                <SurveyResults
-                  studyId={study.id}
-                  config={(study.config as SurveyConfig) ?? { questions: [] }}
-                  responses={responses}
-                />
-              )}
-              {study.type === "card_sort" && (
-                <CardSortResults
-                  studyId={study.id}
-                  cards={cards}
-                  responses={responses}
-                />
-              )}
-              {study.type === "first_click" && (
-                <FirstClickResults
-                  config={(study.config as FirstClickConfig) ?? { task: "", image_url: "" }}
-                  responses={responses}
-                />
-              )}
-              {study.type === "tree_test" && (
-                <TreeTestResults
-                  studyId={study.id}
-                  config={
-                    (study.config as TreeTestConfig) ?? { tasks: [] }
-                  }
-                  responses={responses}
-                />
-              )}
+        ) : locked ? (
+          <div className="mx-auto flex max-w-md flex-col items-center px-4 py-12 text-center">
+            <div className="mb-8 flex items-baseline gap-2">
+              <span className="font-serif text-6xl font-bold tracking-tight text-foreground tabular-nums">
+                {responses.length}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                response{responses.length === 1 ? "" : "s"} waiting
+              </span>
             </div>
-
-            {locked && (
-              <div className="absolute inset-0 flex items-start justify-center px-4 pt-16 sm:pt-24">
-                <div className="w-full max-w-sm rounded-lg border border-border bg-card/95 p-6 text-center shadow-lg backdrop-blur-sm">
-                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                    <Lock className="h-4 w-4 text-foreground" />
-                  </div>
-                  <h3 className="font-serif text-xl font-bold tracking-tight text-foreground">
-                    Unlock results
-                  </h3>
-                  <p className="mt-1.5 text-sm text-muted-foreground">
-                    You have {responses.length} response{responses.length === 1 ? "" : "s"} waiting.
-                  </p>
-                  <Button
-                    size="sm"
-                    className="mt-4"
-                    onClick={() => navigate(`/checkout?return=${encodeURIComponent(`/studies/${study.id}?tab=results`)}`)}
-                  >
-                    Unlock for $75
-                  </Button>
-                </div>
+            <div className="w-full rounded-lg border border-border bg-card p-6 text-center shadow-sm">
+              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                <Lock className="h-4 w-4 text-foreground" />
               </div>
+              <h3 className="font-serif text-xl font-bold tracking-tight text-foreground">
+                Unlock results
+              </h3>
+              <p className="mt-1.5 text-sm text-muted-foreground">
+                Pay once, keep StudyDrop forever.
+              </p>
+              <Button
+                size="sm"
+                className="mt-4"
+                onClick={() => navigate(`/checkout?return=${encodeURIComponent(`/studies/${study.id}?tab=results`)}`)}
+              >
+                Unlock for $75
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            {study.type === "survey" && (
+              <SurveyResults
+                studyId={study.id}
+                config={(study.config as SurveyConfig) ?? { questions: [] }}
+                responses={responses}
+              />
+            )}
+            {study.type === "card_sort" && (
+              <CardSortResults
+                studyId={study.id}
+                cards={cards}
+                responses={responses}
+              />
+            )}
+            {study.type === "first_click" && (
+              <FirstClickResults
+                config={(study.config as FirstClickConfig) ?? { task: "", image_url: "" }}
+                responses={responses}
+              />
+            )}
+            {study.type === "tree_test" && (
+              <TreeTestResults
+                studyId={study.id}
+                config={(study.config as TreeTestConfig) ?? { tasks: [] }}
+                responses={responses}
+              />
             )}
           </div>
         )}
