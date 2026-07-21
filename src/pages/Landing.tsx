@@ -282,44 +282,6 @@ export default function Landing() {
         </button>
       </header>
 
-      {!user && (
-        <section aria-label="How it works" className="rounded-[6px] border border-border bg-card" style={{ padding: "28px" }}>
-          <div className="font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.14em", marginBottom: "18px" }}>
-            How it works
-          </div>
-          <ol className="grid grid-cols-1 sm:grid-cols-3" style={{ gap: "24px" }}>
-            {[
-              { n: "01", h: "Build a study", b: "Pick card sort, tree test, first click, or a survey. Set it up in minutes." },
-              { n: "02", h: "Share a link", b: "One URL. No accounts, no installs — participants just answer." },
-              { n: "03", h: "See what happened", b: "Clean, aggregated results the moment responses roll in." },
-            ].map((s) => (
-              <li key={s.n} className="min-w-0">
-                <div className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.08em", marginBottom: "6px" }}>
-                  {s.n}
-                </div>
-                <div className="font-serif text-foreground" style={{ fontSize: "18px", fontWeight: 600, letterSpacing: "-0.01em", marginBottom: "4px" }}>
-                  {s.h}
-                </div>
-                <div className="text-muted-foreground" style={{ fontSize: "14px", lineHeight: 1.5 }}>
-                  {s.b}
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
-
-      {!user && (
-        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-2">
-          <h2 className="font-serif text-foreground" style={{ fontSize: "20px", fontWeight: 600, letterSpacing: "-0.01em" }}>
-            See what you can build
-          </h2>
-          <p className="font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.14em" }}>
-            Four real example studies
-          </p>
-        </div>
-      )}
-
       {user ? (
         loadedUserRows ? (
         <section className="rounded-[6px] border border-border bg-card overflow-hidden">
@@ -353,17 +315,6 @@ export default function Landing() {
         >
           {EXAMPLE_ROWS.map((r, i) => renderCard(r, i))}
         </section>
-      )}
-
-      {!user && (
-        <footer className="border-t border-border pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div className="font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.14em" }}>
-            One payment · No subscription · Payments by Stripe
-          </div>
-          <div className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
-            © {new Date().getFullYear()} StudyDrop
-          </div>
-        </footer>
       )}
 
       <AuthDialog
