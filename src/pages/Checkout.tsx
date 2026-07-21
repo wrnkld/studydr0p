@@ -10,17 +10,19 @@ export default function Checkout() {
   const returnUrl = `${window.location.origin}${returnTo}${returnTo.includes("?") ? "&" : "?"}checkout=success`;
 
   return (
-    <PageContainer>
-      <div className="mx-auto w-full max-w-3xl py-8">
-        {user && (
-          <StripeEmbeddedCheckout
-            priceId="pro_lifetime"
-            customerEmail={user.email ?? undefined}
-            userId={user.id}
-            returnUrl={returnUrl}
-          />
-        )}
-      </div>
-    </PageContainer>
+    <div className="min-h-screen bg-muted">
+      <PageContainer>
+        <div className="mx-auto w-full max-w-3xl py-8">
+          {user && (
+            <StripeEmbeddedCheckout
+              priceId="pro_lifetime"
+              customerEmail={user.email ?? undefined}
+              userId={user.id}
+              returnUrl={returnUrl}
+            />
+          )}
+        </div>
+      </PageContainer>
+    </div>
   );
 }
