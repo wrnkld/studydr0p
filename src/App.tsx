@@ -11,6 +11,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import TopBar from "@/components/TopBar";
+import Footer from "@/components/Footer";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StudyToolbarProvider } from "@/components/StudyToolbarContext";
 import Landing from "./pages/Landing";
@@ -63,6 +64,7 @@ const App = () => (
 
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <Footer />
           </StudyToolbarProvider>
         </AuthProvider>
       </BrowserRouter>
