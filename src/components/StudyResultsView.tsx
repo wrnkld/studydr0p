@@ -204,6 +204,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   const { isPaid, loading: paidLoading } = usePaid();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [unlocking, setUnlocking] = useState(false);
   const locked = !paidLoading && !isPaid && responses.length > 0;
 
   // Show a success toast when returning from Stripe checkout
