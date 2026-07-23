@@ -10,7 +10,7 @@ export default function Footer() {
   if (location.pathname.startsWith("/s/")) return null;
 
   return (
-    <footer className="w-full border-t border-border bg-card">
+    <footer className="w-full border-t border-border bg-background">
       <div className="container max-w-5xl py-8">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
