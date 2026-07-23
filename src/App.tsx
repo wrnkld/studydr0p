@@ -34,37 +34,41 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <StudyToolbarProvider>
-            <PaymentTestModeBanner />
-            <TopBar />
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/examples/:id" element={<ExampleStudy />} />
-              <Route path="/s/:slug" element={<ParticipantStudy />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route path="/unsubscribe" element={<Unsubscribe />} />
-              <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+            <div className="flex min-h-screen flex-col">
+              <PaymentTestModeBanner />
+              <TopBar />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<Landing />} />
+                  <Route path="/examples/:id" element={<ExampleStudy />} />
+                  <Route path="/s/:slug" element={<ParticipantStudy />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
+                  <Route path="/unsubscribe" element={<Unsubscribe />} />
+                  <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
 
-              <Route path="/studies" element={<Navigate to="/" replace />} />
-              <Route
-                path="/studies/new"
-                element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
-              />
-              <Route
-                path="/studies/:id"
-                element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
-              />
-              <Route
-                path="/studies/:id/edit"
-                element={<Navigate to=".." replace relative="path" />}
-              />
-              <Route
-                path="/studies/:id/results"
-                element={<ResultsRedirect />}
-              />
+                  <Route path="/studies" element={<Navigate to="/" replace />} />
+                  <Route
+                    path="/studies/new"
+                    element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
+                  />
+                  <Route
+                    path="/studies/:id"
+                    element={<ProtectedRoute><StudyBuilder /></ProtectedRoute>}
+                  />
+                  <Route
+                    path="/studies/:id/edit"
+                    element={<Navigate to=".." replace relative="path" />}
+                  />
+                  <Route
+                    path="/studies/:id/results"
+                    element={<ResultsRedirect />}
+                  />
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <Footer />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
           </StudyToolbarProvider>
         </AuthProvider>
       </BrowserRouter>
