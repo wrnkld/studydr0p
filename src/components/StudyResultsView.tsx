@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { usePaid } from "@/hooks/usePaid";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { startCheckout } from "@/lib/startCheckout";
 
 interface StudyData {
   id: string;
@@ -204,6 +205,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   const { isPaid, loading: paidLoading } = usePaid();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [unlocking, setUnlocking] = useState(false);
   const locked = !paidLoading && !isPaid && responses.length > 0;
 
   // Show a success toast when returning from Stripe checkout
@@ -282,9 +284,23 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               <Button
                 size="sm"
                 className="mt-4"
-                onClick={() => navigate(`/checkout?return=${encodeURIComponent(`/studies/${study.id}?tab=results`)}`)}
+                disabled={unlocking}
+                onClick={async () => {
+                  if (!user) return;
+                  setUnlocking(true);
+                  try {
+                    await startCheckout({
+                      userId: user.id,
+                      email: user.email ?? undefined,
+                      returnTo: `/studies/${study.id}?tab=results`,
+                    });
+                  } catch (e) {
+                    setUnlocking(false);
+                    toast.error((e as Error).message);
+                  }
+                }}
               >
-                Unlock for $75
+                {unlocking ? "Loading…" : "Unlock for $75"}
               </Button>
             </div>
           </div>
