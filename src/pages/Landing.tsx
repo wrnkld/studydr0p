@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -256,24 +257,30 @@ export default function Landing() {
         <button
           type="button"
           onClick={handleBadgeClick}
-          disabled={isPaid}
+          disabled={isPaid || unlocking}
           aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
+          aria-busy={unlocking}
           className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
           style={{
             width: "112px",
             height: "112px",
             transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
             boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
-            cursor: isPaid ? "default" : "pointer",
+            cursor: isPaid || unlocking ? "default" : "pointer",
+            opacity: unlocking ? 0.7 : 1,
           }}
           onMouseEnter={(e) => {
+            if (unlocking) return;
             e.currentTarget.style.transform = "rotate(0deg)";
           }}
           onMouseLeave={(e) => {
+            if (unlocking) return;
             e.currentTarget.style.transform = isPaid ? "rotate(-6deg)" : "rotate(8deg)";
           }}
         >
-          {isPaid ? (
+          {unlocking ? (
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+          ) : isPaid ? (
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
               <span className="font-serif font-bold" style={{ fontSize: "26px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 PAID
@@ -293,6 +300,7 @@ export default function Landing() {
             </div>
           )}
         </button>
+
       </header>
 
       {user ? (
