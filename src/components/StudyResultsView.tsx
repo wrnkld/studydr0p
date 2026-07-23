@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { usePaid } from "@/hooks/usePaid";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { startCheckout } from "@/lib/startCheckout";
 
 interface StudyData {
   id: string;
