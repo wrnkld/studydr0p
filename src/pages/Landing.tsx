@@ -73,10 +73,23 @@ export default function Landing() {
   const navigate = useNavigate();
   const [authOpen, setAuthOpen] = useState(false);
 
-  const handleBadgeClick = () => {
-    if (isPaid) return;
-    if (!user) setAuthOpen(true);
-    else navigate("/checkout?return=/");
+  const [unlocking, setUnlocking] = useState(false);
+  const handleBadgeClick = async () => {
+    if (isPaid || unlocking) return;
+    if (!user) {
+      setAuthOpen(true);
+      return;
+    }
+    setUnlocking(true);
+    try {
+      await (await import("@/lib/startCheckout")).startCheckout({
+        userId: user.id,
+        email: user.email ?? undefined,
+        returnTo: "/",
+      });
+    } catch {
+      setUnlocking(false);
+    }
   };
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
