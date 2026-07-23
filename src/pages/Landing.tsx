@@ -75,6 +75,24 @@ export default function Landing() {
   const [authOpen, setAuthOpen] = useState(false);
 
   const [unlocking, setUnlocking] = useState(false);
+
+  useEffect(() => {
+    const resetUnlocking = () => setUnlocking(false);
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") resetUnlocking();
+    };
+
+    window.addEventListener("pageshow", resetUnlocking);
+    window.addEventListener("focus", resetUnlocking);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pageshow", resetUnlocking);
+      window.removeEventListener("focus", resetUnlocking);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
   const handleBadgeClick = async () => {
     if (isPaid || unlocking) return;
     if (!user) {
