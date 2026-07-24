@@ -33,10 +33,10 @@ export default function Footer() {
             >
               Contact
             </a>
-            <Link to="/" className="hover:text-foreground">
+            <Link to="/privacy" className="hover:text-foreground">
               Privacy
             </Link>
-            <Link to="/" className="hover:text-foreground">
+            <Link to="/terms" className="hover:text-foreground">
               Terms
             </Link>
           </div>
