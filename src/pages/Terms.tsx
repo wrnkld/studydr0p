@@ -2,7 +2,7 @@ import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 export default function Terms() {
   return (
-    <PageContainer space="md">
+    <PageContainer width="wide" space="md">
       <PageHeader title="Terms" />
 
       <section className="space-y-3 text-[15px] leading-relaxed text-foreground">
