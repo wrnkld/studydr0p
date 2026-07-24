@@ -3,10 +3,7 @@ import { PageContainer, PageHeader } from "@/components/study/primitives";
 export default function Privacy() {
   return (
     <PageContainer width="narrow" space="md">
-      <PageHeader
-        title="Privacy"
-        description="How StudyDrop handles your data."
-      />
+      <PageHeader title="Privacy" />
 
       <section className="space-y-3 text-[15px] leading-relaxed text-foreground">
         <p>
@@ -18,14 +15,7 @@ export default function Privacy() {
           handles billing.
         </p>
         <p>
-          You can delete your studies and account at any time. Questions? Email{" "}
-          <a
-            href="mailto:hello@studydrop.app"
-            className="text-foreground underline underline-offset-4 hover:text-muted-foreground"
-          >
-            hello@studydrop.app
-          </a>
-          .
+          You can delete your studies and account at any time.
         </p>
       </section>
     </PageContainer>

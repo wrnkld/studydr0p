@@ -3,10 +3,7 @@ import { PageContainer, PageHeader } from "@/components/study/primitives";
 export default function Terms() {
   return (
     <PageContainer width="narrow" space="md">
-      <PageHeader
-        title="Terms"
-        description="The rules for using StudyDrop."
-      />
+      <PageHeader title="Terms" />
 
       <section className="space-y-3 text-[15px] leading-relaxed text-foreground">
         <p>
@@ -21,16 +18,6 @@ export default function Terms() {
         <p>
           Do not use StudyDrop for illegal, harmful, or abusive purposes. We
           may suspend accounts that violate these rules.
-        </p>
-        <p>
-          Questions? Email{" "}
-          <a
-            href="mailto:hello@studydrop.app"
-            className="text-foreground underline underline-offset-4 hover:text-muted-foreground"
-          >
-            hello@studydrop.app
-          </a>
-          .
         </p>
       </section>
     </PageContainer>
