@@ -34,9 +34,6 @@ export default function Footer() {
               Contact
             </a>
             <Link to="/" className="hover:text-foreground">
-              Refund policy
-            </Link>
-            <Link to="/" className="hover:text-foreground">
               Privacy
             </Link>
             <Link to="/" className="hover:text-foreground">
@@ -50,7 +47,7 @@ export default function Footer() {
             © {new Date().getFullYear()} StudyDrop
           </p>
           <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
-            Payments processed by Stripe
+            Payments by Stripe
           </p>
         </div>
       </div>
