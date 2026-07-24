@@ -2,7 +2,7 @@ import { PageContainer, PageHeader } from "@/components/study/primitives";
 
 export default function Privacy() {
   return (
-    <PageContainer width="narrow" space="md">
+    <PageContainer space="md">
       <PageHeader title="Privacy" />
 
       <section className="space-y-3 text-[15px] leading-relaxed text-foreground">
