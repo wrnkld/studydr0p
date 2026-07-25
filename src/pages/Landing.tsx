@@ -219,29 +219,23 @@ export default function Landing() {
         onClick={() => navigate(r.href)}
         className="group cursor-pointer border-b border-border/60 hover:bg-muted/40 transition-colors"
       >
-        <td className="py-3 px-4 sm:px-8">
+        <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
             <div
               className="flex items-center justify-center shrink-0"
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "9999px",
-                backgroundColor: `${color}33`,
-                color,
-              }}
+              style={{ width: "24px", height: "24px", color }}
             >
-              <StudyTypeIcon type={r.type} size={16} />
+              <StudyTypeIcon type={r.type} size={20} />
             </div>
             <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground">
               {r.title}
             </span>
           </div>
         </td>
-        <td className="hidden sm:table-cell py-3 px-8 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
+        <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
           {typeLabel}
         </td>
-        <td className="hidden sm:table-cell py-3 px-8">
+        <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
             <span
               className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
@@ -253,7 +247,7 @@ export default function Landing() {
             <span className="inline-block" style={{ width: "54px" }} aria-hidden />
           )}
         </td>
-        <td className="hidden sm:table-cell py-3 px-8 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
+        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
         </td>
       </tr>
@@ -329,16 +323,16 @@ export default function Landing() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="py-2.5 px-4 sm:px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                <th className="py-2.5 px-3 sm:px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Study
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Type
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   &nbsp;
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-8 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
                 
