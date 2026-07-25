@@ -45,10 +45,10 @@ export default function Checkout() {
             <p className="font-mono text-xs uppercase tracking-wider text-destructive">{error}</p>
           ) : (
             <>
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
               <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Redirecting to secure checkout…</p>
               <p className="mt-2 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
-                <ShieldCheck className="h-3.5 w-3.5" />
+                <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.5} />
                 Powered by Stripe
               </p>
             </>

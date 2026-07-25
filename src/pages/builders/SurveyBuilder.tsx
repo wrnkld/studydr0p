@@ -245,13 +245,13 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={() => addQuestion("multiple_choice")}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Multiple choice
+            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Multiple choice
           </Button>
           <Button variant="outline" size="sm" onClick={() => addQuestion("likert")}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Rating scale
+            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Rating scale
           </Button>
           <Button variant="outline" size="sm" onClick={() => addQuestion("open_text")}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Open text
+            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Open text
           </Button>
         </div>
       </section>
@@ -297,7 +297,7 @@ function SortableQuestionRow({
           {...listeners}
           aria-label="Drag to reorder"
         >
-          <GripVertical className="h-4 w-4" />
+          <GripVertical className="h-4 w-4" strokeWidth={1.5} />
         </button>
         <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
         <div className="flex-1 space-y-3">
@@ -330,7 +330,7 @@ function SortableQuestionRow({
               className="ml-auto"
               onClick={() => removeQuestion(q.id)}
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4" strokeWidth={1.5} />
             </Button>
           </div>
           <Input
@@ -370,7 +370,7 @@ function SortableQuestionRow({
                       updateQuestion(q.id, { options: opts });
                     }}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" strokeWidth={1.5} />
                   </Button>
                 </div>
               ))}
@@ -386,7 +386,7 @@ function SortableQuestionRow({
                   })
                 }
               >
-                <Plus className="mr-1.5 h-3.5 w-3.5" /> Add option
+                <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add option
               </Button>
             </div>
           )}

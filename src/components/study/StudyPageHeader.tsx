@@ -122,9 +122,9 @@ export function StudyPageHeader<T extends string>({
                   onClick={copy}
                 >
                   {copied ? (
-                    <Check className="h-4 w-4" />
+                    <Check className="h-4 w-4" strokeWidth={1.5} />
                   ) : (
-                    <LinkIcon className="h-4 w-4" />
+                    <LinkIcon className="h-4 w-4" strokeWidth={1.5} />
                   )}
                 </Button>
               </TooltipTrigger>
@@ -143,7 +143,7 @@ export function StudyPageHeader<T extends string>({
                   className={iconBtn}
                   onClick={() => onExport()}
                 >
-                  <Download className="h-4 w-4" />
+                  <Download className="h-4 w-4" strokeWidth={1.5} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">Export CSV</TooltipContent>
@@ -159,7 +159,7 @@ export function StudyPageHeader<T extends string>({
                   className="h-8 w-8 text-muted-foreground hover:text-destructive"
                   onClick={() => onDelete()}
                 >
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" strokeWidth={1.5} />
                 </Button>
               </TooltipTrigger>
               <TooltipContent side="bottom">Delete study</TooltipContent>

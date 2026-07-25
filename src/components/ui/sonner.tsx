@@ -10,11 +10,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       icons={{
-        success: <Check className="h-4 w-4" />,
-        error: <X className="h-4 w-4" />,
-        warning: <AlertTriangle className="h-4 w-4" />,
-        info: <Info className="h-4 w-4" />,
-        loading: <LoaderCircle className="h-4 w-4 animate-spin" />,
+        success: <Check className="h-4 w-4" strokeWidth={1.5} />,
+        error: <X className="h-4 w-4" strokeWidth={1.5} />,
+        warning: <AlertTriangle className="h-4 w-4" strokeWidth={1.5} />,
+        info: <Info className="h-4 w-4" strokeWidth={1.5} />,
+        loading: <LoaderCircle className="h-4 w-4 animate-spin" strokeWidth={1.5} />,
       }}
       style={{ fontFamily: "'Calibre', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" }}
       theme={theme as ToasterProps["theme"]}

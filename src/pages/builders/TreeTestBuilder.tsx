@@ -111,7 +111,7 @@ function SortableNode({
         {...attributes}
         {...listeners}
       >
-        <GripVertical className="h-4 w-4" />
+        <GripVertical className="h-4 w-4" strokeWidth={1.5} />
       </button>
 
       {hasChildren ? (
@@ -122,9 +122,9 @@ function SortableNode({
           onClick={onToggle}
         >
           {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
           ) : (
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4" strokeWidth={1.5} />
           )}
         </Button>
       ) : (
@@ -139,7 +139,7 @@ function SortableNode({
       />
 
       <Button variant="ghost" size="sm" onClick={onAddChild} title="Add child">
-        <Plus className="h-3.5 w-3.5" />
+        <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
       </Button>
       <Button
         variant="ghost"
@@ -147,7 +147,7 @@ function SortableNode({
         className="h-9 w-9"
         onClick={onRemove}
       >
-        <Trash2 className="h-4 w-4" />
+        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
       </Button>
     </div>
   );
@@ -523,7 +523,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={() => addNode(null)}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add top-level node
+            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add top-level node
           </Button>
         </div>
       </section>
@@ -546,7 +546,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                       className="ml-auto"
                       onClick={() => removeTask(t.id)}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
                     </Button>
                   </div>
                   <Textarea
@@ -587,7 +587,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={addTask}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add task
+            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add task
           </Button>
         </div>
       </section>

@@ -238,9 +238,9 @@ export default function TreeTestParticipant({
                 >
                   {hasKids ? (
                     isOpen ? (
-                      <ChevronDown className="h-4 w-4 shrink-0" />
+                      <ChevronDown className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                     ) : (
-                      <ChevronRight className="h-4 w-4 shrink-0" />
+                      <ChevronRight className="h-4 w-4 shrink-0" strokeWidth={1.5} />
                     )
                   ) : (
                     <span className="inline-block w-4 shrink-0" />

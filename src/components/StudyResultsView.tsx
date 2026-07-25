@@ -68,7 +68,7 @@ function EmptyCopyLink({ slug }: { slug: string }) {
   }, [slug]);
   return (
     <Button variant="outline" size="sm" className="mt-4 h-8 gap-1.5 px-3 text-sm" onClick={copy}>
-      {copied ? <Check className="h-3.5 w-3.5" /> : <LinkIcon className="h-3.5 w-3.5" />}
+      {copied ? <Check className="h-3.5 w-3.5" strokeWidth={1.5} /> : <LinkIcon className="h-3.5 w-3.5" strokeWidth={1.5} />}
       {copied ? "Copied" : "Copy link"}
     </Button>
   );
@@ -273,7 +273,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
             </div>
             <div className="w-full rounded-lg border border-border bg-card p-6 text-center shadow-sm">
               <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                <Lock className="h-4 w-4 text-foreground" />
+                <Lock className="h-4 w-4 text-foreground" strokeWidth={1.5} />
               </div>
               <h3 className="font-mono text-lg font-bold uppercase tracking-wide text-foreground">
                 Unlock results

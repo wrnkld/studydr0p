@@ -361,7 +361,7 @@ export function BackButton({
         className,
       )}
     >
-      <ArrowLeft className="h-3.5 w-3.5" />
+      <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
       <span>Back</span>
     </Link>
   );
