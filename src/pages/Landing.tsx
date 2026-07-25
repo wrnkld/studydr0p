@@ -413,20 +413,15 @@ export default function Landing() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="py-2.5 px-3 sm:px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Study
+                <th className="py-2.5 px-3 sm:px-5 text-left">
+                  <SortHeader label="Study" k="title" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Type
+                <th className="hidden sm:table-cell py-2.5 px-5 text-left">
+                  <SortHeader label="Type" k="type" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  &nbsp;
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Responses
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  &nbsp;
+                <th className="hidden sm:table-cell py-2.5 px-5" />
+                <th className="hidden sm:table-cell py-2.5 px-5 text-right">
+                  <SortHeader label="Responses" k="responses" align="right" />
                 </th>
               </tr>
             </thead>
