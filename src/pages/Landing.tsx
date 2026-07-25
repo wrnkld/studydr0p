@@ -128,35 +128,71 @@ export default function Landing() {
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
 
+  const loadStudies = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("studies")
+      .select("id, title, type, slug, created_at, responses(count)")
+      .eq("researcher_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      setUserRows(
+        (data as any[]).map((s) => ({
+          id: s.id,
+          href: `/studies/${s.id}`,
+          title: s.title || "Untitled",
+          type: s.type as StudyType,
+          slug: s.slug as string | null,
+          responseCount: s.responses?.[0]?.count ?? 0,
+          isExample: false,
+          createdAt: s.created_at,
+        })),
+      );
+    }
+    setLoadedUserRows(true);
+  };
+
   useEffect(() => {
     if (!user) {
       setUserRows([]);
       setLoadedUserRows(false);
       return;
     }
-    (async () => {
-      const { data } = await supabase
-        .from("studies")
-        .select("id, title, type, created_at, responses(count)")
-        .eq("researcher_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (data) {
-        setUserRows(
-          (data as any[]).map((s) => ({
-            id: s.id,
-            href: `/studies/${s.id}`,
-            title: s.title || "Untitled",
-            type: s.type as StudyType,
-            responseCount: s.responses?.[0]?.count ?? 0,
-            isExample: false,
-            createdAt: s.created_at,
-          })),
-        );
-      }
-      setLoadedUserRows(true);
-    })();
+    loadStudies();
   }, [user]);
+
+  const handleCopyLink = async (e: React.MouseEvent, slug: string | null) => {
+    e.stopPropagation();
+    if (!slug) return;
+    const url = `${window.location.origin}/s/${slug}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(slug);
+      toast.success("Link copied");
+      setTimeout(() => setCopiedId((id) => (id === slug ? null : id)), 1500);
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId || !user) return;
+    setDeleting(true);
+    const { error } = await supabase
+      .from("studies")
+      .delete()
+      .eq("id", deleteId)
+      .eq("researcher_id", user.id);
+    setDeleting(false);
+    setDeleteId(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Study deleted");
+    setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
+  };
 
   // --- Signed-out: chunky cards (marketing/onboarding) ---
   const renderCard = (r: CombinedRow, i: number) => {
