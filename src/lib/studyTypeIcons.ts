@@ -7,7 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { StudyType } from "@/lib/types";
-import { createElement } from "react";
+import { createElement, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 export const STUDY_TYPE_ICONS: Record<StudyType, LucideIcon> = {
