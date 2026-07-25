@@ -54,16 +54,17 @@ const EXAMPLE_ROWS: CombinedRow[] = [
   },
 ];
 
+// App palette — matches --chart-1..8 tokens in index.css.
 const EXAMPLE_COLORS: Record<StudyType, string> = {
-  card_sort: "#777BBB",
-  survey: "#9AA67E",
-  tree_test: "#B87D6A",
-  first_click: "#4E7A8A",
+  card_sort: "#777BBB",  // periwinkle (chart-1 / primary)
+  survey: "#9BBE45",     // green      (chart-3)
+  tree_test: "#D9795A",  // terracotta (chart-2)
+  first_click: "#1F6E8C",// teal       (chart-5)
 };
 
 const PALETTE = [
-  "#777BBB", "#9AA67E", "#B87D6A", "#4E7A8A",
-  "#C4A882", "#8B6B8A", "#6B8A8A", "#A87A5E",
+  "#777BBB", "#D9795A", "#9BBE45", "#EBC24E",
+  "#1F6E8C", "#D081A0", "#7E3C86", "#B5762F",
 ];
 
 const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];

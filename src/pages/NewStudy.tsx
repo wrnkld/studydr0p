@@ -105,11 +105,12 @@ export default function NewStudy() {
     void create(requestedType);
   }, [searchParams, user, creating]);
 
+  // App palette — matches --chart tokens in index.css.
   const TYPE_COLORS: Record<StudyType, string> = {
-    card_sort: "#777BBB",
-    survey: "#9AA67E",
-    tree_test: "#B87D6A",
-    first_click: "#4E7A8A",
+    card_sort: "#777BBB",  // chart-1 periwinkle
+    survey: "#9BBE45",     // chart-3 green
+    tree_test: "#D9795A",  // chart-2 terracotta
+    first_click: "#1F6E8C",// chart-5 teal
   };
   const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg"];
 
