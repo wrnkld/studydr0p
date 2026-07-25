@@ -149,10 +149,10 @@
   }
 }
 
-/* Thinner, more refined Lucide icons globally (override default stroke-width: 2). */
+/* Refined Lucide icons globally (override default stroke-width: 2). */
 @layer base {
   svg.lucide {
-    stroke-width: 1;
+    stroke-width: 1.5;
   }
 }
 
