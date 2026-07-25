@@ -25,6 +25,7 @@ interface CombinedRow {
   href: string;
   title: string;
   type: StudyType;
+  slug: string | null;
   responseCount: number;
   isExample: boolean;
   createdAt?: string;
