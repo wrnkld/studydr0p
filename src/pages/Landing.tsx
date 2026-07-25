@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Check, Link2, Loader2, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -8,12 +8,24 @@ import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface CombinedRow {
   id: string;
   href: string;
   title: string;
   type: StudyType;
+  slug: string | null;
   responseCount: number;
   isExample: boolean;
   createdAt?: string;
@@ -25,6 +37,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     href: "/examples/fridge",
     title: "Where does it go in the fridge?",
     type: "card_sort",
+    slug: null,
     responseCount: 20,
     isExample: true,
   },
@@ -33,6 +46,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     href: "/examples/gasstation",
     title: "Gas station food. No judgment.",
     type: "survey",
+    slug: null,
     responseCount: 20,
     isExample: true,
   },
@@ -41,6 +55,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     href: "/examples/grocery",
     title: "Help us stock the shelves.",
     type: "tree_test",
+    slug: null,
     responseCount: 20,
     isExample: true,
   },
@@ -49,6 +64,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     href: "/examples/orderitagain",
     title: "Order it again.",
     type: "first_click",
+    slug: null,
     responseCount: 20,
     isExample: true,
   },
@@ -76,6 +92,9 @@ export default function Landing() {
   const [authOpen, setAuthOpen] = useState(false);
 
   const [unlocking, setUnlocking] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
     const resetUnlocking = () => setUnlocking(false);
@@ -114,35 +133,71 @@ export default function Landing() {
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
 
+  const loadStudies = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("studies")
+      .select("id, title, type, slug, created_at, responses(count)")
+      .eq("researcher_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (data) {
+      setUserRows(
+        (data as any[]).map((s) => ({
+          id: s.id,
+          href: `/studies/${s.id}`,
+          title: s.title || "Untitled",
+          type: s.type as StudyType,
+          slug: s.slug as string | null,
+          responseCount: s.responses?.[0]?.count ?? 0,
+          isExample: false,
+          createdAt: s.created_at,
+        })),
+      );
+    }
+    setLoadedUserRows(true);
+  };
+
   useEffect(() => {
     if (!user) {
       setUserRows([]);
       setLoadedUserRows(false);
       return;
     }
-    (async () => {
-      const { data } = await supabase
-        .from("studies")
-        .select("id, title, type, created_at, responses(count)")
-        .eq("researcher_id", user.id)
-        .order("created_at", { ascending: false });
-
-      if (data) {
-        setUserRows(
-          (data as any[]).map((s) => ({
-            id: s.id,
-            href: `/studies/${s.id}`,
-            title: s.title || "Untitled",
-            type: s.type as StudyType,
-            responseCount: s.responses?.[0]?.count ?? 0,
-            isExample: false,
-            createdAt: s.created_at,
-          })),
-        );
-      }
-      setLoadedUserRows(true);
-    })();
+    loadStudies();
   }, [user]);
+
+  const handleCopyLink = async (e: React.MouseEvent, slug: string | null) => {
+    e.stopPropagation();
+    if (!slug) return;
+    const url = `${window.location.origin}/s/${slug}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopiedId(slug);
+      toast.success("Link copied");
+      setTimeout(() => setCopiedId((id) => (id === slug ? null : id)), 1500);
+    } catch {
+      toast.error("Could not copy link");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId || !user) return;
+    setDeleting(true);
+    const { error } = await supabase
+      .from("studies")
+      .delete()
+      .eq("id", deleteId)
+      .eq("researcher_id", user.id);
+    setDeleting(false);
+    setDeleteId(null);
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+    toast.success("Study deleted");
+    setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
+  };
 
   // --- Signed-out: chunky cards (marketing/onboarding) ---
   const renderCard = (r: CombinedRow, i: number) => {
@@ -213,6 +268,7 @@ export default function Landing() {
   const renderTableRow = (r: CombinedRow) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const color = EXAMPLE_COLORS[r.type];
+    const shareUrl = r.slug ? `${window.location.origin}/s/${r.slug}` : null;
     return (
       <tr
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -249,6 +305,41 @@ export default function Landing() {
         </td>
         <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
+        </td>
+        <td className="hidden sm:table-cell py-3 px-5 text-right whitespace-nowrap">
+          {!r.isExample && (
+            <div
+              className="inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                type="button"
+                onClick={(e) => handleCopyLink(e, r.slug)}
+                disabled={!shareUrl}
+                aria-label="Copy participant link"
+                title="Copy participant link"
+                className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30"
+              >
+                {copiedId === r.slug ? (
+                  <Check className="w-4 h-4" />
+                ) : (
+                  <Link2 className="w-4 h-4" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setDeleteId(r.id);
+                }}
+                aria-label="Delete study"
+                title="Delete study"
+                className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </td>
       </tr>
     );
@@ -335,7 +426,9 @@ export default function Landing() {
                 <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
-                
+                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                  &nbsp;
+                </th>
               </tr>
             </thead>
             <tbody>{rows.map(renderTableRow)}</tbody>
@@ -357,6 +450,30 @@ export default function Landing() {
         title="Sign in to unlock"
         description="Create an account or sign in, then complete your $75 lifetime unlock."
       />
+
+      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this study?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently remove the study and all of its responses.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col-reverse sm:flex-row sm:justify-start gap-2">
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
+              Delete
+            </AlertDialogAction>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
     </PageContainer>
   );
