@@ -277,19 +277,16 @@ export default function Landing() {
       >
         <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
-            <div
-              className="flex items-center justify-center shrink-0"
-              style={{ width: "24px", height: "24px", color }}
-            >
-              <StudyTypeIcon type={r.type} size={20} />
-            </div>
             <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground">
               {r.title}
             </span>
           </div>
         </td>
         <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
-          {typeLabel}
+          <div className="flex items-center gap-2">
+            <StudyTypeIcon type={r.type} size={16} style={{ color }} />
+            {typeLabel}
+          </div>
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (

@@ -7,7 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { StudyType } from "@/lib/types";
-import { createElement } from "react";
+import { createElement, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 export const STUDY_TYPE_ICONS: Record<StudyType, LucideIcon> = {
@@ -20,13 +20,15 @@ export const STUDY_TYPE_ICONS: Record<StudyType, LucideIcon> = {
 export function StudyTypeIcon({
   type,
   size = 24,
-  strokeWidth = 1,
+  strokeWidth,
   className,
+  style,
 }: {
   type: StudyType;
   size?: number;
   strokeWidth?: number;
   className?: string;
+  style?: CSSProperties;
 }) {
   const Icon = STUDY_TYPE_ICONS[type];
   if (!Icon) return null;
@@ -34,5 +36,6 @@ export function StudyTypeIcon({
     size,
     strokeWidth,
     className: cn(className),
+    style,
   });
 }
