@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Check, Link2, Loader2, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -264,11 +264,28 @@ export default function Landing() {
     );
   };
 
+  // --- Sorting ---
+  type SortKey = "title" | "type" | "responses";
+  const [sortKey, setSortKey] = useState<SortKey>("title");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const sortValue = (r: CombinedRow, key: SortKey): string | number => {
+    if (key === "title") return r.title.toLowerCase();
+    if (key === "type") return (STUDY_TYPE_META[r.type]?.label ?? r.type).toLowerCase();
+    return r.responseCount;
+  };
+
   // --- Signed-in: dense table ---
   const renderTableRow = (r: CombinedRow) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const color = EXAMPLE_COLORS[r.type];
-    const shareUrl = r.slug ? `${window.location.origin}/s/${r.slug}` : null;
     return (
       <tr
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -300,46 +317,34 @@ export default function Landing() {
         <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 text-right whitespace-nowrap">
-          {!r.isExample && (
-            <div
-              className="inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                onClick={(e) => handleCopyLink(e, r.slug)}
-                disabled={!shareUrl}
-                aria-label="Copy participant link"
-                title="Copy participant link"
-                className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30"
-              >
-                {copiedId === r.slug ? (
-                  <Check className="w-4 h-4" strokeWidth={1.5} />
-                ) : (
-                  <Link2 className="w-4 h-4" strokeWidth={1.5} />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteId(r.id);
-                }}
-                aria-label="Delete study"
-                title="Delete study"
-                className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-              >
-                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-              </button>
-            </div>
-          )}
-        </td>
       </tr>
     );
   };
 
-  const rows = [...userRows, ...EXAMPLE_ROWS];
+  const rows = [...userRows, ...EXAMPLE_ROWS].sort((a, b) => {
+    const av = sortValue(a, sortKey);
+    const bv = sortValue(b, sortKey);
+    if (av < bv) return sortDir === "asc" ? -1 : 1;
+    if (av > bv) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const SortHeader = ({ label, k, align }: { label: string; k: SortKey; align?: "right" }) => {
+    const active = sortKey === k;
+    const Icon = !active ? ArrowUpDown : sortDir === "asc" ? ArrowUp : ArrowDown;
+    return (
+      <button
+        type="button"
+        onClick={() => toggleSort(k)}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors ${align === "right" ? "flex-row-reverse" : ""}`}
+        style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}
+      >
+        {label}
+        <Icon className="w-3 h-3" strokeWidth={1.5} style={{ opacity: active ? 1 : 0.4 }} />
+      </button>
+    );
+  };
+
 
   return (
     <PageContainer width="wide" space="lg">
@@ -408,20 +413,15 @@ export default function Landing() {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="py-2.5 px-3 sm:px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Study
+                <th className="py-2.5 px-3 sm:px-5 text-left">
+                  <SortHeader label="Study" k="title" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Type
+                <th className="hidden sm:table-cell py-2.5 px-5 text-left">
+                  <SortHeader label="Type" k="type" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  &nbsp;
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  Responses
-                </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
-                  &nbsp;
+                <th className="hidden sm:table-cell py-2.5 px-5" />
+                <th className="hidden sm:table-cell py-2.5 px-5 text-right">
+                  <SortHeader label="Responses" k="responses" align="right" />
                 </th>
               </tr>
             </thead>
