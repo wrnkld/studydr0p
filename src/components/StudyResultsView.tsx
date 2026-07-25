@@ -263,47 +263,38 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
           </div>
         ) : locked ? (
           <div className="mx-auto flex max-w-md flex-col items-center px-4 py-12 text-center">
-            <div className="mb-8 flex items-baseline gap-2">
-              <span className="font-serif text-6xl font-bold tracking-tight text-foreground tabular-nums">
-                {responses.length}
-              </span>
-              <span className="text-sm text-muted-foreground">
-                response{responses.length === 1 ? "" : "s"} waiting
-              </span>
+            <div className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+              <Lock className="h-4 w-4 text-foreground" strokeWidth={1.5} />
             </div>
-            <div className="w-full rounded-lg border border-border bg-card p-6 text-center shadow-sm">
-              <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
-                <Lock className="h-4 w-4 text-foreground" strokeWidth={1.5} />
-              </div>
-              <h3 className="font-mono text-lg font-bold uppercase tracking-wide text-foreground">
-                Unlock results
-              </h3>
-              <p className="mt-1.5 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                Pay once, keep StudyDrop forever.
-              </p>
-              <Button
-                size="sm"
-                className="mt-4 font-mono text-xs uppercase tracking-wider"
-                disabled={unlocking}
-                onClick={async () => {
-                  if (!user) return;
-                  setUnlocking(true);
-                  try {
-                    await startCheckout({
-                      userId: user.id,
-                      email: user.email ?? undefined,
-                      returnTo: `/studies/${study.id}?tab=results`,
-                    });
-                  } catch (e) {
-                    setUnlocking(false);
-                    toast.error((e as Error).message);
-                  }
-                }}
-              >
-                {unlocking ? "Loading…" : "Unlock for $75"}
-              </Button>
-            </div>
+            <h3 className="font-serif text-2xl font-bold tracking-tight text-foreground">
+              Unlock results
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Pay once, keep StudyDrop forever.
+            </p>
+            <Button
+              size="sm"
+              className="mt-5"
+              disabled={unlocking}
+              onClick={async () => {
+                if (!user) return;
+                setUnlocking(true);
+                try {
+                  await startCheckout({
+                    userId: user.id,
+                    email: user.email ?? undefined,
+                    returnTo: `/studies/${study.id}?tab=results`,
+                  });
+                } catch (e) {
+                  setUnlocking(false);
+                  toast.error((e as Error).message);
+                }
+              }}
+            >
+              {unlocking ? "Loading…" : "Unlock for $75"}
+            </Button>
           </div>
+
         ) : (
           <div>
             {study.type === "survey" && (
