@@ -174,7 +174,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
             />
           </div>
           <Button type="submit" className="h-10 w-full" disabled={submitting}>
-            {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />}
+            {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" strokeWidth={1.5} aria-hidden="true" />}
             {mode === "signin" ? "Sign in" : "Sign up"}
           </Button>
         </form>

@@ -20,7 +20,7 @@ export const STUDY_TYPE_ICONS: Record<StudyType, LucideIcon> = {
 export function StudyTypeIcon({
   type,
   size = 24,
-  strokeWidth,
+  strokeWidth = 1.5,
   className,
   style,
 }: {

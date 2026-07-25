@@ -347,14 +347,14 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
                   onChange={(e) => updateCard(c.id, { label: e.target.value })}
                 />
                 <Button variant="ghost" size="icon" onClick={() => removeCard(c.id)}>
-                  <Trash2 className="h-4 w-4" />
+                  <Trash2 className="h-4 w-4" strokeWidth={1.5} />
                 </Button>
               </li>
             ))}
           </ul>
         )}
         <Button variant="outline" size="sm" onClick={addCard} className="self-start">
-          <Plus className="mr-1.5 h-3.5 w-3.5" /> Add card
+          <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add card
         </Button>
       </section>
 
@@ -376,14 +376,14 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
                     size="icon"
                     onClick={() => removeCategory(c.id)}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 className="h-4 w-4" strokeWidth={1.5} />
                   </Button>
                 </li>
               ))}
             </ul>
           )}
           <Button variant="outline" size="sm" onClick={addCategory} className="self-start">
-            <Plus className="mr-1.5 h-3.5 w-3.5" /> Add category
+            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add category
           </Button>
         </section>
       )}

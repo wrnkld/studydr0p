@@ -58,7 +58,7 @@ function SignedInActions() {
         className="h-8 gap-1.5 px-3 text-sm"
         onClick={() => navigate("/studies/new")}
       >
-        <Plus className="h-3.5 w-3.5" />
+        <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
         New study
       </Button>
       <Tooltip>
@@ -73,7 +73,7 @@ function SignedInActions() {
               navigate("/");
             }}
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-4 w-4" strokeWidth={1.5} />
           </Button>
         </TooltipTrigger>
         <TooltipContent>Sign out</TooltipContent>

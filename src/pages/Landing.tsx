@@ -318,9 +318,9 @@ export default function Landing() {
                 className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30"
               >
                 {copiedId === r.slug ? (
-                  <Check className="w-4 h-4" />
+                  <Check className="w-4 h-4" strokeWidth={1.5} />
                 ) : (
-                  <Link2 className="w-4 h-4" />
+                  <Link2 className="w-4 h-4" strokeWidth={1.5} />
                 )}
               </button>
               <button
@@ -333,7 +333,7 @@ export default function Landing() {
                 title="Delete study"
                 className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
               </button>
             </div>
           )}
@@ -380,7 +380,7 @@ export default function Landing() {
           }}
         >
           {unlocking ? (
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
           ) : isPaid ? (
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
               <span className="font-serif font-bold tracking-tight" style={{ fontSize: "24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
@@ -463,7 +463,7 @@ export default function Landing() {
               className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
             >
               {deleting ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" strokeWidth={1.5} />
               ) : null}
               Delete
             </AlertDialogAction>

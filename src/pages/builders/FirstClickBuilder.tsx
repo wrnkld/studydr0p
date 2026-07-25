@@ -273,7 +273,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
               >
-                <Upload className="mr-1.5 h-3.5 w-3.5" />
+                <Upload className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} />
                 {uploading ? "Uploading…" : "Replace image"}
               </Button>
               {zone && (
@@ -300,7 +300,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
             disabled={uploading}
             className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-12 text-sm text-muted-foreground transition-colors hover:bg-muted/60"
           >
-            <ImageIcon className="h-8 w-8" />
+            <ImageIcon className="h-8 w-8" strokeWidth={1.5} />
             <span>{uploading ? "Uploading…" : "Click to upload an image"}</span>
             <span className="text-xs">PNG or JPG, up to 10 MB</span>
           </button>
