@@ -300,41 +300,6 @@ export default function Landing() {
         <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
           {r.responseCount}
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 text-right whitespace-nowrap">
-          {!r.isExample && (
-            <div
-              className="inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button
-                type="button"
-                onClick={(e) => handleCopyLink(e, r.slug)}
-                disabled={!shareUrl}
-                aria-label="Copy participant link"
-                title="Copy participant link"
-                className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30"
-              >
-                {copiedId === r.slug ? (
-                  <Check className="w-4 h-4" strokeWidth={1.5} />
-                ) : (
-                  <Link2 className="w-4 h-4" strokeWidth={1.5} />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setDeleteId(r.id);
-                }}
-                aria-label="Delete study"
-                title="Delete study"
-                className="inline-flex items-center justify-center rounded-[4px] w-8 h-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-              >
-                <Trash2 className="w-4 h-4" strokeWidth={1.5} />
-              </button>
-            </div>
-          )}
-        </td>
       </tr>
     );
   };
