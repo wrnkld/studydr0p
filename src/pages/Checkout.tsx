@@ -42,12 +42,12 @@ export default function Checkout() {
       <PageContainer>
         <div className="mx-auto flex min-h-[60vh] w-full max-w-md flex-col items-center justify-center gap-3 py-16 text-center">
           {error ? (
-            <p className="text-sm text-destructive">{error}</p>
+            <p className="font-mono text-xs uppercase tracking-wider text-destructive">{error}</p>
           ) : (
             <>
               <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">Redirecting to secure checkout…</p>
-              <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <p className="font-mono text-xs uppercase tracking-wider text-muted-foreground">Redirecting to secure checkout…</p>
+              <p className="mt-2 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 Powered by Stripe
               </p>
