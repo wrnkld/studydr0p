@@ -11,45 +11,19 @@ export default function Footer() {
 
   return (
     <footer className="w-full border-t border-border bg-background">
-      <div className="container max-w-5xl py-8">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-          <div className="space-y-2">
-            <Link
-              to="/"
-              className="inline-block font-serif text-[15px] font-bold tracking-tight text-foreground hover:opacity-80"
-              style={{ letterSpacing: "-0.03em" }}
-            >
-              StudyDrop
-            </Link>
-            <p className="max-w-xs text-[13px] leading-relaxed text-muted-foreground">
-              Run and share unmoderated UX studies with a single link.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-x-6 gap-y-2 text-[13px] text-muted-foreground">
-            <a
-              href="mailto:hello@studydrop.app"
-              className="hover:text-foreground"
-            >
-              Contact
-            </a>
-            <Link to="/privacy" className="hover:text-foreground">
-              Privacy
-            </Link>
-            <Link to="/terms" className="hover:text-foreground">
-              Terms
-            </Link>
-          </div>
+      <div className="container flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 py-4 text-[13px] text-muted-foreground">
+        <div className="flex flex-wrap gap-x-6 gap-y-1">
+          <a href="mailto:hello@studydrop.app" className="hover:text-foreground">
+            Contact
+          </a>
+          <Link to="/privacy" className="hover:text-foreground">
+            Privacy
+          </Link>
+          <Link to="/terms" className="hover:text-foreground">
+            Terms
+          </Link>
         </div>
-
-        <div className="mt-8 flex flex-col gap-2 border-t border-border/60 pt-6 sm:flex-row sm:items-center sm:justify-between">
-          <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
-            © {new Date().getFullYear()} StudyDrop
-          </p>
-          <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70">
-            Payments by Stripe
-          </p>
-        </div>
+        <p className="text-muted-foreground/70">Payments by Stripe</p>
       </div>
     </footer>
   );
