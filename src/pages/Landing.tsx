@@ -393,11 +393,11 @@ export default function Landing() {
               </span>
             </div>
           ) : (
-            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "7px" }}>
               <span className="font-serif font-bold tracking-tight" style={{ fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 $75
               </span>
-              <span className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
+              <span className="font-mono uppercase text-muted-foreground/70" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>
                 Lifetime
               </span>
             </div>
