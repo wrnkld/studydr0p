@@ -149,10 +149,12 @@
   }
 }
 
-/* Refined Lucide icons globally (override default stroke-width: 2). */
+/* Refined Lucide icons globally (override default stroke-width: 2).
+   Use !important because lucide-react sets stroke-width as an SVG
+   presentation attribute on the element, which beats normal CSS. */
 @layer base {
   svg.lucide {
-    stroke-width: 1.5;
+    stroke-width: 1.5 !important;
   }
 }
 
