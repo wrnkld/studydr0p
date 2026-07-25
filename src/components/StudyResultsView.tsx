@@ -275,15 +275,15 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-muted">
                 <Lock className="h-4 w-4 text-foreground" />
               </div>
-              <h3 className="font-serif text-xl font-bold tracking-tight text-foreground">
+              <h3 className="font-mono text-lg font-bold uppercase tracking-wide text-foreground">
                 Unlock results
               </h3>
-              <p className="mt-1.5 text-sm text-muted-foreground">
+              <p className="mt-1.5 font-mono text-xs uppercase tracking-wider text-muted-foreground">
                 Pay once, keep StudyDrop forever.
               </p>
               <Button
                 size="sm"
-                className="mt-4"
+                className="mt-4 font-mono text-xs uppercase tracking-wider"
                 disabled={unlocking}
                 onClick={async () => {
                   if (!user) return;
