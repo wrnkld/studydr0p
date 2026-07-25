@@ -23,7 +23,7 @@ export default function Footer() {
             Terms
           </Link>
         </div>
-        <p className="text-muted-foreground/70">Payments by Stripe</p>
+        <p className="font-mono uppercase text-muted-foreground/70" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>Payments by Stripe</p>
       </div>
     </footer>
   );

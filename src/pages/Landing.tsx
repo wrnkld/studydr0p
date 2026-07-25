@@ -300,19 +300,19 @@ export default function Landing() {
             <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
           ) : isPaid ? (
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
-              <span className="font-mono font-bold uppercase tracking-tight" style={{ fontSize: "24px", letterSpacing: "0.04em", lineHeight: 1 }}>
+              <span className="font-serif font-bold tracking-tight" style={{ fontSize: "24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 PAID
               </span>
-              <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>
+              <span className="text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
                 Lifetime
               </span>
             </div>
           ) : (
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
-              <span className="font-mono font-bold uppercase tracking-tight" style={{ fontSize: "30px", letterSpacing: "0.02em", lineHeight: 1 }}>
+              <span className="font-serif font-bold tracking-tight" style={{ fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 $75
               </span>
-              <span className="font-mono uppercase text-muted-foreground" style={{ fontSize: "9px", letterSpacing: "0.14em" }}>
+              <span className="text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
                 Lifetime
               </span>
             </div>
