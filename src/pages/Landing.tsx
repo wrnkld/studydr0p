@@ -426,7 +426,9 @@ export default function Landing() {
                 <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
                   Responses
                 </th>
-                
+                <th className="hidden sm:table-cell py-2.5 px-5 font-mono uppercase text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}>
+                  &nbsp;
+                </th>
               </tr>
             </thead>
             <tbody>{rows.map(renderTableRow)}</tbody>
