@@ -388,7 +388,7 @@ export default function Landing() {
               <span className="font-serif font-bold tracking-tight" style={{ fontSize: "24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 PAID
               </span>
-              <span className="text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
+              <span className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
                 Lifetime
               </span>
             </div>
