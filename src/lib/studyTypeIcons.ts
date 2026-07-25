@@ -28,7 +28,7 @@ export function StudyTypeIcon({
   size?: number;
   strokeWidth?: number;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }) {
   const Icon = STUDY_TYPE_ICONS[type];
   if (!Icon) return null;
