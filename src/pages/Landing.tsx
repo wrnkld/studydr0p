@@ -87,6 +87,9 @@ export default function Landing() {
   const [authOpen, setAuthOpen] = useState(false);
 
   const [unlocking, setUnlocking] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
     const resetUnlocking = () => setUnlocking(false);
