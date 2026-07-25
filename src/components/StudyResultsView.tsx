@@ -270,7 +270,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               Unlock results
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Pay once, keep StudyDrop forever.
+              One-time payment for lifetime access to unlimited studies and unlimited participant responses.
             </p>
             <Button
               size="sm"
