@@ -264,11 +264,28 @@ export default function Landing() {
     );
   };
 
+  // --- Sorting ---
+  type SortKey = "title" | "type" | "responses";
+  const [sortKey, setSortKey] = useState<SortKey>("title");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const toggleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDir((d) => (d === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir("asc");
+    }
+  };
+
+  const sortValue = (r: CombinedRow, key: SortKey): string | number => {
+    if (key === "title") return r.title.toLowerCase();
+    if (key === "type") return (STUDY_TYPE_META[r.type]?.label ?? r.type).toLowerCase();
+    return r.responseCount;
+  };
+
   // --- Signed-in: dense table ---
   const renderTableRow = (r: CombinedRow) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const color = EXAMPLE_COLORS[r.type];
-    const shareUrl = r.slug ? `${window.location.origin}/s/${r.slug}` : null;
     return (
       <tr
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -304,7 +321,30 @@ export default function Landing() {
     );
   };
 
-  const rows = [...userRows, ...EXAMPLE_ROWS];
+  const rows = [...userRows, ...EXAMPLE_ROWS].sort((a, b) => {
+    const av = sortValue(a, sortKey);
+    const bv = sortValue(b, sortKey);
+    if (av < bv) return sortDir === "asc" ? -1 : 1;
+    if (av > bv) return sortDir === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  const SortHeader = ({ label, k, align }: { label: string; k: SortKey; align?: "right" }) => {
+    const active = sortKey === k;
+    const Icon = !active ? ArrowUpDown : sortDir === "asc" ? ArrowUp : ArrowDown;
+    return (
+      <button
+        type="button"
+        onClick={() => toggleSort(k)}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors ${align === "right" ? "flex-row-reverse" : ""}`}
+        style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}
+      >
+        {label}
+        <Icon className="w-3 h-3" strokeWidth={1.5} style={{ opacity: active ? 1 : 0.4 }} />
+      </button>
+    );
+  };
+
 
   return (
     <PageContainer width="wide" space="lg">
