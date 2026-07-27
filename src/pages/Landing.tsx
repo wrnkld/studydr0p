@@ -5,10 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
-import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
 import { toast } from "sonner";
+import illoFridge from "@/assets/illo-fridge.png";
+import illoGasStation from "@/assets/illo-gasstation.png";
+import illoGrocery from "@/assets/illo-grocery.png";
+import illoOrderAgain from "@/assets/illo-orderagain.png";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,7 +34,7 @@ interface CombinedRow {
   createdAt?: string;
 }
 
-const EXAMPLE_ROWS: CombinedRow[] = [
+const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
   {
     id: "fridge",
     href: "/examples/fridge",
@@ -40,6 +43,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoFridge,
   },
   {
     id: "gasstation",
@@ -49,6 +53,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoGasStation,
   },
   {
     id: "grocery",
@@ -58,6 +63,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoGrocery,
   },
   {
     id: "orderitagain",
@@ -67,15 +73,16 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoOrderAgain,
   },
 ];
 
-// App palette blocks — real chart tokens, not faded pastel washes.
-const EXAMPLE_BLOCK_CLASS: Record<StudyType, string> = {
-  card_sort: "bg-chart-4 text-foreground",   // yellow
-  survey: "bg-chart-3 text-foreground",      // green
-  tree_test: "bg-chart-6 text-foreground",   // pink
-  first_click: "bg-chart-5 text-foreground", // aqua
+// Small accent dot color per study type — one dot of color per row, nothing more.
+const ACCENT_CLASS: Record<StudyType, string> = {
+  card_sort: "bg-chart-4",   // yellow
+  survey: "bg-chart-3",      // green
+  tree_test: "bg-chart-6",   // pink
+  first_click: "bg-chart-5", // aqua
 };
 
 
@@ -195,10 +202,10 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: 4 stacked rows ---
-  const renderRow = (r: CombinedRow) => {
+  // --- Signed-out: 4 stacked rows, calm neutral cards with B&W illustration ---
+  const renderRow = (r: CombinedRow & { illo?: string }) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const blockClass = EXAMPLE_BLOCK_CLASS[r.type];
+    const accent = ACCENT_CLASS[r.type];
     return (
       <a
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -209,37 +216,40 @@ export default function Landing() {
           navigate(r.href);
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className={`group relative flex w-full items-center gap-5 rounded-[10px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg ${blockClass}`}
+        className="group relative flex w-full items-center gap-6 rounded-[12px] border border-border bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-foreground/20"
         style={{ padding: "20px 24px" }}
       >
-        <div
-          className="flex shrink-0 items-center justify-center rounded-[8px] bg-background/40"
-          style={{ width: "64px", height: "64px" }}
-          aria-hidden
-        >
-          <StudyTypeIcon type={r.type} size={32} />
-        </div>
+        {r.illo ? (
+          <div
+            className="shrink-0 flex items-center justify-center"
+            style={{ width: "88px", height: "88px" }}
+            aria-hidden
+          >
+            <img
+              src={r.illo}
+              alt=""
+              loading="lazy"
+              width={176}
+              height={176}
+              className="max-w-full max-h-full object-contain"
+            />
+          </div>
+        ) : null}
 
         <div className="min-w-0 flex-1">
           <div
-            className="font-serif"
-            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+            className="font-serif text-foreground"
+            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
           </div>
           <div
-            className="font-mono uppercase opacity-70"
-            style={{ fontSize: "10px", letterSpacing: "0.12em", marginTop: "6px" }}
+            className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
+            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
           >
+            <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
             {typeLabel} · Example
           </div>
-        </div>
-
-        <div
-          className="hidden sm:block shrink-0 font-mono tabular-nums opacity-70 text-right"
-          style={{ fontSize: "12px", letterSpacing: "0.02em" }}
-        >
-          {r.responseCount} responses
         </div>
       </a>
     );
