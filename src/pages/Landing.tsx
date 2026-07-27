@@ -78,16 +78,8 @@ const EXAMPLE_BLOCK_CLASS: Record<StudyType, string> = {
   first_click: "bg-chart-5 text-foreground", // aqua
 };
 
-const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];
 
-// Wacky bento grid placement for the 4 example studies.
-// Desktop: 3 cols × 2 rows. Mobile: single column.
-const BENTO_CLASSES = [
-  "sm:col-span-1 sm:row-span-2",  // tall left
-  "sm:col-span-2 sm:row-span-1",  // wide top-right
-  "sm:col-span-1 sm:row-span-1",  // small
-  "sm:col-span-1 sm:row-span-1",  // small
-];
+
 
 export default function Landing() {
   const { user } = useAuth();
@@ -203,13 +195,10 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: wacky bento grid with color blocks + illustration slots ---
+  // --- Signed-out: uniform 4-card grid ---
   const renderCard = (r: CombinedRow, i: number) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const blockClass = EXAMPLE_BLOCK_CLASS[r.type];
-    const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
-    const bento = BENTO_CLASSES[i % BENTO_CLASSES.length];
-    const isTall = i === 0;
     return (
       <a
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -220,29 +209,20 @@ export default function Landing() {
           navigate(r.href);
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className={`group relative flex w-full flex-col rounded-[10px] text-left transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${blockClass} ${bento}`}
+        className={`group relative flex w-full flex-col rounded-[10px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${blockClass}`}
         style={{
-          minHeight: isTall ? "480px" : "230px",
+          minHeight: "260px",
           padding: "28px",
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = `rotate(${hoverRotate}) translateY(-2px)`;
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "";
-        }}
       >
-        {/* Illustration slot — user will provide art */}
         <div
           className="flex items-center justify-center"
-          style={{
-            height: isTall ? "260px" : "120px",
-            marginBottom: "16px",
-          }}
+          style={{ height: "120px", marginBottom: "16px" }}
           aria-hidden
         >
-          <StudyTypeIcon type={r.type} size={isTall ? 96 : 64} />
+          <StudyTypeIcon type={r.type} size={64} />
         </div>
+
 
         <div className="mt-auto">
           <div
@@ -447,7 +427,7 @@ export default function Landing() {
         ) : null
       ) : (
         <section
-          className="grid grid-cols-1 sm:grid-cols-3 sm:grid-rows-2 auto-rows-min"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
           style={{ gap: "20px", paddingTop: "12px", paddingBottom: "12px" }}
         >
           {EXAMPLE_ROWS.map((r, i) => renderCard(r, i))}
