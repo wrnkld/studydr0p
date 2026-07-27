@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
-import { CHART_PALETTE } from "@/components/survey/SurveyChart";
 import { Kicker } from "@/components/study/primitives";
 
 interface ResponseRow {
@@ -17,7 +16,7 @@ interface Props {
   responses?: ResponseRow[];
 }
 
-const PALETTE = CHART_PALETTE;
+const CHART_COLOR = "hsl(var(--chart-1))";
 
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
@@ -60,7 +59,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     const categories = Array.from(catSet);
 
     const colorByCategory = Object.fromEntries(
-      categories.map((c, i) => [c, PALETTE[i % PALETTE.length]]),
+      categories.map((c) => [c, CHART_COLOR]),
     );
 
     const chartData = cards.map((card) => {
@@ -90,7 +89,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return <div className="text-sm text-muted-foreground">No sorted cards yet.</div>;
   }
 
-  const colorFor = (cat: string) => colorByCategory[cat] ?? PALETTE[0];
+  const colorFor = (_cat: string) => CHART_COLOR;
 
   return (
     <div className="space-y-8">

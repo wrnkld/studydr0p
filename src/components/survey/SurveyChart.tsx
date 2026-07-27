@@ -26,14 +26,6 @@ import {
 import { Stat } from "@/components/study/primitives";
 
 
-// Map a value to a chart-1 (blue) shade — higher value = darker.
-// Uses HSL alpha to lighten so we don't need extra tokens.
-export function shadeFor(value: number, max: number) {
-  const t = max > 0 ? value / max : 0;
-  // alpha 0.3 (lightest) → 1.0 (darkest)
-  const alpha = 0.3 + t * 0.7;
-  return `hsl(var(--chart-1) / ${alpha.toFixed(3)})`;
-}
 
 const AXIS_COLOR = "hsl(var(--chart-axis))";
 const GRID_COLOR = "hsl(var(--chart-grid))";
@@ -104,7 +96,7 @@ export function ChoiceChart({
             </div>
             <div className="h-3 w-full overflow-hidden rounded-sm bg-[hsl(var(--chart-grid))]">
               <div
-                className="h-full rounded-sm bg-foreground transition-[width]"
+                className="h-full rounded-sm bg-primary transition-[width]"
                 style={{ width: `${widthPct}%` }}
               />
             </div>
@@ -291,11 +283,7 @@ export function ScaleChart({
             dataKey="value"
             fill="var(--color-value)"
             isAnimationActive={false}
-          >
-            {data.map((d, i) => (
-              <Cell key={i} fill={shadeFor(d.value, maxCount)} />
-            ))}
-          </Bar>
+          />
         </BarChart>
       </ChartContainer>
     </div>
