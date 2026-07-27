@@ -254,8 +254,9 @@ export default function Landing() {
             style={{ fontSize: "10px", letterSpacing: "0.12em" }}
           >
             <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-            {typeLabel} · Example
+            {typeLabel}
           </div>
+
         </div>
       </a>
     );
