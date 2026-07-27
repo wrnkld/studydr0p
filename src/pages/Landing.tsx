@@ -16,7 +16,7 @@ import illoWhyShare from "@/assets/illo-why-share.png";
 import illoWhyFast from "@/assets/illo-why-fast.png";
 import illoWhySimple from "@/assets/illo-why-simple.png";
 import illoFaq from "@/assets/illo-faq.png";
-import { useState as useStateFaq } from "react";
+
 
 import {
   AlertDialog,
