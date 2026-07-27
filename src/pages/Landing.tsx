@@ -424,10 +424,10 @@ export default function Landing() {
         ) : null
       ) : (
         <section
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-          style={{ gap: "20px", paddingTop: "12px", paddingBottom: "12px" }}
+          className="flex flex-col"
+          style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
         >
-          {EXAMPLE_ROWS.map((r, i) => renderCard(r, i))}
+          {EXAMPLE_ROWS.map(renderRow)}
         </section>
       )}
 
