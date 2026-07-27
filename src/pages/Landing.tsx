@@ -12,6 +12,12 @@ import illoFridge from "@/assets/illo-fridge.png";
 import illoGasStation from "@/assets/illo-gasstation.png";
 import illoGrocery from "@/assets/illo-grocery.png";
 import illoOrderAgain from "@/assets/illo-orderagain.png";
+import illoWhyShare from "@/assets/illo-why-share.png";
+import illoWhyFast from "@/assets/illo-why-fast.png";
+import illoWhySimple from "@/assets/illo-why-simple.png";
+import illoFaq from "@/assets/illo-faq.png";
+
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -433,13 +439,98 @@ export default function Landing() {
         </section>
         ) : null
       ) : (
-        <section
-          className="flex flex-col"
-          style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
-        >
-          {EXAMPLE_ROWS.map(renderRow)}
-        </section>
+        <>
+          <section
+            className="flex flex-col"
+            style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
+          >
+            {EXAMPLE_ROWS.map(renderRow)}
+          </section>
+
+          {/* Why StudyDrop — three-column editorial feature blocks */}
+          <section className="pt-16 pb-8 border-t border-border">
+            <div
+              className="font-mono uppercase text-muted-foreground mb-10"
+              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
+            >
+              Why StudyDrop
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+              {[
+                {
+                  illo: illoWhyShare,
+                  title: "One link.\nNo setup.",
+                  body: "Build a study, share a link. No participant accounts, no logins, no plugins. It just opens.",
+                },
+                {
+                  illo: illoWhyFast,
+                  title: "Results\nas they arrive.",
+                  body: "Every response streams into a live dashboard with the charts and tables you actually want.",
+                },
+                {
+                  illo: illoWhySimple,
+                  title: "Pay once.\nUse forever.",
+                  body: "$75 for lifetime access. Unlimited studies, unlimited responses. No seats, no tiers, no trial.",
+                },
+              ].map((f, i) => (
+                <div key={i} className="flex flex-col">
+                  <div className="mb-6" style={{ height: "140px" }}>
+                    <img
+                      src={f.illo}
+                      alt=""
+                      loading="lazy"
+                      width={280}
+                      height={280}
+                      className="h-full w-auto object-contain"
+                    />
+                  </div>
+                  <h3
+                    className="font-serif text-foreground whitespace-pre-line"
+                    style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                  >
+                    {f.title}
+                  </h3>
+                  <p className="mt-3 text-[15px] text-muted-foreground leading-relaxed">
+                    {f.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FAQ — editorial two-column */}
+          <section className="pt-16 pb-20 border-t border-border">
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] gap-12 md:gap-16">
+              <div>
+                <div
+                  className="font-mono uppercase text-muted-foreground mb-6"
+                  style={{ fontSize: "11px", letterSpacing: "0.14em" }}
+                >
+                  Questions
+                </div>
+                <h2
+                  className="font-serif text-foreground"
+                  style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
+                >
+                  Fair
+                  <br />
+                  questions.
+                </h2>
+                <img
+                  src={illoFaq}
+                  alt=""
+                  loading="lazy"
+                  width={280}
+                  height={280}
+                  className="mt-10 w-56 h-auto"
+                />
+              </div>
+              <FaqList />
+            </div>
+          </section>
+        </>
       )}
+
 
       <AuthDialog
         open={authOpen}
@@ -475,3 +566,79 @@ export default function Landing() {
     </PageContainer>
   );
 }
+
+const FAQ_ITEMS: { q: string; a: string }[] = [
+  {
+    q: "What is StudyDrop?",
+    a: "An unmoderated UX research tool. Build card sorts, tree tests, first-click tests, and surveys, then share a single link with participants.",
+  },
+  {
+    q: "Do participants need an account?",
+    a: "No. They open the link, do the study, and you get the results. No sign-in, no download, no friction.",
+  },
+  {
+    q: "What does it cost?",
+    a: "$75 once. That's it. Unlimited studies, unlimited responses, forever. No seats, no subscription, no upsells.",
+  },
+  {
+    q: "Can I try it before paying?",
+    a: "Yes. Build as many studies as you want and collect responses for free. Pay only when you want to unlock the results.",
+  },
+  {
+    q: "How do I share a study?",
+    a: "Every study gets a shareable link. Drop it into Slack, email, a recruiting panel — anywhere. Responses stream back in real time.",
+  },
+  {
+    q: "Is my data private?",
+    a: "Yes. Studies and responses belong to your account and aren't shown to anyone else. You can delete a study at any time.",
+  },
+];
+
+function FaqList() {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  return (
+    <ol className="flex flex-col">
+      {FAQ_ITEMS.map((item, i) => {
+        const open = openIdx === i;
+        return (
+          <li key={i} className="border-t border-border last:border-b">
+            <button
+              type="button"
+              onClick={() => setOpenIdx(open ? null : i)}
+              className="flex w-full items-start gap-5 py-6 text-left transition-colors hover:bg-muted/30"
+              aria-expanded={open}
+            >
+              <span
+                className="font-mono text-muted-foreground shrink-0 pt-1"
+                style={{ fontSize: "11px", letterSpacing: "0.08em" }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="flex-1 min-w-0">
+                <span
+                  className="font-serif text-foreground block"
+                  style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.015em" }}
+                >
+                  {item.q}
+                </span>
+                {open ? (
+                  <span className="block mt-3 text-[15px] text-muted-foreground leading-relaxed">
+                    {item.a}
+                  </span>
+                ) : null}
+              </span>
+              <span
+                className="shrink-0 pt-2 text-muted-foreground font-mono select-none"
+                style={{ fontSize: "18px", lineHeight: 1 }}
+                aria-hidden
+              >
+                {open ? "×" : "+"}
+              </span>
+            </button>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
