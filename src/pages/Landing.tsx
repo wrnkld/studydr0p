@@ -439,13 +439,98 @@ export default function Landing() {
         </section>
         ) : null
       ) : (
-        <section
-          className="flex flex-col"
-          style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
-        >
-          {EXAMPLE_ROWS.map(renderRow)}
-        </section>
+        <>
+          <section
+            className="flex flex-col"
+            style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
+          >
+            {EXAMPLE_ROWS.map(renderRow)}
+          </section>
+
+          {/* Why StudyDrop — three-column editorial feature blocks */}
+          <section className="pt-16 pb-8 border-t border-border">
+            <div
+              className="font-mono uppercase text-muted-foreground mb-10"
+              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
+            >
+              Why StudyDrop
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+              {[
+                {
+                  illo: illoWhyShare,
+                  title: "One link.\nNo setup.",
+                  body: "Build a study, share a link. No participant accounts, no logins, no plugins. It just opens.",
+                },
+                {
+                  illo: illoWhyFast,
+                  title: "Results\nas they arrive.",
+                  body: "Every response streams into a live dashboard with the charts and tables you actually want.",
+                },
+                {
+                  illo: illoWhySimple,
+                  title: "Pay once.\nUse forever.",
+                  body: "$75 for lifetime access. Unlimited studies, unlimited responses. No seats, no tiers, no trial.",
+                },
+              ].map((f, i) => (
+                <div key={i} className="flex flex-col">
+                  <div className="mb-6" style={{ height: "140px" }}>
+                    <img
+                      src={f.illo}
+                      alt=""
+                      loading="lazy"
+                      width={280}
+                      height={280}
+                      className="h-full w-auto object-contain"
+                    />
+                  </div>
+                  <h3
+                    className="font-serif text-foreground whitespace-pre-line"
+                    style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                  >
+                    {f.title}
+                  </h3>
+                  <p className="mt-3 text-[15px] text-muted-foreground leading-relaxed">
+                    {f.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* FAQ — editorial two-column */}
+          <section className="pt-16 pb-20 border-t border-border">
+            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] gap-12 md:gap-16">
+              <div>
+                <div
+                  className="font-mono uppercase text-muted-foreground mb-6"
+                  style={{ fontSize: "11px", letterSpacing: "0.14em" }}
+                >
+                  Questions
+                </div>
+                <h2
+                  className="font-serif text-foreground"
+                  style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
+                >
+                  Fair
+                  <br />
+                  questions.
+                </h2>
+                <img
+                  src={illoFaq}
+                  alt=""
+                  loading="lazy"
+                  width={280}
+                  height={280}
+                  className="mt-10 w-56 h-auto"
+                />
+              </div>
+              <FaqList />
+            </div>
+          </section>
+        </>
       )}
+
 
       <AuthDialog
         open={authOpen}
