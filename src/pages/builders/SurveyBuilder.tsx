@@ -288,7 +288,7 @@ function SortableQuestionRow({
   };
 
   return (
-    <li ref={setNodeRef} style={style} className="group rounded-md border p-4 bg-background">
+    <li ref={setNodeRef} style={style} className="group rounded-lg border p-4 bg-background">
       <div className="flex items-start gap-3">
         <button
           type="button"

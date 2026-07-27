@@ -230,7 +230,7 @@ export default function TreeTestParticipant({
                 <button
                   type="button"
                   onClick={() => handleNodeClick(n)}
-                  className={`flex flex-1 items-center gap-2 rounded-md px-2 py-1.5 text-left text-sm transition-colors ${
+                  className={`flex flex-1 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-colors ${
                     isSelected
                       ? "bg-accent ring-2 ring-ring"
                       : "hover:bg-accent"

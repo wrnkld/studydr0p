@@ -534,7 +534,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
         <ul className="space-y-3">
           {tasks.map((t, i) => (
-            <li key={t.id} className="group rounded-md border p-4 bg-background">
+            <li key={t.id} className="group rounded-lg border p-4 bg-background">
               <div className="flex items-start gap-3">
                 <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
                 <div className="flex-1 space-y-3">
