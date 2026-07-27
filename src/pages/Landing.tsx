@@ -195,8 +195,8 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: uniform 4-card grid ---
-  const renderCard = (r: CombinedRow, i: number) => {
+  // --- Signed-out: 4 stacked rows ---
+  const renderRow = (r: CombinedRow) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const blockClass = EXAMPLE_BLOCK_CLASS[r.type];
     return (
@@ -209,40 +209,37 @@ export default function Landing() {
           navigate(r.href);
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className={`group relative flex w-full flex-col rounded-[10px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${blockClass}`}
-        style={{
-          minHeight: "260px",
-          padding: "28px",
-        }}
+        className={`group relative flex w-full items-center gap-5 rounded-[10px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${blockClass}`}
+        style={{ padding: "20px 24px" }}
       >
         <div
-          className="flex items-center justify-center"
-          style={{ height: "120px", marginBottom: "16px" }}
+          className="flex shrink-0 items-center justify-center rounded-[8px] bg-background/40"
+          style={{ width: "64px", height: "64px" }}
           aria-hidden
         >
-          <StudyTypeIcon type={r.type} size={64} />
+          <StudyTypeIcon type={r.type} size={32} />
         </div>
 
-
-        <div className="mt-auto">
-          <div
-            className="font-mono uppercase opacity-70"
-            style={{ fontSize: "10px", letterSpacing: "0.14em", marginBottom: "8px" }}
-          >
-            {typeLabel} · Example
-          </div>
+        <div className="min-w-0 flex-1">
           <div
             className="font-serif"
-            style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.015em" }}
+            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
           </div>
           <div
-            className="mt-3 font-mono tabular-nums opacity-70"
-            style={{ fontSize: "11px", letterSpacing: "0.02em" }}
+            className="font-mono uppercase opacity-70"
+            style={{ fontSize: "10px", letterSpacing: "0.12em", marginTop: "6px" }}
           >
-            {r.responseCount} responses
+            {typeLabel} · Example
           </div>
+        </div>
+
+        <div
+          className="hidden sm:block shrink-0 font-mono tabular-nums opacity-70 text-right"
+          style={{ fontSize: "12px", letterSpacing: "0.02em" }}
+        >
+          {r.responseCount} responses
         </div>
       </a>
     );
@@ -427,10 +424,10 @@ export default function Landing() {
         ) : null
       ) : (
         <section
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
-          style={{ gap: "20px", paddingTop: "12px", paddingBottom: "12px" }}
+          className="flex flex-col"
+          style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
         >
-          {EXAMPLE_ROWS.map((r, i) => renderCard(r, i))}
+          {EXAMPLE_ROWS.map(renderRow)}
         </section>
       )}
 
