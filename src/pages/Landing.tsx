@@ -367,52 +367,59 @@ export default function Landing() {
             Run and share unmoderated UX studies with a single link.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={handleBadgeClick}
-          disabled={isPaid || unlocking}
-          aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
-          aria-busy={unlocking}
-          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
-          style={{
-            width: "112px",
-            height: "112px",
-            transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
-            boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
-            cursor: isPaid || unlocking ? "default" : "pointer",
-            opacity: unlocking ? 0.7 : 1,
-          }}
-          onMouseEnter={(e) => {
-            if (unlocking) return;
-            e.currentTarget.style.transform = "rotate(0deg)";
-          }}
-          onMouseLeave={(e) => {
-            if (unlocking) return;
-            e.currentTarget.style.transform = isPaid ? "rotate(-6deg)" : "rotate(8deg)";
-          }}
-        >
-          {unlocking ? (
-              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
-          ) : isPaid ? (
-            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
-              <span className="font-serif font-bold tracking-tight" style={{ fontSize: "24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
-                PAID
-              </span>
-              <span className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
-                Lifetime
-              </span>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center leading-none text-center" style={{ gap: "7px" }}>
-              <span className="font-serif font-bold tracking-tight" style={{ fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1 }}>
-                $75
-              </span>
-              <span className="font-mono uppercase text-muted-foreground/70" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>
-                Lifetime
-              </span>
-            </div>
+        <div className="flex flex-col items-end gap-2 shrink-0">
+          <button
+            type="button"
+            onClick={handleBadgeClick}
+            disabled={isPaid || unlocking}
+            aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
+            aria-busy={unlocking}
+            className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
+            style={{
+              width: "112px",
+              height: "112px",
+              transform: isPaid ? "rotate(-6deg)" : "rotate(8deg)",
+              boxShadow: "0 1px 0 hsl(var(--foreground) / 0.04)",
+              cursor: isPaid || unlocking ? "default" : "pointer",
+              opacity: unlocking ? 0.7 : 1,
+            }}
+            onMouseEnter={(e) => {
+              if (unlocking) return;
+              e.currentTarget.style.transform = "rotate(0deg)";
+            }}
+            onMouseLeave={(e) => {
+              if (unlocking) return;
+              e.currentTarget.style.transform = isPaid ? "rotate(-6deg)" : "rotate(8deg)";
+            }}
+          >
+            {unlocking ? (
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
+            ) : isPaid ? (
+              <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
+                <span className="font-serif font-bold tracking-tight" style={{ fontSize: "24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
+                  PAID
+                </span>
+                <span className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
+                  Lifetime
+                </span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center leading-none text-center" style={{ gap: "7px" }}>
+                <span className="font-serif font-bold tracking-tight" style={{ fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1 }}>
+                  $75
+                </span>
+                <span className="font-mono uppercase text-muted-foreground/70" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>
+                  Lifetime
+                </span>
+              </div>
+            )}
+          </button>
+          {!user && (
+            <span className="font-mono text-muted-foreground text-right" style={{ fontSize: "10px", letterSpacing: "0.08em" }}>
+              One-time payment
+            </span>
           )}
-        </button>
+        </div>
 
       </header>
 
@@ -452,45 +459,6 @@ export default function Landing() {
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
-
-          {/* $75 CTA band */}
-          <section className="pt-16 border-t border-border">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-              <div className="max-w-xl">
-                <div
-                  className="font-mono uppercase text-muted-foreground mb-3"
-                  style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-                >
-                  Pricing
-                </div>
-                <h2
-                  className="font-serif text-foreground"
-                  style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
-                >
-                  $75. Once.
-                </h2>
-                <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
-                  One-time payment for lifetime access to unlimited studies and unlimited participant responses.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleBadgeClick}
-                disabled={isPaid || unlocking}
-                className="shrink-0 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-default"
-                style={{ fontSize: "12px", letterSpacing: "0.14em", padding: "16px 28px" }}
-              >
-                {unlocking ? (
-                  <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
-                ) : isPaid ? (
-                  "You're in — Lifetime"
-                ) : (
-                  "Get lifetime access"
-                )}
-              </button>
-            </div>
-          </section>
-
 
           {/* Why StudyDrop — three-column editorial feature blocks */}
           <section className="pt-16 pb-8 border-t border-border">
@@ -571,6 +539,36 @@ export default function Landing() {
                 />
               </div>
               <FaqList />
+            </div>
+          </section>
+
+          {/* Final CTA — calm closing */}
+          <section className="pt-12 pb-24 border-t border-border">
+            <div className="max-w-xl mx-auto text-center">
+              <h2
+                className="font-serif text-foreground"
+                style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
+              >
+                $75. Lifetime access.
+              </h2>
+              <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
+                One-time payment for unlimited studies and unlimited participant responses.
+              </p>
+              <button
+                type="button"
+                onClick={handleBadgeClick}
+                disabled={isPaid || unlocking}
+                className="mt-8 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-default"
+                style={{ fontSize: "12px", letterSpacing: "0.14em", padding: "16px 28px" }}
+              >
+                {unlocking ? (
+                  <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
+                ) : isPaid ? (
+                  "You're in — Lifetime"
+                ) : (
+                  "Get lifetime access"
+                )}
+              </button>
             </div>
           </section>
         </>
