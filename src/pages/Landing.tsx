@@ -379,7 +379,7 @@ export default function Landing() {
           disabled={isPaid || unlocking}
           aria-label={isPaid ? "Paid — lifetime access" : "Unlock for $75 — lifetime"}
           aria-busy={unlocking}
-          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-border text-foreground select-none shrink-0 bg-card transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
+          className="relative z-10 flex items-center justify-center rounded-full border-2 border-dashed border-primary-foreground/70 bg-primary text-primary-foreground select-none shrink-0 transition-transform duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-default"
           style={{
             width: "112px",
             height: "112px",
@@ -398,13 +398,13 @@ export default function Landing() {
           }}
         >
           {unlocking ? (
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
+              <Loader2 className="h-6 w-6 animate-spin text-primary-foreground/80" strokeWidth={1.5} />
           ) : isPaid ? (
             <div className="flex flex-col items-center leading-none text-center" style={{ gap: "4px" }}>
               <span className="font-serif font-bold tracking-tight" style={{ fontSize: "24px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 PAID
               </span>
-              <span className="font-mono text-muted-foreground" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
+              <span className="font-mono text-primary-foreground/80" style={{ fontSize: "11px", letterSpacing: "0.02em" }}>
                 Lifetime
               </span>
             </div>
@@ -413,7 +413,7 @@ export default function Landing() {
               <span className="font-serif font-bold tracking-tight" style={{ fontSize: "32px", letterSpacing: "-0.02em", lineHeight: 1 }}>
                 $75
               </span>
-              <span className="font-mono uppercase text-muted-foreground/70" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>
+              <span className="font-mono uppercase text-primary-foreground/80" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>
                 Lifetime
               </span>
             </div>
