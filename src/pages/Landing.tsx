@@ -5,10 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
-import { StudyTypeIcon } from "@/lib/studyTypeIcons";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
 import { toast } from "sonner";
+import illoFridge from "@/assets/illo-fridge.png";
+import illoGasStation from "@/assets/illo-gasstation.png";
+import illoGrocery from "@/assets/illo-grocery.png";
+import illoOrderAgain from "@/assets/illo-orderagain.png";
 import {
   AlertDialog,
   AlertDialogAction,
