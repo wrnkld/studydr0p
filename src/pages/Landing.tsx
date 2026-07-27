@@ -72,10 +72,10 @@ const EXAMPLE_ROWS: CombinedRow[] = [
 
 // App palette blocks — real chart tokens, not faded pastel washes.
 const EXAMPLE_BLOCK_CLASS: Record<StudyType, string> = {
-  card_sort: "bg-chart-1 text-foreground",
-  survey: "bg-chart-3 text-foreground",
-  tree_test: "bg-chart-2 text-foreground",
-  first_click: "bg-chart-5 text-background",
+  card_sort: "bg-chart-4 text-foreground",   // yellow
+  survey: "bg-chart-3 text-foreground",      // green
+  tree_test: "bg-chart-2 text-foreground",   // terracotta
+  first_click: "bg-chart-1 text-foreground", // periwinkle
 };
 
 const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];
