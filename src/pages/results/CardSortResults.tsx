@@ -16,7 +16,16 @@ interface Props {
   responses?: ResponseRow[];
 }
 
-const CHART_COLOR = "hsl(var(--chart-1))";
+const CHART_PALETTE = [
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-5))",
+  "hsl(var(--chart-6))",
+  "hsl(var(--chart-7))",
+  "hsl(var(--chart-8))",
+];
 
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
@@ -59,7 +68,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     const categories = Array.from(catSet);
 
     const colorByCategory = Object.fromEntries(
-      categories.map((c) => [c, CHART_COLOR]),
+      categories.map((c, i) => [c, CHART_PALETTE[i % CHART_PALETTE.length]]),
     );
 
     const chartData = cards.map((card) => {
@@ -89,7 +98,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return <div className="text-sm text-muted-foreground">No sorted cards yet.</div>;
   }
 
-  const colorFor = (_cat: string) => CHART_COLOR;
+  const colorFor = (cat: string) => colorByCategory[cat] ?? CHART_PALETTE[0];
 
   return (
     <div className="space-y-8">
