@@ -190,7 +190,7 @@ export default function NewStudy() {
                   {t.description}
                 </div>
               </div>
-            </button>
+            </a>
           );
         })}
       </section>
