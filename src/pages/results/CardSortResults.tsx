@@ -59,7 +59,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     const categories = Array.from(catSet);
 
     const colorByCategory = Object.fromEntries(
-      categories.map((c, i) => [c, PALETTE[i % PALETTE.length]]),
+      categories.map((c) => [c, CHART_COLOR]),
     );
 
     const chartData = cards.map((card) => {
@@ -89,7 +89,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return <div className="text-sm text-muted-foreground">No sorted cards yet.</div>;
   }
 
-  const colorFor = (cat: string) => colorByCategory[cat] ?? PALETTE[0];
+  const colorFor = (_cat: string) => CHART_COLOR;
 
   return (
     <div className="space-y-8">
