@@ -209,7 +209,7 @@ export default function Landing() {
           navigate(r.href);
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className={`group relative flex w-full items-center gap-5 rounded-[10px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${blockClass}`}
+        className={`group relative flex w-full items-center gap-5 rounded-[10px] text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-lg ${blockClass}`}
         style={{ padding: "20px 24px" }}
       >
         <div
