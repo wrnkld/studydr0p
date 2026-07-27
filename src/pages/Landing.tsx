@@ -71,11 +71,12 @@ const EXAMPLE_ROWS: CombinedRow[] = [
 ];
 
 // App palette — matches --chart-1..8 tokens in index.css.
-const EXAMPLE_COLORS: Record<StudyType, string> = {
-  card_sort: "#777BBB",  // periwinkle (chart-1 / primary)
-  survey: "#9BBE45",     // green      (chart-3)
-  tree_test: "#D9795A",  // terracotta (chart-2)
-  first_click: "#1F6E8C",// teal       (chart-5)
+// Pastel block backgrounds (~28% alpha over card) keep body text readable.
+const EXAMPLE_BLOCK_BG: Record<StudyType, string> = {
+  card_sort: "#C7C9E4",   // periwinkle wash
+  survey: "#E4EFC6",      // green wash
+  tree_test: "#F3D1BE",   // terracotta wash
+  first_click: "#BFD8E2", // teal wash
 };
 
 const PALETTE = [
@@ -84,6 +85,15 @@ const PALETTE = [
 ];
 
 const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];
+
+// Wacky bento grid placement for the 4 example studies.
+// Desktop: 3 cols × 2 rows. Mobile: single column.
+const BENTO_CLASSES = [
+  "sm:col-span-1 sm:row-span-2",  // tall left
+  "sm:col-span-2 sm:row-span-1",  // wide top-right
+  "sm:col-span-1 sm:row-span-1",  // small
+  "sm:col-span-1 sm:row-span-1",  // small
+];
 
 export default function Landing() {
   const { user } = useAuth();
