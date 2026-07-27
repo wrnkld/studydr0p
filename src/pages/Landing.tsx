@@ -78,16 +78,8 @@ const EXAMPLE_BLOCK_CLASS: Record<StudyType, string> = {
   first_click: "bg-chart-5 text-foreground", // aqua
 };
 
-const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];
 
-// Wacky bento grid placement for the 4 example studies.
-// Desktop: 3 cols × 2 rows. Mobile: single column.
-const BENTO_CLASSES = [
-  "sm:col-span-1 sm:row-span-2",  // tall left
-  "sm:col-span-2 sm:row-span-1",  // wide top-right
-  "sm:col-span-1 sm:row-span-1",  // small
-  "sm:col-span-1 sm:row-span-1",  // small
-];
+
 
 export default function Landing() {
   const { user } = useAuth();
