@@ -127,17 +127,25 @@ export default function NewStudy() {
           const color = TYPE_COLORS[t.id];
           const tint = `${color}33`; // 20% alpha
           return (
-            <button
+            <a
               key={t.id}
-              type="button"
-              onClick={() => {
-                if (!t.enabled || creating) return;
+              href={t.enabled ? `/studies/new?type=${t.id}` : undefined}
+              onClick={(e) => {
+                if (!t.enabled || creating) {
+                  e.preventDefault();
+                  return;
+                }
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+                e.preventDefault();
                 setPendingType(t.id);
                 void create(t.id);
               }}
-              disabled={!t.enabled || creating}
               aria-label={t.label}
-              className="group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              aria-disabled={!t.enabled || creating}
+              className={cn(
+                "group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline",
+                (!t.enabled || creating) && "opacity-60 cursor-not-allowed",
+              )}
               style={{
                 height: "240px",
                 padding: "28px",
@@ -182,7 +190,7 @@ export default function NewStudy() {
                   {t.description}
                 </div>
               </div>
-            </button>
+            </a>
           );
         })}
       </section>
