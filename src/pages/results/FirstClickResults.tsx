@@ -155,7 +155,7 @@ export default function FirstClickResults({
             type="button"
             onClick={() => setView(v)}
             className={cn(
-              "rounded-md px-3 py-1.5 text-sm font-medium capitalize transition-all",
+              "rounded-lg px-3 py-1.5 text-sm font-medium capitalize transition-all",
               view === v
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground",
