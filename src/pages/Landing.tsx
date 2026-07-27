@@ -493,10 +493,10 @@ export default function Landing() {
                 className="font-serif text-foreground"
                 style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
               >
-                $75. Lifetime access.
+                $75 for lifetime access.
               </h2>
               <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
-                One-time payment for unlimited studies and unlimited participant responses.
+                One payment for unlimited studies and participant responses.
               </p>
               <button
                 type="button"
@@ -557,27 +557,27 @@ export default function Landing() {
 const FAQ_ITEMS: { q: string; a: string }[] = [
   {
     q: "What is StudyDrop?",
-    a: "An unmoderated UX research tool. Build card sorts, tree tests, first-click tests, and surveys, then share a single link with participants.",
+    a: "StudyDrop is an unmoderated UX research tool for card sorts, tree tests, first-click tests, and surveys.",
   },
   {
     q: "Do participants need an account?",
-    a: "No. They open the link, do the study, and you get the results. No sign-in, no download, no friction.",
+    a: "No. They open the link and complete the study in their browser.",
   },
   {
     q: "What does it cost?",
-    a: "$75 once. That's it. Unlimited studies, unlimited responses, forever. No seats, no subscription, no upsells.",
+    a: "$75 once. That includes unlimited studies and participant responses.",
   },
   {
     q: "Can I try it before paying?",
-    a: "Yes. Build as many studies as you want and collect responses for free. Pay only when you want to unlock the results.",
+    a: "Yes. You can build studies and collect responses for free. Pay when you want to view the results.",
   },
   {
     q: "How do I share a study?",
-    a: "Every study gets a shareable link. Drop it into Slack, email, a recruiting panel — anywhere. Responses stream back in real time.",
+    a: "Copy the study link and send it by email, Slack, a recruiting panel, or anywhere else.",
   },
   {
     q: "Is my data private?",
-    a: "Yes. Studies and responses belong to your account and aren't shown to anyone else. You can delete a study at any time.",
+    a: "Yes. Your studies and responses are private to your account. You can delete a study at any time.",
   },
 ];
 
