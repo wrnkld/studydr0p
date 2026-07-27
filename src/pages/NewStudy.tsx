@@ -133,7 +133,7 @@ export default function NewStudy() {
           return (
             <a
               key={t.id}
-              href={t.enabled ? `/new-study?type=${t.id}` : undefined}
+              href={t.enabled ? `/studies/new?type=${t.id}` : undefined}
               onClick={(e) => {
                 if (!t.enabled || creating) {
                   e.preventDefault();
