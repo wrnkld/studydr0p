@@ -493,10 +493,10 @@ export default function Landing() {
                 className="font-serif text-foreground"
                 style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
               >
-                $75. Lifetime access.
+                $75 for lifetime access.
               </h2>
               <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
-                One-time payment for unlimited studies and unlimited participant responses.
+                One payment for unlimited studies and participant responses.
               </p>
               <button
                 type="button"
