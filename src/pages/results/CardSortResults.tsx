@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
-import { CHART_PALETTE } from "@/components/survey/SurveyChart";
 import { Kicker } from "@/components/study/primitives";
 
 interface ResponseRow {
@@ -17,7 +16,7 @@ interface Props {
   responses?: ResponseRow[];
 }
 
-const PALETTE = CHART_PALETTE;
+const CHART_COLOR = "hsl(var(--chart-1))";
 
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
