@@ -208,12 +208,16 @@ export default function Landing() {
     const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
     const tint = `${bg}33`;
     return (
-      <button
+      <a
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
-        type="button"
-        onClick={() => navigate(r.href)}
+        href={r.href}
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+          e.preventDefault();
+          navigate(r.href);
+        }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline"
         style={{ height: "240px", padding: "28px" }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = `rotate(${hoverRotate}) translateY(-2px)`;
