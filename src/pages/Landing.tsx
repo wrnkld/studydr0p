@@ -244,19 +244,18 @@ export default function Landing() {
 
         <div className="min-w-0 flex-1">
           <div
-            className="font-serif text-foreground"
-            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
-          >
-            {r.title}
-          </div>
-          <div
-            className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
+            className="flex items-center gap-2 font-mono uppercase text-muted-foreground"
             style={{ fontSize: "10px", letterSpacing: "0.12em" }}
           >
             <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
             {typeLabel}
           </div>
-
+          <div
+            className="mt-2 font-serif text-foreground"
+            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+          >
+            {r.title}
+          </div>
         </div>
       </a>
     );
