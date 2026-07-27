@@ -163,7 +163,7 @@
    now mapped to plain shadcn card/button styling. */
 @layer components {
   .btn-press {
-    @apply border border-input bg-background rounded-md transition-colors;
+    @apply border border-input bg-background rounded-lg transition-colors;
   }
   .btn-press:hover:not(:disabled) {
     @apply bg-accent text-accent-foreground;
