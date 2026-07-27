@@ -147,7 +147,7 @@ export default function NewStudy() {
               aria-label={t.label}
               aria-disabled={!t.enabled || creating}
               className={cn(
-                "group relative flex w-full items-center gap-6 rounded-[12px] border border-border bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-foreground/20",
+                "group relative flex w-full items-center gap-6 rounded-[12px] border border-border bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/20",
                 (!t.enabled || creating) && "opacity-60 cursor-not-allowed",
                 pendingType === t.id && creating && "opacity-80"
               )}
