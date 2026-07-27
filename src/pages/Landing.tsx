@@ -415,18 +415,18 @@ export default function Landing() {
               {[
                 {
                   illo: illoWhyShare,
-                  title: "One link.\nNo setup.",
-                  body: "Build a study, share a link. No participant accounts, no logins, no plugins. It just opens.",
+                  title: "No friction for participants",
+                  body: "Share one link. Participants open it and answer — no accounts, no downloads, and no plugins required.",
                 },
                 {
                   illo: illoWhyFast,
-                  title: "Results\nas they arrive.",
-                  body: "Every response streams into a live dashboard with the charts and tables you actually want.",
+                  title: "Results in real time",
+                  body: "Responses appear in your dashboard as they come in, with charts and tables that make the patterns clear.",
                 },
                 {
                   illo: illoWhySimple,
-                  title: "Pay once.\nUse forever.",
-                  body: "$75 for lifetime access. Unlimited studies, unlimited responses. No seats, no tiers, no trial.",
+                  title: "One price, unlimited everything",
+                  body: "$75 once. Run as many studies as you want, collect as many responses as you need. No subscriptions, no tiers, no catch.",
                 },
               ].map((f, i) => (
                 <div key={i} className="flex flex-col">
