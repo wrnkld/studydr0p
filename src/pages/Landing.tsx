@@ -566,3 +566,79 @@ export default function Landing() {
     </PageContainer>
   );
 }
+
+const FAQ_ITEMS: { q: string; a: string }[] = [
+  {
+    q: "What is StudyDrop?",
+    a: "An unmoderated UX research tool. Build card sorts, tree tests, first-click tests, and surveys, then share a single link with participants.",
+  },
+  {
+    q: "Do participants need an account?",
+    a: "No. They open the link, do the study, and you get the results. No sign-in, no download, no friction.",
+  },
+  {
+    q: "What does it cost?",
+    a: "$75 once. That's it. Unlimited studies, unlimited responses, forever. No seats, no subscription, no upsells.",
+  },
+  {
+    q: "Can I try it before paying?",
+    a: "Yes. Build as many studies as you want and collect responses for free. Pay only when you want to unlock the results.",
+  },
+  {
+    q: "How do I share a study?",
+    a: "Every study gets a shareable link. Drop it into Slack, email, a recruiting panel — anywhere. Responses stream back in real time.",
+  },
+  {
+    q: "Is my data private?",
+    a: "Yes. Studies and responses belong to your account and aren't shown to anyone else. You can delete a study at any time.",
+  },
+];
+
+function FaqList() {
+  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  return (
+    <ol className="flex flex-col">
+      {FAQ_ITEMS.map((item, i) => {
+        const open = openIdx === i;
+        return (
+          <li key={i} className="border-t border-border last:border-b">
+            <button
+              type="button"
+              onClick={() => setOpenIdx(open ? null : i)}
+              className="flex w-full items-start gap-5 py-6 text-left transition-colors hover:bg-muted/30"
+              aria-expanded={open}
+            >
+              <span
+                className="font-mono text-muted-foreground shrink-0 pt-1"
+                style={{ fontSize: "11px", letterSpacing: "0.08em" }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="flex-1 min-w-0">
+                <span
+                  className="font-serif text-foreground block"
+                  style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.015em" }}
+                >
+                  {item.q}
+                </span>
+                {open ? (
+                  <span className="block mt-3 text-[15px] text-muted-foreground leading-relaxed">
+                    {item.a}
+                  </span>
+                ) : null}
+              </span>
+              <span
+                className="shrink-0 pt-2 text-muted-foreground font-mono select-none"
+                style={{ fontSize: "18px", lineHeight: 1 }}
+                aria-hidden
+              >
+                {open ? "×" : "+"}
+              </span>
+            </button>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
