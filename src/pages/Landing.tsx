@@ -460,45 +460,6 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* $75 CTA band */}
-          <section className="pt-16 border-t border-border">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-              <div className="max-w-xl">
-                <div
-                  className="font-mono uppercase text-muted-foreground mb-3"
-                  style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-                >
-                  Pricing
-                </div>
-                <h2
-                  className="font-serif text-foreground"
-                  style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
-                >
-                  $75. Once.
-                </h2>
-                <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
-                  One-time payment for lifetime access to unlimited studies and unlimited participant responses.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleBadgeClick}
-                disabled={isPaid || unlocking}
-                className="shrink-0 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-default"
-                style={{ fontSize: "12px", letterSpacing: "0.14em", padding: "16px 28px" }}
-              >
-                {unlocking ? (
-                  <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
-                ) : isPaid ? (
-                  "You're in — Lifetime"
-                ) : (
-                  "Get lifetime access"
-                )}
-              </button>
-            </div>
-          </section>
-
-
           {/* Why StudyDrop — three-column editorial feature blocks */}
           <section className="pt-16 pb-8 border-t border-border">
             <div
