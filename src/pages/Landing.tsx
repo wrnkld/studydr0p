@@ -469,10 +469,11 @@ export default function Landing() {
                   className="font-serif text-foreground"
                   style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
                 >
-                  Fair
+                  Common
                   <br />
                   questions.
                 </h2>
+
                 <img
                   src={illoFaq}
                   alt=""
@@ -608,11 +609,12 @@ function FaqList() {
                 >
                   {item.q}
                 </span>
-                {open ? (
-                  <span className="block mt-3 text-[15px] text-muted-foreground leading-relaxed">
+                <div className={`faq-answer-grid ${open ? "open" : ""}`}>
+                  <span className="faq-answer-inner block mt-3 text-[15px] text-muted-foreground leading-relaxed">
                     {item.a}
                   </span>
-                ) : null}
+                </div>
+
               </span>
               <span
                 className="shrink-0 pt-2 text-muted-foreground font-mono select-none"
