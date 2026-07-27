@@ -12,6 +12,11 @@ import illoFridge from "@/assets/illo-fridge.png";
 import illoGasStation from "@/assets/illo-gasstation.png";
 import illoGrocery from "@/assets/illo-grocery.png";
 import illoOrderAgain from "@/assets/illo-orderagain.png";
+import illoWhyShare from "@/assets/illo-why-share.png";
+import illoWhyFast from "@/assets/illo-why-fast.png";
+import illoWhySimple from "@/assets/illo-why-simple.png";
+import illoFaq from "@/assets/illo-faq.png";
+import { useState as useStateFaq } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
