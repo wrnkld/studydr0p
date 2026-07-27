@@ -70,19 +70,13 @@ const EXAMPLE_ROWS: CombinedRow[] = [
   },
 ];
 
-// App palette — matches --chart-1..8 tokens in index.css.
-// Pastel block backgrounds (~28% alpha over card) keep body text readable.
-const EXAMPLE_BLOCK_BG: Record<StudyType, string> = {
-  card_sort: "#C7C9E4",   // periwinkle wash
-  survey: "#E4EFC6",      // green wash
-  tree_test: "#F3D1BE",   // terracotta wash
-  first_click: "#BFD8E2", // teal wash
+// App palette blocks — real chart tokens, not faded pastel washes.
+const EXAMPLE_BLOCK_CLASS: Record<StudyType, string> = {
+  card_sort: "bg-chart-1 text-foreground",
+  survey: "bg-chart-3 text-foreground",
+  tree_test: "bg-chart-2 text-foreground",
+  first_click: "bg-chart-5 text-background",
 };
-
-const PALETTE = [
-  "#777BBB", "#D9795A", "#9BBE45", "#EBC24E",
-  "#1F6E8C", "#D081A0", "#7E3C86", "#B5762F",
-];
 
 const HOVER_ROTATIONS = ["-1.2deg", "1.4deg", "1deg", "-1.6deg", "-0.8deg", "1.2deg"];
 
@@ -212,7 +206,7 @@ export default function Landing() {
   // --- Signed-out: wacky bento grid with color blocks + illustration slots ---
   const renderCard = (r: CombinedRow, i: number) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const bg = EXAMPLE_BLOCK_BG[r.type];
+    const blockClass = EXAMPLE_BLOCK_CLASS[r.type];
     const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
     const bento = BENTO_CLASSES[i % BENTO_CLASSES.length];
     const isTall = i === 0;
@@ -226,9 +220,8 @@ export default function Landing() {
           navigate(r.href);
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className={`group relative flex w-full flex-col rounded-[10px] text-left text-foreground transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${bento}`}
+        className={`group relative flex w-full flex-col rounded-[10px] text-left transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${blockClass} ${bento}`}
         style={{
-          backgroundColor: bg,
           minHeight: isTall ? "480px" : "230px",
           padding: "28px",
         }}
@@ -253,19 +246,19 @@ export default function Landing() {
 
         <div className="mt-auto">
           <div
-            className="font-mono uppercase text-foreground/60"
+            className="font-mono uppercase opacity-70"
             style={{ fontSize: "10px", letterSpacing: "0.14em", marginBottom: "8px" }}
           >
             {typeLabel} · Example
           </div>
           <div
-            className="font-serif text-foreground"
+            className="font-serif"
             style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.015em" }}
           >
             {r.title}
           </div>
           <div
-            className="mt-3 font-mono tabular-nums text-foreground/60"
+            className="mt-3 font-mono tabular-nums opacity-70"
             style={{ fontSize: "11px", letterSpacing: "0.02em" }}
           >
             {r.responseCount} responses
