@@ -264,7 +264,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </button>
+      </a>
     );
   };
 
