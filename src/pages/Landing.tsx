@@ -34,7 +34,7 @@ interface CombinedRow {
   createdAt?: string;
 }
 
-const EXAMPLE_ROWS: CombinedRow[] = [
+const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
   {
     id: "fridge",
     href: "/examples/fridge",
@@ -43,6 +43,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoFridge,
   },
   {
     id: "gasstation",
@@ -52,6 +53,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoGasStation,
   },
   {
     id: "grocery",
@@ -61,6 +63,7 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoGrocery,
   },
   {
     id: "orderitagain",
@@ -70,15 +73,16 @@ const EXAMPLE_ROWS: CombinedRow[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
+    illo: illoOrderAgain,
   },
 ];
 
-// App palette blocks — real chart tokens, not faded pastel washes.
-const EXAMPLE_BLOCK_CLASS: Record<StudyType, string> = {
-  card_sort: "bg-chart-4 text-foreground",   // yellow
-  survey: "bg-chart-3 text-foreground",      // green
-  tree_test: "bg-chart-6 text-foreground",   // pink
-  first_click: "bg-chart-5 text-foreground", // aqua
+// Small accent dot color per study type — one dot of color per row, nothing more.
+const ACCENT_CLASS: Record<StudyType, string> = {
+  card_sort: "bg-chart-4",   // yellow
+  survey: "bg-chart-3",      // green
+  tree_test: "bg-chart-6",   // pink
+  first_click: "bg-chart-5", // aqua
 };
 
 
