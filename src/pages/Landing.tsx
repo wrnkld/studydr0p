@@ -541,6 +541,36 @@ export default function Landing() {
               <FaqList />
             </div>
           </section>
+
+          {/* Final CTA — calm closing */}
+          <section className="pt-12 pb-24 border-t border-border">
+            <div className="max-w-xl mx-auto text-center">
+              <h2
+                className="font-serif text-foreground"
+                style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
+              >
+                $75. Lifetime access.
+              </h2>
+              <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
+                One-time payment for unlimited studies and unlimited participant responses.
+              </p>
+              <button
+                type="button"
+                onClick={handleBadgeClick}
+                disabled={isPaid || unlocking}
+                className="mt-8 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-default"
+                style={{ fontSize: "12px", letterSpacing: "0.14em", padding: "16px 28px" }}
+              >
+                {unlocking ? (
+                  <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
+                ) : isPaid ? (
+                  "You're in — Lifetime"
+                ) : (
+                  "Get lifetime access"
+                )}
+              </button>
+            </div>
+          </section>
         </>
       )}
 
