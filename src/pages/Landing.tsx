@@ -209,14 +209,13 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: chunky cards (marketing/onboarding) ---
+  // --- Signed-out: wacky bento grid with color blocks + illustration slots ---
   const renderCard = (r: CombinedRow, i: number) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const bg = r.isExample
-      ? EXAMPLE_COLORS[r.type]
-      : PALETTE[(i + 4) % PALETTE.length];
+    const bg = EXAMPLE_BLOCK_BG[r.type];
     const hoverRotate = HOVER_ROTATIONS[i % HOVER_ROTATIONS.length];
-    const tint = `${bg}33`;
+    const bento = BENTO_CLASSES[i % BENTO_CLASSES.length];
+    const isTall = i === 0;
     return (
       <a
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -227,8 +226,12 @@ export default function Landing() {
           navigate(r.href);
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col rounded-[6px] bg-card text-left text-foreground border border-border transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline"
-        style={{ height: "240px", padding: "28px" }}
+        className={`group relative flex w-full flex-col rounded-[10px] text-left text-foreground transition-[transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden ${bento}`}
+        style={{
+          backgroundColor: bg,
+          minHeight: isTall ? "480px" : "230px",
+          padding: "28px",
+        }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = `rotate(${hoverRotate}) translateY(-2px)`;
         }}
@@ -236,42 +239,36 @@ export default function Landing() {
           e.currentTarget.style.transform = "";
         }}
       >
-        <div className="flex items-start justify-between gap-4">
-          <div
-            className="flex items-center justify-center shrink-0"
-            style={{
-              width: "48px",
-              height: "48px",
-              borderRadius: "9999px",
-              backgroundColor: tint,
-              color: bg,
-            }}
-          >
-            <StudyTypeIcon type={r.type} size={24} />
-          </div>
-          <div className="text-right text-muted-foreground">
-            <div className="font-mono uppercase" style={{ fontSize: "9px", letterSpacing: "0.12em", opacity: 0.75 }}>
-              {r.isExample ? "EXAMPLE" : "TYPE"}
-            </div>
-            <div className="font-mono" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
-              {typeLabel}
-            </div>
-          </div>
+        {/* Illustration slot — user will provide art */}
+        <div
+          className="flex items-center justify-center"
+          style={{
+            height: isTall ? "260px" : "120px",
+            marginBottom: "16px",
+          }}
+          aria-hidden
+        >
+          <StudyTypeIcon type={r.type} size={isTall ? 96 : 64} />
         </div>
+
         <div className="mt-auto">
-          <div className="flex items-end justify-between gap-4">
-            <div
-              className="font-serif text-foreground"
-              style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.01em" }}
-            >
-              {r.title}
-            </div>
-            <div
-              className="shrink-0 whitespace-nowrap font-mono tabular-nums text-muted-foreground"
-              style={{ fontSize: "11px", letterSpacing: "0.02em" }}
-            >
-              {r.responseCount} responses
-            </div>
+          <div
+            className="font-mono uppercase text-foreground/60"
+            style={{ fontSize: "10px", letterSpacing: "0.14em", marginBottom: "8px" }}
+          >
+            {typeLabel} · Example
+          </div>
+          <div
+            className="font-serif text-foreground"
+            style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.015em" }}
+          >
+            {r.title}
+          </div>
+          <div
+            className="mt-3 font-mono tabular-nums text-foreground/60"
+            style={{ fontSize: "11px", letterSpacing: "0.02em" }}
+          >
+            {r.responseCount} responses
           </div>
         </div>
       </a>
