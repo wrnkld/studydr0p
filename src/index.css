@@ -177,3 +177,18 @@
   }
 }
 
+@layer utilities {
+  .faq-answer-grid {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.35s ease-out;
+  }
+  .faq-answer-grid.open {
+    grid-template-rows: 1fr;
+  }
+  .faq-answer-inner {
+    overflow: hidden;
+  }
+}
+
+
