@@ -293,7 +293,19 @@ export default function Landing() {
     return (
       <tr
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
-        onClick={() => navigate(r.href)}
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey) {
+            window.open(r.href, "_blank", "noopener");
+            return;
+          }
+          navigate(r.href);
+        }}
+        onAuxClick={(e) => {
+          if (e.button === 1) {
+            e.preventDefault();
+            window.open(r.href, "_blank", "noopener");
+          }
+        }}
         className="group cursor-pointer border-b border-border/60 hover:bg-muted/40 transition-colors"
       >
         <td className="py-3 px-3 sm:px-5">
