@@ -65,7 +65,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 237 33% 60%;
+    --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96.1%;
@@ -86,20 +86,21 @@
 
     --radius: 0.5rem;
 
-    /* Muted, warm research-artifact palette — matches landing example cards. */
-    --chart-1: 237 33% 60%;  /* periwinkle — matches primary */
-    --chart-2: 14 82% 64%;   /* terracotta — punchier coral */
-    --chart-3: 82 62% 52%;   /* green — brighter lime */
-    --chart-4: 46 96% 60%;   /* yellow — poppy gold */
-    --chart-5: 194 78% 45%;  /* teal — brighter cyan-teal */
-    --chart-6: 338 78% 70%;  /* rose — vivid pink */
-    --chart-7: 285 55% 55%;  /* plum — brighter violet */
-    --chart-8: 30 85% 58%;   /* orange — warm pop */
+    /* Muted, warm research-artifact palette — matches landing example cards.
+       Primary is now ink/charcoal; chart-1 keeps the original periwinkle
+       accent so data visualizations still carry the purple pop. */
+    --chart-1: 237 33% 60%;  /* periwinkle */
+    --chart-2: 14 82% 64%;   /* terracotta */
+    --chart-3: 82 62% 52%;   /* green */
+    --chart-4: 46 96% 60%;   /* yellow */
+    --chart-5: 194 78% 45%;  /* teal */
+    --chart-6: 338 78% 70%;  /* rose */
+    --chart-7: 285 55% 55%;  /* plum */
+    --chart-8: 30 85% 58%;   /* orange */
     --chart-axis: 215.4 16.3% 46.9%;
     --chart-grid: 214.3 31.8% 91.4%;
 
-    /* Single accent color used sparingly — active tab underline,
-       links, primary stat tone. Ink blue. */
+    /* Single accent color used sparingly — links, primary stat tone. Ink blue. */
     --accent-ink: 224 76% 48%;
 
     --sidebar-background: 0 0% 98%;
