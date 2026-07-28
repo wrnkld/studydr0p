@@ -207,7 +207,7 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: example rows, plain list style integrated into the page ---
+  // --- Signed-out: example cards (matches NewStudy card style) ---
   const renderRow = (r: CombinedRow & { illo?: string }) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const accent = ACCENT_CLASS[r.type];
@@ -227,40 +227,39 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-all duration-200 ease-out hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        style={{ padding: "20px 24px" }}
       >
         {r.illo ? (
           <div
-            className="flex items-center justify-center sm:w-1/2"
-            style={{ minHeight: "160px", maxHeight: "220px" }}
+            className="shrink-0 flex items-center justify-center"
+            style={{ width: "88px", height: "88px" }}
             aria-hidden
           >
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={400}
-              height={400}
-              className="h-full w-full max-w-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+              width={176}
+              height={176}
+              className="max-w-full max-h-full object-contain"
             />
           </div>
         ) : null}
 
-        <div className="flex items-center sm:w-1/2">
-          <div className="min-w-0">
-            <div
-              className="flex items-center gap-2 font-mono uppercase text-muted-foreground"
-              style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-            >
-              <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-              {typeLabel}
-            </div>
-            <div
-              className="mt-2 font-serif text-foreground transition-transform duration-200 ease-out group-hover:translate-x-1"
-              style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
-            >
-              {r.title}
-            </div>
+        <div className="min-w-0 flex-1">
+          <div
+            className="font-serif text-foreground"
+            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+          >
+            {r.title}
+          </div>
+          <div
+            className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
+            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
+          >
+            <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
+            {typeLabel}
           </div>
         </div>
       </a>
