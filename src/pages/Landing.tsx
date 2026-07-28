@@ -362,20 +362,20 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <header className="space-y-4 pt-2 pb-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[0.95] font-serif text-foreground max-w-3xl">
+      <header className="space-y-3 pt-2 pb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl">
           UX research, without the friction.
         </h1>
-        <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl">
+        <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
           Run and share unmoderated UX studies with a single link.
         </p>
       </header>
 
       {user ? (
         loadedUserRows ? (
-        <section className="overflow-hidden">
+        <section className="overflow-hidden rounded-lg border border-border">
           <table className="w-full text-left">
-            <thead>
+            <thead className="bg-muted/40">
               <tr className="border-b border-border">
                 <th className="py-3 px-3 sm:px-5 text-left">
                   <SortHeader label="Study" k="title" />
@@ -389,32 +389,37 @@ export default function Landing() {
                 </th>
               </tr>
             </thead>
-            <tbody>{rows.map(renderTableRow)}</tbody>
+            <tbody className="divide-y divide-border">{rows.map(renderTableRow)}</tbody>
           </table>
         </section>
         ) : null
       ) : (
         <>
           <section>
-            <div
-              className="font-mono uppercase text-muted-foreground mb-5"
-              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-            >
-              Examples
+            <div className="mb-5">
+              <span
+                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
+                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+              >
+                Examples
+              </span>
             </div>
-            <div className="flex flex-col">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
 
           {/* Why StudyDrop — three-column editorial feature blocks */}
           <section className="pt-20 pb-10">
-            <div
-              className="font-mono uppercase text-muted-foreground mb-12"
-              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-            >
-              Why StudyDrop
+            <div className="mb-10">
+              <span
+                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
+                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+              >
+                Why StudyDrop
+              </span>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
               {[
                 {
