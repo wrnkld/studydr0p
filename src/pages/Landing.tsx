@@ -227,7 +227,7 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-all duration-200 ease-out hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {r.illo ? (
           <div
