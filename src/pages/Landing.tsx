@@ -39,7 +39,7 @@ interface CombinedRow {
   createdAt?: string;
 }
 
-const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
+const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
   {
     id: "fridge",
     href: "/examples/fridge",
@@ -49,6 +49,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoFridge,
+    description: "Put each item in the fridge.",
   },
   {
     id: "gasstation",
@@ -59,6 +60,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoGasStation,
+    description: "Rate the snacks you'd actually buy.",
   },
   {
     id: "grocery",
@@ -69,6 +71,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoGrocery,
+    description: "Sort each product into its department.",
   },
   {
     id: "orderitagain",
@@ -79,6 +82,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoOrderAgain,
+    description: "Click the first place you'd look to reorder.",
   },
 ];
 
