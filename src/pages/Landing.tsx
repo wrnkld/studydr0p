@@ -579,7 +579,7 @@ function FaqList() {
             <button
               type="button"
               onClick={() => setOpenIdx(open ? null : i)}
-              className="group flex w-full items-start gap-5 rounded-lg border border-transparent px-4 py-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:bg-card hover:shadow-md"
+              className="group flex w-full items-start gap-5 rounded-lg border border-border bg-card px-4 py-6 text-left transition-colors duration-150 hover:border-foreground"
               aria-expanded={open}
             >
               <span
