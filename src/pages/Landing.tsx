@@ -232,7 +232,7 @@ export default function Landing() {
       >
         {r.illo ? (
           <div
-            className="w-full flex items-center justify-center mb-6"
+            className="w-full flex items-center justify-start mb-6"
             style={{ height: "200px" }}
             aria-hidden
           >
@@ -443,7 +443,7 @@ export default function Landing() {
                 },
               ].map((f, i) => (
                 <div key={i} className="flex flex-col">
-                  <div className="mb-8 w-full flex items-center justify-center" style={{ height: "220px" }}>
+                  <div className="mb-8 w-full flex items-center justify-start" style={{ height: "220px" }}>
                     <img
                       src={f.illo}
                       alt=""
