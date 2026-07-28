@@ -12,6 +12,7 @@ import illoFridge from "@/assets/illo-fridge.svg";
 import illoGasStation from "@/assets/illo-gasstation.svg";
 import illoGrocery from "@/assets/illo-grocery.svg";
 import illoOrderAgain from "@/assets/illo-orderagain.svg";
+import illoWhyShare from "@/assets/illo-why-share.png";
 
 
 
@@ -416,13 +417,15 @@ export default function Landing() {
               <SectionDivider label="Why StudyDrop" />
             </div>
             <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-              {/* Placeholder illustration */}
               <div className="w-full md:w-1/2">
-                <div className="aspect-square w-full max-w-[280px] rounded-lg border-2 border-dashed border-border bg-muted/50 flex items-center justify-center text-muted-foreground">
-                  <span className="font-mono uppercase text-[11px]" style={{ letterSpacing: "0.12em" }}>
-                    Illustration
-                  </span>
-                </div>
+                <img
+                  src={illoWhyShare}
+                  alt=""
+                  loading="lazy"
+                  width={280}
+                  height={280}
+                  className="block w-full max-w-[280px]"
+                />
               </div>
               <div className="w-full md:w-1/2">
                 <ol className="relative space-y-8">
@@ -487,7 +490,7 @@ export default function Landing() {
                 type="button"
                 onClick={handleBadgeClick}
                 disabled={isPaid || unlocking}
-                className="mt-10 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider text-[11px] transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
+                className="mt-10 inline-flex items-center justify-center rounded-lg bg-foreground text-background font-mono uppercase tracking-wider text-[11px] transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
                 style={{ letterSpacing: "0.14em", padding: "18px 32px" }}
               >
                 {unlocking ? (
