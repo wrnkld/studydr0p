@@ -426,7 +426,7 @@ export default function Landing() {
               <SectionDivider label="Why StudyDrop" />
             </div>
             <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-              <div className="w-full md:w-1/2">
+              <div className="w-full md:w-1/2 flex justify-center">
                 <img
                   src={illoWhyShare}
                   alt=""
@@ -438,7 +438,6 @@ export default function Landing() {
               </div>
               <div className="w-full md:w-1/2">
                 <ol className="relative space-y-8">
-                  <div className="absolute left-3.5 top-0 bottom-0 w-px bg-border" aria-hidden />
                   {[
                     {
                       title: "Share your study",
@@ -452,8 +451,14 @@ export default function Landing() {
                       title: "Unlimited use for $75",
                       body: "Pay once and run as many studies as you want.",
                     },
-                  ].map((item, i) => (
+                  ].map((item, i, arr) => (
                     <li key={i} className="relative flex gap-5">
+                      {i < arr.length - 1 ? (
+                        <span
+                          className="absolute left-3.5 top-7 -bottom-8 w-px bg-border"
+                          aria-hidden
+                        />
+                      ) : null}
                       <span
                         className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground text-[11px]"
                       >
