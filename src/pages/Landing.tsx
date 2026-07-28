@@ -301,7 +301,7 @@ export default function Landing() {
       >
         <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
-              <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground">
+              <span className="font-serif font-medium text-base tracking-tight truncate text-foreground">
               {r.title}
             </span>
           </div>
