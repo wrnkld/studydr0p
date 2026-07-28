@@ -7,7 +7,6 @@ import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
-import { TypeBadge } from "@/components/TypeBadge";
 import { toast } from "sonner";
 import illoFridge from "@/assets/illo-fridge.svg";
 import illoGasStation from "@/assets/illo-gasstation.svg";
@@ -221,7 +220,12 @@ export default function Landing() {
         style={{ padding: "28px 28px 24px" }}
       >
         <div className="mb-4">
-          <TypeBadge type={r.type} />
+          <span
+            className="font-mono uppercase text-muted-foreground"
+            style={{ fontSize: "11px", letterSpacing: "0.08em" }}
+          >
+            {STUDY_TYPE_META[r.type]?.label ?? r.type}
+          </span>
         </div>
 
         {r.illo ? (
