@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/__l5e/:path*", "destination": "https://studydr0p.lovable.app/__l5e/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
