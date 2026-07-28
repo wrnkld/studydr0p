@@ -360,13 +360,26 @@ export default function Landing() {
   };
 
 
+  const SectionDivider = ({ label }: { label: string }) => (
+    <div className="flex items-center gap-4 w-full">
+      <div className="h-px flex-1 bg-border" />
+      <span
+        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap"
+        style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+      >
+        {label}
+      </span>
+      <div className="h-px flex-1 bg-border" />
+    </div>
+  );
+
   return (
     <PageContainer width="wide" space="lg">
-      <header className="space-y-3 pt-2 pb-4">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl">
+      <header className="space-y-3 pt-2 pb-4 text-center">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
           UX research, without the friction.
         </h1>
-        <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
+        <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
           Run and share unmoderated UX studies with a single link.
         </p>
       </header>
@@ -396,31 +409,21 @@ export default function Landing() {
       ) : (
         <>
           <section>
-            <div className="mb-5">
-              <span
-                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
-                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
-              >
-                Examples
-              </span>
+            <div className="mb-8">
+              <SectionDivider label="Examples" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
 
-          {/* Why StudyDrop — three-column editorial feature blocks */}
+          {/* Why StudyDrop — illustrations on their own line, larger */}
           <section className="pt-20 pb-10">
-            <div className="mb-10">
-              <span
-                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
-                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
-              >
-                Why StudyDrop
-              </span>
+            <div className="mb-12">
+              <SectionDivider label="Why StudyDrop" />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-10">
               {[
                 {
                   illo: illoWhyShare,
@@ -439,13 +442,13 @@ export default function Landing() {
                 },
               ].map((f, i) => (
                 <div key={i} className="flex flex-col">
-                  <div className="mb-6" style={{ height: "140px" }}>
+                  <div className="mb-8 w-full flex items-center justify-center" style={{ height: "220px" }}>
                     <img
                       src={f.illo}
                       alt=""
                       loading="lazy"
-                      width={280}
-                      height={280}
+                      width={360}
+                      height={360}
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -463,15 +466,10 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* FAQ — plain, no illustration */}
+          {/* FAQ — wrapped in bordered cards like examples */}
           <section className="pt-20 pb-24">
-            <div className="mb-8">
-              <span
-                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
-                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
-              >
-                Questions
-              </span>
+            <div className="mb-10">
+              <SectionDivider label="Questions" />
             </div>
             <FaqList />
           </section>
@@ -504,6 +502,7 @@ export default function Landing() {
           </section>
         </>
       )}
+
 
 
       <AuthDialog
@@ -571,7 +570,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
 function FaqList() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   return (
-    <ol className="flex flex-col">
+    <ol className="flex flex-col gap-3">
       {FAQ_ITEMS.map((item, i) => {
         const open = openIdx === i;
         return (
@@ -579,7 +578,7 @@ function FaqList() {
             <button
               type="button"
               onClick={() => setOpenIdx(open ? null : i)}
-              className="group flex w-full items-start gap-5 rounded-lg border border-transparent px-4 py-6 text-left transition-colors duration-150 hover:border-foreground"
+              className="group flex w-full items-start gap-5 rounded-lg border border-border bg-card px-6 py-6 text-left transition-colors duration-150 hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-expanded={open}
             >
               <span
@@ -600,7 +599,6 @@ function FaqList() {
                     {item.a}
                   </span>
                 </div>
-
               </span>
               <span
                 className="shrink-0 pt-2 text-muted-foreground font-mono select-none"
@@ -616,4 +614,5 @@ function FaqList() {
     </ol>
   );
 }
+
 
