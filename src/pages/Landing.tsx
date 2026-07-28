@@ -440,16 +440,16 @@ export default function Landing() {
                 <ol className="relative space-y-8">
                   {[
                     {
+                      title: "Build your study",
+                      body: "Set up a card sort, tree test, first-click test, or survey in minutes.",
+                    },
+                    {
                       title: "Share your study",
-                      body: "Copy the link and share it anywhere.",
+                      body: "Copy the link and send it anywhere.",
                     },
                     {
                       title: "Easy for participants",
                       body: "Participants open the link and answer without signing up.",
-                    },
-                    {
-                      title: "Unlimited use for $75",
-                      body: "Pay once and run as many studies as you want.",
                     },
                   ].map((item, i, arr) => (
                     <li key={i} className="relative flex gap-5">
