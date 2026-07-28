@@ -207,7 +207,7 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: 4 stacked rows, calm neutral cards with B&W illustration ---
+  // --- Signed-out: example rows, plain list style integrated into the page ---
   const renderRow = (r: CombinedRow & { illo?: string }) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const accent = ACCENT_CLASS[r.type];
@@ -220,23 +220,28 @@ export default function Landing() {
           e.preventDefault();
           navigate(r.href);
         }}
+        onAuxClick={(e) => {
+          if (e.button === 1) {
+            e.preventDefault();
+            window.open(r.href, "_blank", "noopener");
+          }
+        }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/20"
-        style={{ padding: "20px 24px" }}
+        className="group relative flex w-full items-center gap-4 border-b border-border py-4 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {r.illo ? (
           <div
             className="shrink-0 flex items-center justify-center"
-            style={{ width: "88px", height: "88px" }}
+            style={{ width: "56px", height: "56px" }}
             aria-hidden
           >
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={176}
-              height={176}
-              className="max-w-full max-h-full object-contain"
+              width={112}
+              height={112}
+              className="max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
             />
           </div>
         ) : null}
@@ -250,8 +255,8 @@ export default function Landing() {
             {typeLabel}
           </div>
           <div
-            className="mt-2 font-serif text-foreground"
-            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+            className="mt-1 font-serif text-foreground"
+            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
           </div>
