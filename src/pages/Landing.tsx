@@ -461,9 +461,9 @@ export default function Landing() {
           </section>
 
           {/* FAQ — plain, no illustration */}
-          <section className="pt-16 pb-20">
+          <section className="pt-20 pb-24">
             <div
-              className="font-mono uppercase text-muted-foreground mb-6"
+              className="font-mono uppercase text-muted-foreground mb-8"
               style={{ fontSize: "11px", letterSpacing: "0.14em" }}
             >
               Questions
