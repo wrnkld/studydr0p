@@ -304,11 +304,11 @@ export default function Landing() {
             window.open(r.href, "_blank", "noopener");
           }
         }}
-        className="group cursor-pointer transition-colors hover:bg-muted"
+        className="group cursor-pointer transition-colors hover:bg-muted/50"
       >
         <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
-              <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground transition-transform duration-200 group-hover:translate-x-1">
+              <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground">
               {r.title}
             </span>
           </div>
