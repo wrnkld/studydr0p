@@ -227,30 +227,30 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        style={{ padding: "20px 24px" }}
+        className="group relative flex w-full flex-col rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        style={{ padding: "28px 28px 24px" }}
       >
         {r.illo ? (
           <div
-            className="shrink-0 flex items-center justify-center"
-            style={{ width: "88px", height: "88px" }}
+            className="w-full flex items-center justify-center mb-6"
+            style={{ height: "200px" }}
             aria-hidden
           >
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={176}
-              height={176}
+              width={360}
+              height={360}
               className="max-w-full max-h-full object-contain"
             />
           </div>
         ) : null}
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0">
           <div
             className="font-serif text-foreground"
-            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
           </div>
@@ -265,6 +265,7 @@ export default function Landing() {
       </a>
     );
   };
+
 
   // --- Sorting ---
   type SortKey = "title" | "type" | "responses";
