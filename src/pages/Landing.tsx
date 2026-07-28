@@ -443,7 +443,7 @@ export default function Landing() {
                 },
               ].map((f, i) => (
                 <div key={i} className="flex flex-col">
-                  <div className="mb-8 w-full flex items-center justify-center" style={{ height: "220px" }}>
+                  <div className="mb-8 w-full flex items-center justify-start" style={{ height: "220px" }}>
                     <img
                       src={f.illo}
                       alt=""
