@@ -479,10 +479,10 @@ export default function Landing() {
           {/* Final CTA — calm closing */}
           <section className="pt-16 pb-28">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-serif text-foreground text-4xl sm:text-5xl font-bold tracking-tight leading-[0.95]">
+              <h2 className="font-serif text-foreground text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
                 $75 for lifetime access.
               </h2>
-              <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
                 One payment for unlimited studies and participant responses.
               </p>
               <button
