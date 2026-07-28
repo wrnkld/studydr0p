@@ -25,20 +25,19 @@ export default function Footer() {
           <Link to="/terms" className="hover:text-foreground">
             Terms
           </Link>
-          {session ? (
-            <button
-              type="button"
-              onClick={async () => {
-                await signOut();
-                navigate("/");
-              }}
-              className="hover:text-foreground"
-            >
-              Sign out
-            </button>
-          ) : null}
         </div>
-        <p className="font-mono uppercase text-muted-foreground/70" style={{ fontSize: "11px", letterSpacing: "0.1em" }}>Payments by Stripe</p>
+        {session ? (
+          <button
+            type="button"
+            onClick={async () => {
+              await signOut();
+              navigate("/");
+            }}
+            className="hover:text-foreground"
+          >
+            Sign out
+          </button>
+        ) : null}
       </div>
     </footer>
   );
