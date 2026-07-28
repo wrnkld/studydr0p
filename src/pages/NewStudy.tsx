@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { StudyType } from "@/lib/types";
+import { StudyType, STUDY_TYPE_META } from "@/lib/types";
 import { toast } from "sonner";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
+import { TypeBadge } from "@/components/TypeBadge";
 import { cn } from "@/lib/utils";
 import illoCardSort from "@/assets/illo-cardsort.svg";
 import illoSurvey from "@/assets/illo-survey.svg";
@@ -13,50 +14,32 @@ import illoFirstClick from "@/assets/illo-firstclick.svg";
 
 type TypeMeta = {
   id: StudyType;
-  label: string;
   description: string;
-  enabled: boolean;
   illo: string;
 };
 
 const TYPES: TypeMeta[] = [
   {
     id: "card_sort",
-    label: "Card sort",
     description: "See how people group and label your content.",
-    enabled: true,
     illo: illoCardSort,
   },
   {
     id: "survey",
-    label: "Survey",
     description: "Ask multiple-choice and rating questions.",
-    enabled: true,
     illo: illoSurvey,
   },
   {
     id: "tree_test",
-    label: "Tree test",
     description: "Test how findable items are in a navigation structure.",
-    enabled: true,
     illo: illoTreeTest,
   },
   {
     id: "first_click",
-    label: "First click",
     description: "Where do users click first to complete a task?",
-    enabled: true,
     illo: illoFirstClick,
   },
 ];
-
-// Small accent dot color per study type — one dot of color per row.
-const ACCENT_CLASS: Record<StudyType, string> = {
-  card_sort: "bg-chart-4",   // yellow
-  survey: "bg-chart-3",      // green
-  tree_test: "bg-chart-6",   // pink
-  first_click: "bg-chart-5", // aqua
-};
 
 function isStudyType(value: string): value is StudyType {
   return TYPES.some((t) => t.id === value);
@@ -124,18 +107,17 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <section
-        className="flex flex-col"
-        style={{ gap: "16px", paddingTop: "12px", paddingBottom: "12px" }}
-      >
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {TYPES.map((t) => {
-          const accent = ACCENT_CLASS[t.id];
+          const label = STUDY_TYPE_META[t.id]?.label ?? t.id;
+          const href = `/studies/new?type=${t.id}`;
+          const isPending = pendingType === t.id && creating;
           return (
             <a
               key={t.id}
-              href={t.enabled ? `/studies/new?type=${t.id}` : undefined}
+              href={href}
               onClick={(e) => {
-                if (!t.enabled || creating) {
+                if (creating) {
                   e.preventDefault();
                   return;
                 }
@@ -144,68 +126,59 @@ export default function NewStudy() {
                 setPendingType(t.id);
                 void create(t.id);
               }}
-              aria-label={t.label}
-              aria-disabled={!t.enabled || creating}
+              onAuxClick={(e) => {
+                if (e.button === 1) {
+                  e.preventDefault();
+                  window.open(href, "_blank", "noopener");
+                }
+              }}
+              aria-label={label}
+              aria-disabled={creating}
               className={cn(
-                "group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-colors duration-150 hover:border-foreground",
-                (!t.enabled || creating) && "opacity-60 cursor-not-allowed",
-                pendingType === t.id && creating && "opacity-80"
+                "group relative flex w-full flex-col rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                creating && "opacity-60 cursor-not-allowed",
+                isPending && "opacity-80",
               )}
-              style={{ padding: "20px 24px" }}
+              style={{ padding: "28px 28px 24px" }}
             >
-              <div
-                className="shrink-0 flex items-center justify-center"
-                style={{ width: "88px", height: "88px" }}
-                aria-hidden
-              >
-                <img
-                  src={t.illo}
-                  alt=""
-                  loading="lazy"
-                  width={176}
-                  height={176}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <div
-                  className="flex items-center gap-3 font-serif text-foreground"
-                  style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
-                >
-                  <span className={`inline-block h-2.5 w-2.5 rounded-full ${accent}`} aria-hidden />
-                  {t.label}
-                </div>
-                <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
-                  {t.description}
-                </p>
-              </div>
-
-              {pendingType === t.id && creating && (
-                <div className="shrink-0 ml-auto">
+              <div className="mb-4 flex items-center justify-between">
+                <TypeBadge type={t.id} />
+                {isPending && (
                   <svg
-                    className="animate-spin h-5 w-5 text-muted-foreground"
+                    className="animate-spin h-4 w-4 text-muted-foreground"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                   >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                    />
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
+                )}
+              </div>
+
+              <div className="mb-5" aria-hidden>
+                <img
+                  src={t.illo}
+                  alt=""
+                  loading="lazy"
+                  width={180}
+                  height={180}
+                  className="block h-[180px] w-[180px]"
+                />
+              </div>
+
+              <div className="min-w-0">
+                <div
+                  className="font-serif text-foreground"
+                  style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+                >
+                  {label}
                 </div>
-              )}
+                <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
+                  {t.description}
+                </p>
+              </div>
             </a>
           );
         })}
