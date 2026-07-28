@@ -5,7 +5,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { StudyType, STUDY_TYPE_META } from "@/lib/types";
 import { toast } from "sonner";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
-import { TypeBadge } from "@/components/TypeBadge";
 import { cn } from "@/lib/utils";
 import illoCardSort from "@/assets/illo-cardsort.svg";
 import illoSurvey from "@/assets/illo-survey.svg";
@@ -141,9 +140,8 @@ export default function NewStudy() {
               )}
               style={{ padding: "28px 28px 24px" }}
             >
-              <div className="mb-4 flex items-center justify-between">
-                <TypeBadge type={t.id} />
-                {isPending && (
+              {isPending && (
+                <div className="mb-4 flex items-center justify-end">
                   <svg
                     className="animate-spin h-4 w-4 text-muted-foreground"
                     xmlns="http://www.w3.org/2000/svg"
@@ -154,8 +152,8 @@ export default function NewStudy() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                )}
-              </div>
+                </div>
+              )}
 
               <div className="mb-5" aria-hidden>
                 <img
