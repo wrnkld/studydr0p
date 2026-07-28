@@ -408,8 +408,43 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* Why StudyDrop — illustrations on their own line, larger */}
+          {/* How it works — three plain value props */}
           <section className="pt-20 pb-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {[
+                {
+                  title: "Share your study",
+                  body: "Copy the link and share it anywhere.",
+                },
+                {
+                  title: "Easy for participants",
+                  body: "Participants open the link and answer without signing up.",
+                },
+                {
+                  title: "Unlimited use for $75",
+                  body: "Pay once and run as many studies as you want.",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="rounded-lg border border-border bg-card p-6 transition-colors duration-150 hover:bg-muted/40"
+                >
+                  <h3
+                    className="font-serif text-foreground"
+                    style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-[15px] text-muted-foreground leading-relaxed">
+                    {item.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Why StudyDrop — illustrations on their own line, larger */}
+          <section className="pt-10 pb-10">
             <div className="mb-12">
               <SectionDivider label="Why StudyDrop" />
             </div>
