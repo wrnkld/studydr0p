@@ -221,8 +221,8 @@ export default function Landing() {
       >
         <div className="mb-4">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
-            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px]"
+            style={{ letterSpacing: "0.12em" }}
           >
             {STUDY_TYPE_META[r.type]?.label ?? r.type}
           </span>
@@ -242,14 +242,14 @@ export default function Landing() {
         ) : null}
 
         <div className="min-w-0">
-          <div
-            className="font-serif text-foreground"
-            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+          <h3
+            className="font-serif text-2xl font-bold text-foreground"
+            style={{ lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
-          </div>
+          </h3>
           {r.description ? (
-            <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
               {r.description}
             </p>
           ) : null}
@@ -301,19 +301,19 @@ export default function Landing() {
       >
         <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
-              <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground">
+              <span className="font-serif font-medium text-base tracking-tight truncate text-foreground">
               {r.title}
             </span>
           </div>
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
+        <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap text-[11px]" style={{ letterSpacing: "0.02em" }}>
           {typeLabel}
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
             <span
-              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
-              style={{ fontSize: "9px", letterSpacing: "0.12em" }}
+              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-[11px]"
+              style={{ letterSpacing: "0.12em" }}
             >
               Example
             </span>
@@ -321,7 +321,7 @@ export default function Landing() {
             <span className="inline-block" style={{ width: "54px" }} aria-hidden />
           )}
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
+        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap text-[11px]">
           {r.responseCount}
         </td>
       </tr>
@@ -343,8 +343,8 @@ export default function Landing() {
       <button
         type="button"
         onClick={() => toggleSort(k)}
-        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors ${align === "right" ? "flex-row-reverse" : ""}`}
-        style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-[11px] ${align === "right" ? "flex-row-reverse" : ""}`}
+        style={{ letterSpacing: "0.12em", fontWeight: 500 }}
       >
         {label}
         <Icon className="w-3 h-3" strokeWidth={1.5} style={{ opacity: active ? 1 : 0.4 }} />
@@ -357,8 +357,8 @@ export default function Landing() {
     <div className="flex items-center gap-4 w-full">
       <div className="h-px flex-1 bg-border" />
       <span
-        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap"
-        style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-[11px]"
+        style={{ letterSpacing: "0.14em" }}
       >
         {label}
       </span>
@@ -419,7 +419,7 @@ export default function Landing() {
               {/* Placeholder illustration */}
               <div className="w-full md:w-1/2">
                 <div className="aspect-square w-full max-w-[280px] rounded-lg border-2 border-dashed border-border bg-muted/50 flex items-center justify-center text-muted-foreground">
-                  <span className="font-mono uppercase" style={{ fontSize: "11px", letterSpacing: "0.12em" }}>
+                  <span className="font-mono uppercase text-[11px]" style={{ letterSpacing: "0.12em" }}>
                     Illustration
                   </span>
                 </div>
@@ -443,19 +443,18 @@ export default function Landing() {
                   ].map((item, i) => (
                     <li key={i} className="relative flex gap-5">
                       <span
-                        className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground"
-                        style={{ fontSize: "12px" }}
+                        className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground text-[11px]"
                       >
                         {i + 1}
                       </span>
                       <div>
                         <h3
-                          className="font-serif text-foreground"
-                          style={{ fontSize: "20px", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.015em" }}
+                          className="font-serif text-foreground text-xl font-bold"
+                          style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
                         >
                           {item.title}
                         </h3>
-                        <p className="mt-1 text-[15px] text-muted-foreground leading-relaxed">
+                        <p className="mt-1 text-base text-muted-foreground leading-relaxed">
                           {item.body}
                         </p>
                       </div>
@@ -488,8 +487,8 @@ export default function Landing() {
                 type="button"
                 onClick={handleBadgeClick}
                 disabled={isPaid || unlocking}
-                className="mt-10 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
-                style={{ fontSize: "13px", letterSpacing: "0.14em", padding: "18px 32px" }}
+                className="mt-10 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider text-[11px] transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
+                style={{ letterSpacing: "0.14em", padding: "18px 32px" }}
               >
                 {unlocking ? (
                   <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
@@ -583,27 +582,27 @@ function FaqList() {
               aria-expanded={open}
             >
               <span
-                className="font-mono text-muted-foreground shrink-0 pt-1"
-                style={{ fontSize: "11px", letterSpacing: "0.08em" }}
+                className="font-mono text-muted-foreground shrink-0 pt-1 text-[11px]"
+                style={{ letterSpacing: "0.08em" }}
               >
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="flex-1 min-w-0">
                 <span
-                  className="font-serif text-foreground block"
-                  style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.015em" }}
+                  className="font-serif text-foreground block text-xl font-bold"
+                  style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
                 >
                   {item.q}
                 </span>
                 <div className={`faq-answer-grid ${open ? "open" : ""}`}>
-                  <span className="faq-answer-inner block mt-3 text-[15px] text-muted-foreground leading-relaxed">
+                  <span className="faq-answer-inner block mt-3 text-base text-muted-foreground leading-relaxed">
                     {item.a}
                   </span>
                 </div>
               </span>
               <span
-                className="shrink-0 pt-2 text-muted-foreground font-mono select-none"
-                style={{ fontSize: "18px", lineHeight: 1 }}
+                className="shrink-0 pt-2 text-muted-foreground font-mono select-none text-base"
+                style={{ lineHeight: 1 }}
                 aria-hidden
               >
                 {open ? "×" : "+"}
