@@ -577,19 +577,19 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What does it cost?",
-    a: "$75 once. That includes unlimited studies and participant responses.",
+    a: "$75 once, including unlimited studies and responses.",
   },
   {
     q: "Can I try it before paying?",
-    a: "Yes. You can build studies and collect responses for free. Pay when you want to view the results.",
+    a: "Yes. Build studies and collect responses for free, then pay to view the results.",
   },
   {
     q: "How do I share a study?",
-    a: "Copy the study link and send it by email, Slack, a recruiting panel, or anywhere else.",
+    a: "Copy the study link and send it anywhere.",
   },
   {
     q: "Is my data private?",
-    a: "Yes. Your studies and responses are private to your account. You can delete a study at any time.",
+    a: "Yes. Your studies and responses are private to your account, and you can delete them at any time.",
   },
 ];
 
