@@ -472,23 +472,20 @@ export default function Landing() {
           </section>
 
           {/* Final CTA — calm closing */}
-          <section className="pt-12 pb-24">
-            <div className="max-w-xl mx-auto text-center">
-              <h2
-                className="font-serif text-foreground"
-                style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
-              >
+          <section className="pt-16 pb-28">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="font-serif text-foreground text-4xl sm:text-5xl font-bold tracking-tight leading-[0.95]">
                 $75 for lifetime access.
               </h2>
-              <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
+              <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
                 One payment for unlimited studies and participant responses.
               </p>
               <button
                 type="button"
                 onClick={handleBadgeClick}
                 disabled={isPaid || unlocking}
-                className="mt-8 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-default"
-                style={{ fontSize: "12px", letterSpacing: "0.14em", padding: "16px 28px" }}
+                className="mt-10 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
+                style={{ fontSize: "13px", letterSpacing: "0.14em", padding: "18px 32px" }}
               >
                 {unlocking ? (
                   <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
