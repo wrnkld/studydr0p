@@ -256,7 +256,7 @@ export default function Landing() {
               {typeLabel}
             </div>
             <div
-              className="mt-2 font-serif text-foreground"
+              className="mt-2 font-serif text-foreground transition-transform duration-200 ease-out group-hover:translate-x-1"
               style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
             >
               {r.title}
