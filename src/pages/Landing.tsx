@@ -227,7 +227,7 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-4 border-b border-border py-4 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full items-center gap-4 py-5 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {r.illo ? (
           <div
@@ -303,7 +303,7 @@ export default function Landing() {
             window.open(r.href, "_blank", "noopener");
           }
         }}
-        className="group cursor-pointer border-b border-border/60 hover:bg-muted/40 transition-colors"
+        className="group cursor-pointer hover:bg-muted/40 transition-colors"
       >
         <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
@@ -372,11 +372,11 @@ export default function Landing() {
 
       {user ? (
         loadedUserRows ? (
-        <section className="rounded-lg border border-border bg-card overflow-hidden">
+        <section className="rounded-lg bg-card overflow-hidden">
 
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-border bg-muted/30">
+              <tr className="bg-muted/30">
                 <th className="py-2.5 px-3 sm:px-5 text-left">
                   <SortHeader label="Study" k="title" />
                 </th>
@@ -408,7 +408,7 @@ export default function Landing() {
           </section>
 
           {/* Why StudyDrop — three-column editorial feature blocks */}
-          <section className="pt-16 pb-8 border-t border-border">
+          <section className="pt-16 pb-8">
             <div
               className="font-mono uppercase text-muted-foreground mb-10"
               style={{ fontSize: "11px", letterSpacing: "0.14em" }}
@@ -459,7 +459,7 @@ export default function Landing() {
           </section>
 
           {/* FAQ — plain, no illustration */}
-          <section className="pt-16 pb-20 border-t border-border">
+          <section className="pt-16 pb-20">
             <div
               className="font-mono uppercase text-muted-foreground mb-6"
               style={{ fontSize: "11px", letterSpacing: "0.14em" }}
@@ -470,7 +470,7 @@ export default function Landing() {
           </section>
 
           {/* Final CTA — calm closing */}
-          <section className="pt-12 pb-24 border-t border-border">
+          <section className="pt-12 pb-24">
             <div className="max-w-xl mx-auto text-center">
               <h2
                 className="font-serif text-foreground"
@@ -571,7 +571,7 @@ function FaqList() {
       {FAQ_ITEMS.map((item, i) => {
         const open = openIdx === i;
         return (
-          <li key={i} className="border-t border-border last:border-b">
+          <li key={i}>
             <button
               type="button"
               onClick={() => setOpenIdx(open ? null : i)}
