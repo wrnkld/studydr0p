@@ -375,9 +375,9 @@ export default function Landing() {
 
       {user ? (
         loadedUserRows ? (
-        <section className="overflow-hidden rounded-lg border border-border">
+        <section className="overflow-hidden rounded-lg border border-border bg-card">
           <table className="w-full text-left">
-            <thead className="bg-muted/40">
+            <thead className="bg-card">
               <tr className="border-b border-border">
                 <th className="py-3 px-3 sm:px-5 text-left">
                   <SortHeader label="Study" k="title" />
