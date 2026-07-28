@@ -204,7 +204,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                             backgroundColor:
                               pct === 0
                                 ? "transparent"
-                                : `hsl(var(--chart-1) / ${alpha.toFixed(3)})`,
+                                : `hsl(var(--chart-3) / ${alpha.toFixed(3)})`,
                           }}
                         >
                           {n === 0 ? "" : `${pct}%`}
