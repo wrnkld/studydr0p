@@ -410,9 +410,9 @@ export default function Landing() {
           </section>
 
           {/* Why StudyDrop — three-column editorial feature blocks */}
-          <section className="pt-16 pb-8">
+          <section className="pt-20 pb-10">
             <div
-              className="font-mono uppercase text-muted-foreground mb-10"
+              className="font-mono uppercase text-muted-foreground mb-12"
               style={{ fontSize: "11px", letterSpacing: "0.14em" }}
             >
               Why StudyDrop
