@@ -410,59 +410,58 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* Why StudyDrop — horizontal feature strip */}
+          {/* Why StudyDrop — 50/50 split with connected numbers */}
           <section className="pt-20 pb-10">
             <div className="mb-10">
               <SectionDivider label="Why StudyDrop" />
             </div>
-            <div className="rounded-lg border border-border bg-card p-6 sm:p-8 transition-colors duration-150 hover:bg-muted/40">
-              <div className="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
-                {/* Placeholder illustration */}
-                <div className="shrink-0 w-full md:w-64 lg:w-72">
-                  <div className="aspect-square w-full max-w-[220px] md:max-w-none rounded-lg border-2 border-dashed border-border bg-muted/50 flex items-center justify-center text-muted-foreground">
-                    <span className="font-mono uppercase" style={{ fontSize: "11px", letterSpacing: "0.12em" }}>
-                      Illustration
-                    </span>
-                  </div>
+            <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
+              {/* Placeholder illustration */}
+              <div className="w-full md:w-1/2">
+                <div className="aspect-square w-full max-w-[280px] rounded-lg border-2 border-dashed border-border bg-muted/50 flex items-center justify-center text-muted-foreground">
+                  <span className="font-mono uppercase" style={{ fontSize: "11px", letterSpacing: "0.12em" }}>
+                    Illustration
+                  </span>
                 </div>
-                <div className="flex-1">
-                  <ol className="space-y-6">
-                    {[
-                      {
-                        title: "Share your study",
-                        body: "Copy the link and share it anywhere.",
-                      },
-                      {
-                        title: "Easy for participants",
-                        body: "Participants open the link and answer without signing up.",
-                      },
-                      {
-                        title: "Unlimited use for $75",
-                        body: "Pay once and run as many studies as you want.",
-                      },
-                    ].map((item, i) => (
-                      <li key={i} className="flex gap-4">
-                        <span
-                          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground"
-                          style={{ fontSize: "12px" }}
+              </div>
+              <div className="w-full md:w-1/2">
+                <ol className="relative space-y-8">
+                  <div className="absolute left-3.5 top-0 bottom-0 w-px bg-border" aria-hidden />
+                  {[
+                    {
+                      title: "Share your study",
+                      body: "Copy the link and share it anywhere.",
+                    },
+                    {
+                      title: "Easy for participants",
+                      body: "Participants open the link and answer without signing up.",
+                    },
+                    {
+                      title: "Unlimited use for $75",
+                      body: "Pay once and run as many studies as you want.",
+                    },
+                  ].map((item, i) => (
+                    <li key={i} className="relative flex gap-5">
+                      <span
+                        className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground"
+                        style={{ fontSize: "12px" }}
+                      >
+                        {i + 1}
+                      </span>
+                      <div>
+                        <h3
+                          className="font-serif text-foreground"
+                          style={{ fontSize: "20px", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.015em" }}
                         >
-                          {i + 1}
-                        </span>
-                        <div>
-                          <h3
-                            className="font-serif text-foreground"
-                            style={{ fontSize: "20px", fontWeight: 700, lineHeight: 1.2, letterSpacing: "-0.015em" }}
-                          >
-                            {item.title}
-                          </h3>
-                          <p className="mt-1 text-[15px] text-muted-foreground leading-relaxed">
-                            {item.body}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
+                          {item.title}
+                        </h3>
+                        <p className="mt-1 text-[15px] text-muted-foreground leading-relaxed">
+                          {item.body}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
               </div>
             </div>
           </section>
