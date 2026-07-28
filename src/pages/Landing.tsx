@@ -207,7 +207,7 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: example rows, plain list style integrated into the page ---
+  // --- Signed-out: example cards (matches NewStudy card style) ---
   const renderRow = (r: CombinedRow & { illo?: string }) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const accent = ACCENT_CLASS[r.type];
@@ -227,40 +227,39 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-all duration-200 ease-out hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        style={{ padding: "20px 24px" }}
       >
         {r.illo ? (
           <div
-            className="flex items-center justify-center sm:w-1/2"
-            style={{ minHeight: "160px", maxHeight: "220px" }}
+            className="shrink-0 flex items-center justify-center"
+            style={{ width: "88px", height: "88px" }}
             aria-hidden
           >
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={400}
-              height={400}
-              className="h-full w-full max-w-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+              width={176}
+              height={176}
+              className="max-w-full max-h-full object-contain"
             />
           </div>
         ) : null}
 
-        <div className="flex items-center sm:w-1/2">
-          <div className="min-w-0">
-            <div
-              className="flex items-center gap-2 font-mono uppercase text-muted-foreground"
-              style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-            >
-              <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-              {typeLabel}
-            </div>
-            <div
-              className="mt-2 font-serif text-foreground transition-transform duration-200 ease-out group-hover:translate-x-1"
-              style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
-            >
-              {r.title}
-            </div>
+        <div className="min-w-0 flex-1">
+          <div
+            className="font-serif text-foreground"
+            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+          >
+            {r.title}
+          </div>
+          <div
+            className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
+            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
+          >
+            <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
+            {typeLabel}
           </div>
         </div>
       </a>
@@ -363,20 +362,20 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <header className="space-y-4 pt-2 pb-4">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[0.95] font-serif text-foreground max-w-3xl">
+      <header className="space-y-3 pt-2 pb-4">
+        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl">
           UX research, without the friction.
         </h1>
-        <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl">
+        <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
           Run and share unmoderated UX studies with a single link.
         </p>
       </header>
 
       {user ? (
         loadedUserRows ? (
-        <section className="overflow-hidden">
+        <section className="overflow-hidden rounded-lg border border-border">
           <table className="w-full text-left">
-            <thead>
+            <thead className="bg-muted/40">
               <tr className="border-b border-border">
                 <th className="py-3 px-3 sm:px-5 text-left">
                   <SortHeader label="Study" k="title" />
@@ -390,32 +389,37 @@ export default function Landing() {
                 </th>
               </tr>
             </thead>
-            <tbody>{rows.map(renderTableRow)}</tbody>
+            <tbody className="divide-y divide-border">{rows.map(renderTableRow)}</tbody>
           </table>
         </section>
         ) : null
       ) : (
         <>
           <section>
-            <div
-              className="font-mono uppercase text-muted-foreground mb-5"
-              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-            >
-              Examples
+            <div className="mb-5">
+              <span
+                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
+                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+              >
+                Examples
+              </span>
             </div>
-            <div className="flex flex-col">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
 
           {/* Why StudyDrop — three-column editorial feature blocks */}
           <section className="pt-20 pb-10">
-            <div
-              className="font-mono uppercase text-muted-foreground mb-12"
-              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-            >
-              Why StudyDrop
+            <div className="mb-10">
+              <span
+                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
+                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+              >
+                Why StudyDrop
+              </span>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
               {[
                 {
@@ -461,11 +465,13 @@ export default function Landing() {
 
           {/* FAQ — plain, no illustration */}
           <section className="pt-20 pb-24">
-            <div
-              className="font-mono uppercase text-muted-foreground mb-8"
-              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-            >
-              Questions
+            <div className="mb-8">
+              <span
+                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
+                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+              >
+                Questions
+              </span>
             </div>
             <FaqList />
           </section>
@@ -473,10 +479,10 @@ export default function Landing() {
           {/* Final CTA — calm closing */}
           <section className="pt-16 pb-28">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-serif text-foreground text-4xl sm:text-5xl font-bold tracking-tight leading-[0.95]">
+              <h2 className="font-serif text-foreground text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
                 $75 for lifetime access.
               </h2>
-              <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
+              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
                 One payment for unlimited studies and participant responses.
               </p>
               <button
