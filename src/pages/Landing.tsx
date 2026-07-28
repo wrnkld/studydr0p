@@ -231,18 +231,14 @@ export default function Landing() {
         style={{ padding: "28px 28px 24px" }}
       >
         {r.illo ? (
-          <div
-            className="w-full flex items-center justify-start mb-5"
-            style={{ height: "140px" }}
-            aria-hidden
-          >
+          <div className="mb-5" aria-hidden>
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={360}
-              height={360}
-              className="max-w-full max-h-full object-contain"
+              width={260}
+              height={260}
+              className="block h-[260px] w-[260px]"
             />
           </div>
         ) : null}
@@ -443,14 +439,14 @@ export default function Landing() {
                 },
               ].map((f, i) => (
                 <div key={i} className="flex flex-col">
-                  <div className="mb-6 w-full flex items-center justify-start" style={{ height: "160px" }}>
+                  <div className="mb-6">
                     <img
                       src={f.illo}
                       alt=""
                       loading="lazy"
-                      width={360}
-                      height={360}
-                      className="h-full w-auto object-contain"
+                      width={220}
+                      height={220}
+                      className="block h-[220px] w-[220px]"
                     />
                   </div>
                   <h3
