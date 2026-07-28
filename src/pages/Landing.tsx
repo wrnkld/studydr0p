@@ -570,7 +570,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
 function FaqList() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   return (
-    <ol className="flex flex-col">
+    <ol className="flex flex-col gap-3">
       {FAQ_ITEMS.map((item, i) => {
         const open = openIdx === i;
         return (
@@ -578,7 +578,7 @@ function FaqList() {
             <button
               type="button"
               onClick={() => setOpenIdx(open ? null : i)}
-              className="group flex w-full items-start gap-5 rounded-lg border border-transparent px-4 py-6 text-left transition-colors duration-150 hover:border-foreground"
+              className="group flex w-full items-start gap-5 rounded-lg border border-border bg-card px-6 py-6 text-left transition-colors duration-150 hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               aria-expanded={open}
             >
               <span
@@ -599,7 +599,6 @@ function FaqList() {
                     {item.a}
                   </span>
                 </div>
-
               </span>
               <span
                 className="shrink-0 pt-2 text-muted-foreground font-mono select-none"
@@ -615,4 +614,5 @@ function FaqList() {
     </ol>
   );
 }
+
 
