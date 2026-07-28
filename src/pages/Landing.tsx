@@ -16,7 +16,8 @@ const illoFridge = illoFridgeAsset.url;
 const illoGasStation = illoGasStationAsset.url;
 const illoGrocery = illoGroceryAsset.url;
 const illoOrderAgain = illoOrderAgainAsset.url;
-import illoWhyShare from "@/assets/illo-why-share.png";
+import illoWhyShareAsset from "@/assets/illo-why-share.png.asset.json";
+const illoWhyShare = illoWhyShareAsset.url;
 
 
 
