@@ -221,8 +221,8 @@ export default function Landing() {
       >
         <div className="mb-4">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
-            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px]"
+            style={{ letterSpacing: "0.12em" }}
           >
             {STUDY_TYPE_META[r.type]?.label ?? r.type}
           </span>
@@ -242,14 +242,14 @@ export default function Landing() {
         ) : null}
 
         <div className="min-w-0">
-          <div
-            className="font-serif text-foreground"
-            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+          <h3
+            className="font-serif text-2xl font-bold text-foreground"
+            style={{ lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
-          </div>
+          </h3>
           {r.description ? (
-            <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
               {r.description}
             </p>
           ) : null}
@@ -306,14 +306,14 @@ export default function Landing() {
             </span>
           </div>
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap" style={{ fontSize: "12px", letterSpacing: "0.02em" }}>
+        <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap text-[11px]" style={{ letterSpacing: "0.02em" }}>
           {typeLabel}
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
             <span
-              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground"
-              style={{ fontSize: "9px", letterSpacing: "0.12em" }}
+              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-[11px]"
+              style={{ letterSpacing: "0.12em" }}
             >
               Example
             </span>
@@ -321,7 +321,7 @@ export default function Landing() {
             <span className="inline-block" style={{ width: "54px" }} aria-hidden />
           )}
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap" style={{ fontSize: "12px" }}>
+        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap text-[11px]">
           {r.responseCount}
         </td>
       </tr>
@@ -343,8 +343,8 @@ export default function Landing() {
       <button
         type="button"
         onClick={() => toggleSort(k)}
-        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors ${align === "right" ? "flex-row-reverse" : ""}`}
-        style={{ fontSize: "10px", letterSpacing: "0.12em", fontWeight: 500 }}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-[11px] ${align === "right" ? "flex-row-reverse" : ""}`}
+        style={{ letterSpacing: "0.12em", fontWeight: 500 }}
       >
         {label}
         <Icon className="w-3 h-3" strokeWidth={1.5} style={{ opacity: active ? 1 : 0.4 }} />
@@ -357,8 +357,8 @@ export default function Landing() {
     <div className="flex items-center gap-4 w-full">
       <div className="h-px flex-1 bg-border" />
       <span
-        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap"
-        style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-[11px]"
+        style={{ letterSpacing: "0.14em" }}
       >
         {label}
       </span>
