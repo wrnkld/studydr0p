@@ -458,34 +458,23 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* FAQ — editorial two-column */}
+          {/* FAQ — plain, no illustration */}
           <section className="pt-16 pb-20 border-t border-border">
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] gap-12 md:gap-16">
-              <div>
-                <div
-                  className="font-mono uppercase text-muted-foreground mb-6"
-                  style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-                >
-                  Questions
-                </div>
-                <h2
-                  className="font-serif text-foreground"
-                  style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
-                >
-                  Common
-                  <br />
-                  questions.
-                </h2>
-
-                <img
-                  src={illoFaq}
-                  alt=""
-                  loading="lazy"
-                  width={280}
-                  height={280}
-                  className="mt-10 w-56 h-auto"
-                />
-              </div>
+            <div
+              className="font-mono uppercase text-muted-foreground mb-6"
+              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
+            >
+              Questions
+            </div>
+            <h2
+              className="font-serif text-foreground"
+              style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
+            >
+              Common
+              <br />
+              questions.
+            </h2>
+            <div className="mt-10">
               <FaqList />
             </div>
           </section>
