@@ -87,17 +87,6 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
   },
 ];
 
-// Small accent dot color per study type — one dot of color per row, nothing more.
-const ACCENT_CLASS: Record<StudyType, string> = {
-  card_sort: "bg-chart-4",   // yellow
-  survey: "bg-chart-3",      // green
-  tree_test: "bg-chart-6",   // pink
-  first_click: "bg-chart-5", // aqua
-};
-
-
-
-
 export default function Landing() {
   const { user } = useAuth();
   const { isPaid } = usePaid();
