@@ -96,7 +96,7 @@ export function ChoiceChart({
             </div>
             <div className="h-3 w-full overflow-hidden rounded-sm bg-[hsl(var(--chart-grid))]">
               <div
-                className="h-full rounded-sm bg-primary transition-[width]"
+                className="h-full rounded-sm bg-[hsl(var(--chart-1))] transition-[width]"
                 style={{ width: `${widthPct}%` }}
               />
             </div>
