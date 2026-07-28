@@ -466,17 +466,7 @@ export default function Landing() {
             >
               Questions
             </div>
-            <h2
-              className="font-serif text-foreground"
-              style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
-            >
-              Fair
-              <br />
-              questions.
-            </h2>
-            <div className="mt-10">
-              <FaqList />
-            </div>
+            <FaqList />
           </section>
 
           {/* Final CTA — calm closing */}
