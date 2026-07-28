@@ -249,7 +249,7 @@ export default function Landing() {
             {r.title}
           </h3>
           {r.description ? (
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-2 text-base text-muted-foreground leading-relaxed">
               {r.description}
             </p>
           ) : null}
