@@ -15,7 +15,6 @@ import illoOrderAgain from "@/assets/illo-orderagain.png";
 import illoWhyShare from "@/assets/illo-why-share.png";
 import illoWhyFast from "@/assets/illo-why-fast.png";
 import illoWhySimple from "@/assets/illo-why-simple.png";
-import illoFaq from "@/assets/illo-faq.png";
 
 
 import {
@@ -208,7 +207,7 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: 4 stacked rows, calm neutral cards with B&W illustration ---
+  // --- Signed-out: example rows, plain list style integrated into the page ---
   const renderRow = (r: CombinedRow & { illo?: string }) => {
     const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
     const accent = ACCENT_CLASS[r.type];
@@ -221,23 +220,28 @@ export default function Landing() {
           e.preventDefault();
           navigate(r.href);
         }}
+        onAuxClick={(e) => {
+          if (e.button === 1) {
+            e.preventDefault();
+            window.open(r.href, "_blank", "noopener");
+          }
+        }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/20"
-        style={{ padding: "20px 24px" }}
+        className="group relative flex w-full items-center gap-4 border-b border-border py-4 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {r.illo ? (
           <div
             className="shrink-0 flex items-center justify-center"
-            style={{ width: "88px", height: "88px" }}
+            style={{ width: "56px", height: "56px" }}
             aria-hidden
           >
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={176}
-              height={176}
-              className="max-w-full max-h-full object-contain"
+              width={112}
+              height={112}
+              className="max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
             />
           </div>
         ) : null}
@@ -251,8 +255,8 @@ export default function Landing() {
             {typeLabel}
           </div>
           <div
-            className="mt-2 font-serif text-foreground"
-            style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+            className="mt-1 font-serif text-foreground"
+            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
           >
             {r.title}
           </div>
@@ -398,7 +402,7 @@ export default function Landing() {
             >
               Examples
             </div>
-            <div className="flex flex-col" style={{ gap: "16px" }}>
+            <div className="flex flex-col">
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
@@ -454,34 +458,23 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* FAQ — editorial two-column */}
+          {/* FAQ — plain, no illustration */}
           <section className="pt-16 pb-20 border-t border-border">
-            <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] gap-12 md:gap-16">
-              <div>
-                <div
-                  className="font-mono uppercase text-muted-foreground mb-6"
-                  style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-                >
-                  Questions
-                </div>
-                <h2
-                  className="font-serif text-foreground"
-                  style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
-                >
-                  Common
-                  <br />
-                  questions.
-                </h2>
-
-                <img
-                  src={illoFaq}
-                  alt=""
-                  loading="lazy"
-                  width={280}
-                  height={280}
-                  className="mt-10 w-56 h-auto"
-                />
-              </div>
+            <div
+              className="font-mono uppercase text-muted-foreground mb-6"
+              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
+            >
+              Questions
+            </div>
+            <h2
+              className="font-serif text-foreground"
+              style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
+            >
+              Common
+              <br />
+              questions.
+            </h2>
+            <div className="mt-10">
               <FaqList />
             </div>
           </section>
