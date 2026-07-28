@@ -6,10 +6,14 @@ import { StudyType, STUDY_TYPE_META } from "@/lib/types";
 import { toast } from "sonner";
 import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
-import illoCardSort from "@/assets/illo-cardsort.svg";
-import illoSurvey from "@/assets/illo-survey.svg";
-import illoTreeTest from "@/assets/illo-treetest.svg";
-import illoFirstClick from "@/assets/illo-firstclick.svg";
+import illoCardSortAsset from "@/assets/illo-cardsort.png.asset.json";
+import illoSurveyAsset from "@/assets/illo-survey.png.asset.json";
+import illoTreeTestAsset from "@/assets/illo-treetest.png.asset.json";
+import illoFirstClickAsset from "@/assets/illo-firstclick.png.asset.json";
+const illoCardSort = illoCardSortAsset.url;
+const illoSurvey = illoSurveyAsset.url;
+const illoTreeTest = illoTreeTestAsset.url;
+const illoFirstClick = illoFirstClickAsset.url;
 
 type TypeMeta = {
   id: StudyType;
