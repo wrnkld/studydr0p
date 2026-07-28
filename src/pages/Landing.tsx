@@ -227,7 +227,7 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:bg-muted hover:shadow-md hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:border-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         style={{ padding: "20px 24px" }}
       >
         {r.illo ? (
