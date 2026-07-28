@@ -8,10 +8,14 @@ import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
 import { toast } from "sonner";
-import illoFridge from "@/assets/illo-fridge.svg";
-import illoGasStation from "@/assets/illo-gasstation.svg";
-import illoGrocery from "@/assets/illo-grocery.svg";
-import illoOrderAgain from "@/assets/illo-orderagain.svg";
+import illoFridgeAsset from "@/assets/illo-fridge.png.asset.json";
+import illoGasStationAsset from "@/assets/illo-gasstation.png.asset.json";
+import illoGroceryAsset from "@/assets/illo-grocery.png.asset.json";
+import illoOrderAgainAsset from "@/assets/illo-orderagain.png.asset.json";
+const illoFridge = illoFridgeAsset.url;
+const illoGasStation = illoGasStationAsset.url;
+const illoGrocery = illoGroceryAsset.url;
+const illoOrderAgain = illoOrderAgainAsset.url;
 import illoWhyShare from "@/assets/illo-why-share.png";
 
 
