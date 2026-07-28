@@ -270,9 +270,9 @@ export default function Landing() {
           >
             {r.title}
           </div>
-          {(r as any).description ? (
+          {r.description ? (
             <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
-              {(r as any).description}
+              {r.description}
             </p>
           ) : null}
         </div>
