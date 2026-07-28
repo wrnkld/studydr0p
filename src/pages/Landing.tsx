@@ -13,9 +13,7 @@ import illoFridge from "@/assets/illo-fridge.svg";
 import illoGasStation from "@/assets/illo-gasstation.svg";
 import illoGrocery from "@/assets/illo-grocery.svg";
 import illoOrderAgain from "@/assets/illo-orderagain.svg";
-import illoWhyShare from "@/assets/illo-why-share.png";
-import illoWhyFast from "@/assets/illo-why-fast.png";
-import illoWhySimple from "@/assets/illo-why-simple.png";
+
 
 
 import {
