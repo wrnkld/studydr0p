@@ -170,18 +170,15 @@ export default function NewStudy() {
 
               <div className="min-w-0 flex-1">
                 <div
-                  className="font-serif text-foreground"
+                  className="flex items-center gap-3 font-serif text-foreground"
                   style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
                 >
+                  <span className={`inline-block h-2.5 w-2.5 rounded-full ${accent}`} aria-hidden />
                   {t.label}
                 </div>
-                <div
-                  className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
-                  style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-                >
-                  <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
+                <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
                   {t.description}
-                </div>
+                </p>
               </div>
 
               {pendingType === t.id && creating && (
