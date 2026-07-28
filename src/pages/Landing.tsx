@@ -406,8 +406,11 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* How it works — three plain value props */}
+          {/* Why StudyDrop — three value props */}
           <section className="pt-20 pb-10">
+            <div className="mb-10">
+              <SectionDivider label="Why StudyDrop" />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
                 {
@@ -441,54 +444,6 @@ export default function Landing() {
             </div>
           </section>
 
-          {/* Why StudyDrop — illustrations on their own line, larger */}
-          <section className="pt-10 pb-10">
-            <div className="mb-12">
-              <SectionDivider label="Why StudyDrop" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-12 md:gap-10">
-              {[
-                {
-                  illo: illoWhyShare,
-                  title: "No friction for participants",
-                  body: "Share one link. Participants open it and answer — no accounts, no downloads, and no plugins required.",
-                },
-                {
-                  illo: illoWhyFast,
-                  title: "Results in real time",
-                  body: "Responses appear in your dashboard as they come in, with charts and tables that make the patterns clear.",
-                },
-                {
-                  illo: illoWhySimple,
-                  title: "One price, unlimited everything",
-                  body: "$75 once. Run as many studies as you want, collect as many responses as you need. No subscriptions, no tiers, no catch.",
-                },
-              ].map((f, i) => (
-                <div key={i} className="flex flex-col">
-                  <div className="mb-6">
-                    <img
-                      src={f.illo}
-                      alt=""
-                      loading="lazy"
-                      width={160}
-                      height={160}
-                      className="block h-[160px] w-[160px]"
-                    />
-                  </div>
-                  <h3
-                    className="font-serif text-foreground whitespace-pre-line"
-                    style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
-                  >
-                    {f.title}
-                  </h3>
-                  <p className="mt-3 text-[15px] text-muted-foreground leading-relaxed">
-                    {f.body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
 
           {/* FAQ — wrapped in bordered cards like examples */}
           <section className="pt-20 pb-24">
