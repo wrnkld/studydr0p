@@ -590,7 +590,7 @@ function FaqList() {
               <span className="flex-1 min-w-0">
                 <span
                   className="font-serif text-foreground block text-2xl font-bold"
-                  style={{ lineHeight: 1.2, letterSpacing: "-0.015em"012" }}
+                  style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
                 >
                   {item.q}
                 </span>
