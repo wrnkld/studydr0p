@@ -7,6 +7,7 @@ import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
+import { TypeBadge } from "@/components/TypeBadge";
 import { toast } from "sonner";
 import illoFridge from "@/assets/illo-fridge.svg";
 import illoGasStation from "@/assets/illo-gasstation.svg";
@@ -39,7 +40,7 @@ interface CombinedRow {
   createdAt?: string;
 }
 
-const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
+const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
   {
     id: "fridge",
     href: "/examples/fridge",
@@ -49,6 +50,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoFridge,
+    description: "Put each item in the fridge.",
   },
   {
     id: "gasstation",
@@ -59,6 +61,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoGasStation,
+    description: "Rate the snacks you'd actually buy.",
   },
   {
     id: "grocery",
@@ -69,6 +72,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoGrocery,
+    description: "Sort each product into its department.",
   },
   {
     id: "orderitagain",
@@ -79,19 +83,9 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string })[] = [
     responseCount: 20,
     isExample: true,
     illo: illoOrderAgain,
+    description: "Click the first place you'd look to reorder.",
   },
 ];
-
-// Small accent dot color per study type — one dot of color per row, nothing more.
-const ACCENT_CLASS: Record<StudyType, string> = {
-  card_sort: "bg-chart-4",   // yellow
-  survey: "bg-chart-3",      // green
-  tree_test: "bg-chart-6",   // pink
-  first_click: "bg-chart-5", // aqua
-};
-
-
-
 
 export default function Landing() {
   const { user } = useAuth();
@@ -208,9 +202,7 @@ export default function Landing() {
   };
 
   // --- Signed-out: example cards (matches NewStudy card style) ---
-  const renderRow = (r: CombinedRow & { illo?: string }) => {
-    const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const accent = ACCENT_CLASS[r.type];
+  const renderRow = (r: CombinedRow & { illo?: string; description?: string }) => {
     return (
       <a
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -226,10 +218,14 @@ export default function Landing() {
             window.open(r.href, "_blank", "noopener");
           }
         }}
-        aria-label={`${typeLabel}: ${r.title}`}
+        aria-label={`${STUDY_TYPE_META[r.type]?.label ?? r.type}: ${r.title}`}
         className="group relative flex w-full flex-col rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         style={{ padding: "28px 28px 24px" }}
       >
+        <div className="mb-4">
+          <TypeBadge type={r.type} />
+        </div>
+
         {r.illo ? (
           <div className="mb-5" aria-hidden>
             <img
@@ -250,13 +246,11 @@ export default function Landing() {
           >
             {r.title}
           </div>
-          <div
-            className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
-            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-          >
-            <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-            {typeLabel}
-          </div>
+          {r.description ? (
+            <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
+              {r.description}
+            </p>
+          ) : null}
         </div>
       </a>
     );
