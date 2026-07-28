@@ -173,7 +173,7 @@ export default function NewStudy() {
                 >
                   {label}
                 </div>
-                <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
+                <p className="mt-2 text-base text-muted-foreground leading-relaxed">
                   {t.description}
                 </p>
               </div>
