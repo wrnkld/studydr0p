@@ -470,7 +470,7 @@ export default function Landing() {
               className="font-serif text-foreground"
               style={{ fontSize: "64px", fontWeight: 700, lineHeight: 0.95, letterSpacing: "-0.03em" }}
             >
-              Common
+              Fair
               <br />
               questions.
             </h2>
