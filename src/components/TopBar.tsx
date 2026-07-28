@@ -1,17 +1,15 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { LogOut, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import AuthDialog from "@/components/AuthDialog";
 
 /**
  * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
- * global account actions on the right (new study + sign out). Per-study
- * actions (copy / export / delete) live in the local StudyPageHeader at
- * the top of the study detail page, not here.
+ * global account actions on the right. Sign-out lives in the footer to
+ * keep it clear of the primary CTA.
  */
 export default function TopBar() {
   const { session } = useAuth();
@@ -49,36 +47,16 @@ function Brand() {
 
 
 function SignedInActions() {
-  const { signOut } = useAuth();
   const navigate = useNavigate();
   return (
-    <>
-      <Button
-        size="sm"
-        className="h-8 gap-1.5 px-3 text-sm"
-        onClick={() => navigate("/studies/new")}
-      >
-        <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
-        New study
-      </Button>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            aria-label="Sign out"
-            className="h-8 w-8 text-muted-foreground hover:text-foreground"
-            onClick={async () => {
-              await signOut();
-              navigate("/");
-            }}
-          >
-            <LogOut className="h-4 w-4" strokeWidth={1.5} />
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>Sign out</TooltipContent>
-      </Tooltip>
-    </>
+    <Button
+      size="sm"
+      className="h-8 gap-1.5 px-3 text-sm"
+      onClick={() => navigate("/studies/new")}
+    >
+      <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
+      New study
+    </Button>
   );
 }
 
