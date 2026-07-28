@@ -236,9 +236,9 @@ export default function Landing() {
               src={r.illo}
               alt=""
               loading="lazy"
-              width={260}
-              height={260}
-              className="block h-[260px] w-[260px]"
+              width={180}
+              height={180}
+              className="block h-[180px] w-[180px]"
             />
           </div>
         ) : null}
@@ -444,9 +444,9 @@ export default function Landing() {
                       src={f.illo}
                       alt=""
                       loading="lazy"
-                      width={220}
-                      height={220}
-                      className="block h-[220px] w-[220px]"
+                      width={160}
+                      height={160}
+                      className="block h-[160px] w-[160px]"
                     />
                   </div>
                   <h3
