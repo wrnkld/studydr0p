@@ -402,7 +402,7 @@ export default function Landing() {
             >
               Examples
             </div>
-            <div className="flex flex-col" style={{ gap: "16px" }}>
+            <div className="flex flex-col">
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
