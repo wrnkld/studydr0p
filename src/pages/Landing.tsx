@@ -374,19 +374,18 @@ export default function Landing() {
 
       {user ? (
         loadedUserRows ? (
-        <section className="rounded-lg bg-card overflow-hidden">
-
+        <section className="overflow-hidden">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-muted/30">
-                <th className="py-2.5 px-3 sm:px-5 text-left">
+              <tr className="border-b border-border">
+                <th className="py-3 px-3 sm:px-5 text-left">
                   <SortHeader label="Study" k="title" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 text-left">
+                <th className="hidden sm:table-cell py-3 px-5 text-left">
                   <SortHeader label="Type" k="type" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5" />
-                <th className="hidden sm:table-cell py-2.5 px-5 text-right">
+                <th className="hidden sm:table-cell py-3 px-5" />
+                <th className="hidden sm:table-cell py-3 px-5 text-right">
                   <SortHeader label="Responses" k="responses" align="right" />
                 </th>
               </tr>
