@@ -439,14 +439,14 @@ export default function Landing() {
                 },
               ].map((f, i) => (
                 <div key={i} className="flex flex-col">
-                  <div className="mb-6 w-full flex items-center justify-start" style={{ height: "160px" }}>
+                  <div className="mb-6">
                     <img
                       src={f.illo}
                       alt=""
                       loading="lazy"
-                      width={360}
-                      height={360}
-                      className="h-full w-auto object-contain"
+                      width={220}
+                      height={220}
+                      className="block h-[220px] w-[220px]"
                     />
                   </div>
                   <h3
