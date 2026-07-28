@@ -227,7 +227,7 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full items-center gap-6 rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:bg-muted hover:shadow-md hover:border-foreground/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         style={{ padding: "20px 24px" }}
       >
         {r.illo ? (
@@ -304,11 +304,11 @@ export default function Landing() {
             window.open(r.href, "_blank", "noopener");
           }
         }}
-        className="group cursor-pointer hover:bg-muted/40 transition-colors"
+        className="group cursor-pointer transition-colors hover:bg-muted"
       >
         <td className="py-3 px-3 sm:px-5">
           <div className="flex items-center gap-3 min-w-0">
-            <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground">
+              <span className="font-serif font-medium text-[16px] tracking-tight truncate text-foreground transition-transform duration-200 group-hover:translate-x-1">
               {r.title}
             </span>
           </div>
@@ -579,7 +579,7 @@ function FaqList() {
             <button
               type="button"
               onClick={() => setOpenIdx(open ? null : i)}
-              className="flex w-full items-start gap-5 py-6 text-left transition-colors hover:bg-muted/30"
+              className="group flex w-full items-start gap-5 rounded-lg border border-transparent px-4 py-6 text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-border hover:bg-card hover:shadow-md"
               aria-expanded={open}
             >
               <span
