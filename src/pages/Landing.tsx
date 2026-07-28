@@ -249,7 +249,7 @@ export default function Landing() {
             {r.title}
           </h3>
           {r.description ? (
-            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+            <p className="mt-2 text-base text-muted-foreground leading-relaxed">
               {r.description}
             </p>
           ) : null}
@@ -449,7 +449,7 @@ export default function Landing() {
                       </span>
                       <div>
                         <h3
-                          className="font-serif text-foreground text-xl font-bold"
+                          className="font-serif text-foreground text-2xl font-bold"
                           style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
                         >
                           {item.title}
@@ -589,7 +589,7 @@ function FaqList() {
               </span>
               <span className="flex-1 min-w-0">
                 <span
-                  className="font-serif text-foreground block text-xl font-bold"
+                  className="font-serif text-foreground block text-2xl font-bold"
                   style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
                 >
                   {item.q}
