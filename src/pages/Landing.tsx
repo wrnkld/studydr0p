@@ -227,38 +227,40 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full items-center gap-4 py-5 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {r.illo ? (
           <div
-            className="shrink-0 flex items-center justify-center"
-            style={{ width: "56px", height: "56px" }}
+            className="flex items-center justify-center sm:w-1/2"
+            style={{ minHeight: "160px", maxHeight: "220px" }}
             aria-hidden
           >
             <img
               src={r.illo}
               alt=""
               loading="lazy"
-              width={112}
-              height={112}
-              className="max-w-full max-h-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
+              width={400}
+              height={400}
+              className="h-full w-full max-w-full object-contain opacity-90 group-hover:opacity-100 transition-opacity"
             />
           </div>
         ) : null}
 
-        <div className="min-w-0 flex-1">
-          <div
-            className="flex items-center gap-2 font-mono uppercase text-muted-foreground"
-            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-          >
-            <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-            {typeLabel}
-          </div>
-          <div
-            className="mt-1 font-serif text-foreground"
-            style={{ fontSize: "22px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
-          >
-            {r.title}
+        <div className="flex items-center sm:w-1/2">
+          <div className="min-w-0">
+            <div
+              className="flex items-center gap-2 font-mono uppercase text-muted-foreground"
+              style={{ fontSize: "10px", letterSpacing: "0.12em" }}
+            >
+              <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
+              {typeLabel}
+            </div>
+            <div
+              className="mt-2 font-serif text-foreground"
+              style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
+            >
+              {r.title}
+            </div>
           </div>
         </div>
       </a>
