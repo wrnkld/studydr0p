@@ -307,8 +307,13 @@ export default function Landing() {
             </span>
           </div>
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 font-mono text-muted-foreground whitespace-nowrap text-[11px]" style={{ letterSpacing: "0.02em" }}>
-          {typeLabel}
+        <td className="hidden sm:table-cell py-3 px-5">
+          <span
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px]"
+            style={{ letterSpacing: "0.12em" }}
+          >
+            {typeLabel}
+          </span>
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
