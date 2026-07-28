@@ -449,7 +449,7 @@ export default function Landing() {
                       </span>
                       <div>
                         <h3
-                          className="font-serif text-foreground text-xl font-bold"
+                          className="font-serif text-foreground text-2xl font-bold"
                           style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
                         >
                           {item.title}
@@ -589,8 +589,8 @@ function FaqList() {
               </span>
               <span className="flex-1 min-w-0">
                 <span
-                  className="font-serif text-foreground block text-xl font-bold"
-                  style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
+                  className="font-serif text-foreground block text-2xl font-bold"
+                  style={{ lineHeight: 1.2, letterSpacing: "-0.015em"012" }}
                 >
                   {item.q}
                 </span>
