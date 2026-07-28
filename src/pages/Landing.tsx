@@ -465,11 +465,13 @@ export default function Landing() {
 
           {/* FAQ — plain, no illustration */}
           <section className="pt-20 pb-24">
-            <div
-              className="font-mono uppercase text-muted-foreground mb-8"
-              style={{ fontSize: "11px", letterSpacing: "0.14em" }}
-            >
-              Questions
+            <div className="mb-8">
+              <span
+                className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground"
+                style={{ fontSize: "10px", letterSpacing: "0.14em" }}
+              >
+                Questions
+              </span>
             </div>
             <FaqList />
           </section>
