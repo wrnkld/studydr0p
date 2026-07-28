@@ -211,10 +211,22 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
+  const TypeBadge = ({ type }: { type: StudyType }) => {
+    const label = STUDY_TYPE_META[type]?.label ?? type;
+    const accent = ACCENT_CLASS[type];
+    return (
+      <span
+        className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-2.5 py-1 font-mono uppercase text-foreground"
+        style={{ fontSize: "11px", letterSpacing: "0.08em" }}
+      >
+        <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
+        {label}
+      </span>
+    );
+  };
+
   // --- Signed-out: example cards (matches NewStudy card style) ---
-  const renderRow = (r: CombinedRow & { illo?: string }) => {
-    const typeLabel = STUDY_TYPE_META[r.type]?.label ?? r.type;
-    const accent = ACCENT_CLASS[r.type];
+  const renderRow = (r: CombinedRow & { illo?: string; description?: string }) => {
     return (
       <a
         key={`${r.isExample ? "ex" : "us"}-${r.id}`}
@@ -230,10 +242,14 @@ export default function Landing() {
             window.open(r.href, "_blank", "noopener");
           }
         }}
-        aria-label={`${typeLabel}: ${r.title}`}
+        aria-label={`${STUDY_TYPE_META[r.type]?.label ?? r.type}: ${r.title}`}
         className="group relative flex w-full flex-col rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         style={{ padding: "28px 28px 24px" }}
       >
+        <div className="mb-4">
+          <TypeBadge type={r.type} />
+        </div>
+
         {r.illo ? (
           <div className="mb-5" aria-hidden>
             <img
@@ -254,13 +270,11 @@ export default function Landing() {
           >
             {r.title}
           </div>
-          <div
-            className="mt-2 flex items-center gap-2 font-mono uppercase text-muted-foreground"
-            style={{ fontSize: "10px", letterSpacing: "0.12em" }}
-          >
-            <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-            {typeLabel}
-          </div>
+          {(r as any).description ? (
+            <p className="mt-2 text-[14px] text-muted-foreground leading-relaxed">
+              {(r as any).description}
+            </p>
+          ) : null}
         </div>
       </a>
     );
