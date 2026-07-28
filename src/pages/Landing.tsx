@@ -201,20 +201,6 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  const TypeBadge = ({ type }: { type: StudyType }) => {
-    const label = STUDY_TYPE_META[type]?.label ?? type;
-    const accent = ACCENT_CLASS[type];
-    return (
-      <span
-        className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-2.5 py-1 font-mono uppercase text-foreground"
-        style={{ fontSize: "11px", letterSpacing: "0.08em" }}
-      >
-        <span className={`inline-block h-2 w-2 rounded-full ${accent}`} aria-hidden />
-        {label}
-      </span>
-    );
-  };
-
   // --- Signed-out: example cards (matches NewStudy card style) ---
   const renderRow = (r: CombinedRow & { illo?: string; description?: string }) => {
     return (
