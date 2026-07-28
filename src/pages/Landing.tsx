@@ -232,7 +232,7 @@ export default function Landing() {
       >
         {r.illo ? (
           <div
-            className="w-full flex items-center justify-center mb-6"
+            className="w-full flex items-center justify-start mb-6"
             style={{ height: "200px" }}
             aria-hidden
           >
