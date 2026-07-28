@@ -363,11 +363,11 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">
+      <header className="space-y-4 pt-2 pb-4">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[0.95] font-serif text-foreground max-w-3xl">
           UX research, without the friction.
         </h1>
-        <p className="text-[15px] text-muted-foreground leading-relaxed">
+        <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl">
           Run and share unmoderated UX studies with a single link.
         </p>
       </header>
