@@ -227,7 +227,7 @@ export default function Landing() {
           }
         }}
         aria-label={`${typeLabel}: ${r.title}`}
-        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-colors hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="group relative flex w-full flex-col sm:flex-row items-stretch gap-5 sm:gap-8 py-6 sm:py-8 text-left no-underline transition-all duration-200 ease-out hover:bg-muted/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         {r.illo ? (
           <div
@@ -256,7 +256,7 @@ export default function Landing() {
               {typeLabel}
             </div>
             <div
-              className="mt-2 font-serif text-foreground"
+              className="mt-2 font-serif text-foreground transition-transform duration-200 ease-out group-hover:translate-x-1"
               style={{ fontSize: "26px", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.02em" }}
             >
               {r.title}
@@ -363,30 +363,29 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <header className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">
+      <header className="space-y-4 pt-2 pb-4">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[0.95] font-serif text-foreground max-w-3xl">
           UX research, without the friction.
         </h1>
-        <p className="text-[15px] text-muted-foreground leading-relaxed">
+        <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-xl">
           Run and share unmoderated UX studies with a single link.
         </p>
       </header>
 
       {user ? (
         loadedUserRows ? (
-        <section className="rounded-lg bg-card overflow-hidden">
-
+        <section className="overflow-hidden">
           <table className="w-full text-left">
             <thead>
-              <tr className="bg-muted/30">
-                <th className="py-2.5 px-3 sm:px-5 text-left">
+              <tr className="border-b border-border">
+                <th className="py-3 px-3 sm:px-5 text-left">
                   <SortHeader label="Study" k="title" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5 text-left">
+                <th className="hidden sm:table-cell py-3 px-5 text-left">
                   <SortHeader label="Type" k="type" />
                 </th>
-                <th className="hidden sm:table-cell py-2.5 px-5" />
-                <th className="hidden sm:table-cell py-2.5 px-5 text-right">
+                <th className="hidden sm:table-cell py-3 px-5" />
+                <th className="hidden sm:table-cell py-3 px-5 text-right">
                   <SortHeader label="Responses" k="responses" align="right" />
                 </th>
               </tr>
@@ -410,14 +409,14 @@ export default function Landing() {
           </section>
 
           {/* Why StudyDrop — three-column editorial feature blocks */}
-          <section className="pt-16 pb-8">
+          <section className="pt-20 pb-10">
             <div
-              className="font-mono uppercase text-muted-foreground mb-10"
+              className="font-mono uppercase text-muted-foreground mb-12"
               style={{ fontSize: "11px", letterSpacing: "0.14em" }}
             >
               Why StudyDrop
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 md:gap-8">
               {[
                 {
                   illo: illoWhyShare,
@@ -461,9 +460,9 @@ export default function Landing() {
           </section>
 
           {/* FAQ — plain, no illustration */}
-          <section className="pt-16 pb-20">
+          <section className="pt-20 pb-24">
             <div
-              className="font-mono uppercase text-muted-foreground mb-6"
+              className="font-mono uppercase text-muted-foreground mb-8"
               style={{ fontSize: "11px", letterSpacing: "0.14em" }}
             >
               Questions
@@ -472,23 +471,20 @@ export default function Landing() {
           </section>
 
           {/* Final CTA — calm closing */}
-          <section className="pt-12 pb-24">
-            <div className="max-w-xl mx-auto text-center">
-              <h2
-                className="font-serif text-foreground"
-                style={{ fontSize: "44px", fontWeight: 700, lineHeight: 1, letterSpacing: "-0.025em" }}
-              >
+          <section className="pt-16 pb-28">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="font-serif text-foreground text-4xl sm:text-5xl font-bold tracking-tight leading-[0.95]">
                 $75 for lifetime access.
               </h2>
-              <p className="mt-4 text-[15px] text-muted-foreground leading-relaxed">
+              <p className="mt-5 text-base sm:text-lg text-muted-foreground leading-relaxed">
                 One payment for unlimited studies and participant responses.
               </p>
               <button
                 type="button"
                 onClick={handleBadgeClick}
                 disabled={isPaid || unlocking}
-                className="mt-8 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-opacity hover:opacity-90 disabled:opacity-60 disabled:cursor-default"
-                style={{ fontSize: "12px", letterSpacing: "0.14em", padding: "16px 28px" }}
+                className="mt-10 inline-flex items-center justify-center rounded-full bg-foreground text-background font-mono uppercase tracking-wider transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
+                style={{ fontSize: "13px", letterSpacing: "0.14em", padding: "18px 32px" }}
               >
                 {unlocking ? (
                   <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
