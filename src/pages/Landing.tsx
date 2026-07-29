@@ -239,7 +239,7 @@ export default function Landing() {
             <img
               src={r.illo}
               alt=""
-              loading="lazy"
+              loading="eager" decoding="async" fetchPriority="high"
               width={180}
               height={180}
               className="block h-[180px] w-[180px]"
@@ -431,7 +431,7 @@ export default function Landing() {
                 <img
                   src={illoWhyShare}
                   alt=""
-                  loading="lazy"
+                  loading="eager" decoding="async" fetchPriority="high"
                   width={280}
                   height={280}
                   className="block w-full max-w-[280px]"

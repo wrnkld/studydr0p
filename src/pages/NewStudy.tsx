@@ -148,7 +148,7 @@ export default function NewStudy() {
                 <img
                   src={t.illo}
                   alt=""
-                  loading="lazy"
+                  loading="eager" decoding="async" fetchPriority="high"
                   width={180}
                   height={180}
                   className="block h-[180px] w-[180px]"
