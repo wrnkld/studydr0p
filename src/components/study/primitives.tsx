@@ -357,7 +357,7 @@ export function BackButton({
       to={to}
       aria-label={label}
       className={cn(
-        "btn-press inline-flex h-8 items-center gap-1.5 rounded-lg bg-card px-3 text-[12px] font-medium text-foreground hover:bg-secondary",
+        "btn-press inline-flex h-9 items-center gap-1.5 rounded-lg bg-card px-3 text-sm font-medium text-foreground hover:bg-secondary",
         className,
       )}
     >

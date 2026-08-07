@@ -69,7 +69,7 @@ export function StudyPageHeader<T extends string>({
     setTimeout(() => setCopied(false), 1500);
   };
 
-  const iconBtn = "h-8 w-8 text-muted-foreground hover:text-foreground";
+  const iconBtn = "text-muted-foreground hover:text-foreground";
 
   return (
     <div
@@ -156,7 +156,7 @@ export function StudyPageHeader<T extends string>({
                   variant="ghost"
                   size="icon"
                   aria-label="Delete study"
-                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                  className="text-muted-foreground hover:text-destructive"
                   onClick={() => onDelete()}
                 >
                   <Trash2 className="h-4 w-4" strokeWidth={1.5} />

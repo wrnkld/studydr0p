@@ -51,7 +51,7 @@ function SignedInActions() {
   return (
     <Button
       size="sm"
-      className="h-8 gap-1.5 px-3 text-sm"
+      className="gap-1.5 text-sm"
       onClick={() => navigate("/studies/new")}
     >
       <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -67,7 +67,7 @@ function SignInForm() {
       <Button
         size="sm"
         variant="outline"
-        className="h-8 px-3 text-xs"
+        className="text-sm"
         onClick={() => setOpen(true)}
       >
         Sign in
