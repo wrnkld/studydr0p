@@ -46,7 +46,7 @@ export function StripeEmbeddedCheckout({ priceId, customerEmail, userId, returnU
   return (
     <div ref={containerRef} className="relative">
       {loading && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-xl bg-background">
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg bg-background">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
           <p className="text-sm text-muted-foreground">Preparing secure checkout…</p>
         </div>
