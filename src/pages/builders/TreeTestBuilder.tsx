@@ -523,7 +523,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={() => addNode(null)}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add top-level node
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Add top-level node
           </Button>
         </div>
       </section>
@@ -587,7 +587,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={addTask}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add task
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Add task
           </Button>
         </div>
       </section>

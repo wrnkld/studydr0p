@@ -273,7 +273,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
                 onClick={() => fileInputRef.current?.click()}
                 disabled={uploading}
               >
-                <Upload className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} />
+                <Upload className="h-3.5 w-3.5" strokeWidth={1.5} />
                 {uploading ? "Uploading…" : "Replace image"}
               </Button>
               {zone && (

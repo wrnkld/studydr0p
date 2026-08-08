@@ -354,7 +354,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
           </ul>
         )}
         <Button variant="outline" size="sm" onClick={addCard} className="self-start">
-          <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add card
+          <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Add card
         </Button>
       </section>
 
@@ -383,7 +383,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
             </ul>
           )}
           <Button variant="outline" size="sm" onClick={addCategory} className="self-start">
-            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add category
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Add category
           </Button>
         </section>
       )}
