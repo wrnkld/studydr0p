@@ -91,7 +91,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
 ];
 
 export default function Landing() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { isPaid } = usePaid();
   const navigate = useNavigate();
   const [authOpen, setAuthOpen] = useState(false);
