@@ -91,7 +91,7 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
 ];
 
 export default function Landing() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { isPaid } = usePaid();
   const navigate = useNavigate();
   const [authOpen, setAuthOpen] = useState(false);
@@ -388,7 +388,7 @@ export default function Landing() {
         </p>
       </header>
 
-      {user ? (
+      {authLoading ? null : user ? (
         loadedUserRows ? (
         <section className="overflow-hidden rounded-lg border border-border bg-card">
           <table className="w-full text-left">
