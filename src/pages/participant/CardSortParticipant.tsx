@@ -286,7 +286,7 @@ export default function CardSortParticipant({
 
           {study.config.sort_type === "open" && (
             <Button variant="outline" size="sm" onClick={addOpenCategory}>
-              <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add category
+              <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Add category
             </Button>
           )}
         </div>

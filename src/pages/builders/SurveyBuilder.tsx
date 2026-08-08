@@ -245,13 +245,13 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
 
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" size="sm" onClick={() => addQuestion("multiple_choice")}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Multiple choice
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Multiple choice
           </Button>
           <Button variant="outline" size="sm" onClick={() => addQuestion("likert")}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Rating scale
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Rating scale
           </Button>
           <Button variant="outline" size="sm" onClick={() => addQuestion("open_text")}>
-            <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Open text
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Open text
           </Button>
         </div>
       </section>
@@ -386,7 +386,7 @@ function SortableQuestionRow({
                   })
                 }
               >
-                <Plus className="mr-1.5 h-3.5 w-3.5" strokeWidth={1.5} /> Add option
+                <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Add option
               </Button>
             </div>
           )}
