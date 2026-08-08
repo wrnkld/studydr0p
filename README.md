@@ -1,3 +1,3 @@
-# Welcome to your Lovable project
+# StudyDrop
 
-TODO: Document your project here
+UX research, without the friction.
