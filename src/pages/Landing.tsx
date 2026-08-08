@@ -388,7 +388,7 @@ export default function Landing() {
         </p>
       </header>
 
-      {user ? (
+      {authLoading ? null : user ? (
         loadedUserRows ? (
         <section className="overflow-hidden rounded-lg border border-border bg-card">
           <table className="w-full text-left">
