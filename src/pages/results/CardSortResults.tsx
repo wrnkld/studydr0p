@@ -136,9 +136,9 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                     {cardTotal} {cardTotal === 1 ? "response" : "responses"}
                   </span>
                 </div>
-                <div className="h-3 w-full overflow-hidden rounded-sm bg-[hsl(var(--chart-grid))]">
+                <div className="h-3 w-full overflow-hidden rounded-lg bg-[hsl(var(--chart-grid))]">
                   <div
-                    className="flex h-full rounded-sm"
+                    className="flex h-full rounded-lg"
                     style={{ width: `${barWidth}%` }}
                   >
                     {categories.map((cat) => {
