@@ -222,8 +222,8 @@ export default function Landing() {
           }
         }}
         aria-label={`${STUDY_TYPE_META[r.type]?.label ?? r.type}: ${r.title}`}
-        className="group relative flex w-full flex-col rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        style={{ padding: "28px 28px 24px" }}
+        className="group relative flex w-full flex-col items-center rounded-lg border border-border bg-card text-center no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        style={{ padding: "32px 32px 28px" }}
       >
         <div className="mb-4">
           <span
@@ -235,14 +235,14 @@ export default function Landing() {
         </div>
 
         {r.illo ? (
-          <div className="mb-5" aria-hidden>
+          <div className="mb-6" aria-hidden>
             <img
               src={r.illo}
               alt=""
               loading="eager" decoding="async" fetchPriority="high"
-              width={180}
-              height={180}
-              className="block h-[180px] w-[180px]"
+              width={240}
+              height={240}
+              className="block h-[240px] w-[240px]"
             />
           </div>
         ) : null}
@@ -416,7 +416,7 @@ export default function Landing() {
             <div className="mb-8">
               <SectionDivider label="Examples" />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {EXAMPLE_ROWS.map(renderRow)}
             </div>
           </section>
