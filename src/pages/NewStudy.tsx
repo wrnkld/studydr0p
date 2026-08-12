@@ -110,7 +110,7 @@ export default function NewStudy() {
     <PageContainer space="lg" width="wide">
       <PageHeader title="What kind of study?" />
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <section className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {TYPES.map((t) => {
           const label = STUDY_TYPE_META[t.id]?.label ?? t.id;
           const href = `/studies/new?type=${t.id}`;
@@ -138,20 +138,20 @@ export default function NewStudy() {
               aria-label={label}
               aria-disabled={creating}
               className={cn(
-                "group relative flex w-full flex-col rounded-lg border border-border bg-card text-left no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "group relative flex w-full flex-col items-center rounded-lg border border-border bg-card text-center no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                 creating && "opacity-60 cursor-not-allowed",
                 isPending && "opacity-80",
               )}
-              style={{ padding: "28px 28px 24px" }}
+              style={{ padding: "32px 32px 28px" }}
             >
-              <div className="mb-5" aria-hidden>
+              <div className="mb-6" aria-hidden>
                 <img
                   src={t.illo}
                   alt=""
                   loading="eager" decoding="async" fetchPriority="high"
-                  width={180}
-                  height={180}
-                  className="block h-[180px] w-[180px]"
+                  width={240}
+                  height={240}
+                  className="block h-[240px] w-[240px]"
                 />
               </div>
 
