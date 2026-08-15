@@ -545,7 +545,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="ml-auto"
+                      className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive ml-auto"
                       onClick={() => removeTask(t.id)}
                     >
                       <Trash2 className="h-4 w-4" strokeWidth={1.5} />
