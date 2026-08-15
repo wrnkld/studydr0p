@@ -25,6 +25,11 @@ import {
 } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   DndContext,
   closestCenter,
   KeyboardSensor,
@@ -138,18 +143,28 @@ function SortableNode({
         className="h-9"
       />
 
-      <Button variant="ghost" size="icon" onClick={onAddChild} title="Add child" aria-label="Add child">
-        <Plus className="h-4 w-4" strokeWidth={1.5} />
-      </Button>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={onRemove}
-        aria-label="Remove node"
-        className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-      >
-        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button variant="ghost" size="icon" onClick={onAddChild} aria-label="Add child">
+            <Plus className="h-4 w-4" strokeWidth={1.5} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">Add child</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onRemove}
+            aria-label="Remove node"
+            className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+          >
+            <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">Remove node</TooltipContent>
+      </Tooltip>
 
     </div>
   );
@@ -542,14 +557,20 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground">Task</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive ml-auto"
-                      onClick={() => removeTask(t.id)}
-                    >
-                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                    </Button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive ml-auto"
+                          onClick={() => removeTask(t.id)}
+                          aria-label="Remove task"
+                        >
+                          <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="bottom">Remove task</TooltipContent>
+                    </Tooltip>
                   </div>
                   <Textarea
                     rows={2}
