@@ -505,8 +505,8 @@ export default function Landing() {
                 type="button"
                 onClick={handleBadgeClick}
                 disabled={isPaid || unlocking}
-                className="mt-10 inline-flex h-[52px] px-8 items-center justify-center rounded-lg bg-foreground text-background font-mono uppercase tracking-wider text-[11px] transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
-                style={{ letterSpacing: "0.14em" }}
+                className="mt-10 inline-flex h-11 px-7 items-center justify-center rounded-full bg-foreground text-background font-mono uppercase text-xs transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
+                style={{ letterSpacing: "0.12em" }}
               >
                 {unlocking ? (
                   <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
