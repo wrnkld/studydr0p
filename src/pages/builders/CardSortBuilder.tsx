@@ -11,6 +11,11 @@ import { generateSlug } from "@/lib/slug";
 import { CardSortConfig, CardRow, CategoryRow, StudyStatus } from "@/lib/types";
 import { Trash2, Plus } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Props {
   studyId: string;
