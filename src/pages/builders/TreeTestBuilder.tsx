@@ -105,15 +105,6 @@ function SortableNode({
         isDragging && "opacity-50",
       )}
     >
-      <button
-        type="button"
-        className="cursor-grab touch-none text-muted-foreground hover:text-foreground"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="h-4 w-4" strokeWidth={1.5} />
-      </button>
-
       {hasChildren ? (
         <Button
           variant="ghost"
@@ -131,6 +122,15 @@ function SortableNode({
         <span className="inline-block w-8 shrink-0" />
       )}
 
+      <button
+        type="button"
+        className="shrink-0 cursor-grab touch-none text-muted-foreground hover:text-foreground"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-4 w-4" strokeWidth={1.5} />
+      </button>
+
       <Input
         placeholder="Node label"
         value={node.label}
@@ -146,9 +146,11 @@ function SortableNode({
         size="icon"
         onClick={onRemove}
         aria-label="Remove node"
+        className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
       >
         <Trash2 className="h-4 w-4" strokeWidth={1.5} />
       </Button>
+
     </div>
   );
 }
