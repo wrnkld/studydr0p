@@ -105,6 +105,15 @@ function SortableNode({
         isDragging && "opacity-50",
       )}
     >
+      <button
+        type="button"
+        className="flex h-8 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-muted-foreground hover:text-foreground"
+        {...attributes}
+        {...listeners}
+      >
+        <GripVertical className="h-4 w-4" strokeWidth={1.5} />
+      </button>
+
       {hasChildren ? (
         <Button
           variant="ghost"
@@ -121,15 +130,6 @@ function SortableNode({
       ) : (
         <span className="inline-block w-8 shrink-0" />
       )}
-
-      <button
-        type="button"
-        className="shrink-0 cursor-grab touch-none text-muted-foreground hover:text-foreground"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="h-4 w-4" strokeWidth={1.5} />
-      </button>
 
       <Input
         placeholder="Node label"
