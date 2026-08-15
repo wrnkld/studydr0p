@@ -284,7 +284,7 @@ export const Chip = React.forwardRef<HTMLButtonElement, ChipProps>(
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           "disabled:pointer-events-none disabled:opacity-50",
           // size
-          size === "icon" ? "h-9 w-9 px-0" : "px-4 py-1.5",
+          size === "icon" ? "h-8 w-8 px-0" : "px-4 py-1.5",
           // block
           block && "w-full justify-start",
           // selected — inverted fill via tokens
