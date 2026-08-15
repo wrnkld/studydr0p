@@ -118,7 +118,7 @@ function SortableNode({
         <Button
           variant="ghost"
           size="icon"
-          className="h-7 w-7 shrink-0"
+          className="shrink-0"
           onClick={onToggle}
         >
           {isCollapsed ? (
@@ -128,7 +128,7 @@ function SortableNode({
           )}
         </Button>
       ) : (
-        <span className="inline-block w-7 shrink-0" />
+        <span className="inline-block w-8 shrink-0" />
       )}
 
       <Input
@@ -138,14 +138,14 @@ function SortableNode({
         className="h-9"
       />
 
-      <Button variant="ghost" size="sm" onClick={onAddChild} title="Add child">
-        <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
+      <Button variant="ghost" size="icon" onClick={onAddChild} title="Add child" aria-label="Add child">
+        <Plus className="h-4 w-4" strokeWidth={1.5} />
       </Button>
       <Button
         variant="ghost"
         size="icon"
-        className="h-9 w-9"
         onClick={onRemove}
+        aria-label="Remove node"
       >
         <Trash2 className="h-4 w-4" strokeWidth={1.5} />
       </Button>
