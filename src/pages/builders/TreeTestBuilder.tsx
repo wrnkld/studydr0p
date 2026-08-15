@@ -25,6 +25,11 @@ import {
 } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   DndContext,
   closestCenter,
   KeyboardSensor,
