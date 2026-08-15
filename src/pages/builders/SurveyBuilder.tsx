@@ -327,7 +327,7 @@ function SortableQuestionRow({
             <Button
               variant="ghost"
               size="icon"
-              className="ml-auto"
+              className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive ml-auto"
               onClick={() => removeQuestion(q.id)}
             >
               <Trash2 className="h-4 w-4" strokeWidth={1.5} />
@@ -363,6 +363,7 @@ function SortableQuestionRow({
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     onClick={() => {
                       const opts = (q.options ?? []).filter(
                         (_, idx) => idx !== oi,
