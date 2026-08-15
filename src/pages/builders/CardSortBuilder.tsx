@@ -351,9 +351,14 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
                   value={c.label}
                   onChange={(e) => updateCard(c.id, { label: e.target.value })}
                 />
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive" onClick={() => removeCard(c.id)}>
-                  <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="ghost" size="icon" className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive" onClick={() => removeCard(c.id)} aria-label="Remove card">
+                      <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">Remove card</TooltipContent>
+                </Tooltip>
               </li>
             ))}
           </ul>
@@ -376,14 +381,20 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
                     value={c.label}
                     onChange={(e) => updateCategory(c.id, { label: e.target.value })}
                   />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                    onClick={() => removeCategory(c.id)}
-                  >
-                    <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => removeCategory(c.id)}
+                        aria-label="Remove category"
+                      >
+                        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">Remove category</TooltipContent>
+                  </Tooltip>
                 </li>
               ))}
             </ul>
