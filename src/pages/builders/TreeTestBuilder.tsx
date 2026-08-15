@@ -110,28 +110,40 @@ function SortableNode({
         isDragging && "opacity-50",
       )}
     >
-      <button
-        type="button"
-        className="flex h-8 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-muted-foreground hover:text-foreground"
-        {...attributes}
-        {...listeners}
-      >
-        <GripVertical className="h-4 w-4" strokeWidth={1.5} />
-      </button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            type="button"
+            className="flex h-8 w-5 shrink-0 cursor-grab touch-none items-center justify-center text-muted-foreground hover:text-foreground"
+            {...attributes}
+            {...listeners}
+            aria-label="Drag to reorder"
+          >
+            <GripVertical className="h-4 w-4" strokeWidth={1.5} />
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom">Drag to reorder</TooltipContent>
+      </Tooltip>
 
       {hasChildren ? (
-        <Button
-          variant="ghost"
-          size="icon"
-          className="shrink-0"
-          onClick={onToggle}
-        >
-          {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
-          ) : (
-            <ChevronDown className="h-4 w-4" strokeWidth={1.5} />
-          )}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="shrink-0"
+              onClick={onToggle}
+              aria-label={isCollapsed ? "Expand" : "Collapse"}
+            >
+              {isCollapsed ? (
+                <ChevronRight className="h-4 w-4" strokeWidth={1.5} />
+              ) : (
+                <ChevronDown className="h-4 w-4" strokeWidth={1.5} />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">{isCollapsed ? "Expand" : "Collapse"}</TooltipContent>
+        </Tooltip>
       ) : (
         <span className="inline-block w-8 shrink-0" />
       )}

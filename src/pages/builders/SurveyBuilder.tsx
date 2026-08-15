@@ -26,6 +26,11 @@ import {
 import { Trash2, Plus, GripVertical } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
   DndContext,
   closestCenter,
   KeyboardSensor,
@@ -290,15 +295,20 @@ function SortableQuestionRow({
   return (
     <li ref={setNodeRef} style={style} className="group rounded-lg border p-4 bg-background">
       <div className="flex items-start gap-3">
-        <button
-          type="button"
-          className="mt-2 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground touch-none"
-          {...attributes}
-          {...listeners}
-          aria-label="Drag to reorder"
-        >
-          <GripVertical className="h-4 w-4" strokeWidth={1.5} />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              className="mt-2 cursor-grab opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground touch-none"
+              {...attributes}
+              {...listeners}
+              aria-label="Drag to reorder"
+            >
+              <GripVertical className="h-4 w-4" strokeWidth={1.5} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Drag to reorder</TooltipContent>
+        </Tooltip>
         <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
         <div className="flex-1 space-y-3">
           <div className="flex items-center gap-2">
@@ -324,14 +334,20 @@ function SortableQuestionRow({
                 <SelectItem value="open_text">Open text</SelectItem>
               </SelectContent>
             </Select>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive ml-auto"
-              onClick={() => removeQuestion(q.id)}
-            >
-              <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive ml-auto"
+                  onClick={() => removeQuestion(q.id)}
+                  aria-label="Remove question"
+                >
+                  <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Remove question</TooltipContent>
+            </Tooltip>
           </div>
           <Input
             placeholder="Question…"
@@ -360,19 +376,25 @@ function SortableQuestionRow({
                       updateQuestion(q.id, { options: opts });
                     }}
                   />
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
-                    onClick={() => {
-                      const opts = (q.options ?? []).filter(
-                        (_, idx) => idx !== oi,
-                      );
-                      updateQuestion(q.id, { options: opts });
-                    }}
-                  >
-                    <Trash2 className="h-4 w-4" strokeWidth={1.5} />
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => {
+                          const opts = (q.options ?? []).filter(
+                            (_, idx) => idx !== oi,
+                          );
+                          updateQuestion(q.id, { options: opts });
+                        }}
+                        aria-label="Remove option"
+                      >
+                        <Trash2 className="h-4 w-4" strokeWidth={1.5} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">Remove option</TooltipContent>
+                  </Tooltip>
                 </div>
               ))}
               <Button
