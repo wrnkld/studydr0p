@@ -363,7 +363,7 @@ function SortableQuestionRow({
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={() = className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"> {
+                    onClick={() => {
                       const opts = (q.options ?? []).filter(
                         (_, idx) => idx !== oi,
                       );
