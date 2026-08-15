@@ -374,6 +374,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
                   <Button
                     variant="ghost"
                     size="icon"
+                    className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
                     onClick={() => removeCategory(c.id)}
                   >
                     <Trash2 className="h-4 w-4" strokeWidth={1.5} />
