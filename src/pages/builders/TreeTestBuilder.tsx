@@ -93,7 +93,7 @@ function SortableNode({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    paddingLeft: `${depth * 24 + 4}px`,
+    paddingLeft: "4px",
   };
 
   return (
