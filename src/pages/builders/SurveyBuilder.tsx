@@ -416,7 +416,7 @@ function SortableQuestionRow({
           {q.type === "likert" && (
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label className="text-xs font-normal text-muted-foreground">Scale type</Label>
+                <Label className="text-sm font-normal text-muted-foreground">Scale type</Label>
                 <Select
                   value={q.scale_preset ?? "agreement"}
                   onValueChange={(v) => {
@@ -453,7 +453,7 @@ function SortableQuestionRow({
               {q.scale_preset === "custom" && (
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-1">
-                    <Label className="text-xs font-normal text-muted-foreground">Left label</Label>
+                    <Label className="text-sm font-normal text-muted-foreground">Left label</Label>
                     <Input
                       value={q.scale_left ?? ""}
                       onChange={(e) => updateQuestion(q.id, { scale_left: e.target.value })}
@@ -461,7 +461,7 @@ function SortableQuestionRow({
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-xs font-normal text-muted-foreground">Right label</Label>
+                    <Label className="text-sm font-normal text-muted-foreground">Right label</Label>
                     <Input
                       value={q.scale_right ?? ""}
                       onChange={(e) => updateQuestion(q.id, { scale_right: e.target.value })}
