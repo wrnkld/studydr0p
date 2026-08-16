@@ -159,7 +159,7 @@ function QuestionInput({
             ))}
           </div>
           {(left || right) && (
-            <div className="flex justify-between gap-4 text-xs text-muted-foreground mt-1.5">
+            <div className="flex justify-between gap-4 text-sm text-muted-foreground mt-1.5">
               <span>{left}</span>
               <span>{right}</span>
             </div>
