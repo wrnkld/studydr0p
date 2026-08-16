@@ -442,11 +442,22 @@ function SortableQuestionRow({
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(LIKERT_PRESETS).map(([key, p]) => (
-                      <SelectItem key={key} value={key}>
-                        {p.label} ({p.left} → {p.right})
+                      <SelectItem
+                        key={key}
+                        value={key}
+                        textValue={`${p.label} (${p.left} → ${p.right})`}
+                      >
+                        <div className="flex flex-col leading-tight py-0.5">
+                          <span>{p.label}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {p.left} → {p.right}
+                          </span>
+                        </div>
                       </SelectItem>
                     ))}
-                    <SelectItem value="custom">Custom…</SelectItem>
+                    <SelectItem value="custom" textValue="Custom…">
+                      <span>Custom…</span>
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
