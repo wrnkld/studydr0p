@@ -437,8 +437,14 @@ function SortableQuestionRow({
                     }
                   }}
                 >
-                  <SelectTrigger className="w-[240px]">
-                    <SelectValue />
+                  <SelectTrigger className="w-[240px] justify-start text-left">
+                    <SelectValue>
+                      {(value: string) => {
+                        if (value === "custom") return "Custom…";
+                        const preset = LIKERT_PRESETS[value as Exclude<LikertPreset, "custom">];
+                        return preset?.label ?? value;
+                      }}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(LIKERT_PRESETS).map(([key, p]) => (
