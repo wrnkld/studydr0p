@@ -438,13 +438,11 @@ function SortableQuestionRow({
                   }}
                 >
                   <SelectTrigger className="w-[240px] justify-start text-left">
-                    <SelectValue>
-                      {(value: string) => {
-                        if (value === "custom") return "Custom…";
-                        const preset = LIKERT_PRESETS[value as Exclude<LikertPreset, "custom">];
-                        return preset?.label ?? value;
-                      }}
-                    </SelectValue>
+                    <span className="truncate">
+                      {q.scale_preset === "custom"
+                        ? "Custom…"
+                        : LIKERT_PRESETS[(q.scale_preset ?? "agreement") as Exclude<LikertPreset, "custom">]?.label}
+                    </span>
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(LIKERT_PRESETS).map(([key, p]) => (
