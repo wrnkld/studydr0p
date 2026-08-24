@@ -17,3 +17,5 @@ project_id = "yysboopndpgeurffyxfk"
     verify_jwt = false
   [functions.payments-webhook]
     verify_jwt = false
+  [functions.delete-account]
+    verify_jwt = true
