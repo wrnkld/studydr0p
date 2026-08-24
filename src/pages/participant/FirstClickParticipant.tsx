@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { FirstClickConfig } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { SectionHeader } from "@/components/study/primitives";
+import { Kicker } from "@/components/study/primitives";
 import { toast } from "sonner";
 
 interface Props {
@@ -121,7 +121,12 @@ export default function FirstClickParticipant({
 
   return (
     <div className="space-y-6">
-      {cfg.task && <SectionHeader kicker="Task" title={cfg.task} />}
+      {cfg.task && (
+        <div className="space-y-2">
+          <Kicker>Task</Kicker>
+          <h3 className="text-[17px] font-medium tracking-tight">{cfg.task}</h3>
+        </div>
+      )}
 
       <div className="relative overflow-hidden rounded-lg border border-border bg-card">
         <img

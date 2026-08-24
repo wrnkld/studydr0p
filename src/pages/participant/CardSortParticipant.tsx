@@ -336,7 +336,7 @@ function PoolZone({
   const { setNodeRef, isOver } = useDroppable({ id });
   return (
     <div ref={setNodeRef} className="space-y-3">
-      <div className="text-sm text-muted-foreground">{label}</div>
+      <Kicker>{label}</Kicker>
       <div className={cn("transition-colors rounded-lg -mx-2 px-2 py-1", isOver && "bg-muted/50")}>
         {children}
       </div>
