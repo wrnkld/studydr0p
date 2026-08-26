@@ -199,11 +199,8 @@ export function Stat({
     <div className={cn("relative py-2", className)}>
       <ResultLabel>{label}</ResultLabel>
       <div
-        className="mt-1 text-foreground"
+        className="mt-1 text-4xl font-bold text-foreground"
         style={{
-          fontSize: "56px",
-          fontWeight: 700,
-          lineHeight: 1,
           letterSpacing: "-0.035em",
           fontVariantNumeric: "tabular-nums",
         }}
