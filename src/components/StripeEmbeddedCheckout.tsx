@@ -48,7 +48,7 @@ export function StripeEmbeddedCheckout({ priceId, customerEmail, userId, returnU
       {loading && (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg bg-background">
           <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" strokeWidth={1.5} />
-          <p className="text-sm text-muted-foreground">Preparing secure checkout…</p>
+          <p className="text-base text-muted-foreground">Preparing secure checkout…</p>
         </div>
       )}
       <div className={loading ? "opacity-0" : "opacity-100 transition-opacity duration-500"}>

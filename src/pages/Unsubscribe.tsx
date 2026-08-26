@@ -55,7 +55,7 @@ export default function Unsubscribe() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6">
       <div className="max-w-md w-full text-center space-y-4">
-        <h1 className="font-serif text-3xl">Unsubscribe</h1>
+        <h1 className="font-serif text-4xl">Unsubscribe</h1>
         {state.kind === "loading" && (
           <p className="text-muted-foreground">Checking your link…</p>
         )}

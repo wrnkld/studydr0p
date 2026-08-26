@@ -157,8 +157,8 @@ export default function NewStudy() {
 
               <div className="min-w-0">
                 <div
-                  className="font-serif text-foreground"
-                  style={{ fontSize: "24px", fontWeight: 700, lineHeight: 1.15, letterSpacing: "-0.015em" }}
+                  className="font-serif text-2xl font-bold text-foreground"
+                  style={{ letterSpacing: "-0.015em" }}
                 >
                   {label}
                 </div>

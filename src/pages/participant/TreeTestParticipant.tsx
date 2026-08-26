@@ -193,7 +193,7 @@ export default function TreeTestParticipant({
   if (!nodes) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="text-sm text-muted-foreground">Loading…</div>
+        <div className="text-base text-muted-foreground">Loading…</div>
       </div>
     );
   }
@@ -201,7 +201,7 @@ export default function TreeTestParticipant({
   if (!currentTask) {
     return (
       <div className="flex items-center justify-center py-16">
-        <div className="text-sm text-muted-foreground">No tasks configured.</div>
+        <div className="text-base text-muted-foreground">No tasks configured.</div>
       </div>
     );
   }
@@ -230,7 +230,7 @@ export default function TreeTestParticipant({
                 <button
                   type="button"
                   onClick={() => handleNodeClick(n)}
-                  className={`flex flex-1 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-colors ${
+                  className={`flex flex-1 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-base transition-colors ${
                     isSelected
                       ? "bg-accent ring-2 ring-ring"
                       : "hover:bg-accent"

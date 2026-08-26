@@ -38,7 +38,7 @@ function Brand() {
       className="text-foreground hover:opacity-80"
       aria-label="StudyDrop home"
     >
-      <span className="text-sm font-bold font-serif" style={{ letterSpacing: '-0.03em' }}>
+      <span className="text-base font-bold font-serif" style={{ letterSpacing: '-0.03em' }}>
         StudyDrop
       </span>
     </Link>
@@ -51,7 +51,7 @@ function SignedInActions() {
   return (
     <Button
       size="sm"
-      className="text-sm"
+      className="text-base"
       onClick={() => navigate("/studies/new")}
     >
       <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -67,7 +67,7 @@ function SignInForm() {
       <Button
         size="sm"
         variant="outline"
-        className="text-sm"
+        className="text-base"
         onClick={() => setOpen(true)}
       >
         Sign in

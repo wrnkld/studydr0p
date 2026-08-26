@@ -69,9 +69,9 @@ export default function SurveyResults({ studyId, config, responses }: Props) {
     });
   }, [config, rows]);
 
-  if (loading) return <div className="text-sm text-muted-foreground">Loading…</div>;
+  if (loading) return <div className="text-base text-muted-foreground">Loading…</div>;
   if (!rows || rows.length === 0) {
-    return <div className="text-sm text-muted-foreground">No responses yet.</div>;
+    return <div className="text-base text-muted-foreground">No responses yet.</div>;
   }
 
   return (

@@ -89,7 +89,7 @@ export function StudyPageHeader<T extends string>({
                 type="button"
                 onClick={() => onTabChange(t.value)}
                 className={cn(
-                  "relative h-16 px-3 text-sm font-medium transition-colors",
+                  "relative h-16 px-3 text-base font-medium transition-colors",
                   active
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground",

@@ -5,7 +5,7 @@ export default function Privacy() {
     <PageContainer width="wide" space="md">
       <PageHeader title="Privacy" />
 
-      <section className="space-y-3 text-sm leading-relaxed text-foreground">
+      <section className="space-y-3 text-base leading-relaxed text-foreground">
         <p>
           We collect your email, the studies you create, and the responses they
           receive. We use this only to run StudyDrop and show your results.

@@ -184,7 +184,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
             <button
               type="button"
               onClick={handleForgot}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              className="text-base text-muted-foreground transition-colors hover:text-foreground"
             >
               Forgot password?
             </button>

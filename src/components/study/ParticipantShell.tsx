@@ -26,11 +26,11 @@ export function ParticipantShell({
   return (
     <div className={cn("mx-auto w-full max-w-5xl space-y-6", className)}>
       <header className="space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif text-foreground">
+        <h1 className="text-4xl font-semibold tracking-tight leading-tight font-serif text-foreground">
           {title}
         </h1>
         {description ? (
-          <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
+          <p className="whitespace-pre-wrap text-base text-muted-foreground leading-relaxed">
             {description}
           </p>
         ) : null}

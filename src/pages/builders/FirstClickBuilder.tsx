@@ -262,7 +262,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
                 />
               )}
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-base text-muted-foreground">
               Click and drag on the image to mark the correct click zone.
               {zone ? " Drag again to redraw." : ""}
             </p>
@@ -298,7 +298,7 @@ export default function FirstClickBuilder({ studyId, initial, onMetaChange }: Pr
             type="button"
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading}
-            className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-12 text-sm text-muted-foreground transition-colors hover:bg-muted/60"
+            className="flex w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-muted/30 px-6 py-12 text-base text-muted-foreground transition-colors hover:bg-muted/60"
           >
             <ImageIcon className="h-8 w-8" strokeWidth={1.5} />
             <span>{uploading ? "Uploading…" : "Click to upload an image"}</span>

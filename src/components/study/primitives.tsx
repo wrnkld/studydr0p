@@ -74,9 +74,9 @@ export function PageHeader({
             {kicker}
           </div>
         ) : null}
-        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">{title}</h1>
+        <h1 className="text-4xl font-semibold tracking-tight leading-tight font-serif">{title}</h1>
         {description ? (
-          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+          <p className="text-base text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
       {actions ? (
@@ -199,11 +199,8 @@ export function Stat({
     <div className={cn("relative py-2", className)}>
       <ResultLabel>{label}</ResultLabel>
       <div
-        className="mt-1 text-foreground"
+        className="mt-1 text-4xl font-bold text-foreground"
         style={{
-          fontSize: "56px",
-          fontWeight: 700,
-          lineHeight: 1,
           letterSpacing: "-0.035em",
           fontVariantNumeric: "tabular-nums",
         }}
@@ -357,7 +354,7 @@ export function BackButton({
       to={to}
       aria-label={label}
       className={cn(
-        "btn-press inline-flex h-9 items-center gap-1.5 rounded-lg bg-card px-3 text-sm font-medium text-foreground hover:bg-secondary",
+        "btn-press inline-flex h-9 items-center gap-1.5 rounded-lg bg-card px-3 text-base font-medium text-foreground hover:bg-secondary",
         className,
       )}
     >

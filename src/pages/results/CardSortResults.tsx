@@ -90,12 +90,12 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
     return { categories, chartData, byCard, colorByCategory, maxCardTotal };
   }, [rows, cards]);
 
-  if (loading) return <div className="text-sm text-muted-foreground">Loading…</div>;
+  if (loading) return <div className="text-base text-muted-foreground">Loading…</div>;
   if (!rows || rows.length === 0) {
-    return <div className="text-sm text-muted-foreground">No responses yet.</div>;
+    return <div className="text-base text-muted-foreground">No responses yet.</div>;
   }
   if (categories.length === 0) {
-    return <div className="text-sm text-muted-foreground">No sorted cards yet.</div>;
+    return <div className="text-base text-muted-foreground">No sorted cards yet.</div>;
   }
 
   const colorFor = (cat: string) => colorByCategory[cat] ?? CHART_PALETTE[0];
@@ -130,7 +130,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
             return (
               <li key={entry.name} className="space-y-1">
-                <div className="flex items-baseline justify-between gap-3 text-sm">
+                <div className="flex items-baseline justify-between gap-3 text-base">
                   <span className="truncate font-medium">{entry.name}</span>
                   <span className="shrink-0 tabular-nums text-muted-foreground">
                     {cardTotal} {cardTotal === 1 ? "response" : "responses"}
