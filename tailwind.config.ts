@@ -75,6 +75,15 @@ export default {
           grid: "hsl(var(--chart-grid))",
         },
       },
+      fontSize: {
+        /* Slightly larger sans text everywhere while keeping serif headings
+           on the default scale. */
+        xs: ["13px", { lineHeight: "18px" }],
+        sm: ["15px", { lineHeight: "22px" }],
+        base: ["17px", { lineHeight: "26px" }],
+        lg: ["19px", { lineHeight: "28px" }],
+        xl: ["22px", { lineHeight: "30px" }],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
