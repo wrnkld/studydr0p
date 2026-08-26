@@ -152,7 +152,7 @@ function QuestionInput({
                 type="button"
                 variant={value === String(n) ? "default" : "outline"}
                 onClick={() => onChange(String(n))}
-                className="h-12 w-12"
+                className="h-12 w-12 rounded-lg text-base"
               >
                 {n}
               </Button>
