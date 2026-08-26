@@ -191,7 +191,7 @@ export const FRIDGE_STUDY: ExampleCardSort = {
 const GAS_QUESTIONS: SurveyQuestion[] = [
   {
     id: "q1",
-    type: "multiple_choice",
+    type: "single_choice",
     label: "Have you ever eaten a gas station hot dog?",
     options: ["Yes", "No"],
   },
@@ -203,7 +203,6 @@ const GAS_QUESTIONS: SurveyQuestion[] = [
   {
     id: "q3",
     type: "multiple_choice",
-    multi: true,
     label: "Which of these have you eaten at a gas station?",
     options: [
       "Hot dog",
@@ -216,7 +215,7 @@ const GAS_QUESTIONS: SurveyQuestion[] = [
   },
   {
     id: "q4",
-    type: "multiple_choice",
+    type: "single_choice",
     label: "What's the best gas station chain for food?",
     options: ["Wawa", "Buc-ee's", "Sheetz", "Casey's", "7-Eleven", "They're all the same"],
   },
