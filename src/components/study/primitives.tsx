@@ -1,8 +1,8 @@
 // Shared visual primitives. The design system for the app.
 //
 // Rules:
-//   - Pills (rounded-full): tabs, choice options, draggable cards, scale numbers
-//   - Frames (rounded-lg):  containers, drop zones, stat cards, inputs, buttons
+//   - Frames (rounded-lg): every interactive surface — inputs, options, cards, scale numbers
+//   - rounded-full is reserved for buttons and status dots only
 //   - All colors via design tokens (hsl(var(--*))). No hardcoded colors here.
 
 import * as React from "react";
@@ -247,7 +247,7 @@ export function StatGrid({
  * Pill primitive — the universal answer button + draggable card shape.
  * Used for choice options, drag cards, scale numbers.
  *
- * Shape: rounded-full. Always.
+ * Shape: rounded-lg. Always.
  */
 export interface ChipProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type"> {
