@@ -67,7 +67,7 @@ function EmptyCopyLink({ slug }: { slug: string }) {
     setTimeout(() => setCopied(false), 1500);
   }, [slug]);
   return (
-    <Button variant="outline" size="sm" className="mt-4 gap-1.5 text-sm" onClick={copy}>
+    <Button variant="outline" size="sm" className="mt-4 gap-1.5 text-base" onClick={copy}>
       {copied ? <Check className="h-3.5 w-3.5" strokeWidth={1.5} /> : <LinkIcon className="h-3.5 w-3.5" strokeWidth={1.5} />}
       {copied ? "Copied" : "Copy link"}
     </Button>
@@ -239,7 +239,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   if (loading || !study) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           {pendingResponse ? "Loading responses…" : "Loading…"}
         </p>
       </div>
@@ -251,15 +251,15 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
       <section>
         {responses.length === 0 && !pendingResponse ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <p className="text-lg font-medium text-foreground">No responses yet</p>
-            <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+            <p className="text-base font-medium text-foreground">No responses yet</p>
+            <p className="mt-1 text-base text-muted-foreground whitespace-nowrap">
               Share your study link with participants to start collecting data.
             </p>
             {study.slug && <EmptyCopyLink slug={study.slug} />}
           </div>
         ) : responses.length === 0 && pendingResponse ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <p className="text-sm text-muted-foreground">Loading responses…</p>
+            <p className="text-base text-muted-foreground">Loading responses…</p>
           </div>
         ) : locked ? (
           <div className="mx-auto flex max-w-md flex-col items-center px-4 py-12 text-center">
@@ -269,7 +269,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
             <h3 className="font-serif text-2xl font-bold tracking-tight text-foreground">
               Unlock results
             </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-base text-muted-foreground">
               One-time payment for lifetime access to unlimited studies and unlimited participant responses.
             </p>
             <Button

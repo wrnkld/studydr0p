@@ -243,7 +243,7 @@ export default function CardSortParticipant({
   };
 
   if (loading) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>;
+    return <p className="text-base text-muted-foreground">Loading…</p>;
   }
 
   const cardById = (id: string) => cards.find((c) => c.id === id);

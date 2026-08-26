@@ -455,7 +455,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
   useRegisterStudyActions({ studyId, onSave: handleSave, onDelete: handleDelete, saving });
 
   if (loadingChildren) {
-    return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
+    return <p className="py-6 text-base text-muted-foreground">Loading…</p>;
   }
 
   const nodeLabel = (id: string) => nodes.find((n) => n.id === id)?.label || id;
@@ -565,10 +565,10 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
           {tasks.map((t, i) => (
             <li key={t.id} className="group rounded-lg border p-4 bg-background">
               <div className="flex items-start gap-3">
-                <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+                <div className="mt-2 text-base text-muted-foreground">{i + 1}.</div>
                 <div className="flex-1 space-y-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-muted-foreground">Task</span>
+                    <span className="text-base text-muted-foreground">Task</span>
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <Button
@@ -591,7 +591,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                     onChange={(e) => updateTask(t.id, { text: e.target.value })}
                   />
                   <div className="space-y-1.5">
-                    <Label className="text-sm text-muted-foreground">Correct answer</Label>
+                    <Label className="text-base text-muted-foreground">Correct answer</Label>
                     <Select
                       value={t.correct_node_id || ""}
                       onValueChange={(v) => updateTask(t.id, { correct_node_id: v })}
@@ -601,7 +601,7 @@ export default function TreeTestBuilder({ studyId, initial, onMetaChange }: Prop
                       </SelectTrigger>
                       <SelectContent>
                         {flatNodes.length === 0 ? (
-                          <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                          <div className="px-2 py-1.5 text-base text-muted-foreground">
                             Add nodes to the tree first.
                           </div>
                         ) : (

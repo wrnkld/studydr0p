@@ -90,7 +90,7 @@ export default function ParticipantStudy() {
     return (
       <main className="container py-8">
         <ParticipantShell title="Loading…">
-          <p className="text-sm text-muted-foreground">One moment.</p>
+          <p className="text-base text-muted-foreground">One moment.</p>
         </ParticipantShell>
       </main>
     );
@@ -185,7 +185,7 @@ export default function ParticipantStudy() {
       />
     );
   } else {
-    body = <p className="text-sm text-muted-foreground">Unsupported study type.</p>;
+    body = <p className="text-base text-muted-foreground">Unsupported study type.</p>;
   }
 
   return (

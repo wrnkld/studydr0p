@@ -74,9 +74,9 @@ export function PageHeader({
             {kicker}
           </div>
         ) : null}
-        <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">{title}</h1>
+        <h1 className="text-4xl font-semibold tracking-tight leading-tight font-serif">{title}</h1>
         {description ? (
-          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
+          <p className="text-base text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
       {actions ? (
@@ -357,7 +357,7 @@ export function BackButton({
       to={to}
       aria-label={label}
       className={cn(
-        "btn-press inline-flex h-9 items-center gap-1.5 rounded-lg bg-card px-3 text-sm font-medium text-foreground hover:bg-secondary",
+        "btn-press inline-flex h-9 items-center gap-1.5 rounded-lg bg-card px-3 text-base font-medium text-foreground hover:bg-secondary",
         className,
       )}
     >

@@ -175,7 +175,7 @@ export default function StudyBuilder() {
     return (
       <PageContainer width="wide">
         <div className="flex items-center justify-center py-24">
-          <p className="text-sm text-muted-foreground">Loading…</p>
+          <p className="text-base text-muted-foreground">Loading…</p>
         </div>
       </PageContainer>
     );
@@ -243,7 +243,7 @@ export default function StudyBuilder() {
         }}
       />
     ) : (
-      <p className="text-sm text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         This study type is not supported yet.
       </p>
     );
@@ -412,7 +412,7 @@ function InlinePreview({
       <div className="space-y-6 py-6">
         <section>
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <p className="text-sm text-muted-foreground">Loading preview…</p>
+            <p className="text-base text-muted-foreground">Loading preview…</p>
           </div>
         </section>
       </div>
@@ -426,8 +426,8 @@ function InlinePreview({
         <div className="space-y-6 py-6">
           <section>
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-lg font-medium text-foreground">No questions yet</p>
-              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+              <p className="text-base font-medium text-foreground">No questions yet</p>
+              <p className="mt-1 text-base text-muted-foreground whitespace-nowrap">
                 Add some in the Build tab.
               </p>
             </div>
@@ -476,8 +476,8 @@ function InlinePreview({
         <div className="space-y-6 py-6">
           <section>
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-lg font-medium text-foreground">No tasks yet</p>
-              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+              <p className="text-base font-medium text-foreground">No tasks yet</p>
+              <p className="mt-1 text-base text-muted-foreground whitespace-nowrap">
                 Add some in the Build tab.
               </p>
             </div>
@@ -511,8 +511,8 @@ function InlinePreview({
         <div className="space-y-6 py-6">
           <section>
             <div className="flex flex-col items-center justify-center py-16 text-center">
-              <p className="text-lg font-medium text-foreground">No image yet</p>
-              <p className="mt-1 text-sm text-muted-foreground whitespace-nowrap">
+              <p className="text-base font-medium text-foreground">No image yet</p>
+              <p className="mt-1 text-base text-muted-foreground whitespace-nowrap">
                 Upload one in the Build tab.
               </p>
             </div>
@@ -540,7 +540,7 @@ function InlinePreview({
     <div className="space-y-6 py-6">
       <section>
         <div className="flex flex-col items-center justify-center py-16 text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             This study type can't be previewed yet.
           </p>
         </div>

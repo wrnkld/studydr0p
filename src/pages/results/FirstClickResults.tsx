@@ -113,14 +113,14 @@ export default function FirstClickResults({
 
   if (!config.image_url) {
     return (
-      <div className="text-sm text-muted-foreground">
+      <div className="text-base text-muted-foreground">
         No image configured for this study.
       </div>
     );
   }
 
   if (responses.length === 0) {
-    return <div className="text-sm text-muted-foreground">No clicks yet.</div>;
+    return <div className="text-base text-muted-foreground">No clicks yet.</div>;
   }
 
   const successCount = points.filter((p) => p.inZone).length;
@@ -155,7 +155,7 @@ export default function FirstClickResults({
             type="button"
             onClick={() => setView(v)}
             className={cn(
-              "rounded-lg px-3 py-1.5 text-sm font-medium capitalize transition-all",
+              "rounded-lg px-3 py-1.5 text-base font-medium capitalize transition-all",
               view === v
                 ? "bg-background text-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground",

@@ -291,7 +291,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
   
 
   if (loadingChildren) {
-    return <p className="py-6 text-sm text-muted-foreground">Loading…</p>;
+    return <p className="py-6 text-base text-muted-foreground">Loading…</p>;
   }
 
   const shareUrl = slug ? `${window.location.origin}/s/${slug}` : null;
@@ -321,18 +321,18 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
             onValueChange={(v) => setSortType(v as "open" | "closed")}
             className="gap-2"
           >
-            <label className="flex cursor-pointer items-start gap-2 text-sm font-normal">
+            <label className="flex cursor-pointer items-start gap-2 text-base font-normal">
               <RadioGroupItem value="open" id="sort-open" className="mt-0.5" />
               <span className="flex flex-col">
                 <span className="font-medium">Open</span>
-                <span className="text-sm text-muted-foreground">Participants name categories</span>
+                <span className="text-base text-muted-foreground">Participants name categories</span>
               </span>
             </label>
-            <label className="flex cursor-pointer items-start gap-2 text-sm font-normal">
+            <label className="flex cursor-pointer items-start gap-2 text-base font-normal">
               <RadioGroupItem value="closed" id="sort-closed" className="mt-0.5" />
               <span className="flex flex-col">
                 <span className="font-medium">Closed</span>
-                <span className="text-sm text-muted-foreground">You define categories</span>
+                <span className="text-base text-muted-foreground">You define categories</span>
               </span>
             </label>
           </RadioGroup>
@@ -345,7 +345,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
           <ul className="space-y-3">
             {cards.map((c, i) => (
               <li key={c.id} className="flex items-center gap-2">
-                <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
+                <div className="w-6 text-base text-muted-foreground">{i + 1}.</div>
                 <Input
                   placeholder="Card label"
                   value={c.label}
@@ -375,7 +375,7 @@ export default function CardSortBuilder({ studyId, initial, onMetaChange }: Prop
             <ul className="space-y-2">
               {categories.map((c, i) => (
                 <li key={c.id} className="flex items-center gap-2">
-                  <div className="w-6 text-sm text-muted-foreground">{i + 1}.</div>
+                  <div className="w-6 text-base text-muted-foreground">{i + 1}.</div>
                   <Input
                     placeholder="Category label"
                     value={c.label}

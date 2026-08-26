@@ -315,7 +315,7 @@ function SortableQuestionRow({
           </TooltipTrigger>
           <TooltipContent side="bottom">Drag to reorder</TooltipContent>
         </Tooltip>
-        <div className="mt-2 text-sm text-muted-foreground">{i + 1}.</div>
+        <div className="mt-2 text-base text-muted-foreground">{i + 1}.</div>
         <div className="flex-1 space-y-3">
           <div className="flex items-center gap-2">
             <Select
@@ -412,7 +412,7 @@ function SortableQuestionRow({
           {q.type === "likert" && (
             <div className="space-y-3">
               <div className="space-y-2">
-                <Label className="text-sm font-normal text-muted-foreground">Scale type</Label>
+                <Label className="text-base font-normal text-muted-foreground">Scale type</Label>
                 <Select
                   value={q.scale_preset ?? "agreement"}
                   onValueChange={(v) => {
@@ -464,7 +464,7 @@ function SortableQuestionRow({
               {q.scale_preset === "custom" && (
                 <div className="grid grid-cols-2 gap-2">
                   <div className="space-y-1">
-                    <Label className="text-sm font-normal text-muted-foreground">Left label</Label>
+                    <Label className="text-base font-normal text-muted-foreground">Left label</Label>
                     <Input
                       value={q.scale_left ?? ""}
                       onChange={(e) => updateQuestion(q.id, { scale_left: e.target.value })}
@@ -472,7 +472,7 @@ function SortableQuestionRow({
                     />
                   </div>
                   <div className="space-y-1">
-                    <Label className="text-sm font-normal text-muted-foreground">Right label</Label>
+                    <Label className="text-base font-normal text-muted-foreground">Right label</Label>
                     <Input
                       value={q.scale_right ?? ""}
                       onChange={(e) => updateQuestion(q.id, { scale_right: e.target.value })}

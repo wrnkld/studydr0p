@@ -380,7 +380,7 @@ export default function Landing() {
   return (
     <PageContainer width="wide" space="lg">
       <header className="space-y-3 pt-2 pb-4 text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
+        <h1 className="text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
           UX research, without the friction.
         </h1>
         <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
@@ -495,7 +495,7 @@ export default function Landing() {
           {/* Final CTA — calm closing */}
           <section className="pt-16 pb-28">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-serif text-foreground text-3xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
+              <h2 className="font-serif text-foreground text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
                 $75 for lifetime access.
               </h2>
               <p className="mt-4 text-base text-muted-foreground leading-relaxed">

@@ -115,7 +115,7 @@ export default function FirstClickParticipant({
 
   if (!cfg.image_url) {
     return (
-      <p className="text-sm text-muted-foreground">No image uploaded yet.</p>
+      <p className="text-base text-muted-foreground">No image uploaded yet.</p>
     );
   }
 

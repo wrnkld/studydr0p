@@ -75,7 +75,7 @@ export function ChoiceChart({
   });
 
   if (data.length === 0) {
-    return <p className="text-sm text-muted-foreground">No answers.</p>;
+    return <p className="text-base text-muted-foreground">No answers.</p>;
   }
 
   const max = Math.max(...data.map((d) => d.value), 1);
@@ -88,7 +88,7 @@ export function ChoiceChart({
         const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
         return (
           <li key={d.label} className="space-y-1">
-            <div className="flex items-baseline justify-between gap-3 text-sm">
+            <div className="flex items-baseline justify-between gap-3 text-base">
               <span className="truncate font-medium">{d.label}</span>
               <span className="shrink-0 tabular-nums text-muted-foreground">
                 {d.value} · {pct}%
@@ -119,7 +119,7 @@ export function BinaryDonut({
   const data = options.map((label) => ({ label, value: counts[label] ?? 0 }));
   const sum = data.reduce((s, d) => s + d.value, 0);
   if (sum === 0) {
-    return <p className="text-sm text-muted-foreground">No answers.</p>;
+    return <p className="text-base text-muted-foreground">No answers.</p>;
   }
 
   // If options are Yes/No, force Yes=blue No=red. Otherwise color by index.
@@ -177,7 +177,7 @@ export function BinaryDonut({
           </Pie>
         </PieChart>
       </ChartContainer>
-      <ul className="space-y-2 text-sm">
+      <ul className="space-y-2 text-base">
         {data.map((d, i) => {
           const pct = total > 0 ? Math.round((d.value / total) * 100) : 0;
           return (
@@ -234,7 +234,7 @@ export function ScaleChart({
           value={
             <>
               {avg.toFixed(1)}
-              <span className="ml-1 text-lg font-normal text-muted-foreground">
+              <span className="ml-1 text-base font-normal text-muted-foreground">
                 / {max}
               </span>
             </>
@@ -292,12 +292,12 @@ export function ScaleChart({
 
 export function TextResponses({ responses }: { responses: string[] }) {
   if (responses.length === 0) {
-    return <p className="text-sm text-muted-foreground">No answers.</p>;
+    return <p className="text-base text-muted-foreground">No answers.</p>;
   }
   return (
     <ul className="space-y-3">
       {responses.map((r, i) => (
-        <li key={i} className="border-l-2 pl-4 text-sm leading-relaxed">
+        <li key={i} className="border-l-2 pl-4 text-base leading-relaxed">
           {r}
         </li>
       ))}
