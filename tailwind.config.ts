@@ -76,13 +76,15 @@ export default {
         },
       },
       fontSize: {
-        /* Slightly larger sans text everywhere while keeping serif headings
-           on the default scale. */
-        xs: ["13px", { lineHeight: "18px" }],
-        sm: ["15px", { lineHeight: "22px" }],
-        base: ["17px", { lineHeight: "26px" }],
-        lg: ["19px", { lineHeight: "28px" }],
-        xl: ["22px", { lineHeight: "30px" }],
+        /* The whole type scale. Seven steps, no arbitrary sizes anywhere.
+           xs–base carry sans UI text; lg and up are serif headings. */
+        xs: ["13px", { lineHeight: "18px" }],      // kickers, mono labels, captions
+        sm: ["15px", { lineHeight: "22px" }],      // secondary + helper text
+        base: ["17px", { lineHeight: "26px" }],    // body, inputs, buttons
+        lg: ["20px", { lineHeight: "28px" }],      // lead-in, empty-state text
+        "2xl": ["26px", { lineHeight: "32px" }],   // card + section headings
+        "3xl": ["34px", { lineHeight: "40px" }],   // page titles
+        "4xl": ["44px", { lineHeight: "48px" }],   // hero
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -234,7 +234,7 @@ export function ScaleChart({
           value={
             <>
               {avg.toFixed(1)}
-              <span className="ml-1 text-[18px] font-normal text-muted-foreground">
+              <span className="ml-1 text-lg font-normal text-muted-foreground">
                 / {max}
               </span>
             </>

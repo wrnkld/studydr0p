@@ -38,7 +38,7 @@ function Brand() {
       className="text-foreground hover:opacity-80"
       aria-label="StudyDrop home"
     >
-      <span className="text-[15px] font-bold font-serif" style={{ letterSpacing: '-0.03em' }}>
+      <span className="text-sm font-bold font-serif" style={{ letterSpacing: '-0.03em' }}>
         StudyDrop
       </span>
     </Link>

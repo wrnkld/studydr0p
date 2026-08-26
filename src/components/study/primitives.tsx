@@ -70,13 +70,13 @@ export function PageHeader({
     >
       <div className="min-w-0 space-y-2">
         {kicker ? (
-          <div className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
+          <div className="text-xs uppercase tracking-[0.08em] text-muted-foreground/80 font-medium">
             {kicker}
           </div>
         ) : null}
         <h1 className="text-3xl font-semibold tracking-tight leading-tight font-serif">{title}</h1>
         {description ? (
-          <p className="text-[15px] text-muted-foreground leading-relaxed">{description}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
         ) : null}
       </div>
       {actions ? (
@@ -104,7 +104,7 @@ export function SectionHeader({
   return (
     <div className={cn("border-b border-border/70 pb-3", className)}>
       {kicker ? <ResultLabel>{kicker}</ResultLabel> : null}
-      <h3 className="mt-1.5 text-[17px] font-medium tracking-tight">{title}</h3>
+      <h3 className="mt-1.5 text-base font-medium tracking-tight">{title}</h3>
     </div>
   );
 }
@@ -124,7 +124,7 @@ export function ResultLabel({
   return (
     <div
       className={cn(
-        "text-[11px] font-medium uppercase tracking-[0.08em] text-muted-foreground/80",
+        "text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground/80",
         className,
       )}
     >

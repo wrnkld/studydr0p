@@ -30,7 +30,7 @@ export function ParticipantShell({
           {title}
         </h1>
         {description ? (
-          <p className="whitespace-pre-wrap text-[15px] text-muted-foreground leading-relaxed">
+          <p className="whitespace-pre-wrap text-sm text-muted-foreground leading-relaxed">
             {description}
           </p>
         ) : null}

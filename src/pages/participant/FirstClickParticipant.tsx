@@ -124,7 +124,7 @@ export default function FirstClickParticipant({
       {cfg.task && (
         <div className="space-y-2">
           <Kicker>Task</Kicker>
-          <h3 className="text-[17px] font-medium tracking-tight">{cfg.task}</h3>
+          <h3 className="text-base font-medium tracking-tight">{cfg.task}</h3>
         </div>
       )}
 
