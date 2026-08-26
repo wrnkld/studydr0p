@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, Loader2 } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Minus, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -618,13 +618,11 @@ function FaqList() {
                   </span>
                 </div>
               </span>
-              <span
-                className="shrink-0 pt-2 text-muted-foreground font-mono select-none text-base"
-                style={{ lineHeight: 1 }}
-                aria-hidden
-              >
-                {open ? "×" : "+"}
-              </span>
+              {open ? (
+                <Minus className="shrink-0 mt-2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} aria-hidden />
+              ) : (
+                <Plus className="shrink-0 mt-2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} aria-hidden />
+              )}
             </button>
           </li>
         );
