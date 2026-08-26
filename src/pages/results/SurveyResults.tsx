@@ -93,7 +93,7 @@ export default function SurveyResults({ studyId, config, responses }: Props) {
 // Picks the chart type based on question type and option count.
 //  - open_text         → list
 //  - likert (1..5)     → scale chart with average
-//  - multiple_choice
+//  - single_choice / multiple_choice
 //      exactly 2 opts  → donut
 //      otherwise       → horizontal bar
 function QuestionViz({
@@ -113,7 +113,7 @@ function QuestionViz({
   if (q.type === "likert") {
     return <ScaleChart min={1} max={5} counts={counts} />;
   }
-  // multiple_choice
+  // single_choice / multiple_choice
   const options = q.options && q.options.length > 0 ? q.options : Object.keys(counts);
   if (options.length === 2) {
     return <BinaryDonut options={options} counts={counts} total={total} />;

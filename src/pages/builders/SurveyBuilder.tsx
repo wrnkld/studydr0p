@@ -2,7 +2,6 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,7 +21,11 @@ import {
   StudyStatus,
   LikertPreset,
   LIKERT_PRESETS,
+  isChoiceQuestion,
 } from "@/lib/types";
+
+const isChoiceType = (t: SurveyQuestionType) =>
+  t === "single_choice" || t === "multiple_choice";
 import { Trash2, Plus, GripVertical } from "lucide-react";
 import { useRegisterStudyActions } from "@/components/StudyToolbarContext";
 import {
