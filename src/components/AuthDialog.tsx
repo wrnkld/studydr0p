@@ -173,7 +173,7 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <Button type="submit" className="w-full" disabled={submitting}>
+          <Button type="submit" size="hero" className="w-full" disabled={submitting}>
             {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" strokeWidth={1.5} aria-hidden="true" />}
             {mode === "signin" ? "Sign in" : "Sign up"}
           </Button>
