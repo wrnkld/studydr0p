@@ -94,7 +94,7 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
           id: crypto.randomUUID(),
           type,
           label: "",
-          options: type === "multiple_choice" ? ["Option 1", "Option 2"] : undefined,
+          options: isChoiceType(type) ? ["Option 1", "Option 2"] : undefined,
         },
       ],
     }));
@@ -249,6 +249,9 @@ export default function SurveyBuilder({ studyId, initial, onMetaChange }: Props)
         </DndContext>
 
         <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" onClick={() => addQuestion("single_choice")}>
+            <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Single choice
+          </Button>
           <Button variant="outline" size="sm" onClick={() => addQuestion("multiple_choice")}>
             <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />Multiple choice
           </Button>
@@ -318,10 +321,9 @@ function SortableQuestionRow({
                 const next = v as SurveyQuestionType;
                 updateQuestion(q.id, {
                   type: next,
-                  options:
-                    next === "multiple_choice"
-                      ? q.options ?? ["Option 1", "Option 2"]
-                      : undefined,
+                  options: isChoiceType(next)
+                    ? q.options ?? ["Option 1", "Option 2"]
+                    : undefined,
                 });
               }}
             >
@@ -329,6 +331,7 @@ function SortableQuestionRow({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="single_choice">Single choice</SelectItem>
                 <SelectItem value="multiple_choice">Multiple choice</SelectItem>
                 <SelectItem value="likert">Rating scale (1-5)</SelectItem>
                 <SelectItem value="open_text">Open text</SelectItem>
@@ -354,18 +357,8 @@ function SortableQuestionRow({
             value={q.label}
             onChange={(e) => updateQuestion(q.id, { label: e.target.value })}
           />
-          {q.type === "multiple_choice" && (
+          {isChoiceQuestion(q) && (
             <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id={`${q.id}-multi`}
-                  checked={!!q.multi}
-                  onCheckedChange={(checked) => updateQuestion(q.id, { multi: checked === true })}
-                />
-                <Label htmlFor={`${q.id}-multi`} className="text-sm font-normal text-muted-foreground">
-                Allow multiple selections
-                </Label>
-              </div>
               {(q.options ?? []).map((opt, oi) => (
                 <div key={oi} className="flex items-center gap-2">
                   <Input

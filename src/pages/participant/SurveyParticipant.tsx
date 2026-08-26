@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
-import { SurveyConfig, SurveyQuestion, getLikertLabels } from "@/lib/types";
+import { SurveyConfig, SurveyQuestion, getLikertLabels, isMultiSelect } from "@/lib/types";
 import { toast } from "sonner";
 import { SectionHeader } from "@/components/study/primitives";
 
