@@ -76,15 +76,12 @@ export default {
         },
       },
       fontSize: {
-        /* The whole type scale. Seven steps, no arbitrary sizes anywhere.
-           xs–base carry sans UI text; lg and up are serif headings. */
-        xs: ["13px", { lineHeight: "18px" }],      // kickers, mono labels, captions
-        sm: ["15px", { lineHeight: "22px" }],      // secondary + helper text
-        base: ["17px", { lineHeight: "26px" }],    // body, inputs, buttons
-        lg: ["20px", { lineHeight: "28px" }],      // lead-in, empty-state text
-        "2xl": ["26px", { lineHeight: "32px" }],   // card + section headings
-        "3xl": ["34px", { lineHeight: "40px" }],   // page titles
-        "4xl": ["44px", { lineHeight: "48px" }],   // hero
+        /* The whole type scale. Four steps. Nothing else exists —
+           no sm, no lg, no 3xl, no arbitrary pixel sizes anywhere. */
+        xs: ["13px", { lineHeight: "18px" }],      // kickers, labels, captions
+        base: ["17px", { lineHeight: "26px" }],    // all body, UI, inputs, buttons
+        "2xl": ["26px", { lineHeight: "32px" }],   // section + card headings
+        "4xl": ["40px", { lineHeight: "44px" }],   // page titles, hero, big numbers
       },
       borderRadius: {
         lg: "var(--radius)",
