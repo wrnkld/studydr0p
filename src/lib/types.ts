@@ -9,7 +9,7 @@ export type StudyType =
 export type StudyStatus = "draft" | "live" | "closed";
 
 // Survey config
-export type SurveyQuestionType = "multiple_choice" | "likert" | "open_text";
+export type SurveyQuestionType = "single_choice" | "multiple_choice" | "likert" | "open_text";
 
 export type LikertPreset =
   | "agreement"
@@ -23,8 +23,8 @@ export interface SurveyQuestion {
   id: string;
   type: SurveyQuestionType;
   label: string;
-  options?: string[]; // for multiple_choice
-  multi?: boolean; // for multiple_choice: allow selecting multiple options
+  options?: string[]; // for single_choice / multiple_choice
+  multi?: boolean; // legacy: multi-select flag on older multiple_choice questions
   // for likert: endpoint labels for the 1–5 scale
   scale_preset?: LikertPreset;
   scale_left?: string;
@@ -38,6 +38,15 @@ export const LIKERT_PRESETS: Record<Exclude<LikertPreset, "custom">, { label: st
   difficulty: { label: "Difficulty", left: "Very difficult", right: "Very easy" },
   frequency: { label: "Frequency", left: "Never", right: "Always" },
 };
+
+// Choice questions render options; multiple_choice always allows several selections.
+export function isChoiceQuestion(q: SurveyQuestion): boolean {
+  return q.type === "single_choice" || q.type === "multiple_choice";
+}
+
+export function isMultiSelect(q: SurveyQuestion): boolean {
+  return q.type === "multiple_choice";
+}
 
 export function getLikertLabels(q: SurveyQuestion): { left: string; right: string } {
   const preset = q.scale_preset ?? "agreement";

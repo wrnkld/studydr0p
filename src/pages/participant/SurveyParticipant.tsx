@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
-import { SurveyConfig, SurveyQuestion, getLikertLabels } from "@/lib/types";
+import { SurveyConfig, SurveyQuestion, getLikertLabels, isMultiSelect } from "@/lib/types";
 import { toast } from "sonner";
 import { SectionHeader } from "@/components/study/primitives";
 
@@ -45,7 +45,7 @@ export default function SurveyParticipant({
     for (const q of study.config.questions) {
       const a = answers[q.id];
       // Multi-select: empty array is valid (means "none of the above")
-      if (q.type === "multiple_choice" && q.multi) {
+      if (isMultiSelect(q)) {
         if (a === undefined) {
           // Treat as explicitly empty
           setAnswers((prev) => ({ ...prev, [q.id]: [] }));
@@ -168,7 +168,7 @@ function QuestionInput({
       </div>
     );
   }
-  if (q.multi) {
+  if (isMultiSelect(q)) {
     const selected = Array.isArray(value) ? value : [];
     const toggle = (opt: string) => {
       if (selected.includes(opt)) onChange(selected.filter((o) => o !== opt));
