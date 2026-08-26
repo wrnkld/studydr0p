@@ -52,7 +52,7 @@ export default function Footer() {
 
   return (
     <footer className="w-full border-t border-border bg-background">
-      <div className="container flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 py-4 text-[13px] text-muted-foreground">
+      <div className="container flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 py-4 text-xs text-muted-foreground">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
           <a href="mailto:hello@studydrop.app" className="hover:text-foreground">
             Contact

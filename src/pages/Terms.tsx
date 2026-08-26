@@ -5,7 +5,7 @@ export default function Terms() {
     <PageContainer width="wide" space="md">
       <PageHeader title="Terms" />
 
-      <section className="space-y-3 text-[15px] leading-relaxed text-foreground">
+      <section className="space-y-3 text-sm leading-relaxed text-foreground">
         <p>
           StudyDrop is for creating and sharing unmoderated UX studies. You own
           your studies and responses. You are responsible for what you ask

@@ -227,7 +227,7 @@ export default function Landing() {
       >
         <div className="mb-4">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px]"
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-xs"
             style={{ letterSpacing: "0.12em" }}
           >
             {STUDY_TYPE_META[r.type]?.label ?? r.type}
@@ -314,7 +314,7 @@ export default function Landing() {
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px]"
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-xs"
             style={{ letterSpacing: "0.12em" }}
           >
             {typeLabel}
@@ -323,7 +323,7 @@ export default function Landing() {
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
             <span
-              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-[11px]"
+              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-xs"
               style={{ letterSpacing: "0.12em" }}
             >
               Example
@@ -332,7 +332,7 @@ export default function Landing() {
             <span className="inline-block" style={{ width: "54px" }} aria-hidden />
           )}
         </td>
-        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap text-[11px]">
+        <td className="hidden sm:table-cell py-3 px-5 font-mono tabular-nums text-muted-foreground text-right whitespace-nowrap text-xs">
           {r.responseCount}
         </td>
       </tr>
@@ -354,7 +354,7 @@ export default function Landing() {
       <button
         type="button"
         onClick={() => toggleSort(k)}
-        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-[11px] ${align === "right" ? "flex-row-reverse" : ""}`}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-xs ${align === "right" ? "flex-row-reverse" : ""}`}
         style={{ letterSpacing: "0.12em", fontWeight: 500 }}
       >
         {label}
@@ -368,7 +368,7 @@ export default function Landing() {
     <div className="flex items-center gap-4 w-full">
       <div className="h-px flex-1 bg-border" />
       <span
-        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-[11px]"
+        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-xs"
         style={{ letterSpacing: "0.14em" }}
       >
         {label}
@@ -461,7 +461,7 @@ export default function Landing() {
                         />
                       ) : null}
                       <span
-                        className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground text-[11px]"
+                        className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground text-xs"
                       >
                         {i + 1}
                       </span>
@@ -600,7 +600,7 @@ function FaqList() {
               aria-expanded={open}
             >
               <span
-                className="font-mono text-muted-foreground shrink-0 pt-1 text-[11px]"
+                className="font-mono text-muted-foreground shrink-0 pt-1 text-xs"
                 style={{ letterSpacing: "0.08em" }}
               >
                 {String(i + 1).padStart(2, "0")}

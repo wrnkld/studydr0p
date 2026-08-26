@@ -399,7 +399,7 @@ function CategoryZone({
         )}
         {isEmpty ? (
           <div className="flex flex-1 items-center justify-center py-3">
-            <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground/70 font-medium">
+            <span className="text-xs uppercase tracking-[0.08em] text-muted-foreground/70 font-medium">
               Drop cards here
             </span>
           </div>
