@@ -81,7 +81,7 @@ export default {
         xs: ["13px", { lineHeight: "18px" }],      // kickers, labels, captions
         base: ["16px", { lineHeight: "24px" }],    // all body, UI, inputs, buttons
         "2xl": ["26px", { lineHeight: "32px" }],   // section + card headings
-        "4xl": ["40px", { lineHeight: "44px" }],   // page titles, hero, big numbers
+        "4xl": ["32px", { lineHeight: "36px" }],   // page titles, hero, big numbers
       },
       borderRadius: {
         lg: "var(--radius)",
