@@ -79,7 +79,7 @@ export default {
         /* The whole type scale. Four steps. Nothing else exists —
            no sm, no lg, no 3xl, no arbitrary pixel sizes anywhere. */
         xs: ["13px", { lineHeight: "18px" }],      // kickers, labels, captions
-        base: ["17px", { lineHeight: "26px" }],    // all body, UI, inputs, buttons
+        base: ["16px", { lineHeight: "24px" }],    // all body, UI, inputs, buttons
         "2xl": ["26px", { lineHeight: "32px" }],   // section + card headings
         "4xl": ["40px", { lineHeight: "44px" }],   // page titles, hero, big numbers
       },
