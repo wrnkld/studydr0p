@@ -29,19 +29,27 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const reset = () => {
     setEmail("");
     setPassword("");
+    setFirstName("");
+    setLastName("");
     setSubmitting(false);
   };
 
-  const ensureResearcher = async (userId: string, userEmail: string) => {
+  const ensureResearcher = async (
+    userId: string,
+    userEmail: string,
+    names?: { first_name: string; last_name: string },
+  ) => {
     await supabase
       .from("researchers")
-      .upsert({ id: userId, email: userEmail }, { onConflict: "id" });
+      .upsert({ id: userId, email: userEmail, ...(names ?? {}) }, { onConflict: "id" });
   };
 
 
