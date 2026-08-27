@@ -139,6 +139,7 @@ export default function Landing() {
   };
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
+  const [firstName, setFirstName] = useState<string | null>(null);
 
   const loadStudies = async () => {
     if (!user) return;
@@ -165,13 +166,25 @@ export default function Landing() {
     setLoadedUserRows(true);
   };
 
+  const loadProfile = async () => {
+    if (!user) return;
+    const { data } = await supabase
+      .from("researchers")
+      .select("first_name")
+      .eq("id", user.id)
+      .single();
+    setFirstName(data?.first_name ?? null);
+  };
+
   useEffect(() => {
     if (!user) {
       setUserRows([]);
       setLoadedUserRows(false);
+      setFirstName(null);
       return;
     }
     loadStudies();
+    loadProfile();
   }, [user]);
 
   const handleCopyLink = async (e: React.MouseEvent, slug: string | null) => {
