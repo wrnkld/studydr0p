@@ -80,11 +80,14 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
           return;
         }
         if (data.user) {
-          await ensureResearcher(data.user.id, data.user.email ?? email);
+          await ensureResearcher(data.user.id, data.user.email ?? email, {
+            first_name: first,
+            last_name: last,
+          });
         }
         // Fire-and-forget welcome email
         const userId = data.user?.id ?? email;
-        const name = email.split("@")[0];
+        const name = first || email.split("@")[0];
         supabase.functions
           .invoke("send-transactional-email", {
             body: {
