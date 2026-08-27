@@ -1,15 +1,27 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Loader2, Plus, User } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import AuthDialog from "@/components/AuthDialog";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 /**
  * Flat top bar — white, 1px bottom border. Mono wordmark on the left,
- * global account actions on the right. Sign-out lives in the footer to
- * keep it clear of the primary CTA.
+ * global account actions on the right. Sign-out lives in an account menu
+ * to keep the primary CTA area clear.
  */
 export default function TopBar() {
   const { session } = useAuth();
@@ -45,18 +57,115 @@ function Brand() {
   );
 }
 
-
 function SignedInActions() {
+  return <AccountMenu />;
+}
+
+function AccountMenu() {
   const navigate = useNavigate();
+  const { signOut } = useAuth();
+  const [open, setOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      const { error } = await supabase.functions.invoke("delete-account", { body: {} });
+      if (error) {
+        toast.error(error.message || "Could not delete account. Try again.");
+        setDeleting(false);
+        return;
+      }
+      await signOut();
+      toast.success("Your account has been deleted");
+      navigate("/");
+    } catch {
+      toast.error("Could not delete account. Try again.");
+      setDeleting(false);
+    }
+  };
+
   return (
-    <Button
-      size="sm"
-      className="text-base"
-      onClick={() => navigate("/studies/new")}
-    >
-      <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
-      New study
-    </Button>
+    <>
+      <div className="relative" ref={menuRef}>
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Account menu"
+          aria-haspopup="menu"
+          aria-expanded={open}
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
+          <User className="h-4 w-4" strokeWidth={1.5} />
+        </button>
+        {open && (
+          <div
+            role="menu"
+            className="absolute right-0 top-full mt-2 w-44 rounded-lg border border-border bg-card py-1 shadow-sm"
+          >
+            <button
+              type="button"
+              role="menuitem"
+              onClick={async () => {
+                setOpen(false);
+                await signOut();
+                navigate("/");
+              }}
+              className="flex w-full items-center px-4 py-2.5 text-left text-base text-foreground transition-colors hover:bg-muted/40"
+            >
+              Sign out
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setOpen(false);
+                setDeleteOpen(true);
+              }}
+              className="flex w-full items-center px-4 py-2.5 text-left text-base text-destructive transition-colors hover:bg-muted/40"
+            >
+              Delete account
+            </button>
+          </div>
+        )}
+      </div>
+
+      <AlertDialog open={deleteOpen} onOpenChange={(open) => !deleting && setDeleteOpen(open)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete your account?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete your account, all of your studies, and every response.
+              You cannot undo this.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col-reverse sm:flex-row sm:justify-start gap-2">
+            <AlertDialogAction
+              onClick={handleDeleteAccount}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" strokeWidth={1.5} />
+              ) : null}
+              Delete account
+            </AlertDialogAction>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
 
@@ -76,3 +185,4 @@ function SignInForm() {
     </>
   );
 }
+
