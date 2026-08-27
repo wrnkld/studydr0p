@@ -370,8 +370,8 @@ export default function Landing() {
     <div className="flex items-center gap-4 w-full">
       <div className="h-px flex-1 bg-border" />
       <span
-        className="inline-block rounded-full border border-border bg-background px-3 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-xs"
-        style={{ letterSpacing: "0.14em" }}
+        className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-[11px]"
+        style={{ letterSpacing: "0.12em" }}
       >
         {label}
       </span>
