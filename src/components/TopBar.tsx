@@ -61,9 +61,17 @@ function SignedInActions() {
   return <AccountMenu />;
 }
 
+function initialsFor(user: { email?: string | null; user_metadata?: Record<string, unknown> } | null) {
+  const meta = (user?.user_metadata ?? {}) as { first_name?: string; last_name?: string };
+  const first = (meta.first_name ?? "").trim();
+  const last = (meta.last_name ?? "").trim();
+  if (first || last) return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
+  return (user?.email ?? "?").charAt(0).toUpperCase();
+}
+
 function AccountMenu() {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
