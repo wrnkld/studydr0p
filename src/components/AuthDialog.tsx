@@ -60,10 +60,15 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
 
     try {
       if (mode === "signup") {
+        const first = firstName.trim();
+        const last = lastName.trim();
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/` },
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: { first_name: first, last_name: last },
+          },
         });
         if (error) {
           toast.error(error.message.includes("already") ? "That email already has an account. Sign in instead." : error.message);
