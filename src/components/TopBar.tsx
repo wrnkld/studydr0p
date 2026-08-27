@@ -120,7 +120,7 @@ function AccountMenu() {
         {open && (
           <div
             role="menu"
-            className="absolute right-0 top-full mt-2 w-40 rounded-lg border border-border bg-card py-1 shadow-sm"
+            className="absolute right-0 top-full mt-2 w-40 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md"
           >
             <button
               type="button"
@@ -130,7 +130,7 @@ function AccountMenu() {
                 await signOut();
                 navigate("/");
               }}
-              className="flex w-full items-center px-3 py-2 text-left text-base text-foreground transition-colors hover:bg-muted/40"
+              className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-base text-popover-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               Sign out
             </button>
@@ -141,7 +141,7 @@ function AccountMenu() {
                 setOpen(false);
                 setDeleteOpen(true);
               }}
-              className="flex w-full items-center px-3 py-2 text-left text-base text-destructive transition-colors hover:bg-muted/40"
+              className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-base text-destructive outline-none transition-colors hover:bg-accent"
             >
               Delete account
             </button>
