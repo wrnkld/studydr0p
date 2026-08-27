@@ -314,7 +314,7 @@ export default function Landing() {
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-xs"
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px] leading-[16px]"
             style={{ letterSpacing: "0.12em" }}
           >
             {typeLabel}
@@ -323,7 +323,7 @@ export default function Landing() {
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
             <span
-              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-xs"
+              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-[11px] leading-[16px]"
               style={{ letterSpacing: "0.12em" }}
             >
               Example
