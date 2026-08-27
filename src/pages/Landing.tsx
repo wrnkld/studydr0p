@@ -397,7 +397,7 @@ export default function Landing() {
           <>
             <div className="flex items-center justify-between gap-4 mb-4">
               <h2 className="font-serif text-2xl font-bold text-foreground">
-                Your studies
+                Studies
               </h2>
               <Button
                 size="sm"
