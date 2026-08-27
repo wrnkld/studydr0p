@@ -113,9 +113,9 @@ function AccountMenu() {
           aria-label="Account menu"
           aria-haspopup="menu"
           aria-expanded={open}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted/40 text-xs font-semibold uppercase tracking-wide text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <User className="h-4 w-4" strokeWidth={1.5} />
+          {initialsFor(user)}
         </button>
         {open && (
           <div
