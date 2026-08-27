@@ -229,7 +229,7 @@ export default function Landing() {
       >
         <div className="mb-4">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-xs"
+            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px] leading-[16px]"
             style={{ letterSpacing: "0.12em" }}
           >
             {STUDY_TYPE_META[r.type]?.label ?? r.type}
