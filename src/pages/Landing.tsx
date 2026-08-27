@@ -7,8 +7,10 @@ import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import illoFridgeAsset from "@/assets/illo-fridge-v3.svg.asset.json";
+
 import illoGasStationAsset from "@/assets/illo-gasstation-v3.svg.asset.json";
 import illoGroceryAsset from "@/assets/illo-grocery-v3.svg.asset.json";
 import illoOrderAgainAsset from "@/assets/illo-orderagain-v3.svg.asset.json";
