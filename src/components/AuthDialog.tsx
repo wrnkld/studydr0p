@@ -166,6 +166,32 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
         </Tabs>
 
         <form onSubmit={handleEmailSubmit} className="space-y-3">
+          {mode === "signup" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="auth-first-name">First name</Label>
+                <Input
+                  id="auth-first-name"
+                  required
+                  maxLength={60}
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="auth-last-name">Last name</Label>
+                <Input
+                  id="auth-last-name"
+                  required
+                  maxLength={60}
+                  autoComplete="family-name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
           <div className="space-y-1.5">
             <Label htmlFor="auth-email">Email</Label>
             <Input
