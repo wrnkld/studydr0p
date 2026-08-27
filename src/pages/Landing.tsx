@@ -392,25 +392,40 @@ export default function Landing() {
 
       {authLoading ? null : user ? (
         loadedUserRows ? (
-        <section className="overflow-hidden rounded-lg border border-border bg-card">
-          <table className="w-full text-left">
-            <thead className="bg-card">
-              <tr className="border-b border-border">
-                <th className="py-3 px-3 sm:px-5 text-left">
-                  <SortHeader label="Study" k="title" />
-                </th>
-                <th className="hidden sm:table-cell py-3 px-5 text-left">
-                  <SortHeader label="Type" k="type" />
-                </th>
-                <th className="hidden sm:table-cell py-3 px-5" />
-                <th className="hidden sm:table-cell py-3 px-5 text-right">
-                  <SortHeader label="Responses" k="responses" align="right" />
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">{rows.map(renderTableRow)}</tbody>
-          </table>
-        </section>
+          <>
+            <div className="flex items-center justify-between gap-4 mb-4">
+              <h2 className="font-serif text-2xl font-bold text-foreground">
+                Your studies
+              </h2>
+              <Button
+                size="sm"
+                className="text-base"
+                onClick={() => navigate("/studies/new")}
+              >
+                <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
+                New study
+              </Button>
+            </div>
+            <section className="overflow-hidden rounded-lg border border-border bg-card">
+              <table className="w-full text-left">
+                <thead className="bg-card">
+                  <tr className="border-b border-border">
+                    <th className="py-3 px-3 sm:px-5 text-left">
+                      <SortHeader label="Study" k="title" />
+                    </th>
+                    <th className="hidden sm:table-cell py-3 px-5 text-left">
+                      <SortHeader label="Type" k="type" />
+                    </th>
+                    <th className="hidden sm:table-cell py-3 px-5" />
+                    <th className="hidden sm:table-cell py-3 px-5 text-right">
+                      <SortHeader label="Responses" k="responses" align="right" />
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">{rows.map(renderTableRow)}</tbody>
+              </table>
+            </section>
+          </>
         ) : null
       ) : (
         <>
