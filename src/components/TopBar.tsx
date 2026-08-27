@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Loader2, Plus, User } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -61,9 +61,17 @@ function SignedInActions() {
   return <AccountMenu />;
 }
 
+function initialsFor(user: { email?: string | null; user_metadata?: Record<string, unknown> } | null) {
+  const meta = (user?.user_metadata ?? {}) as { first_name?: string; last_name?: string };
+  const first = (meta.first_name ?? "").trim();
+  const last = (meta.last_name ?? "").trim();
+  if (first || last) return `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
+  return (user?.email ?? "?").charAt(0).toUpperCase();
+}
+
 function AccountMenu() {
   const navigate = useNavigate();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
   const [open, setOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -105,9 +113,9 @@ function AccountMenu() {
           aria-label="Account menu"
           aria-haspopup="menu"
           aria-expanded={open}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted/40 text-xs font-semibold uppercase tracking-wide text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <User className="h-4 w-4" strokeWidth={1.5} />
+          {initialsFor(user)}
         </button>
         {open && (
           <div

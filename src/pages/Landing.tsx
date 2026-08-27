@@ -381,21 +381,23 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      <header className="space-y-3 pt-2 pb-4 text-center">
-        <h1 className="text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
-          UX research, without the friction.
-        </h1>
-        <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
-          Run and share unmoderated UX studies with a single link.
-        </p>
-      </header>
+      {user ? null : (
+        <header className="space-y-3 pt-2 pb-4 text-center">
+          <h1 className="text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
+            UX research, without the friction.
+          </h1>
+          <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
+            Run and share unmoderated UX studies with a single link.
+          </p>
+        </header>
+      )}
 
       {authLoading ? null : user ? (
         loadedUserRows ? (
           <>
             <div className="flex items-center justify-between gap-4 mb-4">
               <h2 className="font-serif text-2xl font-bold text-foreground">
-                Your studies
+                Studies
               </h2>
               <Button
                 size="sm"

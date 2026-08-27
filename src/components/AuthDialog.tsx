@@ -29,19 +29,27 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const reset = () => {
     setEmail("");
     setPassword("");
+    setFirstName("");
+    setLastName("");
     setSubmitting(false);
   };
 
-  const ensureResearcher = async (userId: string, userEmail: string) => {
+  const ensureResearcher = async (
+    userId: string,
+    userEmail: string,
+    names?: { first_name: string; last_name: string },
+  ) => {
     await supabase
       .from("researchers")
-      .upsert({ id: userId, email: userEmail }, { onConflict: "id" });
+      .upsert({ id: userId, email: userEmail, ...(names ?? {}) }, { onConflict: "id" });
   };
 
 
@@ -52,10 +60,15 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
 
     try {
       if (mode === "signup") {
+        const first = firstName.trim();
+        const last = lastName.trim();
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/` },
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: { first_name: first, last_name: last },
+          },
         });
         if (error) {
           toast.error(error.message.includes("already") ? "That email already has an account. Sign in instead." : error.message);
@@ -67,11 +80,14 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
           return;
         }
         if (data.user) {
-          await ensureResearcher(data.user.id, data.user.email ?? email);
+          await ensureResearcher(data.user.id, data.user.email ?? email, {
+            first_name: first,
+            last_name: last,
+          });
         }
         // Fire-and-forget welcome email
         const userId = data.user?.id ?? email;
-        const name = email.split("@")[0];
+        const name = first || email.split("@")[0];
         supabase.functions
           .invoke("send-transactional-email", {
             body: {
@@ -150,6 +166,32 @@ export default function AuthDialog({ open, onOpenChange, title, description }: P
         </Tabs>
 
         <form onSubmit={handleEmailSubmit} className="space-y-3">
+          {mode === "signup" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="auth-first-name">First name</Label>
+                <Input
+                  id="auth-first-name"
+                  required
+                  maxLength={60}
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="auth-last-name">Last name</Label>
+                <Input
+                  id="auth-last-name"
+                  required
+                  maxLength={60}
+                  autoComplete="family-name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+            </div>
+          )}
           <div className="space-y-1.5">
             <Label htmlFor="auth-email">Email</Label>
             <Input
