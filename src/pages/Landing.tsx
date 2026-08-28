@@ -409,9 +409,9 @@ export default function Landing() {
         loadedUserRows ? (
           <>
             <div className="flex items-center justify-between gap-4 mb-4">
-              <h2 className="font-serif text-4xl font-bold text-foreground">
+              <h1 className="font-serif text-4xl font-semibold text-foreground">
                 {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
-              </h2>
+              </h1>
               <Button
                 size="sm"
                 className="text-base"
