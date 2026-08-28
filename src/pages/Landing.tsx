@@ -394,7 +394,7 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      {user ? null : (
+      {authLoading || user ? null : (
         <header className="space-y-3 pt-2 pb-4 text-center">
           <h1 className="text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
             UX research, without the friction.
