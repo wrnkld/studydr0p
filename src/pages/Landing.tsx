@@ -369,7 +369,7 @@ export default function Landing() {
       <button
         type="button"
         onClick={() => toggleSort(k)}
-        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-xs ${align === "right" ? "flex-row-reverse" : ""}`}
+        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-xs ${align === "right" ? "justify-end" : ""}`}
         style={{ letterSpacing: "0.12em", fontWeight: 500 }}
       >
         {label}
