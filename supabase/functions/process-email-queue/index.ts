@@ -352,12 +352,12 @@ Deno.serve(async (req) => {
           )
         }
 
-        // 403 means emails are disabled for this project — retrying won't help.
-        // Move straight to DLQ and stop processing the rest of the batch.
+        // 403 from Resend means the API key or sending domain is not permitted —
+        // retrying won't help. Move straight to DLQ and stop the batch.
         if (isForbidden(error)) {
-          await moveToDlq(supabase, queue, msg, 'Emails disabled for this project')
+          await moveToDlq(supabase, queue, msg, 'Resend rejected the sender (403)')
           return new Response(
-            JSON.stringify({ processed: totalProcessed, stopped: 'emails_disabled' }),
+            JSON.stringify({ processed: totalProcessed, stopped: 'sender_forbidden' }),
             { headers: { 'Content-Type': 'application/json' } }
           )
         }
