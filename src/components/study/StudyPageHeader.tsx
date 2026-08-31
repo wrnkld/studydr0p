@@ -156,7 +156,7 @@ export function StudyPageHeader<T extends string>({
                   variant="ghost"
                   size="icon"
                   aria-label="Delete study"
-                  className="text-muted-foreground hover:text-destructive"
+                  className="text-destructive hover:text-destructive"
                   onClick={() => onDelete()}
                 >
                   <Trash2 className="h-4 w-4" strokeWidth={1.5} />
