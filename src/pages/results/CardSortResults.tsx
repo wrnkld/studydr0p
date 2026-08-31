@@ -27,6 +27,15 @@ const CHART_PALETTE = [
   "hsl(var(--chart-8))",
 ];
 
+/** Simple plural -> singular for display grouping. No fuzzy matching. */
+function singularize(word: string): string {
+  if (word.length <= 3) return word;
+  if (/[^aeiou]ies$/.test(word)) return word.slice(0, -3) + "y";
+  if (/(s|x|z|ch|sh)es$/.test(word)) return word.slice(0, -2);
+  if (/[^s]s$/.test(word) && !/(ss|us|is)$/.test(word)) return word.slice(0, -1);
+  return word;
+}
+
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
@@ -50,22 +59,58 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
   const { categories, chartData, byCard, colorByCategory, maxCardTotal } = useMemo(() => {
     const list = rows ?? [];
-    const catSet = new Set<string>();
-    const byCard: Record<string, Record<string, number>> = {};
+    // Display-time only: derive a bucket key so trivially different spellings
+    // ("Payments", "payment methods ", "Payment.") group together. Stored data
+    // keeps the participant's raw label untouched.
+    const normalize = (raw: string) => {
+      const base = raw
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/[\s.,;:!?/&|-]+$/g, "")
+        .trim();
+      return base
+        .split(" ")
+        .map((word) => singularize(word))
+        .join(" ");
+    };
+
+    // key -> { originals: label -> count, byCard: cardId -> count }
+    const buckets: Record<string, { originals: Record<string, number>; cards: Record<string, number> }> = {};
 
     list.forEach((r) => {
       const data = r.data as unknown as CardSortResponseData;
       (data.groups ?? []).forEach((g) => {
-        const cat = g.category_label || "(unnamed)";
-        catSet.add(cat);
+        const original = (g.category_label || "").trim() || "(unnamed)";
+        const key = normalize(original) || "(unnamed)";
+        const bucket = (buckets[key] ??= { originals: {}, cards: {} });
+        bucket.originals[original] = (bucket.originals[original] ?? 0) + 1;
         g.card_ids.forEach((cid) => {
-          if (!byCard[cid]) byCard[cid] = {};
-          byCard[cid][cat] = (byCard[cid][cat] ?? 0) + 1;
+          bucket.cards[cid] = (bucket.cards[cid] ?? 0) + 1;
         });
       });
     });
 
-    const categories = Array.from(catSet);
+    // Most common original spelling wins as the display label.
+    const labelForKey: Record<string, string> = {};
+    Object.entries(buckets).forEach(([key, b]) => {
+      const best = Object.entries(b.originals).sort(
+        (a, c) => c[1] - a[1] || a[0].localeCompare(c[0]),
+      )[0];
+      labelForKey[key] = best ? best[0] : key;
+    });
+
+    const keys = Object.keys(buckets);
+    const categories = keys.map((k) => labelForKey[k]);
+
+    const byCard: Record<string, Record<string, number>> = {};
+    keys.forEach((k) => {
+      const label = labelForKey[k];
+      Object.entries(buckets[k].cards).forEach(([cid, n]) => {
+        if (!byCard[cid]) byCard[cid] = {};
+        byCard[cid][label] = (byCard[cid][label] ?? 0) + n;
+      });
+    });
 
     const colorByCategory = Object.fromEntries(
       categories.map((c, i) => [c, CHART_PALETTE[i % CHART_PALETTE.length]]),
@@ -89,6 +134,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
 
     return { categories, chartData, byCard, colorByCategory, maxCardTotal };
   }, [rows, cards]);
+
 
   if (loading) return <div className="text-base text-muted-foreground">Loading…</div>;
   if (!rows || rows.length === 0) {
