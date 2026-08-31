@@ -1,5 +1,52 @@
-import { sendLovableEmail } from 'npm:@lovable.dev/email-js'
 import { createClient } from 'npm:@supabase/supabase-js@2'
+
+const RESEND_ENDPOINT = 'https://api.resend.com/emails'
+
+class ResendError extends Error {
+  status: number
+  retryAfterSeconds: number | null
+  constructor(status: number, body: string, retryAfterSeconds: number | null) {
+    super(`Resend send failed [${status}]: ${body}`)
+    this.status = status
+    this.retryAfterSeconds = retryAfterSeconds
+  }
+}
+
+// Send one pre-rendered email through the Resend API.
+async function sendResendEmail(
+  payload: Record<string, any>,
+  resendApiKey: string
+): Promise<void> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${resendApiKey}`,
+    'Content-Type': 'application/json',
+  }
+  if (payload.idempotency_key) {
+    headers['Idempotency-Key'] = String(payload.idempotency_key)
+  }
+
+  const response = await fetch(RESEND_ENDPOINT, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      from: payload.from,
+      to: [payload.to],
+      subject: payload.subject,
+      html: payload.html,
+      text: payload.text,
+    }),
+  })
+
+  if (!response.ok) {
+    const body = await response.text()
+    const retryAfter = response.headers.get('Retry-After')
+    throw new ResendError(
+      response.status,
+      body.slice(0, 500),
+      retryAfter ? Number(retryAfter) : null
+    )
+  }
+}
 
 const MAX_RETRIES = 5
 const DEFAULT_BATCH_SIZE = 10
