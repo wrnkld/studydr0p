@@ -354,7 +354,11 @@ export default function StudyBuilder() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="justify-start sm:justify-start">
-            <AlertDialogAction onClick={handleDelete} disabled={deleting}>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={deleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               {deleting ? "Deleting…" : "Delete"}
             </AlertDialogAction>
             <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
