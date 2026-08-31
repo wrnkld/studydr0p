@@ -289,32 +289,7 @@ export default function StudyBuilder() {
                     .single();
                   if (updated) {
                     setStudy(updated as StudyRow);
-                    const url = updated.slug
-                      ? `${window.location.origin}/s/${updated.slug}`
-                      : null;
-                    let copied = false;
-                    if (url) {
-                      try {
-                        await navigator.clipboard.writeText(url);
-                        copied = true;
-                      } catch {
-                        try {
-                          const ta = document.createElement("textarea");
-                          ta.value = url;
-                          ta.style.position = "fixed";
-                          ta.style.opacity = "0";
-                          document.body.appendChild(ta);
-                          ta.select();
-                          copied = document.execCommand("copy");
-                          document.body.removeChild(ta);
-                        } catch {
-                          copied = false;
-                        }
-                      }
-                    }
-                    toast.success(
-                      copied ? "Study saved · link copied" : "Study saved",
-                    );
+                    toast.success("Study saved");
                   }
                   setTab("preview");
                 }}
