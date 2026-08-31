@@ -528,7 +528,7 @@ export default function Landing() {
           <section className="pt-16 pb-28">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="font-serif text-foreground text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
-                $75 for lifetime access.
+                $129 for lifetime access.
               </h2>
               <p className="mt-4 text-base text-muted-foreground leading-relaxed">
                 One payment for unlimited studies and participant responses.
@@ -559,7 +559,7 @@ export default function Landing() {
         open={authOpen}
         onOpenChange={setAuthOpen}
         title="Sign in to unlock"
-        description="Create an account or sign in, then complete your $75 lifetime unlock."
+        description="Create an account or sign in, then complete your $129 lifetime unlock."
       />
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>

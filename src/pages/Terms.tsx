@@ -12,7 +12,7 @@ export default function Terms() {
           participants and how you use their answers.
         </p>
         <p>
-          StudyDrop is a one-time $75 lifetime unlock. Payments are final and
+          StudyDrop is a one-time $129 lifetime unlock. Payments are final and
           processed by Stripe.
         </p>
         <p>
