@@ -3,6 +3,6 @@ export const FREE_RESPONSE_LIMIT = 10;
 
 export const UPGRADE_COPY = {
   headline: "Unlock unlimited studies and responses",
-  body: "Yours forever for $75.",
+  body: "Yours forever for $129.",
   cta: "Upgrade",
 };

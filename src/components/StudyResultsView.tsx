@@ -291,7 +291,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                 }
               }}
             >
-              {unlocking ? "Loading…" : "Unlock for $75"}
+              {unlocking ? "Loading…" : "Unlock for $129"}
             </Button>
           </div>
 
