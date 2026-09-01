@@ -66,6 +66,74 @@ function BarTooltip({
   );
 }
 
+function BarRow({
+  entry,
+  categories,
+  colorFor,
+  maxCardTotal,
+}: {
+  entry: Record<string, string | number>;
+  categories: string[];
+  colorFor: (cat: string) => string;
+  maxCardTotal: number;
+}) {
+  const [tip, setTip] = useState({ show: false, x: 0, y: 0 });
+  const cardTotal = categories.reduce(
+    (sum, cat) => sum + ((entry[cat] as number) ?? 0),
+    0
+  );
+  const barWidth = maxCardTotal > 0 ? (cardTotal / maxCardTotal) * 100 : 0;
+
+  return (
+    <li className="space-y-1">
+      <div className="flex items-baseline justify-between gap-3 text-base">
+        <span className="truncate font-medium">{entry.name}</span>
+        <span className="shrink-0 tabular-nums text-muted-foreground">
+          {cardTotal} {cardTotal === 1 ? "response" : "responses"}
+        </span>
+      </div>
+      <div
+        className="relative h-3 w-full overflow-hidden rounded-lg bg-[hsl(var(--chart-grid))]"
+        onMouseEnter={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+        onMouseMove={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+        onMouseLeave={() => setTip((t) => ({ ...t, show: false }))}
+      >
+        <div
+          className="flex h-full rounded-lg"
+          style={{ width: `${barWidth}%` }}
+        >
+          {categories.map((cat) => {
+            const count = (entry[cat] as number) ?? 0;
+            if (count === 0) return null;
+            const segWidth = cardTotal > 0 ? (count / cardTotal) * 100 : 0;
+            return (
+              <Segment
+                key={cat}
+                color={colorFor(cat)}
+                widthPct={`${segWidth}%`}
+              />
+            );
+          })}
+        </div>
+        {tip.show && (
+          <div
+            className="fixed z-50 pointer-events-none"
+            style={{ left: tip.x + 12, top: tip.y - 12 }}
+          >
+            <BarTooltip
+              categories={categories}
+              values={Object.fromEntries(
+                categories.map((cat) => [cat, (entry[cat] as number) ?? 0])
+              )}
+              colorFor={colorFor}
+            />
+          </div>
+        )}
+      </div>
+    </li>
+  );
+}
+
 function Segment({
   color,
   widthPct,
