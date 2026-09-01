@@ -4,7 +4,6 @@ import {
   Body,
   Container,
   Head,
-  Heading,
   Html,
   Preview,
   Text,
@@ -17,18 +16,18 @@ const ProUnlockEmail = () => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>You're now on {SITE_NAME} Pro — thanks!</Preview>
-    <Body style={main}>
+    <Body>
       <Container style={container}>
-        <Heading style={h1}>You're now on Pro</Heading>
+        <Text style={title}>You're now on Pro</Text>
         <Text style={text}>Thanks for upgrading to {SITE_NAME} Pro.</Text>
         <Text style={text}>
           Your account is now unlocked: unlimited studies, unlimited responses, and full results
           export — yours forever.
         </Text>
-        <Text style={text}>
+        <Text style={lastText}>
           Your receipt has been emailed separately by our payment processor.
         </Text>
-        <Text style={footer}>— {SITE_NAME}</Text>
+        <Text style={signoff}>— {SITE_NAME}</Text>
       </Container>
     </Body>
   </Html>
@@ -41,8 +40,15 @@ export const template = {
   previewData: {},
 } satisfies TemplateEntry
 
-const main = { backgroundColor: '#ffffff', fontFamily: "'Calibre', Arial, sans-serif" }
-const container = { padding: '20px 25px' }
-const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#0f172a', margin: '0 0 20px' }
-const text = { fontSize: '14px', color: '#0f172a', lineHeight: '1.6', margin: '0 0 16px' }
-const footer = { fontSize: '14px', color: '#999999', margin: '30px 0 0' }
+const container = {
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  maxWidth: '600px',
+  margin: '0 auto',
+  padding: '40px 20px',
+  fontSize: '16px',
+}
+const title = { fontWeight: 600 as const, margin: '0 0 24px' }
+const text = { lineHeight: '1.6', color: '#374151', margin: '0 0 16px' }
+const lastText = { lineHeight: '1.6', color: '#374151', margin: '0 0 24px' }
+const signoff = { color: '#6b7280', margin: '0' }
