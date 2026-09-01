@@ -36,42 +36,46 @@ function singularize(word: string): string {
   return word;
 }
 
+function BarTooltip({
+  categories,
+  values,
+  colorFor,
+}: {
+  categories: string[];
+  values: Record<string, number>;
+  colorFor: (cat: string) => string;
+}) {
+  return (
+    <div className="rounded-lg border bg-popover px-3 py-2 text-base text-popover-foreground shadow-md">
+      {categories.map((cat) => {
+        const count = values[cat] ?? 0;
+        if (count === 0) return null;
+        return (
+          <div key={cat} className="flex items-center gap-2 py-0.5">
+            <span
+              aria-hidden
+              className="inline-block h-2 w-2 rounded-full"
+              style={{ backgroundColor: colorFor(cat) }}
+            />
+            <span className="font-medium">{cat}</span>
+            <span className="ml-auto font-medium tabular-nums">{count}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Segment({
   color,
-  cat,
-  count,
   widthPct,
 }: {
   color: string;
-  cat: string;
-  count: number;
   widthPct: string;
 }) {
-  const [tip, setTip] = useState({ show: false, x: 0, y: 0 });
   return (
-    <div
-      className="relative h-full"
-      style={{ width: widthPct }}
-      onMouseEnter={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
-      onMouseMove={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
-      onMouseLeave={() => setTip((t) => ({ ...t, show: false }))}
-      aria-label={`${cat}: ${count}`}
-    >
+    <div className="relative h-full" style={{ width: widthPct }}>
       <div className="h-full" style={{ backgroundColor: color }} />
-      {tip.show && (
-        <div
-          className="fixed z-50 flex items-center gap-2 rounded-lg border bg-popover px-3 py-1.5 text-base text-popover-foreground shadow-md pointer-events-none"
-          style={{ left: tip.x + 12, top: tip.y - 40 }}
-        >
-          <span
-            aria-hidden
-            className="inline-block h-2 w-2 rounded-full"
-            style={{ backgroundColor: color }}
-          />
-          <span className="font-medium">{cat}</span>
-          <span className="font-medium tabular-nums">{count}</span>
-        </div>
-      )}
     </div>
   );
 }
