@@ -192,21 +192,13 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                       if (count === 0) return null;
                       const segWidth = cardTotal > 0 ? (count / cardTotal) * 100 : 0;
                       return (
-                        <Tooltip key={cat}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className="h-full cursor-help"
-                              style={{
-                                width: `${segWidth}%`,
-                                backgroundColor: colorFor(cat),
-                              }}
-                              aria-label={`${cat}: ${count}`}
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent side="top" sideOffset={6}>
-                            {cat}: {count}
-                          </TooltipContent>
-                        </Tooltip>
+                        <Segment
+                          key={cat}
+                          color={colorFor(cat)}
+                          cat={cat}
+                          count={count}
+                          widthPct={`${segWidth}%`}
+                        />
                       );
                     })}
                   </div>
