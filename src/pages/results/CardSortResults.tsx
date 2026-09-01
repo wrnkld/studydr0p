@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
 import { Kicker } from "@/components/study/primitives";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ResponseRow {
   id: string;
@@ -35,6 +34,46 @@ function singularize(word: string): string {
   if (/(s|x|z|ch|sh)es$/.test(word)) return word.slice(0, -2);
   if (/[^s]s$/.test(word) && !/(ss|us|is)$/.test(word)) return word.slice(0, -1);
   return word;
+}
+
+function Segment({
+  color,
+  cat,
+  count,
+  widthPct,
+}: {
+  color: string;
+  cat: string;
+  count: number;
+  widthPct: string;
+}) {
+  const [tip, setTip] = useState({ show: false, x: 0, y: 0 });
+  return (
+    <div
+      className="relative h-full"
+      style={{ width: widthPct }}
+      onMouseEnter={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+      onMouseMove={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+      onMouseLeave={() => setTip((t) => ({ ...t, show: false }))}
+      aria-label={`${cat}: ${count}`}
+    >
+      <div className="h-full" style={{ backgroundColor: color }} />
+      {tip.show && (
+        <div
+          className="fixed z-50 flex items-center gap-2 rounded-lg border bg-popover px-3 py-1.5 text-base text-popover-foreground shadow-md pointer-events-none"
+          style={{ left: tip.x + 12, top: tip.y - 40 }}
+        >
+          <span
+            aria-hidden
+            className="inline-block h-2 w-2 rounded-full"
+            style={{ backgroundColor: color }}
+          />
+          <span className="font-medium">{cat}</span>
+          <span className="font-medium tabular-nums">{count}</span>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function CardSortResults({ studyId, cards, responses }: Props) {
@@ -193,21 +232,13 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                       if (count === 0) return null;
                       const segWidth = cardTotal > 0 ? (count / cardTotal) * 100 : 0;
                       return (
-                        <Tooltip key={cat}>
-                          <TooltipTrigger asChild>
-                            <div
-                              className="h-full cursor-help"
-                              style={{
-                                width: `${segWidth}%`,
-                                backgroundColor: colorFor(cat),
-                              }}
-                              aria-label={`${cat}: ${count}`}
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent side="top" sideOffset={6}>
-                            {cat}: {count}
-                          </TooltipContent>
-                        </Tooltip>
+                        <Segment
+                          key={cat}
+                          color={colorFor(cat)}
+                          cat={cat}
+                          count={count}
+                          widthPct={`${segWidth}%`}
+                        />
                       );
                     })}
                   </div>
