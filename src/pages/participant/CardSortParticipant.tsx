@@ -19,6 +19,7 @@ import {
   CategoryRow,
 } from "@/lib/types";
 import { toast } from "sonner";
+import { submitErrorMessage } from "@/lib/submitError";
 import { Plus, X } from "lucide-react";
 import { Chip, Frame, Kicker } from "@/components/study/primitives";
 import { cn } from "@/lib/utils";
@@ -223,7 +224,7 @@ export default function CardSortParticipant({
     });
     if (respErr) {
       setSubmitting(false);
-      toast.error(respErr.message);
+      toast.error(submitErrorMessage(respErr));
       return;
     }
     await supabase

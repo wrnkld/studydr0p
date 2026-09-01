@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { supabase } from "@/integrations/supabase/client";
 import { SurveyConfig, SurveyQuestion, getLikertLabels, isMultiSelect } from "@/lib/types";
 import { toast } from "sonner";
+import { submitErrorMessage } from "@/lib/submitError";
 import { SectionHeader } from "@/components/study/primitives";
 
 interface Props {
@@ -72,7 +73,7 @@ export default function SurveyParticipant({
     });
     if (respErr) {
       setSubmitting(false);
-      toast.error(respErr.message);
+      toast.error(submitErrorMessage(respErr));
       return;
     }
     await supabase
