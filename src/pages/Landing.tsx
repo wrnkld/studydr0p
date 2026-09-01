@@ -601,7 +601,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What does it cost?",
-    a: "$75 once, including unlimited studies and responses.",
+    a: "$129 once, including unlimited studies and responses.",
   },
   {
     q: "Can I try it before paying?",
