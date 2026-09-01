@@ -410,7 +410,13 @@ export default function Landing() {
           <>
             <div className="flex items-center justify-between gap-4 mb-4">
               <h1 className="font-serif text-4xl font-semibold text-foreground">
-                {firstName ? `Welcome back, ${firstName}` : "Welcome back"}
+                {firstName ? (
+                  <>
+                    Hey, <span className="hidden sm:inline">{firstName}</span>
+                  </>
+                ) : (
+                  "Hey"
+                )}
               </h1>
               <Button
                 size="sm"
