@@ -36,6 +36,46 @@ function singularize(word: string): string {
   return word;
 }
 
+function Segment({
+  color,
+  cat,
+  count,
+  widthPct,
+}: {
+  color: string;
+  cat: string;
+  count: number;
+  widthPct: string;
+}) {
+  const [tip, setTip] = useState({ show: false, x: 0, y: 0 });
+  return (
+    <div
+      className="relative h-full"
+      style={{ width: widthPct }}
+      onMouseEnter={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+      onMouseMove={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+      onMouseLeave={() => setTip((t) => ({ ...t, show: false }))}
+      aria-label={`${cat}: ${count}`}
+    >
+      <div className="h-full" style={{ backgroundColor: color }} />
+      {tip.show && (
+        <div
+          className="fixed z-50 flex items-center gap-2 rounded-lg border bg-popover px-3 py-1.5 text-base text-popover-foreground shadow-md pointer-events-none"
+          style={{ left: tip.x + 12, top: tip.y - 40 }}
+        >
+          <span
+            aria-hidden
+            className="inline-block h-2 w-2 rounded-full"
+            style={{ backgroundColor: color }}
+          />
+          <span className="font-medium">{cat}</span>
+          <span className="tabular-nums text-muted-foreground">{count}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function CardSortResults({ studyId, cards, responses }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [loading, setLoading] = useState(!responses);
