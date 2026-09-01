@@ -69,7 +69,7 @@ function Segment({
             style={{ backgroundColor: color }}
           />
           <span className="font-medium">{cat}</span>
-          <span className="tabular-nums text-muted-foreground">{count}</span>
+          <span className="font-medium tabular-nums">{count}</span>
         </div>
       )}
     </div>
