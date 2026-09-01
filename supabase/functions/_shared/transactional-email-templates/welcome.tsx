@@ -4,7 +4,6 @@ import {
   Body,
   Container,
   Head,
-  Heading,
   Html,
   Preview,
   Text,
@@ -17,26 +16,24 @@ interface WelcomeEmailProps {
   name?: string
 }
 
-const WelcomeEmail = ({ name }: WelcomeEmailProps) => {
-  const greeting = name ? `Hey ${name},` : 'Hey there,'
-  return (
-    <Html lang="en" dir="ltr">
-      <Head />
-      <Preview>Welcome to {SITE_NAME}</Preview>
-      <Body style={main}>
-        <Container style={container}>
-          <Heading style={h1}>Welcome to {SITE_NAME}</Heading>
-          <Text style={text}>{greeting}</Text>
-          <Text style={text}>
-            Thank you for joining {SITE_NAME}. Run quick studies, gather feedback, and learn from your users.
-          </Text>
-          <Text style={text}>Have fun!</Text>
-          <Text style={footer}>— {SITE_NAME}</Text>
-        </Container>
-      </Body>
-    </Html>
-  )
-}
+const WelcomeEmail = ({ name }: WelcomeEmailProps) => (
+  <Html lang="en" dir="ltr">
+    <Head />
+    <Preview>Welcome to {SITE_NAME}</Preview>
+    <Body>
+      <Container style={container}>
+        <Text style={title}>Welcome to {SITE_NAME}</Text>
+        <Text style={text}>Hey{name ? ` ${name}` : ''},</Text>
+        <Text style={text}>
+          Thank you for joining {SITE_NAME}. Run quick studies, gather feedback, and learn from
+          your users.
+        </Text>
+        <Text style={lastText}>Have fun!</Text>
+        <Text style={signoff}>— {SITE_NAME}</Text>
+      </Container>
+    </Body>
+  </Html>
+)
 
 export const template = {
   component: WelcomeEmail,
@@ -45,18 +42,15 @@ export const template = {
   previewData: { name: 'Jane' },
 } satisfies TemplateEntry
 
-const main = { backgroundColor: '#ffffff', fontFamily: "'Calibre', Arial, sans-serif" }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#0f172a',
-  margin: '0 0 20px',
+const container = {
+  fontFamily:
+    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  maxWidth: '600px',
+  margin: '0 auto',
+  padding: '40px 20px',
+  fontSize: '16px',
 }
-const text = {
-  fontSize: '14px',
-  color: '#0f172a',
-  lineHeight: '1.6',
-  margin: '0 0 16px',
-}
-const footer = { fontSize: '14px', color: '#999999', margin: '30px 0 0' }
+const title = { fontWeight: 600 as const, margin: '0 0 24px' }
+const text = { lineHeight: '1.6', color: '#374151', margin: '0 0 16px' }
+const lastText = { lineHeight: '1.6', color: '#374151', margin: '0 0 24px' }
+const signoff = { color: '#6b7280', margin: '0' }
