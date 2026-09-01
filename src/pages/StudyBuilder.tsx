@@ -173,13 +173,23 @@ export default function StudyBuilder() {
 
   if (loading || !study) {
     return (
-      <PageContainer width="wide">
-        <div className="flex items-center justify-center py-24">
-          <p className="text-base text-muted-foreground">Loading…</p>
+      <>
+        {/* Reserve the exact header height so tabs/actions don't shift in on load */}
+        <div
+          aria-hidden
+          className="sticky top-16 z-30 w-full border-b border-border bg-card"
+        >
+          <div className="container max-w-5xl h-16" />
         </div>
-      </PageContainer>
+        <PageContainer width="wide">
+          <div className="flex items-center justify-center py-24">
+            <p className="text-base text-muted-foreground">Loading…</p>
+          </div>
+        </PageContainer>
+      </>
     );
   }
+
 
   const builder =
     study.type === "survey" ? (
