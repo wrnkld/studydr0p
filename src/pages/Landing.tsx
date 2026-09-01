@@ -412,7 +412,7 @@ export default function Landing() {
               <h1 className="font-serif text-4xl font-semibold text-foreground">
                 {firstName ? (
                   <>
-                    Hey, <span className="hidden sm:inline">{firstName}</span>
+                    Hey<span className="hidden sm:inline">, {firstName}</span>
                   </>
                 ) : (
                   "Hey"
