@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { CardRow, CardSortResponseData } from "@/lib/types";
 import { Kicker } from "@/components/study/primitives";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface ResponseRow {
   id: string;
