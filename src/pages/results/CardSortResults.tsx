@@ -217,6 +217,7 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
               0
             );
             const barWidth = maxCardTotal > 0 ? (cardTotal / maxCardTotal) * 100 : 0;
+            const [tip, setTip] = useState({ show: false, x: 0, y: 0 });
 
             return (
               <li key={entry.name} className="space-y-1">
@@ -226,7 +227,12 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                     {cardTotal} {cardTotal === 1 ? "response" : "responses"}
                   </span>
                 </div>
-                <div className="h-3 w-full overflow-hidden rounded-lg bg-[hsl(var(--chart-grid))]">
+                <div
+                  className="relative h-3 w-full overflow-hidden rounded-lg bg-[hsl(var(--chart-grid))]"
+                  onMouseEnter={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+                  onMouseMove={(e) => setTip({ show: true, x: e.clientX, y: e.clientY })}
+                  onMouseLeave={() => setTip((t) => ({ ...t, show: false }))}
+                >
                   <div
                     className="flex h-full rounded-lg"
                     style={{ width: `${barWidth}%` }}
@@ -239,13 +245,25 @@ export default function CardSortResults({ studyId, cards, responses }: Props) {
                         <Segment
                           key={cat}
                           color={colorFor(cat)}
-                          cat={cat}
-                          count={count}
                           widthPct={`${segWidth}%`}
                         />
                       );
                     })}
                   </div>
+                  {tip.show && (
+                    <div
+                      className="fixed z-50 pointer-events-none"
+                      style={{ left: tip.x + 12, top: tip.y - 12 }}
+                    >
+                      <BarTooltip
+                        categories={categories}
+                        values={Object.fromEntries(
+                          categories.map((cat) => [cat, (entry[cat] as number) ?? 0])
+                        )}
+                        colorFor={colorFor}
+                      />
+                    </div>
+                  )}
                 </div>
               </li>
             );
