@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { TreeTestConfig, TreeTestTask } from "@/lib/types";
 import { toast } from "sonner";
+import { submitErrorMessage } from "@/lib/submitError";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/study/primitives";
 
@@ -88,7 +89,7 @@ export default function TreeTestParticipant({
         .eq("study_id", study.id)
         .order("position");
       if (error) {
-        toast.error(error.message);
+        toast.error(submitErrorMessage(error));
         return;
       }
       setNodes(data ?? []);
@@ -176,7 +177,7 @@ export default function TreeTestParticipant({
     });
     if (respErr) {
       setSubmitting(false);
-      toast.error(respErr.message);
+      toast.error(submitErrorMessage(respErr));
       return;
     }
     await supabase

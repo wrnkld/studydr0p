@@ -4,6 +4,7 @@ import { FirstClickConfig } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Kicker } from "@/components/study/primitives";
 import { toast } from "sonner";
+import { submitErrorMessage } from "@/lib/submitError";
 
 interface Props {
   study: {
@@ -95,7 +96,7 @@ export default function FirstClickParticipant({
     });
     if (error) {
       setSubmitting(false);
-      toast.error(error.message);
+      toast.error(submitErrorMessage(error));
       return;
     }
     await supabase
