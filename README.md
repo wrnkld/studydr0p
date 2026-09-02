@@ -1,6 +1,6 @@
 # StudyDrop
 
-UX research, without the friction.
+UX research without the friction.
 
 Built and shipped by Matthew Stevens.
 

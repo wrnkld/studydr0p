@@ -397,7 +397,7 @@ export default function Landing() {
       {authLoading || user ? null : (
         <header className="space-y-3 pt-2 pb-4 text-center">
           <h1 className="text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
-            UX research, without the friction.
+            UX research without the friction.
           </h1>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
             Run and share unmoderated UX studies with a single link.
