@@ -120,8 +120,39 @@ function AccountMenu() {
         {open && (
           <div
             role="menu"
-            className="absolute right-0 top-full mt-2 w-40 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md"
+            className="absolute right-0 top-full mt-2 w-44 rounded-lg border bg-popover p-1 text-popover-foreground shadow-md"
           >
+            {!paidLoading && (
+              isPaid ? (
+                <div className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-base text-muted-foreground">
+                  Pro plan · active
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  role="menuitem"
+                  disabled={upgrading}
+                  onClick={async () => {
+                    if (!user) return;
+                    setUpgrading(true);
+                    try {
+                      await (await import("@/lib/startCheckout")).startCheckout({
+                        userId: user.id,
+                        email: user.email ?? undefined,
+                        returnTo: "/",
+                      });
+                    } catch (e) {
+                      setUpgrading(false);
+                      toast.error((e as Error).message);
+                    }
+                  }}
+                  className="flex w-full items-center rounded-lg px-2 py-1.5 text-left text-base text-popover-foreground outline-none transition-colors hover:bg-accent hover:text-accent-foreground disabled:opacity-60"
+                >
+                  {upgrading ? "Loading…" : "Upgrade — $129/yr"}
+                </button>
+              )
+            )}
+
             <button
               type="button"
               role="menuitem"
