@@ -63,6 +63,23 @@ async function handleCheckoutCompleted(session: any, env: StripeEnv) {
   if (email) await sendConfirmationEmail(email);
 }
 
+/** Revoke access when a yearly subscription ends or goes unpaid. */
+async function handleSubscriptionChange(subscription: any, _env: StripeEnv) {
+  const customerId = typeof subscription.customer === "string"
+    ? subscription.customer
+    : subscription.customer?.id;
+  const userId = subscription.metadata?.userId;
+  const active = ["active", "trialing", "past_due"].includes(subscription.status);
+
+  const query = getSupabase().from("researchers").update({ is_paid: active });
+  const { error } = userId
+    ? await query.eq("id", userId)
+    : customerId
+      ? await query.eq("stripe_customer_id", customerId)
+      : { error: new Error("subscription event has no userId or customer") };
+  if (error) console.error("Failed to sync is_paid from subscription:", error);
+}
+
 async function handleRefund(charge: any, _env: StripeEnv) {
   const customerId = typeof charge.customer === "string" ? charge.customer : charge.customer?.id;
   if (!customerId) {
@@ -103,6 +120,10 @@ Deno.serve(async (req) => {
         break;
       case "charge.refunded":
         await handleRefund(event.data.object, env);
+        break;
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+        await handleSubscriptionChange(event.data.object, env);
         break;
       default:
         console.log("Unhandled event:", event.type);

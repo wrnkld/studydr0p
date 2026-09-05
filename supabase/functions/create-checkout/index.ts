@@ -74,26 +74,32 @@ Deno.serve(async (req) => {
       });
     }
     const stripePrice = prices.data[0];
+    const isRecurring = stripePrice.type === "recurring";
 
     const customerId = (customerEmail || userId)
       ? await resolveOrCreateCustomer(stripe, { email: customerEmail, userId })
       : undefined;
 
-    const productId = typeof stripePrice.product === "string"
-      ? stripePrice.product
-      : stripePrice.product.id;
-    const product = await stripe.products.retrieve(productId);
+    let productDescription: string | undefined;
+    if (!isRecurring) {
+      const productId = typeof stripePrice.product === "string"
+        ? stripePrice.product
+        : stripePrice.product.id;
+      const product = await stripe.products.retrieve(productId);
+      productDescription = product.name;
+    }
 
     const session = await stripe.checkout.sessions.create({
       line_items: [{ price: stripePrice.id, quantity: 1 }],
-      mode: "payment",
+      mode: isRecurring ? "subscription" : "payment",
       success_url: returnUrl,
       cancel_url: returnUrl.split("?")[0],
       ...(customerId && { customer: customerId }),
-      payment_intent_data: { description: product.name },
+      ...(!isRecurring && { payment_intent_data: { description: productDescription } }),
       managed_payments: { enabled: true },
       ...(userId && {
         metadata: { userId, managed_payments: "true" },
+        ...(isRecurring && { subscription_data: { metadata: { userId } } }),
       }),
     });
 

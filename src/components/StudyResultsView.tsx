@@ -270,7 +270,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               Unlock results
             </h3>
             <p className="mt-2 text-base text-muted-foreground">
-              One-time payment for lifetime access to unlimited studies and unlimited participant responses.
+              $129 per year for unlimited studies and unlimited participant responses.
             </p>
             <Button
               size="sm"

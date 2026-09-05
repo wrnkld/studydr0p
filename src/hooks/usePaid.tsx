@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
 /**
- * Returns whether the current researcher has paid the one-time fee.
+ * Returns whether the current researcher has an active paid plan.
  * `loading` is true until we've fetched the row at least once.
  */
 export function usePaid() {

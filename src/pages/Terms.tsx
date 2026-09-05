@@ -12,8 +12,8 @@ export default function Terms() {
           participants and how you use their answers.
         </p>
         <p>
-          StudyDrop is a one-time $129 lifetime unlock. Payments are final and
-          processed by Stripe.
+          StudyDrop costs $129 per year. Subscriptions renew automatically
+          until you cancel, and payments are processed by Stripe.
         </p>
         <p>
           Do not use StudyDrop for illegal, harmful, or abusive purposes. We
