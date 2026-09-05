@@ -72,10 +72,13 @@ function initialsFor(user: { email?: string | null; user_metadata?: Record<strin
 function AccountMenu() {
   const navigate = useNavigate();
   const { signOut, user } = useAuth();
+  const { isPaid, loading: paidLoading } = usePaid();
   const [open, setOpen] = useState(false);
+  const [upgrading, setUpgrading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     if (!open) return;
