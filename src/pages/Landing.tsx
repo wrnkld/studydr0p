@@ -534,10 +534,10 @@ export default function Landing() {
           <section className="pt-16 pb-28">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="font-serif text-foreground text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
-                $129 for lifetime access.
+                $129 per year.
               </h2>
               <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-                One payment for unlimited studies and participant responses.
+                Unlimited studies and participant responses.
               </p>
               <button
                 type="button"
@@ -549,9 +549,9 @@ export default function Landing() {
                 {unlocking ? (
                   <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
                 ) : isPaid ? (
-                  "You're in — Lifetime"
+                  "You're in"
                 ) : (
-                  "Get lifetime access"
+                  "Get full access"
                 )}
               </button>
             </div>
@@ -565,7 +565,7 @@ export default function Landing() {
         open={authOpen}
         onOpenChange={setAuthOpen}
         title="Sign in to unlock"
-        description="Create an account or sign in, then complete your $129 lifetime unlock."
+        description="Create an account or sign in, then start your $129 per year plan."
       />
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
@@ -607,7 +607,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "What does it cost?",
-    a: "$129 once, including unlimited studies and responses.",
+    a: "$129 per year, including unlimited studies and responses.",
   },
   {
     q: "Can I try it before paying?",

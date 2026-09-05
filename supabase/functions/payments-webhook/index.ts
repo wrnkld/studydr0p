@@ -121,6 +121,10 @@ Deno.serve(async (req) => {
       case "charge.refunded":
         await handleRefund(event.data.object, env);
         break;
+      case "customer.subscription.updated":
+      case "customer.subscription.deleted":
+        await handleSubscriptionChange(event.data.object, env);
+        break;
       default:
         console.log("Unhandled event:", event.type);
     }
