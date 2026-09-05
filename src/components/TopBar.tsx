@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
+import { usePaid } from "@/hooks/usePaid";
+
 import { Button } from "@/components/ui/button";
 import AuthDialog from "@/components/AuthDialog";
 import { supabase } from "@/integrations/supabase/client";
