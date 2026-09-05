@@ -22,7 +22,7 @@ export default function Checkout() {
       try {
         const { data, error } = await supabase.functions.invoke("create-checkout", {
           body: {
-            priceId: "pro_lifetime",
+            priceId: "pro_yearly",
             customerEmail: user.email ?? undefined,
             userId: user.id,
             returnUrl,
