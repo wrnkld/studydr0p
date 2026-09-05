@@ -23,9 +23,15 @@ interface Props {
   /** Optional override of the dialog headline (e.g. on the paywall). */
   title?: string;
   description?: string;
+  /**
+   * Called after a successful sign-in/sign-up. When provided, the dialog
+   * skips its own navigation so the caller can continue a flow (e.g. checkout).
+   */
+  onAuthed?: (user: { id: string; email?: string | null }) => void;
 }
 
-export default function AuthDialog({ open, onOpenChange, title, description }: Props) {
+export default function AuthDialog({ open, onOpenChange, title, description, onAuthed }: Props) {
+
   const [mode, setMode] = useState<Mode>("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
