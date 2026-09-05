@@ -566,7 +566,20 @@ export default function Landing() {
         onOpenChange={setAuthOpen}
         title="Sign in to unlock"
         description="Create an account or sign in, then start your $129 per year plan."
+        onAuthed={async (u) => {
+          setUnlocking(true);
+          try {
+            await (await import("@/lib/startCheckout")).startCheckout({
+              userId: u.id,
+              email: u.email ?? undefined,
+              returnTo: "/",
+            });
+          } catch {
+            setUnlocking(false);
+          }
+        }}
       />
+
 
       <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
