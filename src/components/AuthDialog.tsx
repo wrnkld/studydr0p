@@ -107,7 +107,8 @@ export default function AuthDialog({ open, onOpenChange, title, description, onA
         toast.success("Welcome to StudyDrop");
         onOpenChange(false);
         reset();
-        navigate("/");
+        if (onAuthed && data.user) onAuthed(data.user);
+        else navigate("/");
         return;
       }
 
@@ -122,11 +123,13 @@ export default function AuthDialog({ open, onOpenChange, title, description, onA
       toast.success("Welcome back");
       onOpenChange(false);
       reset();
-      navigate("/");
+      if (onAuthed && data.user) onAuthed(data.user);
+      else navigate("/");
     } finally {
       setSubmitting(false);
     }
   };
+
 
   const handleForgot = async () => {
     if (!email) {
