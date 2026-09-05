@@ -66,7 +66,9 @@ Deno.serve(async (req) => {
     const env = environment as StripeEnv;
     const stripe = createStripeClient(env);
 
-    const prices = await stripe.prices.list({ lookup_keys: [priceId] });
+    // Only active prices can be used in a checkout session; replaced/archived
+    // prices can keep the same lookup key, so filter explicitly.
+    const prices = await stripe.prices.list({ lookup_keys: [priceId], active: true });
     if (!prices.data.length) {
       return new Response(JSON.stringify({ error: "Price not found" }), {
         status: 404,
