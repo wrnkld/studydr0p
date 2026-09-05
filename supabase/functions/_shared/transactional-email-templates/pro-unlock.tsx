@@ -22,7 +22,7 @@ const ProUnlockEmail = () => (
         <Text style={text}>Thanks for upgrading to {SITE_NAME} Pro.</Text>
         <Text style={text}>
           Your account is now unlocked: unlimited studies, unlimited responses, and full results
-          export — yours forever.
+          export. Your plan renews yearly until you cancel.
         </Text>
         <Text style={lastText}>
           Your receipt has been emailed separately by our payment processor.
