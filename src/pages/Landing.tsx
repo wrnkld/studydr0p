@@ -9,6 +9,7 @@ import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { REFUND_NOTE } from "@/lib/limits";
 import illoFridgeAsset from "@/assets/illo-fridge-v3.svg.asset.json";
 
 import illoGasStationAsset from "@/assets/illo-gasstation-v3.svg.asset.json";

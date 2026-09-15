@@ -8,7 +8,8 @@ import { usePaid } from "@/hooks/usePaid";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { PRO_PRICE_LABEL, PRO_CTA } from "@/lib/limits";
+import { Checkbox } from "@/components/ui/checkbox";
+import { PRO_PRICE_LABEL, PRO_CTA, REFUND_NOTE } from "@/lib/limits";
 import {
   BillingInvoice,
   BillingSubscription,
@@ -55,6 +56,8 @@ export default function Account() {
   const [upgrading, setUpgrading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [showExamples, setShowExamples] = useState(true);
+  const [examplesSaving, setExamplesSaving] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -62,12 +65,15 @@ export default function Account() {
     (async () => {
       const { data } = await supabase
         .from("researchers")
-        .select("first_name, last_name")
+        .select("first_name, last_name, show_examples")
         .eq("id", user.id)
         .maybeSingle();
       if (cancelled) return;
       setFirstName((data as { first_name?: string } | null)?.first_name ?? null);
       setLastName((data as { last_name?: string } | null)?.last_name ?? null);
+      setShowExamples(
+        (data as { show_examples?: boolean } | null)?.show_examples !== false,
+      );
     })();
     return () => {
       cancelled = true;
@@ -106,6 +112,23 @@ export default function Account() {
     } catch (e) {
       setUpgrading(false);
       toast.error((e as Error).message);
+    }
+  };
+
+  const handleShowExamplesChange = async (checked: boolean) => {
+    if (!user) return;
+    setShowExamples(checked);
+    setExamplesSaving(true);
+    const { error } = await supabase
+      .from("researchers")
+      .update({ show_examples: checked })
+      .eq("id", user.id);
+    setExamplesSaving(false);
+    if (error) {
+      setShowExamples(!checked);
+      toast.error("Could not save your preference");
+    } else {
+      toast.success(checked ? "Examples will show in your study list" : "Examples hidden from your study list");
     }
   };
 
@@ -196,6 +219,7 @@ export default function Account() {
             <Button size="sm" className="mt-5 text-base" disabled={upgrading} onClick={handleUpgrade}>
               {upgrading ? "Loading…" : PRO_CTA}
             </Button>
+            <p className="mt-2 text-base text-muted-foreground">{REFUND_NOTE}</p>
           </>
         )}
       </section>
@@ -260,6 +284,22 @@ export default function Account() {
             Privacy
           </Link>
         </div>
+      </section>
+
+      {/* Preferences */}
+      <section className="mt-6 rounded-lg border border-border bg-card p-6">
+        <Kicker>Preferences</Kicker>
+        <label className="mt-4 flex cursor-pointer items-start gap-3">
+          <Checkbox
+            checked={showExamples}
+            onCheckedChange={(v) => handleShowExamplesChange(v === true)}
+            disabled={examplesSaving}
+            className="mt-1"
+          />
+          <span className="text-base text-foreground leading-relaxed">
+            Show example studies in my study list
+          </span>
+        </label>
       </section>
 
       {/* Account actions */}
