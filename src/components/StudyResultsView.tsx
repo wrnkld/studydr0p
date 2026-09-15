@@ -20,6 +20,7 @@ import TreeTestResults from "@/pages/results/TreeTestResults";
 import { useStudyToolbar } from "@/components/StudyToolbarContext";
 import { BarChart3, Link as LinkIcon, Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { REFUND_NOTE } from "@/lib/limits";
 import { usePaid } from "@/hooks/usePaid";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
@@ -364,6 +365,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
             >
               {unlocking ? "Loading…" : "Get Pro — $129/yr"}
             </Button>
+            <p className="mt-3 text-base text-muted-foreground">{REFUND_NOTE}</p>
           </div>
 
         ) : (

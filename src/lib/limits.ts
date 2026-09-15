@@ -8,6 +8,8 @@ export const PRO_PRICE_LABEL = "$129 per year";
 export const PRO_CTA_PRIMARY = "Get StudyDrop Pro";
 /** In-app call to action, where the price needs to be on the button. */
 export const PRO_CTA = "Get Pro — $129/yr";
+/** Trust line shown right under payment buttons. */
+export const REFUND_NOTE = "Cancel anytime in your billing settings.";
 
 export const UPGRADE_COPY = {
   headline: "Get StudyDrop Pro",

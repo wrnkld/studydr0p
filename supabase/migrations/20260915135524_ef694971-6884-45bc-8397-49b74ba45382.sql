@@ -1,0 +1,1 @@
+ALTER TABLE public.researchers ADD COLUMN IF NOT EXISTS show_examples boolean NOT NULL DEFAULT true;
