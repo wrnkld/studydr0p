@@ -170,6 +170,7 @@ export type Database = {
           id: string
           is_paid: boolean
           last_name: string | null
+          show_examples: boolean
           stripe_customer_id: string | null
         }
         Insert: {
@@ -179,6 +180,7 @@ export type Database = {
           id: string
           is_paid?: boolean
           last_name?: string | null
+          show_examples?: boolean
           stripe_customer_id?: string | null
         }
         Update: {
@@ -188,6 +190,7 @@ export type Database = {
           id?: string
           is_paid?: boolean
           last_name?: string | null
+          show_examples?: boolean
           stripe_customer_id?: string | null
         }
         Relationships: []
