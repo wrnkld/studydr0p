@@ -192,6 +192,77 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
         });
       });
       csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
+    } else if (study.type === "first_click") {
+      const headers = [
+        "session_id",
+        "submitted_at",
+        "x_pct",
+        "y_pct",
+        "time_to_click_ms",
+        "in_zone",
+      ];
+      const rows = responses.map((r) => {
+        const d = r.data as {
+          x_pct?: number;
+          y_pct?: number;
+          time_to_click_ms?: number;
+          in_zone?: boolean | null;
+        };
+        return [
+          r.session_id,
+          r.created_at,
+          d.x_pct != null ? d.x_pct.toFixed(2) : "",
+          d.y_pct != null ? d.y_pct.toFixed(2) : "",
+          d.time_to_click_ms != null ? String(d.time_to_click_ms) : "",
+          d.in_zone == null ? "" : d.in_zone ? "yes" : "no",
+        ]
+          .map(csvEscape)
+          .join(",");
+      });
+      csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
+    } else if (study.type === "tree_test") {
+      const headers = [
+        "session_id",
+        "submitted_at",
+        "task",
+        "selected_label",
+        "correct",
+        "duration_ms",
+        "path",
+      ];
+      const rows: string[] = [];
+      responses.forEach((r) => {
+        const d = r.data as {
+          tasks?: {
+            task_text?: string;
+            correct_node_id?: string;
+            selected_node_id?: string;
+            selected_label?: string;
+            path?: { label?: string }[];
+            duration_ms?: number;
+          }[];
+        };
+        (d.tasks ?? []).forEach((t) => {
+          rows.push(
+            [
+              r.session_id,
+              r.created_at,
+              t.task_text ?? "",
+              t.selected_label ?? t.selected_node_id ?? "",
+              t.selected_node_id && t.correct_node_id
+                ? t.selected_node_id === t.correct_node_id
+                  ? "yes"
+                  : "no"
+                : "",
+              t.duration_ms != null ? String(t.duration_ms) : "",
+              (t.path ?? []).map((p) => p.label ?? "").filter(Boolean).join(" > "),
+            ]
+              .map(csvEscape)
+              .join(","),
+          );
+        });
+      });
+      csv = [headers.map(csvEscape).join(","), ...rows].join("\n");
     }
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
@@ -222,7 +293,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   const canExport =
     !!study &&
     !locked &&
-    (study.type === "survey" || study.type === "card_sort") &&
+    responses.length > 0 &&
     responses.length > 0;
 
   const { setExportCsv } = useStudyToolbar();
@@ -267,7 +338,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               <Lock className="h-4 w-4 text-foreground" strokeWidth={1.5} />
             </div>
             <h3 className="font-serif text-2xl font-bold tracking-tight text-foreground">
-              Unlock results
+              Get StudyDrop Pro
             </h3>
             <p className="mt-2 text-base text-muted-foreground">
               $129 per year for unlimited studies and unlimited participant responses.
@@ -291,7 +362,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                 }
               }}
             >
-              {unlocking ? "Loading…" : "Unlock for $129"}
+              {unlocking ? "Loading…" : "Get Pro — $129/yr"}
             </Button>
           </div>
 
