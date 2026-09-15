@@ -17,5 +17,9 @@ project_id = "yysboopndpgeurffyxfk"
     verify_jwt = false
   [functions.payments-webhook]
     verify_jwt = false
+  [functions.create-portal-session]
+    verify_jwt = false
+  [functions.get-billing-data]
+    verify_jwt = false
   [functions.delete-account]
     verify_jwt = true
