@@ -293,7 +293,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   const canExport =
     !!study &&
     !locked &&
-    (study.type === "survey" || study.type === "card_sort") &&
+    responses.length > 0 &&
     responses.length > 0;
 
   const { setExportCsv } = useStudyToolbar();
@@ -338,7 +338,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               <Lock className="h-4 w-4 text-foreground" strokeWidth={1.5} />
             </div>
             <h3 className="font-serif text-2xl font-bold tracking-tight text-foreground">
-              Unlock results
+              Get StudyDrop Pro
             </h3>
             <p className="mt-2 text-base text-muted-foreground">
               $129 per year for unlimited studies and unlimited participant responses.
@@ -362,7 +362,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                 }
               }}
             >
-              {unlocking ? "Loading…" : "Unlock for $129"}
+              {unlocking ? "Loading…" : "Get Pro — $129/yr"}
             </Button>
           </div>
 
