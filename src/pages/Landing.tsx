@@ -446,7 +446,17 @@ export default function Landing() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-border">{rows.map(renderTableRow)}</tbody>
+                <tbody className="divide-y divide-border">
+                  {rows.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className="py-10 px-5 text-center text-base text-muted-foreground">
+                        No studies yet — click "New study" to create your first one.
+                      </td>
+                    </tr>
+                  ) : (
+                    rows.map(renderTableRow)
+                  )}
+                </tbody>
               </table>
             </section>
           </>
