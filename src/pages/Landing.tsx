@@ -551,7 +551,7 @@ export default function Landing() {
                 ) : isPaid ? (
                   "You're in"
                 ) : (
-                  "Get full access"
+                  "Get StudyDrop Pro"
                 )}
               </button>
             </div>
@@ -564,7 +564,7 @@ export default function Landing() {
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}
-        title="Sign in to unlock"
+        title="Sign in to get Pro"
         description="Create an account or sign in, then start your $129 per year plan."
         onAuthed={async (u) => {
           setUnlocking(true);
