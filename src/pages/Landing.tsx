@@ -140,6 +140,7 @@ export default function Landing() {
   const [userRows, setUserRows] = useState<CombinedRow[]>([]);
   const [loadedUserRows, setLoadedUserRows] = useState(false);
   const [firstName, setFirstName] = useState<string | null>(null);
+  const [showExamples, setShowExamples] = useState(true);
 
   const loadStudies = async () => {
     if (!user) return;
@@ -170,10 +171,11 @@ export default function Landing() {
     if (!user) return;
     const { data } = await supabase
       .from("researchers")
-      .select("first_name")
+      .select("first_name, show_examples")
       .eq("id", user.id)
       .single();
     setFirstName(data?.first_name ?? null);
+    setShowExamples(data?.show_examples !== false);
   };
 
   useEffect(() => {
@@ -354,7 +356,7 @@ export default function Landing() {
     );
   };
 
-  const rows = [...userRows, ...EXAMPLE_ROWS].sort((a, b) => {
+  const rows = [...userRows, ...(showExamples ? EXAMPLE_ROWS : [])].sort((a, b) => {
     const av = sortValue(a, sortKey);
     const bv = sortValue(b, sortKey);
     if (av < bv) return sortDir === "asc" ? -1 : 1;
@@ -554,6 +556,7 @@ export default function Landing() {
                   "Get StudyDrop Pro"
                 )}
               </button>
+              <p className="mt-3 text-base text-muted-foreground">{REFUND_NOTE}</p>
             </div>
           </section>
         </>
@@ -624,7 +627,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Can I try it before paying?",
-    a: "Yes. Build studies and collect responses for free, then pay to view the results.",
+    a: "Yes. Build studies and collect responses for free, then pay to view the results. Pro is $129 per year and you can cancel anytime in your billing settings.",
   },
   {
     q: "How do I share a study?",
