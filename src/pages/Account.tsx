@@ -167,11 +167,9 @@ export default function Account() {
     : null;
 
   return (
-    <div className="container max-w-2xl py-10">
-      <h1 className="font-serif text-4xl font-semibold tracking-tight">Account</h1>
-      <p className="mt-3 text-base text-muted-foreground leading-relaxed">
-        Your plan, your payment history, and everything else tied to this login.
-      </p>
+    <PageContainer width="wide" space="md">
+      <PageHeader title="Account" description="Your plan, your payment history, and everything else tied to this login." />
+
 
       {/* Plan */}
       <section className="mt-10 rounded-lg border border-border bg-card p-6">
@@ -350,6 +348,6 @@ export default function Account() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+    </PageContainer>
   );
 }
