@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { PageContainer, PageHeader } from "@/components/study/primitives";
 import { useAuth } from "@/hooks/useAuth";
 import { usePaid } from "@/hooks/usePaid";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
