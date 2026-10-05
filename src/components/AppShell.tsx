@@ -89,8 +89,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
             {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation" onClick={() => setMobileOpen(true)}><PanelLeftOpen /></Button>
-          <span className="text-xs text-muted-foreground">{pageLabel}</span>
-          {currentExample && <span className="ml-auto font-mono text-xs text-muted-foreground">20 responses</span>}
+          <span className="min-w-0 truncate text-base font-medium">{pageLabel}</span>
+          {currentExample && <span className="ml-auto shrink-0 font-mono text-xs text-muted-foreground">20 responses</span>}
         </header>
         {children}
       </div>
