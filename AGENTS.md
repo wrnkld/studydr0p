@@ -4,4 +4,4 @@
 - The entry route opens Studies for signed-in users and seeded example results for visitors; informational copy and FAQ live at /home.
 - Typography is defined in the root Tailwind font-size scale, not extended from defaults; legacy size names map to shared steps to prevent extra sizes.
 - NewStudyMenu is the shared study-type picker; creation remains in NewStudy and is guarded against repeated inserts.
-- The named account menu opens existing Account sections in dialogs, preserving one implementation of billing, preferences, and account actions.
+- The named account menu opens Account sections in dialogs; payment status and history share one billing section so account and dialog views cannot diverge.
