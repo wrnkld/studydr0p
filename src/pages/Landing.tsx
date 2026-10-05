@@ -532,7 +532,7 @@ function LegalSection({ id, label, children }: { id: string; label: string; chil
   return (
     <section id={id} className="scroll-mt-24 py-4">
       <div className="mb-10">
-        <SectionDivider label={label} />
+        <h2 className="border-b border-border pb-4 font-mono text-xs uppercase text-muted-foreground">{label}</h2>
       </div>
       <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
     </section>
