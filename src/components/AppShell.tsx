@@ -30,7 +30,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const navigation = (compact = false) => (
     <div className="flex h-full flex-col">
       <div className={cn("flex h-16 shrink-0 items-center border-b border-border px-5", compact && "justify-center px-2")}>
-        <NavLink to="/" className="text-base font-semibold" aria-label="StudyDrop">
+        <NavLink to="/" className="font-serif text-base font-semibold" aria-label="StudyDrop">
           {compact ? "SD" : "StudyDrop"}
         </NavLink>
       </div>
