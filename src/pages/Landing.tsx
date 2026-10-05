@@ -521,5 +521,55 @@ function FaqList() {
   );
 }
 
+function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="scroll-mt-24 py-4">
+      <div className="mb-10">
+        <SectionDivider label={label} />
+      </div>
+      <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
+    </section>
+  );
+}
+
+function PrivacySection() {
+  return (
+    <LegalSection id="privacy" label="Privacy">
+      <p>
+        We collect your email, the studies you create, and the responses they
+        receive. We use this only to run StudyDrop and show your results.
+      </p>
+      <p>
+        We do not sell data or run ads. We do not store payment cards — Stripe
+        handles billing.
+      </p>
+      <p>
+        You can delete your studies and account at any time.
+      </p>
+    </LegalSection>
+  );
+}
+
+function TermsSection() {
+  return (
+    <LegalSection id="terms" label="Terms">
+      <p>
+        StudyDrop is for creating and sharing unmoderated UX studies. You own
+        your studies and responses. You are responsible for what you ask
+        participants and how you use their answers.
+      </p>
+      <p>
+        StudyDrop costs $129 per year. Subscriptions renew automatically
+        until you cancel, and payments are processed by Stripe.
+      </p>
+      <p>
+        Do not use StudyDrop for illegal, harmful, or abusive purposes. We
+        may suspend accounts that violate these rules.
+      </p>
+    </LegalSection>
+  );
+}
+
+
 
 
