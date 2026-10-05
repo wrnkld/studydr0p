@@ -261,8 +261,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
         </td>
         <td className="hidden sm:table-cell py-3 px-5">
           <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px] leading-[16px]"
-            style={{ letterSpacing: "0.12em" }}
+            className="inline-block font-mono text-muted-foreground text-xs"
           >
             {typeLabel}
           </span>
@@ -270,8 +269,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
         <td className="hidden sm:table-cell py-3 px-5">
           {r.isExample ? (
             <span
-              className="inline-block rounded-full border border-border bg-background px-2 py-0.5 font-mono uppercase text-muted-foreground text-[11px] leading-[16px]"
-              style={{ letterSpacing: "0.12em" }}
+              className="inline-block text-muted-foreground text-xs"
             >
               Example
             </span>
