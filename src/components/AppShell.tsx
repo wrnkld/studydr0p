@@ -30,20 +30,20 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const navigation = (compact = false) => (
     <div className="flex h-full flex-col">
       <div className={cn("flex h-16 shrink-0 items-center border-b border-border px-5", compact && "justify-center px-2")}>
-        <NavLink to="/" className="font-mono text-base font-semibold" aria-label="StudyDrop">
+        <NavLink to="/" className="text-base font-semibold" aria-label="StudyDrop">
           {compact ? "SD" : "StudyDrop"}
         </NavLink>
       </div>
       <nav aria-label="Main navigation" className="flex-1 overflow-y-auto px-3 py-5">
         <NavItem to="/home" icon={Home} label="Home" compact={compact} />
         {user ? <NavItem to="/studies" icon={Layers} label="Studies" compact={compact} /> : null}
-        <Button variant="outline" className={cn("mt-3 w-full justify-start font-mono text-xs", compact && "justify-center px-0")}
+        <Button variant="outline" className={cn("mt-3 w-full justify-start", compact && "justify-center px-0")}
           title={compact ? "New study" : undefined}
           onClick={() => user ? navigate("/studies/new") : requestAuth("/studies/new")}>
           <Plus />{!compact && "New study"}
         </Button>
         <div className="mt-8 border-t border-border pt-5">
-          {!compact && <p className="mb-3 px-2 font-mono text-xs uppercase text-muted-foreground">Example studies</p>}
+          {!compact && <p className="mb-3 px-2 text-xs uppercase text-muted-foreground">Example studies</p>}
           {EXAMPLE_STUDIES.map((study, index) => (
             <Button key={study.id} asChild variant="ghost" className={cn("mb-1 h-auto min-h-10 w-full justify-start rounded-lg px-2 py-3 text-left",
               location.pathname === `/examples/${study.id}` && "bg-accent text-accent-foreground", compact && "justify-center px-0")}
@@ -60,11 +60,11 @@ export default function AppShell({ children }: { children: ReactNode }) {
       </nav>
       <div className="shrink-0 border-t border-border px-3 py-4">
         {user ? <NavItem to="/account" icon={UserRound} label="Account info" compact={compact} /> :
-          <Button variant="ghost" className={cn("w-full justify-start font-mono text-xs", compact && "justify-center px-0")}
+          <Button variant="ghost" className={cn("w-full justify-start", compact && "justify-center px-0")}
             title={compact ? "Sign in" : undefined} onClick={() => requestAuth("/studies")}>
             <LogIn />{!compact && "Sign in"}
           </Button>}
-        {!compact && <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 px-2 font-mono text-xs text-muted-foreground">
+        {!compact && <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 px-2 text-xs text-muted-foreground">
           <NavLink to="/home#privacy" className="hover:text-foreground">Privacy</NavLink>
           <NavLink to="/home#terms" className="hover:text-foreground">Terms</NavLink>
           <a href="mailto:hello@studydrop.app" className="hover:text-foreground">Contact</a>
@@ -89,7 +89,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             {collapsed ? <PanelLeftOpen /> : <PanelLeftClose />}
           </Button>
           <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation" onClick={() => setMobileOpen(true)}><PanelLeftOpen /></Button>
-          <span className="font-mono text-xs text-muted-foreground">{pageLabel}</span>
+          <span className="text-xs text-muted-foreground">{pageLabel}</span>
           {currentExample && <span className="ml-auto font-mono text-xs text-muted-foreground">20 responses</span>}
         </header>
         {children}
@@ -106,7 +106,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
 }
 
 function NavItem({ to, icon: Icon, label, compact }: { to: string; icon: typeof Home; label: string; compact: boolean }) {
-  return <Button asChild variant="ghost" className="mb-1 h-10 w-full justify-start rounded-lg px-2 font-mono text-xs">
+  return <Button asChild variant="ghost" className="mb-1 h-10 w-full justify-start rounded-lg px-2">
     <NavLink to={to} end title={compact ? label : undefined} className={({ isActive }) => cn(isActive && "bg-accent text-accent-foreground", compact && "justify-center")}>
       <Icon />{!compact && label}
     </NavLink>
