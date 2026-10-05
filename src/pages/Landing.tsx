@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Minus, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePaid } from "@/hooks/usePaid";
@@ -103,6 +103,13 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
+
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) return;
+    const el = document.getElementById(location.hash.slice(1));
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }, [location.hash, loadedUserRows]);
 
   const handleBadgeClick = async () => {
     if (isPaid || unlocking) return;
