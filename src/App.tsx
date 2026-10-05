@@ -22,8 +22,6 @@ import ResetPassword from "./pages/ResetPassword";
 import Unsubscribe from "./pages/Unsubscribe";
 import Checkout from "./pages/Checkout";
 import Account from "./pages/Account";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,10 +50,10 @@ const App = () => (
                   <Route path="/s/:slug" element={<ParticipantStudy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/unsubscribe" element={<Unsubscribe />} />
+                  <Route path="/privacy" element={<Navigate to="/home#privacy" replace />} />
+                  <Route path="/terms" element={<Navigate to="/home#terms" replace />} />
                   <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                   <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
-                  <Route path="/privacy" element={<Privacy />} />
-                  <Route path="/terms" element={<Terms />} />
 
                   <Route path="/studies" element={<ProtectedRoute><Landing mode="studies" /></ProtectedRoute>} />
                   <Route

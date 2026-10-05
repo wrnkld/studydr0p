@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Minus, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { usePaid } from "@/hooks/usePaid";
@@ -103,6 +103,13 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
   }, []);
+
+  const location = useLocation();
+  useEffect(() => {
+    if (!location.hash) return;
+    const el = document.getElementById(location.hash.slice(1));
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  }, [location.hash]);
 
   const handleBadgeClick = async () => {
     if (isPaid || unlocking) return;
@@ -381,7 +388,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
         ) : null
       ) : (
         <>
-          {/* FAQ — wrapped in bordered cards like examples */}
+          {/* FAQ */}
           <section className="py-4">
             <div className="mb-10">
               <SectionDivider label="Questions" />
@@ -389,6 +396,8 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
             <FaqList />
           </section>
 
+          <PrivacySection />
+          <TermsSection />
         </>
       )}
 
@@ -518,6 +527,56 @@ function FaqList() {
     </ol>
   );
 }
+
+function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="scroll-mt-24 py-4">
+      <div className="mb-10">
+        <h2 className="border-b border-border pb-4 font-mono text-xs uppercase text-muted-foreground">{label}</h2>
+      </div>
+      <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
+    </section>
+  );
+}
+
+function PrivacySection() {
+  return (
+    <LegalSection id="privacy" label="Privacy">
+      <p>
+        We collect your email, the studies you create, and the responses they
+        receive. We use this only to run StudyDrop and show your results.
+      </p>
+      <p>
+        We do not sell data or run ads. We do not store payment cards — Stripe
+        handles billing.
+      </p>
+      <p>
+        You can delete your studies and account at any time.
+      </p>
+    </LegalSection>
+  );
+}
+
+function TermsSection() {
+  return (
+    <LegalSection id="terms" label="Terms">
+      <p>
+        StudyDrop is for creating and sharing unmoderated UX studies. You own
+        your studies and responses. You are responsible for what you ask
+        participants and how you use their answers.
+      </p>
+      <p>
+        StudyDrop costs $129 per year. Subscriptions renew automatically
+        until you cancel, and payments are processed by Stripe.
+      </p>
+      <p>
+        Do not use StudyDrop for illegal, harmful, or abusive purposes. We
+        may suspend accounts that violate these rules.
+      </p>
+    </LegalSection>
+  );
+}
+
 
 
 
