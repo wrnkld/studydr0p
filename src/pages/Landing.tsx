@@ -10,11 +10,6 @@ import AuthDialog from "@/components/AuthDialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { REFUND_NOTE } from "@/lib/limits";
-import { getExampleStudy, ExampleStudyId } from "@/lib/exampleStudies";
-import CardSortResults from "@/pages/results/CardSortResults";
-import SurveyResults from "@/pages/results/SurveyResults";
-import TreeTestResults from "@/pages/results/TreeTestResults";
-import FirstClickResults from "@/pages/results/FirstClickResults";
 
 import {
   AlertDialog,
@@ -81,7 +76,7 @@ const EXAMPLE_ROWS: (CombinedRow & { description: string })[] = [
   },
 ];
 
-export default function Landing() {
+export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }) {
   const { user, loading: authLoading } = useAuth();
   const { isPaid } = usePaid();
   const navigate = useNavigate();
@@ -210,9 +205,6 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  const [exampleId, setExampleId] = useState<ExampleStudyId>("fridge");
-  const example = getExampleStudy(exampleId);
-
   // --- Sorting ---
   type SortKey = "title" | "type" | "responses";
   const [sortKey, setSortKey] = useState<SortKey>("title");
@@ -318,23 +310,23 @@ export default function Landing() {
 
   return (
     <PageContainer width="wide" space="lg">
-      {authLoading || user ? null : (
-        <header className="space-y-5 py-10 text-center sm:py-14">
+      {mode === "home" ? (
+        <header className="space-y-4 border-b border-border pb-8">
           <p className="font-mono text-xs uppercase text-muted-foreground">StudyDrop / Unmoderated UX research</p>
-          <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl mx-auto">
+          <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl">
             UX research without the friction.
           </h1>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
+          <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
             Run and share unmoderated UX studies with a single link.
           </p>
-          <Button onClick={handleBadgeClick} disabled={unlocking} className="font-mono">
-            {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get StudyDrop Pro"}
+          <Button onClick={handleBadgeClick} disabled={isPaid || unlocking} className="font-mono">
+            {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
           </Button>
-          <p className="font-mono text-xs text-muted-foreground">$129 per year</p>
+          <p className="font-mono text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
         </header>
-      )}
+      ) : null}
 
-      {authLoading ? null : user ? (
+      {authLoading ? null : mode === "studies" && user ? (
         loadedUserRows ? (
           <>
             <div className="flex items-center justify-between gap-4 mb-4">
@@ -389,71 +381,14 @@ export default function Landing() {
         ) : null
       ) : (
         <>
-          <section className="space-y-6 pb-8" aria-label="Example results">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
-              <h2 className="font-mono text-xs uppercase text-muted-foreground">Example results</h2>
-              <span className="font-mono text-xs text-muted-foreground">20 participant responses</span>
-            </div>
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Study type">
-              {EXAMPLE_ROWS.map((row) => (
-                <Button key={row.id} variant={exampleId === row.id ? "secondary" : "ghost"}
-                  aria-pressed={exampleId === row.id} className="font-mono text-xs"
-                  onClick={() => setExampleId(row.id as ExampleStudyId)}>
-                  {STUDY_TYPE_META[row.type].label}
-                </Button>
-              ))}
-            </div>
-            {example ? (
-              <>
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                  <h3 className="font-sans text-2xl font-semibold">{example.title}</h3>
-                  <Button variant="outline" onClick={() => navigate(`/examples/${example.id}`)}>Try this study</Button>
-                </div>
-                <div className="min-w-0">
-                  {example.type === "card_sort" ? <CardSortResults studyId={example.id} cards={example.cards} responses={example.seedResponses} />
-                    : example.type === "survey" ? <SurveyResults studyId={example.id} config={example.config} responses={example.seedResponses} />
-                    : example.type === "tree_test" ? <TreeTestResults studyId={example.id} config={example.config} responses={example.seedResponses} initialNodes={example.nodes} />
-                    : <FirstClickResults config={example.config} responses={example.seedResponses} />}
-                </div>
-              </>
-            ) : null}
-          </section>
-          <section className="grid gap-8 border-y border-border py-10 sm:grid-cols-3">
-            {[
-              { title: "Build", body: "Create a card sort, tree test, first-click test, or survey." },
-              { title: "Share", body: "Copy the link and send it anywhere." },
-              { title: "Collect", body: "Participants answer without signing in." },
-            ].map((item, i) => (
-              <div key={item.title} className="space-y-3">
-                <h2 className="font-mono text-base font-medium"><span className="text-muted-foreground">0{i + 1} / </span>{item.title}</h2>
-                <p className="text-base text-muted-foreground">{item.body}</p>
-              </div>
-            ))}
-          </section>
-
           {/* FAQ — wrapped in bordered cards like examples */}
-          <section className="py-10">
+          <section className="py-4">
             <div className="mb-10">
               <SectionDivider label="Questions" />
             </div>
             <FaqList />
           </section>
 
-          {/* Final CTA — calm closing */}
-          <section className="border-t border-border py-12">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-serif text-foreground text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
-                $129 per year.
-              </h2>
-              <p className="mt-4 text-base text-muted-foreground leading-relaxed">
-                Unlimited studies and participant responses.
-              </p>
-              <Button onClick={handleBadgeClick} disabled={isPaid || unlocking} className="mt-6 font-mono">
-                 {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You're in" : "Get StudyDrop Pro"}
-               </Button>
-              <p className="mt-3 text-base text-muted-foreground">{REFUND_NOTE}</p>
-            </div>
-          </section>
         </>
       )}
 

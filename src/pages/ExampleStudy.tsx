@@ -33,7 +33,7 @@ import FirstClickResults from "@/pages/results/FirstClickResults";
 export default function ExampleStudy() {
   const { id } = useParams();
   const study = id ? getExampleStudy(id) : null;
-  const [tab, setTab] = useState<"preview" | "results">("preview");
+  const [tab, setTab] = useState<"preview" | "results">("results");
   const [userResponse, setUserResponse] = useState<ExampleResponseRow | null>(
     null,
   );

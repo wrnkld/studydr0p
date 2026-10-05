@@ -8,10 +8,9 @@ function ResultsRedirect() {
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "@/hooks/useAuth";
+import { AuthProvider, useAuth } from "@/hooks/useAuth";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import TopBar from "@/components/TopBar";
-import Footer from "@/components/Footer";
+import AppShell from "@/components/AppShell";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { StudyToolbarProvider } from "@/components/StudyToolbarContext";
 import Landing from "./pages/Landing";
@@ -29,6 +28,12 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+function AppEntry() {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  return <Navigate to={user ? "/studies" : "/examples/fridge"} replace />;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -39,10 +44,10 @@ const App = () => (
           <StudyToolbarProvider>
             <div className="flex min-h-screen flex-col">
               <PaymentTestModeBanner />
-              <TopBar />
-              <main className="flex-1">
+              <AppShell>
                 <Routes>
-                  <Route path="/" element={<Landing />} />
+                  <Route path="/" element={<AppEntry />} />
+                  <Route path="/home" element={<Landing mode="home" />} />
                   <Route path="/examples/:id" element={<ExampleStudy />} />
                   <Route path="/s/:slug" element={<ParticipantStudy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
@@ -52,7 +57,7 @@ const App = () => (
                   <Route path="/privacy" element={<Privacy />} />
                   <Route path="/terms" element={<Terms />} />
 
-                  <Route path="/studies" element={<Navigate to="/" replace />} />
+                  <Route path="/studies" element={<ProtectedRoute><Landing mode="studies" /></ProtectedRoute>} />
                   <Route
                     path="/studies/new"
                     element={<ProtectedRoute><NewStudy /></ProtectedRoute>}
@@ -72,8 +77,7 @@ const App = () => (
 
                   <Route path="*" element={<NotFound />} />
                 </Routes>
-              </main>
-              <Footer />
+              </AppShell>
             </div>
           </StudyToolbarProvider>
         </AuthProvider>
