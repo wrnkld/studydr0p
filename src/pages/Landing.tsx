@@ -301,7 +301,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
       <button
         type="button"
         onClick={() => toggleSort(k)}
-        className={`inline-flex items-center gap-1.5 font-mono uppercase text-muted-foreground hover:text-foreground transition-colors text-xs ${align === "right" ? "justify-end" : ""}`}
+        className={`inline-flex items-center gap-1.5 uppercase text-muted-foreground hover:text-foreground transition-colors text-xs ${align === "right" ? "justify-end" : ""}`}
         style={{ letterSpacing: "0.12em", fontWeight: 500 }}
       >
         {label}
@@ -312,24 +312,24 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
 
 
   const SectionDivider = ({ label }: { label: string }) => (
-    <h2 className="border-b border-border pb-4 font-mono text-xs uppercase text-muted-foreground">{label}</h2>
+    <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
   );
 
   return (
     <PageContainer width="wide" space="lg">
       {mode === "home" ? (
         <header className="space-y-4 border-b border-border pb-8">
-          <p className="font-mono text-xs uppercase text-muted-foreground">StudyDrop / Unmoderated UX research</p>
+          <p className="text-xs uppercase text-muted-foreground">StudyDrop / Unmoderated UX research</p>
           <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl">
             UX research without the friction.
           </h1>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
             Run and share unmoderated UX studies with a single link.
           </p>
-          <Button onClick={handleBadgeClick} disabled={isPaid || unlocking} className="font-mono">
+          <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
             {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
           </Button>
-          <p className="font-mono text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
+          <p className="text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
         </header>
       ) : null}
 
@@ -532,7 +532,7 @@ function LegalSection({ id, label, children }: { id: string; label: string; chil
   return (
     <section id={id} className="scroll-mt-24 py-4">
       <div className="mb-10">
-        <h2 className="border-b border-border pb-4 font-mono text-xs uppercase text-muted-foreground">{label}</h2>
+        <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
       </div>
       <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
     </section>
