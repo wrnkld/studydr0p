@@ -9,7 +9,6 @@ import { usePaid } from "@/hooks/usePaid";
 import { useDocumentTitle } from "@/hooks/useDocumentTitle";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { PRO_PRICE_LABEL, PRO_CTA, REFUND_NOTE } from "@/lib/limits";
 import {
   BillingInvoice,
@@ -40,7 +39,7 @@ function Kicker({ children }: { children: React.ReactNode }) {
   );
 }
 
-export type AccountSection = "plan" | "billing" | "details" | "preferences" | "account";
+export type AccountSection = "billing" | "account";
 
 export default function Account({ section }: { section?: AccountSection }) {
   useDocumentTitle("Account · StudyDrop");
@@ -48,8 +47,6 @@ export default function Account({ section }: { section?: AccountSection }) {
   const { user, signOut } = useAuth();
   const { isPaid, loading: paidLoading } = usePaid();
 
-  const [firstName, setFirstName] = useState<string | null>(null);
-  const [lastName, setLastName] = useState<string | null>(null);
   const [subscription, setSubscription] = useState<BillingSubscription | null>(null);
   const [invoices, setInvoices] = useState<BillingInvoice[]>([]);
   const [billingLoading, setBillingLoading] = useState(true);
@@ -58,29 +55,6 @@ export default function Account({ section }: { section?: AccountSection }) {
   const [upgrading, setUpgrading] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [showExamples, setShowExamples] = useState(true);
-  const [examplesSaving, setExamplesSaving] = useState(false);
-
-  useEffect(() => {
-    if (!user) return;
-    let cancelled = false;
-    (async () => {
-      const { data } = await supabase
-        .from("researchers")
-        .select("first_name, last_name, show_examples")
-        .eq("id", user.id)
-        .maybeSingle();
-      if (cancelled) return;
-      setFirstName((data as { first_name?: string } | null)?.first_name ?? null);
-      setLastName((data as { last_name?: string } | null)?.last_name ?? null);
-      setShowExamples(
-        (data as { show_examples?: boolean } | null)?.show_examples !== false,
-      );
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -117,23 +91,6 @@ export default function Account({ section }: { section?: AccountSection }) {
     }
   };
 
-  const handleShowExamplesChange = async (checked: boolean) => {
-    if (!user) return;
-    setShowExamples(checked);
-    setExamplesSaving(true);
-    const { error } = await supabase
-      .from("researchers")
-      .update({ show_examples: checked })
-      .eq("id", user.id);
-    setExamplesSaving(false);
-    if (error) {
-      setShowExamples(!checked);
-      toast.error("Could not save your preference");
-    } else {
-      toast.success(checked ? "Examples will show in your study list" : "Examples hidden from your study list");
-    }
-  };
-
   const handlePortal = async () => {
     setPortalLoading(true);
     try {
@@ -163,25 +120,23 @@ export default function Account({ section }: { section?: AccountSection }) {
     }
   };
 
-  const fullName = [firstName, lastName].filter(Boolean).join(" ");
   const renews = subscription?.current_period_end
     ? formatDate(subscription.current_period_end)
     : null;
 
   return (
     <PageContainer width="wide" space="md">
-      {!section && <PageHeader title={fullName || "Your account"} />}
+      {!section && <PageHeader title="Your account" />}
 
 
-      {/* Plan */}
-      {(!section || section === "plan") && <section className="border-b border-border py-4">
-        <Kicker>Plan</Kicker>
+      {(!section || section === "billing") && <section className="border-b border-border py-4">
+        <Kicker>Billing</Kicker>
         {paidLoading ? (
-          <p className="mt-3 text-base text-muted-foreground">Checking your plan…</p>
+          <p className="mt-3 text-base text-muted-foreground">Checking payment status…</p>
         ) : isPaid ? (
           <>
             <p className="mt-3 text-base text-foreground">
-              You're on StudyDrop Pro — unlimited studies and unlimited responses.
+              You've paid for StudyDrop Pro — unlimited studies and unlimited responses.
             </p>
             <p className="mt-1 text-base text-muted-foreground">
               {subscription?.cancel_at_period_end
@@ -211,7 +166,7 @@ export default function Account({ section }: { section?: AccountSection }) {
         ) : (
           <>
             <p className="mt-3 text-base text-foreground">
-              You're on the free plan. You haven't paid anything yet.
+              You haven't paid anything yet.
             </p>
             <p className="mt-1 text-base text-muted-foreground">
               Pro is {PRO_PRICE_LABEL} and lifts every limit on studies and responses.
@@ -222,11 +177,8 @@ export default function Account({ section }: { section?: AccountSection }) {
             <p className="mt-2 text-base text-muted-foreground">{REFUND_NOTE}</p>
           </>
         )}
-      </section>}
-
-      {/* Billing history */}
-      {(!section || section === "billing") && <section className="border-b border-border py-4">
-        <Kicker>Billing history</Kicker>
+        <div className="mt-6">
+        <Kicker>Payment history</Kicker>
         {billingLoading ? (
           <p className="mt-3 text-base text-muted-foreground">Loading payments…</p>
         ) : billingError ? (
@@ -259,39 +211,7 @@ export default function Account({ section }: { section?: AccountSection }) {
             ))}
           </ul>
         )}
-      </section>}
-
-      {/* Details */}
-      {(!section || section === "details") && <section className="border-b border-border py-4">
-        <Kicker>Details</Kicker>
-        <dl className="mt-4 space-y-3">
-          {fullName ? (
-            <div className="flex items-baseline justify-between gap-4">
-              <dt className="text-base text-muted-foreground">Name</dt>
-              <dd className="text-base text-foreground">{fullName}</dd>
-            </div>
-          ) : null}
-          <div className="flex items-baseline justify-between gap-4">
-            <dt className="text-base text-muted-foreground">Email</dt>
-            <dd className="min-w-0 truncate text-base text-foreground">{user?.email}</dd>
-          </div>
-        </dl>
-      </section>}
-
-      {/* Preferences */}
-      {(!section || section === "preferences") && <section className="border-b border-border py-4">
-        <Kicker>Preferences</Kicker>
-        <label className="mt-4 flex cursor-pointer items-start gap-3">
-          <Checkbox
-            checked={showExamples}
-            onCheckedChange={(v) => handleShowExamplesChange(v === true)}
-            disabled={examplesSaving}
-            className="mt-1"
-          />
-          <span className="text-base text-foreground leading-relaxed">
-            Show example studies in my study list
-          </span>
-        </label>
+        </div>
       </section>}
 
       {/* Account actions */}

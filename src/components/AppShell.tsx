@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Home, Layers, PanelLeftClose, PanelLeftOpen, UserRound, LogIn, ChevronUp, CreditCard, Settings, LogOut, Trash2 } from "lucide-react";
+import { Home, Layers, PanelLeftClose, PanelLeftOpen, UserRound, LogIn, ChevronUp, CreditCard, LogOut, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { EXAMPLE_STUDIES } from "@/lib/exampleStudies";
 import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
@@ -81,10 +81,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent side="top" align="start">
-            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("details"); }}><UserRound />Your details</DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("plan"); }}><CreditCard />Plan</DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("billing"); }}><CreditCard />Billing history</DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("preferences"); }}><Settings />Preferences</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("billing"); }}><CreditCard />Billing</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onSelect={() => { void signOut().then(() => navigate("/")); }}><LogOut />Sign out</DropdownMenuItem>
             <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("account"); }} className="text-destructive"><Trash2 />Delete account</DropdownMenuItem>
