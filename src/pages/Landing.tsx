@@ -109,7 +109,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
     if (!location.hash) return;
     const el = document.getElementById(location.hash.slice(1));
     if (el) el.scrollIntoView({ behavior: "smooth" });
-  }, [location.hash, loadedUserRows]);
+  }, [location.hash]);
 
   const handleBadgeClick = async () => {
     if (isPaid || unlocking) return;
