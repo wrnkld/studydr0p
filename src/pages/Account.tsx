@@ -33,8 +33,7 @@ import {
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="uppercase text-muted-foreground"
-      style={{ fontSize: "11px", letterSpacing: "0.12em" }}
+      className="text-base font-medium text-muted-foreground"
     >
       {children}
     </p>

@@ -5,6 +5,21 @@ export default {
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
+    fontSize: {
+      xs: ["13px", { lineHeight: "18px" }],
+      sm: ["16px", { lineHeight: "24px" }],
+      base: ["16px", { lineHeight: "24px" }],
+      lg: ["16px", { lineHeight: "24px" }],
+      xl: ["26px", { lineHeight: "32px" }],
+      "2xl": ["26px", { lineHeight: "32px" }],
+      "3xl": ["26px", { lineHeight: "32px" }],
+      "4xl": ["26px", { lineHeight: "32px" }],
+      "5xl": ["26px", { lineHeight: "32px" }],
+      "6xl": ["26px", { lineHeight: "32px" }],
+      "7xl": ["26px", { lineHeight: "32px" }],
+      "8xl": ["26px", { lineHeight: "32px" }],
+      "9xl": ["26px", { lineHeight: "32px" }],
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -74,14 +89,6 @@ export default {
           axis: "hsl(var(--chart-axis))",
           grid: "hsl(var(--chart-grid))",
         },
-      },
-      fontSize: {
-        /* The whole type scale. Four steps. Nothing else exists —
-           no sm, no lg, no 3xl, no arbitrary pixel sizes anywhere. */
-        xs: ["13px", { lineHeight: "18px" }],      // kickers, labels, captions
-        base: ["16px", { lineHeight: "24px" }],    // all body, UI, inputs, buttons
-        "2xl": ["26px", { lineHeight: "32px" }],   // section + card headings
-        "4xl": ["32px", { lineHeight: "36px" }],   // page titles, hero, big numbers
       },
       borderRadius: {
         lg: "var(--radius)",
