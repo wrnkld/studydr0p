@@ -10,7 +10,7 @@ export const STUDY_TYPES: StudyType[] = ["card_sort", "survey", "tree_test", "fi
 export default function NewStudyMenu({ onSelect, compact = false, className, disabled = false }: { onSelect: (type: StudyType) => void; compact?: boolean; className?: string; disabled?: boolean }) {
   return <DropdownMenu>
     <DropdownMenuTrigger asChild>
-      <Button variant="outline" disabled={disabled} aria-label="New study" title={compact ? "New study" : undefined} className={cn("justify-start", compact && "justify-center px-0", className)}>
+      <Button variant="ghost" disabled={disabled} aria-label="New study" title={compact ? "New study" : undefined} className={cn("h-10 justify-start px-2", compact && "justify-center px-0", className)}>
         <Plus />{!compact && <><span>New study</span><ChevronDown className="ml-auto" /></>}
       </Button>
     </DropdownMenuTrigger>

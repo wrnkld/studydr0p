@@ -3,7 +3,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { Home, Layers, PanelLeftClose, PanelLeftOpen, UserRound, LogIn, ChevronUp, CreditCard, Settings, LogOut, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { EXAMPLE_STUDIES } from "@/lib/exampleStudies";
-import { STUDY_TYPE_META } from "@/lib/types";
+import { STUDY_TYPE_ICONS } from "@/lib/studyTypeIcons";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
@@ -55,30 +55,28 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <nav aria-label="Main navigation" className="flex-1 overflow-y-auto px-3 py-5">
         <NavItem to="/home" icon={Home} label="Home" compact={compact} />
         {user ? <NavItem to="/studies" icon={Layers} label="Studies" compact={compact} /> : null}
-        <NewStudyMenu compact={compact} className="mt-3 w-full" onSelect={type => {
+        <NewStudyMenu compact={compact} className="mb-1 w-full" onSelect={type => {
           const destination = `/studies/new?type=${type}`;
           user ? navigate(destination) : requestAuth(destination);
         }} />
         <div className="mt-8 border-t border-border pt-5">
           {!compact && <p className="mb-3 px-2 text-xs uppercase text-muted-foreground">Example studies</p>}
-          {EXAMPLE_STUDIES.map((study, index) => (
-            <Button key={study.id} asChild variant="ghost" className={cn("mb-1 h-auto min-h-10 w-full justify-start rounded-lg px-2 py-3 text-left",
+          {EXAMPLE_STUDIES.map(study => {
+            const Icon = STUDY_TYPE_ICONS[study.type];
+            return <Button key={study.id} asChild variant="ghost" className={cn("mb-1 h-10 w-full justify-start rounded-lg px-2 text-left",
               location.pathname === `/examples/${study.id}` && "bg-accent text-accent-foreground", compact && "justify-center px-0")}
             >
-              <NavLink to={`/examples/${study.id}`} title={compact ? study.title : undefined}>
-                {compact ? <span className="font-mono text-xs">0{index + 1}</span> : <span className="min-w-0 whitespace-normal">
-                  <span className="block text-base leading-snug">{study.title}</span>
-                  <span className="mt-1 block font-mono text-xs text-muted-foreground">{STUDY_TYPE_META[study.type].label}</span>
-                </span>}
+              <NavLink to={`/examples/${study.id}`} title={study.title} aria-label={study.title}>
+                <Icon />{!compact && <span className="min-w-0 truncate">{study.title}</span>}
               </NavLink>
-            </Button>
-          ))}
+            </Button>;
+          })}
         </div>
       </nav>
       <div className="shrink-0 border-t border-border px-3 py-4">
         {user ? <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" aria-label={personName} title={compact ? personName : undefined} className={cn("w-full justify-start", compact && "justify-center px-0")}>
+            <Button variant="ghost" aria-label={personName} title={compact ? personName : undefined} className={cn("h-10 w-full justify-start px-2", compact && "justify-center px-0")}>
               <UserRound />{!compact && <><span className="min-w-0 truncate">{personName}</span><ChevronUp className="ml-auto" /></>}
             </Button>
           </DropdownMenuTrigger>
@@ -92,7 +90,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("account"); }} className="text-destructive"><Trash2 />Delete account</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu> :
-          <Button variant="ghost" className={cn("w-full justify-start", compact && "justify-center px-0")}
+          <Button variant="ghost" className={cn("h-10 w-full justify-start px-2", compact && "justify-center px-0")}
             title={compact ? "Sign in" : undefined} onClick={() => requestAuth("/studies")}>
             <LogIn />{!compact && "Sign in"}
           </Button>}
