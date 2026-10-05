@@ -65,8 +65,8 @@ export default function AppShell({ children }: { children: ReactNode }) {
             <LogIn />{!compact && "Sign in"}
           </Button>}
         {!compact && <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 px-2 font-mono text-xs text-muted-foreground">
-          <NavLink to="/privacy" className="hover:text-foreground">Privacy</NavLink>
-          <NavLink to="/terms" className="hover:text-foreground">Terms</NavLink>
+          <NavLink to="/home#privacy" className="hover:text-foreground">Privacy</NavLink>
+          <NavLink to="/home#terms" className="hover:text-foreground">Terms</NavLink>
           <a href="mailto:hello@studydrop.app" className="hover:text-foreground">Contact</a>
         </div>}
       </div>

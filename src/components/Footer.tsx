@@ -16,10 +16,10 @@ export default function Footer() {
           <a href="mailto:hello@studydrop.app" className="hover:text-foreground">
             Contact
           </a>
-          <Link to="/privacy" className="hover:text-foreground">
+          <Link to="/home#privacy" className="hover:text-foreground">
             Privacy
           </Link>
-          <Link to="/terms" className="hover:text-foreground">
+          <Link to="/home#terms" className="hover:text-foreground">
             Terms
           </Link>
         </div>
