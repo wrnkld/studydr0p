@@ -412,7 +412,7 @@ export default function Landing() {
                 <div className="min-w-0">
                   {example.type === "card_sort" ? <CardSortResults studyId={example.id} cards={example.cards} responses={example.seedResponses} />
                     : example.type === "survey" ? <SurveyResults studyId={example.id} config={example.config} responses={example.seedResponses} />
-                    : example.type === "tree_test" ? <TreeTestResults studyId={example.id} config={example.config} responses={example.seedResponses} />
+                    : example.type === "tree_test" ? <TreeTestResults studyId={example.id} config={example.config} responses={example.seedResponses} initialNodes={example.nodes} />
                     : <FirstClickResults config={example.config} responses={example.seedResponses} />}
                 </div>
               </>
