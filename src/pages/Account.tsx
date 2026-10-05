@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ExternalLink, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -40,7 +40,9 @@ function Kicker({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function Account() {
+export type AccountSection = "plan" | "billing" | "details" | "preferences" | "account";
+
+export default function Account({ section }: { section?: AccountSection }) {
   useDocumentTitle("Account · StudyDrop");
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
@@ -168,11 +170,11 @@ export default function Account() {
 
   return (
     <PageContainer width="wide" space="md">
-      <PageHeader title="Account" description="Your plan, your payment history, and everything else tied to this login." />
+      {!section && <PageHeader title={fullName || "Your account"} />}
 
 
       {/* Plan */}
-      <section className="mt-10 rounded-lg border border-border bg-card p-6">
+      {(!section || section === "plan") && <section className="border-b border-border py-4">
         <Kicker>Plan</Kicker>
         {paidLoading ? (
           <p className="mt-3 text-base text-muted-foreground">Checking your plan…</p>
@@ -220,10 +222,10 @@ export default function Account() {
             <p className="mt-2 text-base text-muted-foreground">{REFUND_NOTE}</p>
           </>
         )}
-      </section>
+      </section>}
 
       {/* Billing history */}
-      <section className="mt-6 rounded-lg border border-border bg-card p-6">
+      {(!section || section === "billing") && <section className="border-b border-border py-4">
         <Kicker>Billing history</Kicker>
         {billingLoading ? (
           <p className="mt-3 text-base text-muted-foreground">Loading payments…</p>
@@ -257,10 +259,10 @@ export default function Account() {
             ))}
           </ul>
         )}
-      </section>
+      </section>}
 
       {/* Details */}
-      <section className="mt-6 rounded-lg border border-border bg-card p-6">
+      {(!section || section === "details") && <section className="border-b border-border py-4">
         <Kicker>Details</Kicker>
         <dl className="mt-4 space-y-3">
           {fullName ? (
@@ -274,18 +276,10 @@ export default function Account() {
             <dd className="min-w-0 truncate text-base text-foreground">{user?.email}</dd>
           </div>
         </dl>
-        <div className="mt-5 flex flex-wrap items-center gap-4">
-          <Link to="/home#terms" className="text-base underline underline-offset-4 hover:opacity-80">
-            Terms
-          </Link>
-          <Link to="/home#privacy" className="text-base underline underline-offset-4 hover:opacity-80">
-            Privacy
-          </Link>
-        </div>
-      </section>
+      </section>}
 
       {/* Preferences */}
-      <section className="mt-6 rounded-lg border border-border bg-card p-6">
+      {(!section || section === "preferences") && <section className="border-b border-border py-4">
         <Kicker>Preferences</Kicker>
         <label className="mt-4 flex cursor-pointer items-start gap-3">
           <Checkbox
@@ -298,10 +292,10 @@ export default function Account() {
             Show example studies in my study list
           </span>
         </label>
-      </section>
+      </section>}
 
       {/* Account actions */}
-      <section className="mt-6 rounded-lg border border-border bg-card p-6">
+      {(!section || section === "account") && <section className="py-4">
         <Kicker>This account</Kicker>
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Button
@@ -324,7 +318,7 @@ export default function Account() {
             Delete account
           </Button>
         </div>
-      </section>
+      </section>}
 
       <AlertDialog open={deleteOpen} onOpenChange={(open) => !deleting && setDeleteOpen(open)}>
         <AlertDialogContent>
