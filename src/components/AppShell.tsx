@@ -73,7 +73,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     </div>
   );
   const currentExample = EXAMPLE_STUDIES.find((study) => location.pathname === `/examples/${study.id}`);
-  const pageLabel = currentExample ? "Example study" : location.pathname === "/home" ? "Home" :
+  const pageLabel = currentExample ? currentExample.title : location.pathname === "/home" ? "Home" :
     location.pathname === "/account" ? "Account info" : location.pathname.startsWith("/studies") ? "Studies" : "StudyDrop";
 
   return (
