@@ -276,10 +276,10 @@ export default function Account() {
           </div>
         </dl>
         <div className="mt-5 flex flex-wrap items-center gap-4">
-          <Link to="/terms" className="text-base underline underline-offset-4 hover:opacity-80">
+          <Link to="/home#terms" className="text-base underline underline-offset-4 hover:opacity-80">
             Terms
           </Link>
-          <Link to="/privacy" className="text-base underline underline-offset-4 hover:opacity-80">
+          <Link to="/home#privacy" className="text-base underline underline-offset-4 hover:opacity-80">
             Privacy
           </Link>
         </div>
