@@ -381,7 +381,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
         ) : null
       ) : (
         <>
-          {/* FAQ — wrapped in bordered cards like examples */}
+          {/* FAQ */}
           <section className="py-4">
             <div className="mb-10">
               <SectionDivider label="Questions" />
@@ -389,6 +389,8 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
             <FaqList />
           </section>
 
+          <PrivacySection />
+          <TermsSection />
         </>
       )}
 
