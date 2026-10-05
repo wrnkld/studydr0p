@@ -50,6 +50,8 @@ const App = () => (
                   <Route path="/s/:slug" element={<ParticipantStudy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/unsubscribe" element={<Unsubscribe />} />
+                  <Route path="/privacy" element={<Navigate to="/home#privacy" replace />} />
+                  <Route path="/terms" element={<Navigate to="/home#terms" replace />} />
                   <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
                   <Route path="/account" element={<ProtectedRoute><Account /></ProtectedRoute>} />
 
