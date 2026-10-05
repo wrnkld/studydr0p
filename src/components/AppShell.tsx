@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { Home, Layers, PanelLeftClose, PanelLeftOpen, Plus, UserRound, LogIn } from "lucide-react";
+import { Home, Layers, PanelLeftClose, PanelLeftOpen, UserRound, LogIn, ChevronUp, CreditCard, Settings, LogOut, Trash2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { EXAMPLE_STUDIES } from "@/lib/exampleStudies";
 import { STUDY_TYPE_META } from "@/lib/types";
@@ -8,15 +8,33 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import AuthDialog from "@/components/AuthDialog";
+import NewStudyMenu from "@/components/NewStudyMenu";
+import Account, { type AccountSection } from "@/pages/Account";
+import { supabase } from "@/integrations/supabase/client";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 export default function AppShell({ children }: { children: ReactNode }) {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authDestination, setAuthDestination] = useState("/studies");
+  const [personName, setPersonName] = useState("Your account");
+  const [accountSection, setAccountSection] = useState<AccountSection | null>(null);
+
+  useEffect(() => {
+    setAccountSection(null);
+    if (!user) return;
+    let cancelled = false;
+    setPersonName(user.user_metadata?.full_name || user.user_metadata?.first_name || "Your account");
+    void supabase.from("researchers").select("first_name, last_name").eq("id", user.id).maybeSingle().then(({ data }) => {
+      const name = [data?.first_name, data?.last_name].filter(Boolean).join(" ");
+      if (!cancelled && name) setPersonName(name);
+    });
+    return () => { cancelled = true; };
+  }, [user]);
 
   useEffect(() => { setMobileOpen(false); }, [location.pathname]);
 
@@ -37,11 +55,10 @@ export default function AppShell({ children }: { children: ReactNode }) {
       <nav aria-label="Main navigation" className="flex-1 overflow-y-auto px-3 py-5">
         <NavItem to="/home" icon={Home} label="Home" compact={compact} />
         {user ? <NavItem to="/studies" icon={Layers} label="Studies" compact={compact} /> : null}
-        <Button variant="outline" className={cn("mt-3 w-full justify-start", compact && "justify-center px-0")}
-          title={compact ? "New study" : undefined}
-          onClick={() => user ? navigate("/studies/new") : requestAuth("/studies/new")}>
-          <Plus />{!compact && "New study"}
-        </Button>
+        <NewStudyMenu compact={compact} className="mt-3 w-full" onSelect={type => {
+          const destination = `/studies/new?type=${type}`;
+          user ? navigate(destination) : requestAuth(destination);
+        }} />
         <div className="mt-8 border-t border-border pt-5">
           {!compact && <p className="mb-3 px-2 text-xs uppercase text-muted-foreground">Example studies</p>}
           {EXAMPLE_STUDIES.map((study, index) => (
@@ -59,7 +76,22 @@ export default function AppShell({ children }: { children: ReactNode }) {
         </div>
       </nav>
       <div className="shrink-0 border-t border-border px-3 py-4">
-        {user ? <NavItem to="/account" icon={UserRound} label="Account info" compact={compact} /> :
+        {user ? <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" aria-label={personName} title={compact ? personName : undefined} className={cn("w-full justify-start", compact && "justify-center px-0")}>
+              <UserRound />{!compact && <><span className="min-w-0 truncate">{personName}</span><ChevronUp className="ml-auto" /></>}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="top" align="start">
+            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("details"); }}><UserRound />Your details</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("plan"); }}><CreditCard />Plan</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("billing"); }}><CreditCard />Billing history</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("preferences"); }}><Settings />Preferences</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={() => { void signOut().then(() => navigate("/")); }}><LogOut />Sign out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => { setMobileOpen(false); setAccountSection("account"); }} className="text-destructive"><Trash2 />Delete account</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu> :
           <Button variant="ghost" className={cn("w-full justify-start", compact && "justify-center px-0")}
             title={compact ? "Sign in" : undefined} onClick={() => requestAuth("/studies")}>
             <LogIn />{!compact && "Sign in"}
@@ -96,6 +128,12 @@ export default function AppShell({ children }: { children: ReactNode }) {
         </DialogContent>
       </Dialog>
       <AuthDialog open={authOpen} onOpenChange={setAuthOpen} onAuthed={() => navigate(authDestination)} />
+      <Dialog open={accountSection !== null} onOpenChange={open => { if (!open) setAccountSection(null); }}>
+        <DialogContent aria-describedby={undefined} className="max-h-[85dvh] overflow-y-auto">
+          <DialogTitle>{personName}</DialogTitle>
+          {accountSection && <Account section={accountSection} />}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

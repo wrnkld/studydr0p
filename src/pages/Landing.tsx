@@ -7,6 +7,7 @@ import { usePaid } from "@/hooks/usePaid";
 import { STUDY_TYPE_META, StudyType } from "@/lib/types";
 import { PageContainer } from "@/components/study/primitives";
 import AuthDialog from "@/components/AuthDialog";
+import NewStudyMenu from "@/components/NewStudyMenu";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { REFUND_NOTE } from "@/lib/limits";
@@ -344,14 +345,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
                   "Hey"
                 )}
               </h1>
-              <Button
-                size="sm"
-                className="text-base"
-                onClick={() => navigate("/studies/new")}
-              >
-                <Plus className="h-3.5 w-3.5" strokeWidth={1.5} />
-                New study
-              </Button>
+              <NewStudyMenu onSelect={type => navigate(`/studies/new?type=${type}`)} />
             </div>
             <section className="overflow-hidden rounded-lg border border-border bg-card">
               <table className="w-full text-left">
