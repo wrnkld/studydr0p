@@ -163,6 +163,7 @@ export default function ExampleStudy() {
             ) : study.type === "tree_test" ? (
               <TreeTestResults
                 studyId={study.id}
+                initialNodes={study.nodes}
                 config={study.config}
                 responses={allResponses}
               />

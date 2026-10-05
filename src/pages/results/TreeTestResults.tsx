@@ -31,9 +31,10 @@ interface Props {
   studyId: string;
   config: TreeTestConfig;
   responses?: ResponseRow[];
+  initialNodes?: TreeNodeRow[];
 }
 
-export default function TreeTestResults({ studyId, config, responses }: Props) {
+export default function TreeTestResults({ studyId, config, responses, initialNodes }: Props) {
   const [rows, setRows] = useState<ResponseRow[] | null>(responses ?? null);
   const [nodes, setNodes] = useState<TreeNodeRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,13 +59,15 @@ export default function TreeTestResults({ studyId, config, responses }: Props) {
               .select("id, session_id, data, created_at")
               .eq("study_id", studyId)
               .order("created_at", { ascending: false }),
-        supabase.from("tree_nodes").select("id, parent_id, label").eq("study_id", studyId),
+        initialNodes
+          ? Promise.resolve({ data: initialNodes })
+          : supabase.from("tree_nodes").select("id, parent_id, label").eq("study_id", studyId),
       ]);
       setRows((respRes.data ?? []) as ResponseRow[]);
       setNodes((nodesRes.data ?? []) as TreeNodeRow[]);
       setLoading(false);
     })();
-  }, [studyId, responses]);
+  }, [studyId, responses, initialNodes]);
 
   const labelFor = (id: string) => nodes.find((n) => n.id === id)?.label ?? id;
 

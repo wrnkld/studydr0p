@@ -10,19 +10,11 @@ import AuthDialog from "@/components/AuthDialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { REFUND_NOTE } from "@/lib/limits";
-import illoFridgeAsset from "@/assets/illo-fridge-v3.svg.asset.json";
-
-import illoGasStationAsset from "@/assets/illo-gasstation-v3.svg.asset.json";
-import illoGroceryAsset from "@/assets/illo-grocery-v3.svg.asset.json";
-import illoOrderAgainAsset from "@/assets/illo-orderagain-v3.svg.asset.json";
-const illoFridge = illoFridgeAsset.url;
-const illoGasStation = illoGasStationAsset.url;
-const illoGrocery = illoGroceryAsset.url;
-const illoOrderAgain = illoOrderAgainAsset.url;
-import illoWhyShareAsset from "@/assets/illo-faq-v3.svg.asset.json";
-const illoWhyShare = illoWhyShareAsset.url;
-
-
+import { getExampleStudy, ExampleStudyId } from "@/lib/exampleStudies";
+import CardSortResults from "@/pages/results/CardSortResults";
+import SurveyResults from "@/pages/results/SurveyResults";
+import TreeTestResults from "@/pages/results/TreeTestResults";
+import FirstClickResults from "@/pages/results/FirstClickResults";
 
 import {
   AlertDialog,
@@ -46,7 +38,7 @@ interface CombinedRow {
   createdAt?: string;
 }
 
-const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
+const EXAMPLE_ROWS: (CombinedRow & { description: string })[] = [
   {
     id: "fridge",
     href: "/examples/fridge",
@@ -55,7 +47,6 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
-    illo: illoFridge,
     description: "Put each item in the fridge.",
   },
   {
@@ -66,7 +57,6 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
-    illo: illoGasStation,
     description: "Rate the snacks you'd actually buy.",
   },
   {
@@ -77,7 +67,6 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
-    illo: illoGrocery,
     description: "Sort each product into its department.",
   },
   {
@@ -88,7 +77,6 @@ const EXAMPLE_ROWS: (CombinedRow & { illo: string; description: string })[] = [
     slug: null,
     responseCount: 20,
     isExample: true,
-    illo: illoOrderAgain,
     description: "Click the first place you'd look to reorder.",
   },
 ];
@@ -222,66 +210,8 @@ export default function Landing() {
     setUserRows((rows) => rows.filter((r) => r.id !== deleteId));
   };
 
-  // --- Signed-out: example cards (matches NewStudy card style) ---
-  const renderRow = (r: CombinedRow & { illo?: string; description?: string }) => {
-    return (
-      <a
-        key={`${r.isExample ? "ex" : "us"}-${r.id}`}
-        href={r.href}
-        onClick={(e) => {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
-          e.preventDefault();
-          navigate(r.href);
-        }}
-        onAuxClick={(e) => {
-          if (e.button === 1) {
-            e.preventDefault();
-            window.open(r.href, "_blank", "noopener");
-          }
-        }}
-        aria-label={`${STUDY_TYPE_META[r.type]?.label ?? r.type}: ${r.title}`}
-        className="group relative flex w-full flex-col items-center rounded-lg border border-border bg-card text-center no-underline overflow-hidden transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        style={{ padding: "32px 32px 28px" }}
-      >
-        <div className="mb-4">
-          <span
-            className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground text-[11px] leading-[16px]"
-            style={{ letterSpacing: "0.12em" }}
-          >
-            {STUDY_TYPE_META[r.type]?.label ?? r.type}
-          </span>
-        </div>
-
-        {r.illo ? (
-          <div className="mb-6" aria-hidden>
-            <img
-              src={r.illo}
-              alt=""
-              loading="eager" decoding="async" fetchPriority="high"
-              width={240}
-              height={240}
-              className="block h-[240px] w-[240px]"
-            />
-          </div>
-        ) : null}
-
-        <div className="min-w-0">
-          <h3
-            className="font-serif text-2xl font-bold text-foreground"
-            style={{ lineHeight: 1.15, letterSpacing: "-0.015em" }}
-          >
-            {r.title}
-          </h3>
-          {r.description ? (
-            <p className="mt-2 text-base text-muted-foreground leading-relaxed">
-              {r.description}
-            </p>
-          ) : null}
-        </div>
-      </a>
-    );
-  };
-
+  const [exampleId, setExampleId] = useState<ExampleStudyId>("fridge");
+  const example = getExampleStudy(exampleId);
 
   // --- Sorting ---
   type SortKey = "title" | "type" | "responses";
@@ -383,28 +313,24 @@ export default function Landing() {
 
 
   const SectionDivider = ({ label }: { label: string }) => (
-    <div className="flex items-center gap-4 w-full">
-      <div className="h-px flex-1 bg-border" />
-      <span
-        className="inline-block rounded-full border border-border bg-background px-2.5 py-1 font-mono uppercase text-muted-foreground whitespace-nowrap text-[11px]"
-        style={{ letterSpacing: "0.12em" }}
-      >
-        {label}
-      </span>
-      <div className="h-px flex-1 bg-border" />
-    </div>
+    <h2 className="border-b border-border pb-4 font-mono text-xs uppercase text-muted-foreground">{label}</h2>
   );
 
   return (
     <PageContainer width="wide" space="lg">
       {authLoading || user ? null : (
-        <header className="space-y-3 pt-2 pb-4 text-center">
-          <h1 className="text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05] font-serif text-foreground max-w-3xl mx-auto">
+        <header className="space-y-5 py-10 text-center sm:py-14">
+          <p className="font-mono text-xs uppercase text-muted-foreground">StudyDrop / Unmoderated UX research</p>
+          <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl mx-auto">
             UX research without the friction.
           </h1>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl mx-auto">
             Run and share unmoderated UX studies with a single link.
           </p>
+          <Button onClick={handleBadgeClick} disabled={unlocking} className="font-mono">
+            {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : "Get StudyDrop Pro"}
+          </Button>
+          <p className="font-mono text-xs text-muted-foreground">$129 per year</p>
         </header>
       )}
 
@@ -463,80 +389,50 @@ export default function Landing() {
         ) : null
       ) : (
         <>
-          <section>
-            <div className="mb-8">
-              <SectionDivider label="Examples" />
+          <section className="space-y-6 pb-8" aria-label="Example results">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-4">
+              <h2 className="font-mono text-xs uppercase text-muted-foreground">Example results</h2>
+              <span className="font-mono text-xs text-muted-foreground">20 participant responses</span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {EXAMPLE_ROWS.map(renderRow)}
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Study type">
+              {EXAMPLE_ROWS.map((row) => (
+                <Button key={row.id} variant={exampleId === row.id ? "secondary" : "ghost"}
+                  aria-pressed={exampleId === row.id} className="font-mono text-xs"
+                  onClick={() => setExampleId(row.id as ExampleStudyId)}>
+                  {STUDY_TYPE_META[row.type].label}
+                </Button>
+              ))}
             </div>
+            {example ? (
+              <>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <h3 className="font-sans text-2xl font-semibold">{example.title}</h3>
+                  <Button variant="outline" onClick={() => navigate(`/examples/${example.id}`)}>Try this study</Button>
+                </div>
+                <div className="min-w-0">
+                  {example.type === "card_sort" ? <CardSortResults studyId={example.id} cards={example.cards} responses={example.seedResponses} />
+                    : example.type === "survey" ? <SurveyResults studyId={example.id} config={example.config} responses={example.seedResponses} />
+                    : example.type === "tree_test" ? <TreeTestResults studyId={example.id} config={example.config} responses={example.seedResponses} initialNodes={example.nodes} />
+                    : <FirstClickResults config={example.config} responses={example.seedResponses} />}
+                </div>
+              </>
+            ) : null}
           </section>
-
-          {/* Why StudyDrop — 50/50 split with connected numbers */}
-          <section className="pt-20 pb-10">
-            <div className="mb-10">
-              <SectionDivider label="Why StudyDrop" />
-            </div>
-            <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-start">
-              <div className="w-full md:w-1/2 flex justify-center">
-                <img
-                  src={illoWhyShare}
-                  alt=""
-                  loading="eager" decoding="async" fetchPriority="high"
-                  width={280}
-                  height={280}
-                  className="block w-full max-w-[280px]"
-                />
+          <section className="grid gap-8 border-y border-border py-10 sm:grid-cols-3">
+            {[
+              { title: "Build", body: "Create a card sort, tree test, first-click test, or survey." },
+              { title: "Share", body: "Copy the link and send it anywhere." },
+              { title: "Collect", body: "Participants answer without signing in." },
+            ].map((item, i) => (
+              <div key={item.title} className="space-y-3">
+                <h2 className="font-mono text-base font-medium"><span className="text-muted-foreground">0{i + 1} / </span>{item.title}</h2>
+                <p className="text-base text-muted-foreground">{item.body}</p>
               </div>
-              <div className="w-full md:w-1/2">
-                <ol className="relative space-y-8">
-                  {[
-                    {
-                      title: "Build",
-                      body: "Create a card sort, tree test, first-click test, or survey.",
-                    },
-                    {
-                      title: "Share",
-                      body: "Copy the link and send it anywhere.",
-                    },
-                    {
-                      title: "Collect",
-                      body: "Participants answer without signing in.",
-                    },
-                  ].map((item, i, arr) => (
-                    <li key={i} className="relative flex gap-5">
-                      {i < arr.length - 1 ? (
-                        <span
-                          className="absolute left-3.5 top-7 -bottom-8 w-px bg-border"
-                          aria-hidden
-                        />
-                      ) : null}
-                      <span
-                        className="relative z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border bg-background font-mono text-foreground text-xs"
-                      >
-                        {i + 1}
-                      </span>
-                      <div>
-                        <h3
-                          className="font-serif text-foreground text-2xl font-bold"
-                          style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
-                        >
-                          {item.title}
-                        </h3>
-                        <p className="mt-1 text-base text-muted-foreground leading-relaxed">
-                          {item.body}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            </div>
+            ))}
           </section>
-
 
           {/* FAQ — wrapped in bordered cards like examples */}
-          <section className="pt-20 pb-24">
+          <section className="py-10">
             <div className="mb-10">
               <SectionDivider label="Questions" />
             </div>
@@ -544,7 +440,7 @@ export default function Landing() {
           </section>
 
           {/* Final CTA — calm closing */}
-          <section className="pt-16 pb-28">
+          <section className="border-t border-border py-12">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="font-serif text-foreground text-4xl sm:text-4xl font-bold tracking-tight leading-[1.05]">
                 $129 per year.
@@ -552,21 +448,9 @@ export default function Landing() {
               <p className="mt-4 text-base text-muted-foreground leading-relaxed">
                 Unlimited studies and participant responses.
               </p>
-              <button
-                type="button"
-                onClick={handleBadgeClick}
-                disabled={isPaid || unlocking}
-                className="mt-10 inline-flex h-11 px-7 items-center justify-center rounded-full bg-foreground text-background font-mono uppercase text-xs transition-all duration-200 hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60 disabled:cursor-default disabled:hover:scale-100"
-                style={{ letterSpacing: "0.12em" }}
-              >
-                {unlocking ? (
-                  <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />
-                ) : isPaid ? (
-                  "You're in"
-                ) : (
-                  "Get StudyDrop Pro"
-                )}
-              </button>
+              <Button onClick={handleBadgeClick} disabled={isPaid || unlocking} className="mt-6 font-mono">
+                 {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You're in" : "Get StudyDrop Pro"}
+               </Button>
               <p className="mt-3 text-base text-muted-foreground">{REFUND_NOTE}</p>
             </div>
           </section>
