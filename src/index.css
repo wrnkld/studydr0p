@@ -178,6 +178,25 @@
 }
 
 @layer utilities {
+  .mobile-navigation[data-state="open"] {
+    animation: navigation-enter 200ms ease-out !important;
+  }
+  .mobile-navigation[data-state="closed"] {
+    animation: navigation-exit 200ms ease-in !important;
+  }
+  @keyframes navigation-enter {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes navigation-exit {
+    from { transform: translateX(0); }
+    to { transform: translateX(-100%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-navigation[data-state] {
+      animation: none !important;
+    }
+  }
   .faq-answer-grid {
     display: grid;
     grid-template-rows: 0fr;

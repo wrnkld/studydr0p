@@ -117,7 +117,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
         {children}
       </div>
       <Dialog open={mobileOpen} onOpenChange={setMobileOpen}>
-        <DialogContent aria-describedby={undefined} className="left-0 top-0 h-[100dvh] w-72 max-w-[85vw] translate-x-0 translate-y-0 gap-0 rounded-none p-0 sm:rounded-none">
+        <DialogContent aria-describedby={undefined} className="mobile-navigation left-0 top-0 h-[100dvh] w-72 max-w-[85vw] translate-x-0 translate-y-0 gap-0 rounded-none p-0 sm:rounded-none">
           <DialogTitle className="sr-only">Navigation</DialogTitle>
           {navigation()}
         </DialogContent>
