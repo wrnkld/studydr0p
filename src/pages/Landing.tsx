@@ -323,7 +323,7 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
           </p>
           <div className="mt-4 flex flex-wrap items-center gap-4">
             <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
-              {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
+              {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You've paid" : "Pay for StudyDrop"}
             </Button>
             <p className="text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
           </div>
@@ -383,8 +383,6 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
             <FaqList />
           </section>
 
-          <PrivacySection />
-          <TermsSection />
         </>
       )}
 
@@ -393,8 +391,8 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
       <AuthDialog
         open={authOpen}
         onOpenChange={setAuthOpen}
-        title="Sign in to get Pro"
-        description="Create an account or sign in, then start your $129 per year plan."
+        title="Sign in to pay"
+        description="Create an account or sign in, then pay $129 per year for StudyDrop."
         onAuthed={async (u) => {
           setUnlocking(true);
           try {
@@ -453,7 +451,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: "Can I try it before paying?",
-    a: "Yes. Build studies and collect responses for free, then pay to view the results. Pro is $129 per year and you can cancel anytime in your billing settings.",
+    a: "Yes. Build studies and collect responses for free, then pay to view the results. It's $129 per year and you can cancel anytime in your billing settings.",
   },
   {
     q: "How do I share a study?",
@@ -490,18 +488,21 @@ function FaqList() {
           </span>
         </li>
       ))}
+      <PrivacySection />
+      <TermsSection />
     </ol>
   );
 }
 
 function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
-    <section id={id} className="scroll-mt-24 py-4">
-      <div className="mb-4">
-        <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
+    <li id={id} className="scroll-mt-24 flex items-start gap-5 py-5">
+      <span className="shrink-0 pt-1 font-mono text-xs text-muted-foreground">{id === "privacy" ? "08" : "09"}</span>
+      <div className="min-w-0 flex-1">
+        <h2 className="font-serif text-base font-medium text-foreground">{label}</h2>
+        <div className="mt-1 space-y-3 text-base leading-relaxed text-muted-foreground">{children}</div>
       </div>
-      <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
-    </section>
+    </li>
   );
 }
 

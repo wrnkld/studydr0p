@@ -136,7 +136,7 @@ export default function Account({ section }: { section?: AccountSection }) {
         ) : isPaid ? (
           <>
             <p className="mt-3 text-base text-foreground">
-              You've paid for StudyDrop Pro — unlimited studies and unlimited responses.
+              You've paid for StudyDrop — unlimited studies and unlimited responses.
             </p>
             <p className="mt-1 text-base text-muted-foreground">
               {subscription?.cancel_at_period_end
@@ -169,7 +169,7 @@ export default function Account({ section }: { section?: AccountSection }) {
               You haven't paid anything yet.
             </p>
             <p className="mt-1 text-base text-muted-foreground">
-              Pro is {PRO_PRICE_LABEL} and lifts every limit on studies and responses.
+               StudyDrop costs {PRO_PRICE_LABEL} for unlimited studies and responses.
             </p>
             <Button size="sm" className="mt-5 text-base" disabled={upgrading} onClick={handleUpgrade}>
               {upgrading ? "Loading…" : PRO_CTA}

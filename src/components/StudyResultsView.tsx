@@ -284,7 +284,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("checkout") === "success") {
-      toast.success("You're on Pro — thanks! Unlimited studies and responses are unlocked.");
+      toast.success("Thanks for paying! You now have unlimited studies and responses.");
       params.delete("checkout");
       const newUrl = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
       window.history.replaceState({}, "", newUrl);
@@ -339,7 +339,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
               <Lock className="h-4 w-4 text-foreground" strokeWidth={1.5} />
             </div>
             <h3 className="font-serif text-2xl font-bold tracking-tight text-foreground">
-              Get StudyDrop Pro
+               Pay to view your results
             </h3>
             <p className="mt-2 text-base text-muted-foreground">
               $129 per year for unlimited studies and unlimited participant responses.
@@ -363,7 +363,7 @@ export default function StudyResultsView({ studyId, showHeader = true, pendingRe
                 }
               }}
             >
-              {unlocking ? "Loading…" : "Get Pro — $129/yr"}
+               {unlocking ? "Loading…" : "Pay — $129/yr"}
             </Button>
             <p className="mt-3 text-base text-muted-foreground">{REFUND_NOTE}</p>
           </div>
