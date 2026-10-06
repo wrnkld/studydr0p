@@ -317,18 +317,15 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
   return (
     <PageContainer width="wide" space="lg">
       {mode === "home" ? (
-        <header className="space-y-4 border-b border-border pb-8">
+        <header className="border-b border-border pb-8">
           <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl">
             UX research without the friction.
           </h1>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
-            Run and share unmoderated UX studies with a single link.
-          </p>
-          <div>
+          <div className="mt-4 flex flex-wrap items-center gap-4">
             <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
               {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
             </Button>
-            <p className="text-xs text-muted-foreground mt-2">$129 per year · {REFUND_NOTE}</p>
+            <p className="text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
           </div>
         </header>
       ) : null}
