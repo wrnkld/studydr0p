@@ -383,9 +383,6 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
         <>
           {/* FAQ */}
           <section className="py-4">
-            <div className="mb-10">
-              <SectionDivider label="Questions" />
-            </div>
             <FaqList />
           </section>
 
