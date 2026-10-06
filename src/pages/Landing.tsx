@@ -473,44 +473,26 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
 ];
 
 function FaqList() {
-  const [openIdx, setOpenIdx] = useState<number | null>(0);
   return (
-    <ol className="flex flex-col rounded-lg border border-border bg-card overflow-hidden divide-y divide-border">
-      {FAQ_ITEMS.map((item, i) => {
-        const open = openIdx === i;
-        return (
-          <li key={i}>
-            <button
-              type="button"
-              onClick={() => setOpenIdx(open ? null : i)}
-              className="group flex w-full items-start gap-5 px-6 py-6 text-left transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-              aria-expanded={open}
-            >
-              <span
-                className="font-mono text-muted-foreground shrink-0 pt-1 text-xs"
-                style={{ letterSpacing: "0.08em" }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="flex-1 min-w-0">
-                <span className="font-serif text-foreground block text-base font-medium">
-                  {item.q}
-                </span>
-                <div className={`faq-answer-grid ${open ? "open" : ""}`}>
-                  <span className="faq-answer-inner block mt-2 text-base text-muted-foreground leading-relaxed">
-                    {item.a}
-                  </span>
-                </div>
-              </span>
-              {open ? (
-                <Minus className="shrink-0 mt-2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-              ) : (
-                <Plus className="shrink-0 mt-2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-              )}
-            </button>
-          </li>
-        );
-      })}
+    <ol className="flex flex-col divide-y divide-border">
+      {FAQ_ITEMS.map((item, i) => (
+        <li key={i} className="flex items-start gap-5 py-5">
+          <span
+            className="font-mono text-muted-foreground shrink-0 pt-1 text-xs"
+            style={{ letterSpacing: "0.08em" }}
+          >
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span className="flex-1 min-w-0">
+            <span className="font-serif text-foreground block text-base font-medium">
+              {item.q}
+            </span>
+            <span className="block mt-1 text-base text-muted-foreground leading-relaxed">
+              {item.a}
+            </span>
+          </span>
+        </li>
+      ))}
     </ol>
   );
 }
