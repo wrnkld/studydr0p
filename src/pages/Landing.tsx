@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Minus, Plus } from "lucide-react";
+import { ArrowDown, ArrowUp, ArrowUpDown, Loader2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -310,25 +310,22 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
   };
 
 
-  const SectionDivider = ({ label }: { label: string }) => (
-    <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
-  );
 
   return (
     <PageContainer width="wide" space="lg">
       {mode === "home" ? (
-        <header className="space-y-4 border-b border-border pb-8">
+        <header className="border-b border-border pb-8">
           <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl">
             UX research without the friction.
           </h1>
-          <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
+          <p className="mt-2 text-base text-muted-foreground">
             Run and share unmoderated UX studies with a single link.
           </p>
-          <div>
+          <div className="mt-4 flex flex-wrap items-center gap-4">
             <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
               {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
             </Button>
-            <p className="text-xs text-muted-foreground mt-2">$129 per year · {REFUND_NOTE}</p>
+            <p className="text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
           </div>
         </header>
       ) : null}
@@ -383,9 +380,6 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
         <>
           {/* FAQ */}
           <section className="py-4">
-            <div className="mb-10">
-              <SectionDivider label="Questions" />
-            </div>
             <FaqList />
           </section>
 
@@ -476,44 +470,26 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
 ];
 
 function FaqList() {
-  const [openIdx, setOpenIdx] = useState<number | null>(0);
   return (
-    <ol className="flex flex-col rounded-lg border border-border bg-card overflow-hidden divide-y divide-border">
-      {FAQ_ITEMS.map((item, i) => {
-        const open = openIdx === i;
-        return (
-          <li key={i}>
-            <button
-              type="button"
-              onClick={() => setOpenIdx(open ? null : i)}
-              className="group flex w-full items-start gap-5 px-6 py-6 text-left transition-colors duration-150 hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-              aria-expanded={open}
-            >
-              <span
-                className="font-mono text-muted-foreground shrink-0 pt-1 text-xs"
-                style={{ letterSpacing: "0.08em" }}
-              >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <span className="flex-1 min-w-0">
-                <span className="font-serif text-foreground block text-base font-medium">
-                  {item.q}
-                </span>
-                <div className={`faq-answer-grid ${open ? "open" : ""}`}>
-                  <span className="faq-answer-inner block mt-2 text-base text-muted-foreground leading-relaxed">
-                    {item.a}
-                  </span>
-                </div>
-              </span>
-              {open ? (
-                <Minus className="shrink-0 mt-2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-              ) : (
-                <Plus className="shrink-0 mt-2 h-4 w-4 text-muted-foreground" strokeWidth={1.5} aria-hidden />
-              )}
-            </button>
-          </li>
-        );
-      })}
+    <ol className="flex flex-col divide-y divide-border">
+      {FAQ_ITEMS.map((item, i) => (
+        <li key={i} className="flex items-start gap-5 py-5">
+          <span
+            className="font-mono text-muted-foreground shrink-0 pt-1 text-xs"
+            style={{ letterSpacing: "0.08em" }}
+          >
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <span className="flex-1 min-w-0">
+            <span className="font-serif text-foreground block text-base font-medium">
+              {item.q}
+            </span>
+            <span className="block mt-1 text-base text-muted-foreground leading-relaxed">
+              {item.a}
+            </span>
+          </span>
+        </li>
+      ))}
     </ol>
   );
 }
@@ -521,7 +497,7 @@ function FaqList() {
 function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-24 py-4">
-      <div className="mb-10">
+      <div className="mb-4">
         <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
       </div>
       <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
