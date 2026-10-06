@@ -318,17 +318,18 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
     <PageContainer width="wide" space="lg">
       {mode === "home" ? (
         <header className="space-y-4 border-b border-border pb-8">
-          <p className="text-xs uppercase text-muted-foreground">StudyDrop / Unmoderated UX research</p>
           <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl">
             UX research without the friction.
           </h1>
           <p className="text-base text-muted-foreground leading-relaxed max-w-xl">
             Run and share unmoderated UX studies with a single link.
           </p>
-          <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
-            {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
-          </Button>
-          <p className="text-xs text-muted-foreground">$129 per year · {REFUND_NOTE}</p>
+          <div>
+            <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
+              {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
+            </Button>
+            <p className="text-xs text-muted-foreground mt-2">$129 per year · {REFUND_NOTE}</p>
+          </div>
         </header>
       ) : null}
 
@@ -495,14 +496,11 @@ function FaqList() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="flex-1 min-w-0">
-                <span
-                  className="font-serif text-foreground block text-2xl font-bold"
-                  style={{ lineHeight: 1.2, letterSpacing: "-0.015em" }}
-                >
+                <span className="font-serif text-foreground block text-base font-medium">
                   {item.q}
                 </span>
                 <div className={`faq-answer-grid ${open ? "open" : ""}`}>
-                  <span className="faq-answer-inner block mt-3 text-base text-muted-foreground leading-relaxed">
+                  <span className="faq-answer-inner block mt-2 text-base text-muted-foreground leading-relaxed">
                     {item.a}
                   </span>
                 </div>
