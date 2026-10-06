@@ -497,7 +497,7 @@ function FaqList() {
 function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-24 py-4">
-      <div className="mb-10">
+      <div className="mb-4">
         <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
       </div>
       <div className="space-y-3 text-base leading-relaxed text-foreground">{children}</div>
