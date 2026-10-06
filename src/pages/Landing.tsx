@@ -321,6 +321,9 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
           <h1 className="text-4xl font-semibold leading-tight font-serif text-foreground max-w-3xl">
             UX research without the friction.
           </h1>
+          <p className="mt-2 text-base text-muted-foreground">
+            Run and share unmoderated UX studies with a single link.
+          </p>
           <div className="mt-4 flex flex-wrap items-center gap-4">
             <Button onClick={handleBadgeClick} disabled={isPaid || unlocking}>
               {unlocking ? <Loader2 className="h-4 w-4 animate-spin" /> : isPaid ? "You’re on Pro" : "Get StudyDrop Pro"}
