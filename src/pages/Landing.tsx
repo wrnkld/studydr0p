@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowDown, ArrowUp, ArrowUpDown, Loader2, Minus, Plus } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -310,9 +310,6 @@ export default function Landing({ mode = "home" }: { mode?: "home" | "studies" }
   };
 
 
-  const SectionDivider = ({ label }: { label: string }) => (
-    <h2 className="border-b border-border pb-4 text-xs uppercase text-muted-foreground">{label}</h2>
-  );
 
   return (
     <PageContainer width="wide" space="lg">
