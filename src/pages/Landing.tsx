@@ -461,10 +461,6 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
     q: "Can I export my results?",
     a: "Yes. Every study type exports to CSV, so you can pull the raw data into a spreadsheet or your analysis tool of choice.",
   },
-  {
-    q: "Is my data private?",
-    a: "Yes. Your studies and responses are private to your account, and you can delete them at any time.",
-  },
 ];
 
 function FaqList() {
@@ -497,7 +493,7 @@ function FaqList() {
 function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
     <li id={id} className="scroll-mt-24 flex items-start gap-5 py-5">
-      <span className="shrink-0 pt-1 font-mono text-xs text-muted-foreground">{id === "privacy" ? "08" : "09"}</span>
+      <span className="shrink-0 pt-1 font-mono text-xs text-muted-foreground">{id === "privacy" ? "07" : "08"}</span>
       <div className="min-w-0 flex-1">
         <h2 className="font-serif text-base font-medium text-foreground">{label}</h2>
         <div className="mt-1 space-y-3 text-base leading-relaxed text-muted-foreground">{children}</div>
