@@ -461,10 +461,6 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
     q: "Can I export my results?",
     a: "Yes. Every study type exports to CSV, so you can pull the raw data into a spreadsheet or your analysis tool of choice.",
   },
-  {
-    q: "Is my data private?",
-    a: "Yes. Your studies and responses are private to your account, and you can delete them at any time.",
-  },
 ];
 
 function FaqList() {
