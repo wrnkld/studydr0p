@@ -493,7 +493,7 @@ function FaqList() {
 function LegalSection({ id, label, children }: { id: string; label: string; children: React.ReactNode }) {
   return (
     <li id={id} className="scroll-mt-24 flex items-start gap-5 py-5">
-      <span className="shrink-0 pt-1 font-mono text-xs text-muted-foreground">{id === "privacy" ? "08" : "09"}</span>
+      <span className="shrink-0 pt-1 font-mono text-xs text-muted-foreground">{id === "privacy" ? "07" : "08"}</span>
       <div className="min-w-0 flex-1">
         <h2 className="font-serif text-base font-medium text-foreground">{label}</h2>
         <div className="mt-1 space-y-3 text-base leading-relaxed text-muted-foreground">{children}</div>
